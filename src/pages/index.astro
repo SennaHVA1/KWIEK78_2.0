@@ -63,16 +63,18 @@ const snelknoppen = [
 
   <!-- Snelknoppen: de drie taken waarvoor mensen deze site openen. -->
   <nav class="snel vlak-zwart" aria-label="Snel naar">
-    <ul class="omhulsel snel-lijst">
-      {snelknoppen.map((knop) => (
-        <li>
-          <a class="snelknop" href={knop.href}>
-            <span class="snelknop-label">{knop.label}</span>
-            <span class="snelknop-uitleg">{knop.uitleg}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <div class="omhulsel">
+      <ul class="snel-lijst">
+        {snelknoppen.map((knop) => (
+          <li>
+            <a class="snelknop" href={knop.href}>
+              <span class="snelknop-label">{knop.label}</span>
+              <span class="snelknop-uitleg">{knop.uitleg}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </nav>
 
   <!-- ================================================================== -->
@@ -214,12 +216,15 @@ const snelknoppen = [
   /* Snelknoppen                                                        */
   /* ------------------------------------------------------------------ */
   .snel { padding-bottom: clamp(1.5rem, 3vw, 2rem); }
+  /* Let op: deze lijst zit in een aparte .omhulsel en is er niet zelf een.
+     Scoped stijlen van Astro staan buiten de cascade-layers en winnen dus van
+     .omhulsel in @layer components. Zet je hier 'margin: 0' op hetzelfde
+     element, dan sneuvelt de centrering van de container. */
   .snel-lijst {
     display: grid;
     gap: 0.6rem;
     grid-template-columns: 1fr;
     list-style: none;
-    margin: 0;
   }
   @media (min-width: 620px) { .snel-lijst { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 

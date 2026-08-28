@@ -77,6 +77,9 @@ export const CLUBGEGEVENS = {
   telefoon: '0229 54 17 82',
   email: 'info@kwiek78.nl',
   facebook: 'https://www.facebook.com/vvkwiek78',
+  /* 471 berichten, 608 volgers. Hun eigen site linkt hier niet naar en noemt in
+     de metadata zelfs het Instagram van een andere club. */
+  instagram: 'https://www.instagram.com/vvkwiek78',
   x: 'https://x.com/kwiek78',
   youtube: 'https://www.youtube.com/@VoetbalverenigingKwiek78',
   clubwinkel: 'https://kwiek78.clubwereld.nl/',

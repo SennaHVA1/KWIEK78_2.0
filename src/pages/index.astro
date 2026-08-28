@@ -187,7 +187,19 @@ const snelknoppen = [
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
+    background:
+      /* Een ovale schaduw die in de hoek linksonder begint, precies waar de
+         tekst staat, en naar rechtsboven uitdooft. De hele band donkerder
+         maken kon niet: de voorste rij spelers staat tussen 38% en 64% van de
+         hero en die moet juist zichtbaar blijven. Zo blijft de rechterkant van
+         de foto open en staat de tekst toch op een vaste donkere ondergrond. */
+      radial-gradient(
+        150% 120% at 0% 100%,
+        color-mix(in srgb, var(--color-zwart) 78%, transparent) 0%,
+        color-mix(in srgb, var(--color-zwart) 55%, transparent) 45%,
+        transparent 78%
+      ),
+      linear-gradient(
       180deg,
       color-mix(in srgb, var(--color-zwart) 16%, transparent) 0%,
       color-mix(in srgb, var(--color-zwart) 12%, transparent) 42%,
@@ -206,27 +218,21 @@ const snelknoppen = [
 
   .hero-binnen { padding-bottom: clamp(1.5rem, 4vw, 2.5rem); }
 
-  /* Deze regel stond eerst als losse blauwe tekst op de foto. Op de donkerste
-     plekken haalde dat 5,9:1, maar precies daar zitten ook de witte shirts uit
-     de teamfoto en dan zakt het naar ongeveer 3:1: te weinig voor tekst van
-     deze grootte. Een dicht zwart vlakje eronder maakt het onafhankelijk van
-     wat er toevallig achter zit, en het is de vormtaal die de club zelf al
-     gebruikt op de thumbnails van Kwiek Inside. Tekst is ook iets groter en de
-     letterafstand iets krapper; 0.2em uit elkaar leest op 12px niet prettig. */
+  /* Wit, geen blauw. Op de hoogte van deze regel staat de verduistering op
+     31% en is 23% van de foto daarachter lichter dan 180: dat zijn de witte
+     shirts van de voorste rij. Blauw haalt daar 1,5:1 en wit 2,1:1, dus geen
+     van beide is leesbaar zonder dat de ondergrond zelf donkerder wordt. Dat
+     doet de scrim hieronder. Wit haalt daarmee ruim 8:1; blauw zou zelfs dan
+     onder de 3,5:1 blijven, dus die kleur is hier gewoon verkeerd. Het accent
+     blijft waar het hoort: aftelklok, uitslagen, actieve links. */
   .hero-boven {
-    display: inline-block;
     font-family: var(--font-smal);
     font-size: 0.8125rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-blauw);
-    background: var(--color-zwart);
-    padding: 0.3rem 0.6rem;
-    margin-bottom: 0.55rem;
-    /* Het vlakje zorgt zelf voor het contrast, de zachte schaduw van de hero
-       maakt de kleine letters daar alleen maar viezig. */
-    text-shadow: none;
+    color: var(--color-wit);
+    margin-bottom: 0.5rem;
   }
   @media (min-width: 1024px) {
     .hero-boven { font-size: 0.875rem; }

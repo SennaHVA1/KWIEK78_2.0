@@ -206,14 +206,30 @@ const snelknoppen = [
 
   .hero-binnen { padding-bottom: clamp(1.5rem, 4vw, 2.5rem); }
 
+  /* Deze regel stond eerst als losse blauwe tekst op de foto. Op de donkerste
+     plekken haalde dat 5,9:1, maar precies daar zitten ook de witte shirts uit
+     de teamfoto en dan zakt het naar ongeveer 3:1: te weinig voor tekst van
+     deze grootte. Een dicht zwart vlakje eronder maakt het onafhankelijk van
+     wat er toevallig achter zit, en het is de vormtaal die de club zelf al
+     gebruikt op de thumbnails van Kwiek Inside. Tekst is ook iets groter en de
+     letterafstand iets krapper; 0.2em uit elkaar leest op 12px niet prettig. */
   .hero-boven {
+    display: inline-block;
     font-family: var(--font-smal);
-    font-size: var(--text-mini);
+    font-size: 0.8125rem;
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-blauw);
-    margin-bottom: 0.3rem;
+    background: var(--color-zwart);
+    padding: 0.3rem 0.6rem;
+    margin-bottom: 0.55rem;
+    /* Het vlakje zorgt zelf voor het contrast, de zachte schaduw van de hero
+       maakt de kleine letters daar alleen maar viezig. */
+    text-shadow: none;
+  }
+  @media (min-width: 1024px) {
+    .hero-boven { font-size: 0.875rem; }
   }
   .hero-titel {
     font-size: var(--text-kop-xl);

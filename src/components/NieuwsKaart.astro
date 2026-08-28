@@ -18,13 +18,19 @@ interface Props {
    * hangt hij onder een sectiekop, geef dan 3 mee.
    */
   kopNiveau?: 2 | 3;
+  /**
+   * Onder 640px inklappen tot een regel met een klein vierkant beeld ernaast,
+   * zonder samenvatting. Voor de homepage: daar is nieuws bijvangst en niet
+   * waarvoor iemand op zaterdagochtend de site opent.
+   */
+  compactOpMobiel?: boolean;
 }
 
-const { artikel, groot = false, kopNiveau = 3 } = Astro.props;
+const { artikel, groot = false, kopNiveau = 3, compactOpMobiel = false } = Astro.props;
 const Kop = `h${kopNiveau}` as 'h2' | 'h3';
 ---
 
-<article class:list={['nieuwskaart', groot && 'nieuwskaart--groot']}>
+<article class:list={['nieuwskaart', groot && 'nieuwskaart--groot', compactOpMobiel && 'nieuwskaart--compact']}>
   <a class="nieuwskaart-link" href={`/nieuws/${artikel.slug}`}>
     <div class="nieuwskaart-beeld">
       <Foto
@@ -107,5 +113,28 @@ const Kop = `h${kopNiveau}` as 'h2' | 'h3';
       gap: 2rem;
       align-items: start;
     }
+  }
+
+  /* Compacte variant, alleen op een telefoon. Beeld naar een klein vierkant
+     naast de tekst, samenvatting en "Lees verder" eruit. Vier berichten passen
+     dan in de hoogte van een enkele kaart van hiervoor. */
+  @media (max-width: 639px) {
+    .nieuwskaart--compact .nieuwskaart-link {
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 0.9rem;
+      align-items: center;
+    }
+    .nieuwskaart--compact .nieuwskaart-beeld { border-radius: var(--radius-klein); }
+    .nieuwskaart--compact .nieuwskaart-beeld :global(img),
+    .nieuwskaart--compact .nieuwskaart-beeld :global(.foto-plek) {
+      aspect-ratio: 1 / 1 !important;
+    }
+    .nieuwskaart--compact .nieuwskaart-tekst { gap: 0.2rem; }
+    .nieuwskaart--compact .nieuwskaart-tekst :is(h2, h3) {
+      font-size: 1.0625rem;
+      line-height: 1.25;
+    }
+    .nieuwskaart--compact .nieuwskaart-samenvatting,
+    .nieuwskaart--compact .nieuwskaart-lees { display: none; }
   }
 </style>

@@ -100,7 +100,7 @@ const snelknoppen = [
       <div class="nieuwsraster">
         {nieuws.map((artikel, i) => (
           <div class="verschijn" style={`transition-delay:${i * 60}ms`}>
-            <NieuwsKaart artikel={artikel} />
+            <NieuwsKaart artikel={artikel} compactOpMobiel />
           </div>
         ))}
       </div>
@@ -298,6 +298,17 @@ const snelknoppen = [
     display: grid;
     gap: 2rem;
     grid-template-columns: 1fr;
+  }
+  /* Op een telefoon geen vier losse kaarten onder elkaar maar een lijst met
+     haarlijnen ertussen. Het nieuws blijft compleet, het duwt alleen niet meer
+     alles eronder van het scherm af. */
+  @media (max-width: 639px) {
+    .nieuwsraster { gap: 0; }
+    .nieuwsraster > * + * {
+      margin-top: 0.9rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--kleur-lijn-licht);
+    }
   }
   @media (min-width: 640px) { .nieuwsraster { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 1100px) { .nieuwsraster { grid-template-columns: repeat(4, minmax(0, 1fr)); } }

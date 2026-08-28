@@ -46,9 +46,13 @@ meer overheen; dat maakte het geheel somber, en een voetbalclub is dat niet.
 
 Beide komen uit `_bronfotos/logo-512.png` en worden gemaakt door `npm run fotos`.
 
-Er is bewust **geen omgekeerde variant** van het logo. Bij het omkeren klappen
-ook de panelen van de voetbal om, en dan klopt het logo niet meer. Op de zwarte
-balken staat het echte logo daarom op een lichte tegel.
+Er is bewust **geen omgekeerde variant** van het logo, en er is er ook geen
+nodig. Het bestand bestaat uit opake witte vlakken met zwarte lijnen erin, dus
+op een zwarte ondergrond blijven de bal en de banier gewoon kloppen. Het logo
+staat in de koptekst en de voettekst rechtstreeks op het zwart.
+
+Bij het omkeren zouden de panelen van de voetbal omklappen en dan klopt het
+logo niet meer. Lever dus geen witte variant aan.
 
 De wapens van de tegenstanders zijn nu **tijdelijke tegels** met de eerste
 letters van de clubnaam, gegenereerd door

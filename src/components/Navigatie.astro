@@ -14,14 +14,17 @@ const pad = Astro.url.pathname;
 
 <header class="kop">
   <div class="omhulsel kop-binnen">
-    {/* Het echte clublogo op een lichte tegel. Een omgekeerde variant klapt de
-        panelen van de bal om en dan klopt het logo niet meer. De naam staat in
-        het logo zelf, dus die staat er niet nog een keer naast; hij zit in de
-        alt-tekst zodat hij voor schermlezers en zoekmachines wel meetelt. */}
+    {/* Het logo staat rechtstreeks op het zwart, zonder tegel eronder. Dat kan
+        omdat het bestand is opgebouwd uit opake witte vlakken met zwarte
+        lijnen erin: de bal en de banier blijven daardoor kloppen op een
+        donkere ondergrond. Een omgekeerde variant klapt de panelen van de bal
+        om en is dus niet nodig en niet gewenst.
+
+        De naam staat in het logo zelf, dus die staat er niet nog een keer
+        naast; hij zit in de alt-tekst zodat hij voor schermlezers en
+        zoekmachines wel meetelt. */}
     <a class="merknaam" href="/">
-      <span class="merknaam-wapen">
-        <img src="/images/logos/kwiek-78.png" alt="v.v. Kwiek '78, naar de homepage" width="104" height="61" />
-      </span>
+      <img src="/images/logos/kwiek-78.png" alt="v.v. Kwiek '78, naar de homepage" width="512" height="300" />
     </a>
 
     <nav class="hoofdmenu" aria-label="Hoofdmenu">
@@ -166,19 +169,12 @@ const pad = Astro.url.pathname;
     color: var(--color-wit);
     flex: none;
   }
-  /* Het logo is een banner met de clubnaam erin, dus het moet groot genoeg
+  /* Het logo is een banier met de clubnaam erin, dus het moet groot genoeg
      staan om die naam te kunnen lezen. De hoogte van de balk is daarop
      afgestemd en niet andersom. */
-  .merknaam-wapen {
-    display: block;
-    background: var(--color-wit);
-    border-radius: var(--radius-klein);
-    padding: 0.3rem 0.5rem;
-    line-height: 0;
-  }
-  .merknaam-wapen img { width: 88px; height: auto; }
+  .merknaam img { width: 96px; height: auto; }
   @media (min-width: 1280px) {
-    .merknaam-wapen img { width: 104px; }
+    .merknaam img { width: 112px; }
   }
 
   /* ------------------------------------------------------------------ */

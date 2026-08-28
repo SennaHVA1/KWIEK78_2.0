@@ -12,10 +12,13 @@
      Blauw is het enige accent, in twee trappen: `blauw` op donker,
      `blauwdiep` voor kleine tekst op wit, omdat #6092b7 op wit maar 3.2:1
      haalt en dus geen WCAG AA voor bodytekst is.                           */
-  --color-zwart:      #14161A;   /* iets warmer dan puur zwart, minder hard  */
+  /* De drie neutralen zijn bewust neutraal tot een tikje warm gezet: in een
+     eerdere versie zat er in alle drie meer blauw dan rood en dan leest het
+     zwart als blauwgrijs. Het tenue is zwart-wit, dus dat moet het ook zijn. */
+  --color-zwart:      #0C0C0D;   /* diep zwart, niet puur #000  vs wit  18.7:1 */
   --color-wit:        #FBFAF7;   /* papier, licht warm                       */
-  --color-grijs:      #9AA0A8;   /* secundaire tekst op zwart   vs zwart 6.6:1 */
-  --color-grijsdonker:#5C6067;   /* secundaire tekst op wit     vs wit   6.2:1 */
+  --color-grijs:      #9B9A98;   /* secundaire tekst op zwart   vs zwart 7.0:1 */
+  --color-grijsdonker:#5F5E5C;   /* secundaire tekst op wit     vs wit   6.2:1 */
   --color-blauw:      #6092B7;   /* accent op zwart             vs zwart 5.3:1 */
   --color-blauwdiep:  #3D6E92;   /* accent op wit, kleine tekst vs wit   5.4:1 */
 

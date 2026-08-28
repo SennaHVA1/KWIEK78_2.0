@@ -8,6 +8,8 @@
  * Zie IMAGES.md voor de lijst en de gevraagde afmetingen.
  *
  * Zwarte tekst op transparant, want de sponsorvlakken op de site zijn wit.
+ * In de huisletter Barlow Condensed, zodat een plaatshouder niet uit de toon
+ * valt tussen de echte logo's.
  */
 import { writeFile, mkdir, access } from 'node:fs/promises';
 import { readFile } from 'node:fs/promises';
@@ -34,11 +36,11 @@ const tegel = (naam) => {
   const startY = r.length === 1 ? 62 : 48;
   const tekst = r
     .map((regel, i) =>
-      `  <text x="160" y="${startY + i * (grootte + 6)}" fill="#0B0B0C" font-family="Archivo, 'Helvetica Neue', Arial, sans-serif" font-size="${grootte}" font-weight="700" letter-spacing="-0.5" text-anchor="middle" dominant-baseline="middle">${regel}</text>`)
+      `  <text x="160" y="${startY + i * (grootte + 6)}" fill="#0C0C0D" font-family="'Barlow Condensed', 'Arial Narrow', Arial, sans-serif" font-size="${grootte}" font-weight="700" letter-spacing="-0.5" text-anchor="middle" dominant-baseline="middle">${regel}</text>`)
     .join('\n');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="320" height="120" role="img" aria-label="${naam}">
 ${tekst}
-  <rect x="118" y="98" width="84" height="3" fill="#0B0B0C"/>
+  <rect x="118" y="98" width="84" height="3" fill="#0C0C0D"/>
 </svg>
 `;
 };

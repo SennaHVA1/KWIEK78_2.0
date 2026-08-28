@@ -20,7 +20,9 @@ const socials = [
   <div class="omhulsel voet-binnen">
     <div class="voet-raster">
       <div class="voet-blok voet-blok--merk">
-        <img src="/images/logos/kwiek-78-wit.png" alt="" width="90" height="53" />
+        <span class="voet-wapen">
+          <img src="/images/logos/kwiek-78.png" alt="" width="120" height="70" />
+        </span>
         <address class="voet-adres">
           <strong>{CLUBGEGEVENS.naam}</strong><br />
           {CLUBGEGEVENS.sportpark}<br />
@@ -102,7 +104,16 @@ const socials = [
   }
 
   .voet-blok { display: grid; gap: 1rem; align-content: start; }
-  .voet-blok img { width: 90px; }
+  /* Het echte logo op een lichte tegel, net als in de koptekst. */
+  .voet-wapen {
+    display: block;
+    width: fit-content;
+    background: var(--color-wit);
+    border-radius: var(--radius-klein);
+    padding: 0.5rem 0.7rem;
+    line-height: 0;
+  }
+  .voet-wapen img { width: 120px; }
   .voet-blok ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
   .voet-blok a { color: var(--color-wit); text-decoration: none; font-size: 1rem; }
   .voet-blok .knop { justify-self: start; }

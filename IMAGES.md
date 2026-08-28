@@ -41,9 +41,14 @@ meer overheen; dat maakte het geheel somber, en een voetbalclub is dat niet.
 
 | Bestand | Formaat | Status | Waarvoor |
 |---|---|---|---|
-| `kwiek-78.png` | 512 x 300, transparant | **aanwezig** | favicon |
-| `kwiek-78-wit.png` | 512 x 300, transparant | **aanwezig** | koptekst en voettekst, op zwart |
-| `kwiek-78-wapen.png` | 192 x 192 | **aanwezig** | wedstrijdpanelen en wedstrijdrijen |
+| `kwiek-78.png` | 512 x 300, transparant | **aanwezig** | koptekst, voettekst, favicon |
+| `kwiek-78-wapen.png` | 192 x 192 | **aanwezig** | wedstrijdrijen en apple-touch-icon |
+
+Beide komen uit `_bronfotos/logo-512.png` en worden gemaakt door `npm run fotos`.
+
+Er is bewust **geen omgekeerde variant** van het logo. Bij het omkeren klappen
+ook de panelen van de voetbal om, en dan klopt het logo niet meer. Op de zwarte
+balken staat het echte logo daarom op een lichte tegel.
 
 De wapens van de tegenstanders zijn nu **tijdelijke tegels** met de eerste
 letters van de clubnaam, gegenereerd door

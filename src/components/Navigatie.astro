@@ -14,12 +14,15 @@ const pad = Astro.url.pathname;
 
 <header class="kop">
   <div class="omhulsel kop-binnen">
+    {/* Het echte clublogo op een lichte tegel. Een omgekeerde variant klapt de
+        panelen van de bal om en dan klopt het logo niet meer. De naam staat in
+        het logo zelf, dus die staat er niet nog een keer naast; hij zit in de
+        alt-tekst zodat hij voor schermlezers en zoekmachines wel meetelt. */}
     <a class="merknaam" href="/">
-      <img class="merknaam-logo" src="/images/logos/kwiek-78-wit.png" alt="" width="52" height="30" />
-      <span class="merknaam-tekst">
-        <span class="merknaam-club">v.v. Kwiek '78</span>
-        <span class="merknaam-plaats">Avenhorn</span>
+      <span class="merknaam-wapen">
+        <img src="/images/logos/kwiek-78.png" alt="v.v. Kwiek '78, naar de homepage" width="68" height="40" />
       </span>
+      <span class="merknaam-plaats">Avenhorn</span>
     </a>
 
     <nav class="hoofdmenu" aria-label="Hoofdmenu">
@@ -164,13 +167,14 @@ const pad = Astro.url.pathname;
     color: var(--color-wit);
     flex: none;
   }
-  .merknaam-logo { width: 52px; height: auto; }
-  .merknaam-tekst { display: grid; line-height: 1.1; }
-  .merknaam-club {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    line-height: 1;
+  .merknaam-wapen {
+    display: block;
+    background: var(--color-wit);
+    border-radius: var(--radius-klein);
+    padding: 0.3rem 0.45rem;
+    line-height: 0;
   }
+  .merknaam-wapen img { width: 68px; height: auto; }
   .merknaam-plaats {
     font-family: var(--font-smal);
     font-size: var(--text-mini);

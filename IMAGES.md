@@ -30,8 +30,8 @@ meer overheen; dat maakte het geheel somber, en een voetbalclub is dat niet.
 
 | | |
 |---|---|
-| Aanwezig | 10 bestanden |
-| Nog nodig | 17 bestanden |
+| Aanwezig | 19 bestanden |
+| Nog nodig | 8 bestanden |
 
 ---
 
@@ -144,15 +144,24 @@ het beeld hier neer en verwijs je ernaar in `src/data/nieuws.json`.
 
 | Bestand | Status |
 |---|---|
-| `kwiek-inside-01.webp` t/m `kwiek-inside-06.webp` | nog nodig |
+| `kwiek-inside-01.webp` t/m `kwiek-inside-09.webp` | **aanwezig** |
 
 Dit zijn de thumbnails. De YouTube-speler wordt pas geladen nadat er op de
 thumbnail is geklikt, dus deze afbeelding is wat de bezoeker als eerste ziet.
-Een still uit de aflevering werkt beter dan een titelkaart.
 
-**Ook nog nodig:** de YouTube-video-id's zelf. Die vul je in bij `youtubeId`
-in `src/data/videos.json`. Nu staat daar `null`, en dan wijst de kaart naar het
-kanaal in plaats van dat hij insluit.
+Ze worden opgehaald met `npm run thumbnails`. Dat script leest de video-id's
+uit `src/data/videos.json`, haalt de thumbnail van YouTube en zet hem als webp
+van 1280 x 720 hier neer. Bestaande bestanden worden overgeslagen, dus een
+eigen still met dezelfde naam blijft staan.
+
+De club maakt zelf al thumbnails met het afleveringsnummer en de titel erin, dus
+dat is meteen het goede beeld. Ze lokaal opslaan is bewust: haal je ze
+rechtstreeks van `i.ytimg.com`, dan gaat er bij het openen van de pagina alsnog
+een verzoek naar Google, en juist dat wilden we met de klik-om-te-laden-speler
+voorkomen.
+
+Komt er een nieuwe aflevering, dan zet je die in `src/data/videos.json` en draai
+je `npm run thumbnails` opnieuw.
 
 ---
 

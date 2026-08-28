@@ -168,7 +168,7 @@ minutenspel zijn voorbeeldmateriaal.
 | `ereleden.json` | 26 namen, **echte gegevens** | eigen beheer |
 | `bulletins.json` | 5 documenten | eigen beheer |
 | `minutenspel.json` | 66 verkochte minuten | eigen beheer |
-| `videos.json` | 6 afleveringen Kwiek Inside | eigen beheer |
+| `videos.json` | 9 afleveringen Kwiek Inside, echte YouTube-id's | eigen beheer |
 
 **Geen enkele pagina importeert rechtstreeks een JSON-bestand.** Alles loopt
 via drie adaptermodules, een per toekomstige bron:
@@ -314,7 +314,6 @@ Zie **IMAGES.md** voor de volledige lijst met verwachte bestandsnamen en
 formaten. Kort samengevat ontbreekt nog:
 
 - teamfoto's van JO17-1, JO12-1 en MO9-1
-- thumbnails en YouTube-id's voor de zes afleveringen van Kwiek Inside
 - echte logo's van vijf sponsoren en van de tegenstanders
 - de vijf PDF-documenten voor het informatiebulletin
 - een kaartuitsnede voor de contactpagina

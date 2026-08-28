@@ -4,7 +4,7 @@
  *
  * De YouTube-iframe wordt pas geplaatst nadat er op de thumbnail is geklikt.
  * Een ingesloten YouTube-speler kost ongeveer een megabyte aan JavaScript per
- * stuk; met zes afleveringen op een pagina zou de site onbruikbaar worden op
+ * stuk; met negen afleveringen op een pagina zou de site onbruikbaar worden op
  * een telefoon langs het veld. Nu staat er een afbeelding met een knop en
  * gebeurt er pas iets als de bezoeker dat wil.
  *
@@ -60,7 +60,6 @@ const heeftId = Boolean(video.youtubeId);
   <div class="videokaart-tekst">
     <p class="videokaart-datum data">{datumZonderDag(video.datum)}</p>
     <h2 class="kop-s">{video.titel}</h2>
-    <p class="videokaart-omschrijving zacht">{video.omschrijving}</p>
   </div>
 </article>
 
@@ -86,13 +85,6 @@ const heeftId = Boolean(video.youtubeId);
     cursor: pointer;
     color: inherit;
   }
-  .videokaart-speler :global(img) {
-    }
-  .videokaart-speler:hover :global(img) { }
-  @media (prefers-reduced-motion: reduce) {
-    .videokaart-speler :global(img) { transition: none; }
-  }
-
   .videokaart-play {
     position: absolute;
     inset: 0;
@@ -129,7 +121,6 @@ const heeftId = Boolean(video.youtubeId);
     color: var(--color-grijs);
   }
   :global(.vlak-wit) .videokaart-datum { color: var(--color-grijsdonker); }
-  .videokaart-omschrijving { font-size: var(--text-klein); line-height: 1.6; max-width: 46ch; }
 
   /* De ingesloten speler neemt de plek van de thumbnail over. */
   .videokaart-speler :global(iframe) {

@@ -240,7 +240,8 @@ export type Video = {
    */
   youtubeId: string | null;
   titel: string;
+  /** Publicatiedatum op YouTube, ISO. */
   datum: string;
+  /** Lengte als mm:ss, puur voor weergave. */
   duur: string;
-  omschrijving: string;
 };

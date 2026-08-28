@@ -1,0 +1,188 @@
+---
+/**
+ * Het minutenspel: negentig minuten, per stuk te koop, de winnaar is de
+ * minuut waarin het laatste doelpunt van het seizoen valt.
+ *
+ * Het raster is bewust een raster en geen tabel: negentig genummerde vakjes
+ * naast elkaar lezen sneller dan negentig regels onder elkaar, en je ziet in
+ * een oogopslag wat er nog vrij is.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import { getMinutenspel, getMinutenspelStand, getContactpersoon } from '../../lib/club';
+
+const minuten = getMinutenspel();
+const stand = getMinutenspelStand();
+const penningmeester = getContactpersoon('Penningmeester');
+---
+
+<Basis
+  titel="Minutenspel"
+  omschrijving="Het minutenspel van v.v. Kwiek '78: koop een minuut en win de pot als het laatste doelpunt van het seizoen in jouw minuut valt."
+>
+  <Paginakop
+    kicker="Club"
+    titel="Minutenspel"
+    intro="Al sinds 1994. Koop een minuut, en valt het laatste doelpunt van het seizoen daarin, dan is de pot voor jou."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Hoe het werkt</p>
+
+        <div class="uitleg">
+          <div class="lopende-tekst">
+            <p>
+              Aan het begin van het seizoen zijn alle negentig minuten van een wedstrijd te koop.
+              Een minuut kost tien euro en je mag er zoveel kopen als je wilt.
+            </p>
+            <p>
+              Aan het eind van het seizoen kijken we naar de laatste thuiswedstrijd van het eerste
+              waarin gescoord is. De minuut waarin dat laatste doelpunt viel, is de winnende.
+              Blessuretijd telt mee bij de negentigste minuut.
+            </p>
+            <p>
+              De opbrengst gaat volledig naar de jeugdafdeling. Vorig seizoen was dat 620 euro,
+              waarvan de helft naar de winnaar ging en de rest naar nieuwe trainingsballen.
+            </p>
+            <p>
+              Meedoen? Achter de bar ligt de lijst, of stuur een bericht aan
+              {penningmeester ? (
+                <a href={`mailto:${penningmeester.email}`}>{penningmeester.naam}</a>
+              ) : 'de penningmeester'}.
+            </p>
+          </div>
+
+          <div class="teller">
+            <p class="teller-kop label">Stand van de verkoop</p>
+            <p class="teller-getal data">
+              <span class="teller-verkocht">{stand.verkocht}</span>
+              <span class="teller-van">van {stand.totaal}</span>
+            </p>
+            <div class="balk" role="img" aria-label={`${stand.verkocht} van ${stand.totaal} minuten verkocht`}>
+              <span class="balk-vulling" style={`width:${(stand.verkocht / stand.totaal) * 100}%`}></span>
+            </div>
+            <p class="teller-vrij zacht">
+              Nog {stand.vrij} {stand.vrij === 1 ? 'minuut' : 'minuten'} vrij, tien euro per stuk.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <section class="vlak-zwart sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Het bord</p>
+        <div>
+          <div class="bordkop">
+            <h2 class="kop-sectie">Alle negentig minuten</h2>
+            <p class="legenda">
+              <span class="legenda-item"><span class="legenda-vlak legenda-vlak--vrij"></span> vrij</span>
+              <span class="legenda-item"><span class="legenda-vlak legenda-vlak--bezet"></span> verkocht</span>
+            </p>
+          </div>
+
+          <ol class="minutenbord">
+            {minuten.map((regel) => (
+              <li class:list={['minuut', regel.naam ? 'is-bezet' : 'is-vrij']}>
+                <span class="minuut-nummer data">{regel.minuut}</span>
+                <span class="minuut-naam">{regel.naam ?? 'vrij'}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .uitleg { display: grid; gap: 2.25rem; }
+  @media (min-width: 900px) {
+    .uitleg { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
+  }
+
+  .teller {
+    display: grid;
+    gap: 0.6rem;
+    border: 1px solid var(--kleur-lijn-licht);
+    padding: 1.5rem;
+  }
+  .teller-getal { display: flex; align-items: baseline; gap: 0.5rem; }
+  .teller-verkocht { font-size: 2.75rem; font-weight: 700; line-height: 1; color: var(--color-blauwdiep); }
+  .teller-van { font-size: var(--text-klein); color: var(--color-grijsdonker); }
+
+  .balk { height: 6px; background: color-mix(in srgb, var(--color-zwart) 12%, transparent); }
+  .balk-vulling { display: block; height: 100%; background: var(--color-blauwdiep); }
+
+  .teller-vrij { font-size: var(--text-klein); }
+
+  /* Bord -------------------------------------------------------------- */
+  .bordkop {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.25rem;
+  }
+  .legenda { display: flex; gap: 1.25rem; }
+  .legenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  .legenda-vlak { width: 0.75rem; height: 0.75rem; }
+  .legenda-vlak--vrij { border: 1px solid var(--kleur-lijn-donker); }
+  .legenda-vlak--bezet { background: color-mix(in srgb, var(--color-blauw) 25%, transparent); border: 1px solid var(--color-blauw); }
+
+  .minutenbord {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: 1px;
+    background: var(--kleur-lijn-donker);
+    border: 1px solid var(--kleur-lijn-donker);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .minuut {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.6rem 0.7rem;
+    background: var(--color-zwart);
+    min-height: 3.75rem;
+    align-content: center;
+  }
+  .minuut-nummer {
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-grijs);
+  }
+  .minuut-naam {
+    font-size: var(--text-klein);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .is-bezet { background: color-mix(in srgb, var(--color-blauw) 14%, var(--color-zwart)); }
+  .is-bezet .minuut-nummer { color: var(--color-blauw); }
+  .is-vrij .minuut-naam {
+    color: var(--color-grijs);
+    font-weight: 400;
+    font-style: italic;
+  }
+</style>

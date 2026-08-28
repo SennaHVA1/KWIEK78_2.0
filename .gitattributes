@@ -1,0 +1,9 @@
+# Tekstbestanden met LF in de repo, ongeacht op welk systeem er gewerkt wordt.
+* text=auto eol=lf
+
+# Binaire bestanden nooit door de regeleindeconversie halen.
+*.webp binary
+*.png  binary
+*.jpg  binary
+*.woff2 binary
+*.pdf  binary

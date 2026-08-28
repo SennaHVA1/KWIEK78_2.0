@@ -1,0 +1,55 @@
+---
+/**
+ * Uitslagen: gespeelde wedstrijden, nieuwste speeldag bovenaan.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import Filterbalk from '../../components/Filterbalk.astro';
+import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
+import { getUitslagen, getWedstrijdTeams } from '../../lib/sportlink';
+
+const wedstrijden = getUitslagen();
+const teams = getWedstrijdTeams();
+
+const filters = [
+  {
+    sleutel: 'team',
+    label: 'Team',
+    opties: teams.map((naam) => ({ waarde: naam, label: naam.replace("Kwiek '78 ", '') })),
+  },
+  {
+    sleutel: 'locatie',
+    label: 'Thuis of uit',
+    opties: [
+      { waarde: 'thuis', label: 'Thuis' },
+      { waarde: 'uit', label: 'Uit' },
+    ],
+  },
+];
+---
+
+<Basis
+  titel="Uitslagen"
+  omschrijving="De uitslagen van alle teams van v.v. Kwiek '78, per speeldag."
+>
+  <Paginakop
+    kicker="Wedstrijden"
+    titel="Uitslagen"
+    intro="Gespeelde wedstrijden, de laatste speeldag bovenaan."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      {/* In dezelfde kolom als de wedstrijdrijen, zodat de filters netjes
+          boven de lijst uitlijnen in plaats van ernaast te beginnen. */}
+      <div class="kolom">
+        <p class="kolom-kicker">Filteren</p>
+        <Filterbalk groepen={filters} />
+      </div>
+      <Wedstrijdlijst
+        wedstrijden={wedstrijden}
+        leegTekst="Er zijn dit seizoen nog geen wedstrijden gespeeld."
+      />
+    </div>
+  </section>
+</Basis>

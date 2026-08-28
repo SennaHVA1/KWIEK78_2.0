@@ -1,0 +1,442 @@
+@import "tailwindcss";
+@import "./lettertypes.css";
+
+/* ==========================================================================
+   TOKENS  —  v.v. Kwiek 78
+   Zes benoemde kleuren, een typeschaal, een spacingschaal. Al het andere
+   wordt hieruit afgeleid met color-mix of met de schaalstappen. Wie een
+   nieuwe hexwaarde in een component zet, breekt het systeem.
+   ========================================================================== */
+@theme {
+  /* -- Kleur ---------------------------------------------------------------
+     Zwart is de basis (chrome, hero, wedstrijdpanelen, footer).
+     Wit is de tegenhanger (leesvlakken: nieuws, teksten, roosters).
+     Blauw is het enige accent en heeft twee trappen: `blauw` op donker,
+     `blauwdiep` voor kleine tekst op wit, omdat #6092b7 op wit maar 3.2:1
+     haalt en dus geen WCAG AA voor bodytekst is.                           */
+  --color-zwart:      #0B0B0C;   /* basis                        vs wit  18.7:1 */
+  --color-wit:        #FAFAF8;   /* papier, licht warm                          */
+  --color-grijs:      #8A8D93;   /* secundaire tekst op zwart    vs zwart  5.8:1 */
+  --color-grijsdonker:#5C6067;   /* secundaire tekst op wit      vs wit    6.1:1 */
+  --color-blauw:      #6092B7;   /* accent op zwart              vs zwart  5.8:1 */
+  --color-blauwdiep:  #3D6E92;   /* accent op wit, kleine tekst  vs wit    5.3:1 */
+
+  /* Afgeleide oppervlakken en lijnen. Geen nieuwe hexwaarden. */
+  --kleur-inkt:        color-mix(in srgb, var(--color-wit) 6%, var(--color-zwart));
+  --kleur-inkt-op:     color-mix(in srgb, var(--color-wit) 11%, var(--color-zwart));
+  --kleur-lijn-donker: color-mix(in srgb, var(--color-wit) 16%, transparent);
+  --kleur-lijn-licht:  color-mix(in srgb, var(--color-zwart) 15%, transparent);
+  --kleur-papier-op:   color-mix(in srgb, var(--color-zwart) 4%, var(--color-wit));
+
+  /* -- Typografie ----------------------------------------------------------
+     Archivo (variabel, met breedte-as) voor tekst en koppen.
+     JetBrains Mono voor alle data: tijden, uitslagen, codes, tabelkoppen.
+     Dat is de stem van het wedstrijdformulier.                             */
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-sans:    "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --text-mini:   0.6875rem;  /* 11px  mono labels          */
+  --text-klein:  0.8125rem;  /* 13px  bijschrift, tabellen */
+  --text-basis:  1rem;
+  --text-groot:  1.125rem;   /* 18px  intro                */
+  --text-kop-s:  clamp(1.25rem, 1.15rem + 0.5vw,  1.5rem);
+  --text-kop-m:  clamp(1.625rem, 1.35rem + 1.3vw, 2.25rem);
+  --text-kop-l:  clamp(2.125rem, 1.6rem + 2.6vw,  3.5rem);
+  --text-kop-xl: clamp(2.75rem, 1.5rem + 6.2vw,   6.5rem);
+
+  /* -- Ruimte --------------------------------------------------------------
+     Een ritme voor alle verticale sectieafstanden en voor de kantlijn.     */
+  --spacing-sectie:    clamp(3rem, 2rem + 4vw, 5.5rem);
+  --spacing-sectie-l:  clamp(4rem, 2.5rem + 6vw, 8rem);
+  --spacing-kantlijn:  clamp(1rem, 0.5rem + 2.5vw, 3.5rem);
+  --spacing-kolom:     10.5rem;  /* breedte van de linkermarge op desktop */
+
+  /* -- Overig -------------------------------------------------------------- */
+  --radius-*: initial;           /* Radius 0. Overal. Dit is een formulier. */
+  --ease-klap: cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+/* ==========================================================================
+   BASIS
+   ========================================================================== */
+@layer base {
+  * { border-color: var(--kleur-lijn-licht); }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    background: var(--color-zwart);
+    color: var(--color-wit);
+    font-family: var(--font-sans);
+    font-size: var(--text-basis);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.03;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  /* Zichtbare focus, op zwart en op wit leesbaar. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-blauw);
+    outline-offset: 3px;
+  }
+
+  ::selection { background: var(--color-blauw); color: var(--color-zwart); }
+
+  img { max-width: 100%; height: auto; display: block; }
+
+  /* Nette placeholder zolang een fotomap nog leeg is. Nooit een gebroken plaatje. */
+  .foto-plek {
+    position: relative;
+    background: var(--kleur-inkt);
+    background-image:
+      repeating-linear-gradient(135deg,
+        transparent 0 9px,
+        color-mix(in srgb, var(--color-wit) 4%, transparent) 9px 10px);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .foto-plek > span {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+    text-align: center;
+    padding: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   COMPONENTEN
+   Semantische klassen, zodat de markup leesbaar blijft en de tokens op een
+   plek staan in plaats van uitgesmeerd over duizend utility-attributen.
+   ========================================================================== */
+@layer components {
+
+  /* -- De Kolom -----------------------------------------------------------
+     Het layoutprincipe van deze site: een vaste kantlijn met daarin een
+     mono-kicker, precies zoals de marge van een wedstrijdformulier.
+     Onder 1024px valt de kantlijn boven de inhoud.                         */
+  .omhulsel {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: var(--spacing-kantlijn);
+  }
+
+  .kolom {
+    display: grid;
+    gap: 1.25rem 2.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 1024px) {
+    .kolom {
+      grid-template-columns: var(--spacing-kolom) minmax(0, 1fr);
+      gap: 0 3rem;
+    }
+  }
+
+  /* De kicker in de kantlijn. Spaarzaam gebruiken: dit is geen sierlabel. */
+  .kolom-kicker {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+    padding-top: 0.45rem;
+    border-top: 1px solid currentColor;
+    align-self: start;
+  }
+  .vlak-wit .kolom-kicker { color: var(--color-grijsdonker); }
+
+  /* -- De Baan ------------------------------------------------------------
+     Zwart-witte baan uit het tenue. Structuurmarkering, geen versiering:
+     hij scheidt alleen de grote wisselingen tussen zwart en wit.           */
+  .baan {
+    height: 0.5rem;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-zwart) 0 0.75rem,
+      var(--color-wit)   0.75rem 1.5rem
+    );
+  }
+  .baan--dun { height: 0.25rem; }
+
+  /* -- Vlakken ------------------------------------------------------------ */
+  .vlak-zwart { background: var(--color-zwart); color: var(--color-wit); }
+  .vlak-inkt  { background: var(--kleur-inkt);  color: var(--color-wit); }
+  .vlak-wit   { background: var(--color-wit);   color: var(--color-zwart); }
+  .vlak-wit a:not(.knop):not(.merk) { color: var(--color-blauwdiep); }
+  .vlak-wit .zacht { color: var(--color-grijsdonker); }
+  .zacht { color: var(--color-grijs); }
+
+  .sectie   { padding-block: var(--spacing-sectie); }
+  .sectie-l { padding-block: var(--spacing-sectie-l); }
+
+  /* -- Typografie --------------------------------------------------------- */
+  .kop-xl { font-size: var(--text-kop-xl); font-weight: 900; letter-spacing: -0.035em; line-height: 0.92; }
+  .kop-l  { font-size: var(--text-kop-l);  font-weight: 800; }
+  .kop-m  { font-size: var(--text-kop-m);  font-weight: 800; }
+  .kop-s  { font-size: var(--text-kop-s);  font-weight: 700; letter-spacing: -0.012em; }
+
+  /* Sectiekop in de breedte-as van Archivo: posterachtig, niet schreeuwerig. */
+  .kop-sectie {
+    font-family: var(--font-display);
+    font-size: var(--text-kop-m);
+    font-weight: 800;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  .data {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  .vlak-wit .label { color: var(--color-grijsdonker); }
+
+  .lopende-tekst { max-width: 68ch; }
+  .lopende-tekst p { margin-block: 0 1.1em; }
+  .lopende-tekst > *:last-child { margin-bottom: 0; }
+  .lopende-tekst h2 { font-size: var(--text-kop-s); margin-block: 2rem 0.75rem; }
+  .lopende-tekst h3 { font-size: var(--text-groot); font-weight: 700; margin-block: 1.75rem 0.5rem; }
+  .lopende-tekst ol { margin-block: 0 1.1em; padding-left: 1.25rem; list-style: decimal; }
+  .lopende-tekst ul { margin-block: 0 1.1em; list-style: none; padding-left: 0; }
+  .lopende-tekst li { margin-bottom: 0.35em; }
+  .lopende-tekst ul > li { position: relative; padding-left: 1.15rem; }
+  .lopende-tekst ul > li::before {
+    content: ""; position: absolute; left: 0; top: 0.62em;
+    width: 0.5rem; height: 1px; background: var(--color-blauwdiep);
+  }
+  .vlak-zwart .lopende-tekst ul > li::before,
+  .vlak-inkt  .lopende-tekst ul > li::before { background: var(--color-blauw); }
+  .lopende-tekst a { text-decoration: underline; text-underline-offset: 0.2em; }
+  .lopende-tekst strong { font-weight: 700; }
+
+  /* -- Knoppen ------------------------------------------------------------
+     Rechthoekig, geen radius, geen schaduw. Duw-feedback bij :active.      */
+  .knop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-klein);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0.8rem 1.35rem;
+    border: 1px solid transparent;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.18s var(--ease-klap),
+                color 0.18s var(--ease-klap),
+                border-color 0.18s var(--ease-klap),
+                transform 0.08s linear;
+  }
+  .knop:active { transform: translateY(1px); }
+  @media (prefers-reduced-motion: reduce) {
+    .knop { transition: none; }
+    .knop:active { transform: none; }
+  }
+
+  .knop--primair { background: var(--color-blauw); color: var(--color-zwart); }
+  .knop--primair:hover { background: var(--color-wit); color: var(--color-zwart); }
+
+  .knop--rand { border-color: var(--kleur-lijn-donker); color: var(--color-wit); }
+  .knop--rand:hover { border-color: var(--color-wit); background: var(--kleur-inkt-op); }
+  .vlak-wit .knop--rand { border-color: color-mix(in srgb, var(--color-zwart) 35%, transparent); color: var(--color-zwart); }
+  .vlak-wit .knop--rand:hover { border-color: var(--color-zwart); background: var(--kleur-papier-op); }
+
+  .knop--zwart { background: var(--color-zwart); color: var(--color-wit); }
+  .knop--zwart:hover { background: var(--color-blauwdiep); color: var(--color-wit); }
+
+  /* -- Wedstrijdrij -------------------------------------------------------
+     De kern van de site. Een rij per wedstrijd, gescheiden door haarlijnen,
+     geen kaarten.                                                          */
+  .rij {
+    display: grid;
+    gap: 0.25rem 1rem;
+    padding-block: 0.95rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    align-items: center;
+  }
+  .vlak-wit .rij { border-top-color: var(--kleur-lijn-licht); }
+  .rij-groep > .rij:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
+  .vlak-wit .rij-groep > .rij:last-child { border-bottom-color: var(--kleur-lijn-licht); }
+
+  /* -- Afgelast -----------------------------------------------------------
+     Het moment waarop een clubsite zich bewijst: zaterdag 8:15.
+     Doorgehaalde wedstrijd, diagonale arcering, blauw label.               */
+  .is-afgelast { position: relative; }
+  .is-afgelast::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent 0 7px,
+      color-mix(in srgb, var(--color-blauw) 20%, transparent) 7px 9px
+    );
+  }
+  .is-afgelast .doorgehaald {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--color-blauw);
+  }
+
+  .merk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+  .merk--afgelast { background: var(--color-blauw); color: var(--color-zwart); }
+  .merk--rand { border: 1px solid var(--kleur-lijn-donker); color: var(--color-grijs); }
+  .vlak-wit .merk--rand { border-color: var(--kleur-lijn-licht); color: var(--color-grijsdonker); }
+  .merk--thuis { background: var(--color-wit); color: var(--color-zwart); }
+  .vlak-wit .merk--thuis { background: var(--color-zwart); color: var(--color-wit); }
+
+  /* -- Formulier ---------------------------------------------------------- */
+  .veld { display: grid; gap: 0.4rem; }
+  .veld > label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+    font-weight: 700;
+  }
+  .vlak-zwart .veld > label, .vlak-inkt .veld > label { color: var(--color-grijs); }
+  .veld input, .veld select, .veld textarea {
+    width: 100%;
+    background: var(--color-wit);
+    color: var(--color-zwart);
+    border: 1px solid color-mix(in srgb, var(--color-zwart) 40%, transparent);
+    padding: 0.7rem 0.8rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-basis);
+    line-height: 1.4;
+  }
+  .veld input::placeholder, .veld textarea::placeholder { color: var(--color-grijsdonker); }
+  .veld input:focus, .veld select:focus, .veld textarea:focus { border-color: var(--color-blauwdiep); }
+  .veld-hulp { font-size: var(--text-klein); color: var(--color-grijsdonker); }
+  .vlak-zwart .veld-hulp, .vlak-inkt .veld-hulp { color: var(--color-grijs); }
+  .veld-fout {
+    font-size: var(--text-klein);
+    font-weight: 700;
+    color: var(--color-zwart);
+    background: var(--color-blauw);
+    padding: 0.2rem 0.45rem;
+    width: fit-content;
+  }
+  .veld input:user-invalid, .veld textarea:user-invalid, .veld select:user-invalid {
+    border-color: var(--color-blauwdiep);
+    border-width: 2px;
+  }
+
+  /* -- Tabel -------------------------------------------------------------- */
+  .tabel { width: 100%; border-collapse: collapse; }
+  .tabel th {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: left;
+    padding: 0.55rem 0.6rem;
+    border-bottom: 2px solid currentColor;
+    white-space: nowrap;
+  }
+  .tabel td {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--kleur-lijn-donker);
+    vertical-align: top;
+  }
+  .vlak-wit .tabel td { border-bottom-color: var(--kleur-lijn-licht); }
+  .tabel .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+  .tabel-schuif { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* -- Link met onderlijn die meegroeit ----------------------------------- */
+  .link-onder {
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background-size 0.25s var(--ease-klap);
+  }
+  .link-onder:hover, .link-onder:focus-visible { background-size: 100% 1px; }
+  @media (prefers-reduced-motion: reduce) {
+    .link-onder { transition: none; }
+  }
+
+  /* -- Skip link ---------------------------------------------------------- */
+  .sla-over {
+    position: absolute;
+    left: 0.5rem;
+    top: -100%;
+    z-index: 100;
+    background: var(--color-blauw);
+    color: var(--color-zwart);
+    padding: 0.65rem 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-klein);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .sla-over:focus { top: 0.5rem; }
+}
+
+/* ==========================================================================
+   BEWEGING
+   Alles hieronder is uitgeschakeld bij prefers-reduced-motion.
+   ========================================================================== */
+@layer utilities {
+  .verschijn { opacity: 0; transform: translateY(14px); }
+  .verschijn.is-zichtbaar {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.6s var(--ease-klap), transform 0.6s var(--ease-klap);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .verschijn { opacity: 1; transform: none; }
+    .verschijn.is-zichtbaar { transition: none; }
+  }
+  .geen-scroll { overflow: hidden; }
+}

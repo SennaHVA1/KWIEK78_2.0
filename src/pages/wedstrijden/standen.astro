@@ -1,0 +1,57 @@
+---
+/**
+ * De poulestanden van alle teams die op de site staan.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import Standentabel from '../../components/Standentabel.astro';
+import { getAllePoulestanden } from '../../lib/sportlink';
+
+const standen = getAllePoulestanden();
+---
+
+<Basis
+  titel="Standen"
+  omschrijving="De poulestanden van alle teams van v.v. Kwiek '78 die op de site staan."
+>
+  <Paginakop
+    kicker="Wedstrijden"
+    titel="Standen"
+    intro="De poule van elk team dat op deze site staat. De regel van Kwiek is blauw gemarkeerd."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel standen">
+      {standen.map(({ team, stand }) => (
+        <section class="kolom standblok">
+          <p class="kolom-kicker">{team.speeldag}</p>
+          <div>
+            <div class="standblok-kop">
+              <h2 class="kop-s">
+                <a class="link-onder" href={`/teams/${team.id}`}>{team.naam}</a>
+              </h2>
+              <span class="merk merk--rand">{team.pouleNaam}</span>
+            </div>
+            <Standentabel
+              stand={stand}
+              geenStandTekst={`Voor ${team.pouleNaam} houdt de KNVB geen stand bij. Bij de pupillen tot en met onder 11 gaat het om spelplezier, niet om punten. De uitslagen staan wel op de teampagina.`}
+            />
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .standen { display: grid; gap: 3.25rem; }
+  .standblok-kop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding-bottom: 0.9rem;
+  }
+  .standblok-kop a { text-decoration: none; color: inherit; }
+</style>

@@ -1,0 +1,128 @@
+---
+/**
+ * Activiteiten als rijen met de datum links in een blokje, zoals een
+ * scheurkalender.
+ */
+import { tijd, machineDatum, MAANDNAMEN } from '../lib/datum';
+import type { AgendaItem } from '../lib/types';
+
+interface Props {
+  items: AgendaItem[];
+  /** Omschrijving tonen. Uit in het compacte blok op de homepage. */
+  toonOmschrijving?: boolean;
+  leegTekst?: string;
+}
+
+const {
+  items,
+  toonOmschrijving = true,
+  leegTekst = 'Er staan op dit moment geen activiteiten in de agenda.',
+} = Astro.props;
+
+const categorieLabel: Record<AgendaItem['categorie'], string> = {
+  club: 'Club',
+  jeugd: 'Jeugd',
+  kantine: 'Kantine',
+  sponsor: 'Sponsor',
+  onderhoud: 'Onderhoud',
+};
+
+/** Dag en afgekorte maand uit een ISO-datum, zonder tijdzoneverschuiving. */
+const dagDeel = (iso: string) => {
+  const [, maand, dag] = iso.slice(0, 10).split('-');
+  return { dag: String(Number(dag)), maand: MAANDNAMEN[Number(maand) - 1].slice(0, 3) };
+};
+---
+
+{items.length === 0 ? (
+  <p class="agenda-leeg zacht">{leegTekst}</p>
+) : (
+  <ul class="agenda rij-groep">
+    {items.map((item) => {
+      const deel = dagDeel(item.datum);
+      return (
+        <li class="rij agenda-rij">
+          <time class="agenda-datum data" datetime={machineDatum(item.datum)}>
+            <span class="agenda-dag">{deel.dag}</span>
+            <span class="agenda-maand">{deel.maand}</span>
+          </time>
+          <div class="agenda-inhoud">
+            <h3 class="agenda-titel">{item.titel}</h3>
+            <p class="agenda-meta data">
+              {tijd(item.datum)}
+              <span class="agenda-scheiding" aria-hidden="true"></span>
+              {item.locatie}
+            </p>
+            {toonOmschrijving && <p class="agenda-omschrijving zacht">{item.omschrijving}</p>}
+          </div>
+          <span class="merk merk--rand agenda-merk">{categorieLabel[item.categorie]}</span>
+        </li>
+      );
+    })}
+  </ul>
+)}
+
+<style>
+  .agenda { list-style: none; margin: 0; padding: 0; }
+
+  .agenda-rij {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "datum inhoud"
+      "merk  merk";
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    align-items: start;
+  }
+
+  .agenda-datum {
+    grid-area: datum;
+    display: grid;
+    place-items: center;
+    width: 3.1rem;
+    padding: 0.35rem 0;
+    border: 1px solid var(--kleur-lijn-donker);
+    line-height: 1.1;
+  }
+  :global(.vlak-wit) .agenda-datum { border-color: var(--kleur-lijn-licht); }
+  .agenda-dag { font-size: 1.15rem; font-weight: 700; }
+  .agenda-maand {
+    font-size: var(--text-mini);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-grijs);
+  }
+  :global(.vlak-wit) .agenda-maand { color: var(--color-grijsdonker); }
+
+  .agenda-inhoud { grid-area: inhoud; display: grid; gap: 0.25rem; }
+  .agenda-titel { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
+  .agenda-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-mini);
+    letter-spacing: 0.06em;
+    color: var(--color-grijs);
+  }
+  :global(.vlak-wit) .agenda-meta { color: var(--color-grijsdonker); }
+  .agenda-scheiding { width: 0.45rem; height: 1px; background: currentColor; flex: none; }
+  .agenda-omschrijving { font-size: var(--text-klein); max-width: 60ch; margin-top: 0.2rem; }
+
+  .agenda-merk { grid-area: merk; justify-self: start; }
+
+  .agenda-leeg {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    font-size: var(--text-klein);
+  }
+  :global(.vlak-wit) .agenda-leeg { border-top-color: var(--kleur-lijn-licht); }
+
+  @media (min-width: 640px) {
+    .agenda-rij {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas: "datum inhoud merk";
+      align-items: center;
+    }
+    .agenda-merk { align-self: center; }
+  }
+</style>

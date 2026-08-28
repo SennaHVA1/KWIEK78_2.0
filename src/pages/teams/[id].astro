@@ -1,0 +1,328 @@
+---
+/**
+ * Teampagina. Een template voor alle teams.
+ *
+ * Bevat teamfoto, programma, uitslagen, poulestand, selectie, staf en
+ * trainingstijden.
+ *
+ * AVG: bij jeugdteams gaat elke spelersnaam door toonNaam() met isJeugd op
+ * true, waardoor er nooit een volledige achternaam op de pagina komt. Leden
+ * met privacyniveau 2 zijn al door de adapter uit de selectie gehaald; het
+ * aantal wordt wel genoemd, want een selectie waar zomaar iemand uit weg is
+ * roept vragen op.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Foto from '../../components/Foto.astro';
+import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
+import Standentabel from '../../components/Standentabel.astro';
+import {
+  getTeams, getTeam, getWedstrijdenVoorTeam, getPoulestand, toonNaam, aantalAfgeschermd,
+} from '../../lib/sportlink';
+
+export function getStaticPaths() {
+  return getTeams().map((team) => ({ params: { id: team.id } }));
+}
+
+const { id } = Astro.params;
+const team = getTeam(id!)!;
+
+const wedstrijden = getWedstrijdenVoorTeam(team.id);
+const programma = wedstrijden.filter((w) => w.uitslag === undefined);
+const uitslagen = wedstrijden.filter((w) => w.uitslag !== undefined).reverse();
+const stand = getPoulestand(team.id);
+const afgeschermd = aantalAfgeschermd(team.id);
+
+/* Selectie op positie groeperen. Spelers zonder positie komen achteraan; bij
+   de jongste jeugd wordt er geen vaste positie bijgehouden. */
+const posities = [
+  { sleutel: 'keeper', label: 'Keepers' },
+  { sleutel: 'verdediger', label: 'Verdediging' },
+  { sleutel: 'middenvelder', label: 'Middenveld' },
+  { sleutel: 'aanvaller', label: 'Aanval' },
+] as const;
+
+const groepen: { label: string; spelers: typeof team.spelers }[] = posities
+  .map((positie) => ({
+    label: positie.label,
+    spelers: team.spelers.filter((s) => s.positie === positie.sleutel),
+  }))
+  .filter((groep) => groep.spelers.length > 0);
+
+const zonderPositie = team.spelers.filter((s) => !s.positie);
+if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderPositie });
+---
+
+<Basis
+  titel={team.naam}
+  omschrijving={`${team.naam} van v.v. Kwiek '78: programma, uitslagen, stand, selectie, staf en trainingstijden.`}
+>
+  <!-- ================================================================== -->
+  <!-- Kop met teamfoto                                                   -->
+  <!-- ================================================================== -->
+  <section class="teamkop vlak-zwart">
+    <div class="omhulsel">
+      <div class="teamkop-binnen">
+        <div class="teamkop-tekst">
+          <p class="label">{team.pouleNaam}</p>
+          <h1 class="kop-l">{team.naam}</h1>
+          <p class="teamkop-intro">{team.omschrijving}</p>
+          <ul class="teamkop-feiten data">
+            <li><span>Speeldag</span> {team.speeldag}</li>
+            <li><span>Selectie</span> {team.spelers.length} spelers</li>
+            <li><span>Staf</span> {team.staf.length} personen</li>
+          </ul>
+        </div>
+
+        <div class="teamkop-beeld">
+          <Foto
+            src={team.teamfoto}
+            alt={`Teamfoto van ${team.naam}`}
+            ratio="16 / 10"
+            prioriteit
+            plaatshouder={`teams/${team.id}.webp`}
+          />
+          {team.fotobijschrift && <p class="teamkop-bijschrift zacht">{team.fotobijschrift}</p>}
+        </div>
+      </div>
+    </div>
+    <div class="baan baan--dun" aria-hidden="true"></div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Programma en uitslagen                                             -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Programma</p>
+        <div>
+          <h2 class="kop-sectie blokkop">Komende wedstrijden</h2>
+          <Wedstrijdlijst
+            wedstrijden={programma}
+            toonLocatie={true}
+            kopNiveau={3}
+            leegTekst={`Er staan op dit moment geen wedstrijden gepland voor ${team.naam}.`}
+          />
+        </div>
+      </div>
+
+      <div class="kolom scheiding">
+        <p class="kolom-kicker">Uitslagen</p>
+        <div>
+          <h2 class="kop-sectie blokkop">Gespeeld</h2>
+          <Wedstrijdlijst
+            wedstrijden={uitslagen}
+            toonLocatie={false}
+            kopNiveau={3}
+            leegTekst={`${team.naam} heeft dit seizoen nog niet gespeeld.`}
+          />
+        </div>
+      </div>
+
+      <div class="kolom scheiding">
+        <p class="kolom-kicker">Stand</p>
+        <div>
+          <h2 class="kop-sectie blokkop">{team.pouleNaam}</h2>
+          <Standentabel
+            stand={stand}
+            geenStandTekst={`Voor ${team.pouleNaam} houdt de KNVB geen stand bij. Bij de pupillen tot en met onder 11 draait het om spelplezier en niet om punten. De uitslagen staan hierboven wel.`}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Selectie, staf en trainingen                                       -->
+  <!-- ================================================================== -->
+  <section class="vlak-zwart sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">De ploeg</p>
+
+        <div class="ploeg">
+          <div class="ploeg-selectie">
+            <h2 class="kop-sectie blokkop">Selectie</h2>
+
+            {team.isJeugd && (
+              <p class="avg-notitie">
+                <span class="merk merk--afgelast">AVG</span>
+                Bij jeugdteams tonen we voornaam en de eerste letter van de achternaam.
+                Meer is niet nodig om je kind terug te vinden.
+              </p>
+            )}
+
+            {groepen.map((groep) => (
+              <div class="positiegroep">
+                <h3 class="positiegroep-kop">{groep.label}</h3>
+                <ul class="spelers">
+                  {groep.spelers.map((speler) => {
+                    const naam = toonNaam(speler, team.isJeugd);
+                    return naam ? (
+                      <li class="speler">
+                        <span class="speler-nummer data">{speler.rugnummer ?? ''}</span>
+                        <span class="speler-naam">{naam}</span>
+                      </li>
+                    ) : null;
+                  })}
+                </ul>
+              </div>
+            ))}
+
+            {afgeschermd > 0 && (
+              <p class="afgeschermd zacht">
+                {afgeschermd === 1
+                  ? 'Een speler van dit team heeft aangegeven niet op de website te willen. Die naam staat hier daarom niet.'
+                  : `${afgeschermd} spelers van dit team hebben aangegeven niet op de website te willen. Die namen staan hier daarom niet.`}
+              </p>
+            )}
+          </div>
+
+          <div class="ploeg-staf">
+            <h2 class="kop-sectie blokkop">Staf</h2>
+            <ul class="staflijst">
+              {team.staf.map((lid) => (
+                <li>
+                  <span class="staf-functie data">{lid.functie}</span>
+                  <span class="staf-naam">{lid.naam}</span>
+                </li>
+              ))}
+            </ul>
+
+            <h2 class="kop-sectie blokkop blokkop--tweede">Trainingstijden</h2>
+            <ul class="traininglijst">
+              {team.trainingen.map((training) => (
+                <li>
+                  <span class="training-dag">{training.dag}</span>
+                  <span class="training-tijd data">{training.van} - {training.tot}</span>
+                  <span class="training-veld zacht">{training.veld}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a class="knop knop--rand" href="/contact">Vragen over dit team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  /* Kop -------------------------------------------------------------- */
+  .teamkop-binnen {
+    display: grid;
+    gap: 2rem;
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .teamkop-binnen { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 3rem; }
+  }
+  .teamkop-tekst { display: grid; gap: 0.85rem; align-content: start; }
+  .teamkop-intro { max-width: 48ch; color: var(--color-grijs); line-height: 1.6; }
+
+  .teamkop-feiten {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.75rem;
+    list-style: none;
+    margin: 0.35rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    font-size: var(--text-klein);
+  }
+  .teamkop-feiten span {
+    display: block;
+    font-size: var(--text-mini);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+
+  .teamkop-beeld { display: grid; gap: 0.6rem; }
+  .teamkop-beeld :global(img) { filter: grayscale(1) contrast(1.08); }
+  .teamkop-bijschrift { font-size: var(--text-mini); }
+
+  /* Blokken ---------------------------------------------------------- */
+  .blokkop { padding-bottom: 1.1rem; }
+  .blokkop--tweede { padding-top: 2rem; }
+  .scheiding { margin-top: 3rem; }
+
+  /* Ploeg ------------------------------------------------------------ */
+  .ploeg { display: grid; gap: 2.75rem; }
+  @media (min-width: 900px) {
+    .ploeg { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 3.5rem; }
+  }
+
+  .avg-notitie {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    font-size: var(--text-klein);
+    color: var(--color-grijs);
+    border-left: 3px solid var(--color-blauw);
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 1.5rem;
+    max-width: 56ch;
+  }
+
+  .positiegroep + .positiegroep { margin-top: 1.75rem; }
+  .positiegroep-kop {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+    padding-bottom: 0.5rem;
+  }
+
+  .spelers, .staflijst, .traininglijst { list-style: none; margin: 0; padding: 0; }
+
+  .speler {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: baseline;
+    padding-block: 0.5rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    font-size: var(--text-klein);
+  }
+  .speler:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
+  .speler-nummer { color: var(--color-grijs); text-align: right; }
+  .speler-naam { font-weight: 600; }
+
+  .afgeschermd {
+    margin-top: 1.25rem;
+    font-size: var(--text-mini);
+    max-width: 52ch;
+    line-height: 1.6;
+  }
+
+  .staflijst li, .traininglijst li {
+    display: grid;
+    gap: 0.15rem 1rem;
+    padding-block: 0.65rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    font-size: var(--text-klein);
+  }
+  .staflijst li:last-child, .traininglijst li:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
+
+  .staf-functie {
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  .staf-naam { font-weight: 600; }
+
+  .traininglijst li { grid-template-columns: 7rem auto minmax(0, 1fr); align-items: baseline; }
+  .training-dag { font-weight: 600; }
+  .training-veld { font-size: var(--text-mini); }
+
+  .ploeg-staf .knop { margin-top: 1.5rem; }
+</style>

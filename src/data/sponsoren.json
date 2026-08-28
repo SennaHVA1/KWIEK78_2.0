@@ -1,0 +1,186 @@
+[
+  {
+    "id": "kramer-keukens",
+    "naam": "Kramer Keukens",
+    "niveau": "hoofdsponsor",
+    "url": "https://www.kramerkeukens.nl",
+    "logo": "/images/sponsoren/kramer-keukens.webp",
+    "omschrijving": "Hoofdsponsor van het eerste elftal sinds 2011. Shirtsponsor en bordsponsor langs veld 1.",
+    "inCarousel": true
+  },
+  {
+    "id": "dralco",
+    "naam": "Dralco BV",
+    "niveau": "hoofdsponsor",
+    "url": "https://www.dralco.nl",
+    "logo": "/images/sponsoren/dralco.webp",
+    "omschrijving": "Co-sponsor van de selectie en vaste partner bij het jaarlijkse zaaltoernooi.",
+    "inCarousel": true
+  },
+  {
+    "id": "braas-en-partners",
+    "naam": "Braas & Partners",
+    "niveau": "hoofdsponsor",
+    "url": "https://www.braasenpartners.nl",
+    "logo": "/images/sponsoren/braas-en-partners.webp",
+    "omschrijving": "Hoofdsponsor van de jeugdafdeling. Kleding voor alle jeugdteams van JO7 tot JO19.",
+    "inCarousel": true
+  },
+  {
+    "id": "kwakman-groep",
+    "naam": "Kwakman Groep",
+    "niveau": "allstars",
+    "url": "https://www.kwakmangroep.nl",
+    "logo": "/images/sponsoren/kwakman-groep.svg",
+    "omschrijving": "Allstar sinds 2016. Sponsor van de dug-outs en het scorebord.",
+    "inCarousel": true
+  },
+  {
+    "id": "wessels-rolluikenfabriek",
+    "naam": "Wessels Rolluikenfabriek",
+    "niveau": "allstars",
+    "url": "https://www.wesselsrolluiken.nl",
+    "logo": "/images/sponsoren/wessels-rolluikenfabriek.svg",
+    "omschrijving": "Allstar en bordsponsor. Levert al jaren het onderhoud aan de rolluiken van de kantine.",
+    "inCarousel": true
+  },
+  {
+    "id": "vi-travel",
+    "naam": "VI Travel",
+    "niveau": "allstars",
+    "url": "https://www.vitravel.nl",
+    "logo": "/images/sponsoren/vi-travel.svg",
+    "omschrijving": "Allstar en partner bij het jaarlijkse trainingsweekend van de selectie.",
+    "inCarousel": true
+  },
+  {
+    "id": "duijn-teamsport",
+    "naam": "Duijn Teamsport",
+    "niveau": "allstars",
+    "url": "https://www.duijnteamsport.nl",
+    "logo": "/images/sponsoren/duijn-teamsport.svg",
+    "omschrijving": "Kledingleverancier van de club. Leden krijgen 20 procent korting in de winkel in Hoorn.",
+    "inCarousel": true
+  },
+  {
+    "id": "sportcafe-de-koggenhal",
+    "naam": "Sportcafé de Koggenhal",
+    "niveau": "allstars",
+    "url": "https://www.dekoggenhal.nl",
+    "logo": "/images/sponsoren/sportcafe-de-koggenhal.svg",
+    "omschrijving": "Onze thuisbasis na de wedstrijd. Sponsor van het minutenspel en de kerstbingo.",
+    "inCarousel": true
+  },
+  {
+    "id": "club78-bouwbedrijf-appelman",
+    "naam": "Bouwbedrijf Appelman",
+    "niveau": "club78",
+    "url": "https://www.bouwbedrijfappelman.nl",
+    "logo": "/images/sponsoren/bouwbedrijf-appelman.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "club78-de-koggeslager",
+    "naam": "De Koggeslager",
+    "niveau": "club78",
+    "url": "https://www.dekoggeslager.nl",
+    "logo": "/images/sponsoren/de-koggeslager.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "club78-installatiebedrijf-sijm",
+    "naam": "Installatiebedrijf Sijm",
+    "niveau": "club78",
+    "url": "https://www.installatiebedrijfsijm.nl",
+    "logo": "/images/sponsoren/installatiebedrijf-sijm.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "club78-hoveniersbedrijf-beerepoot",
+    "naam": "Hoveniersbedrijf Beerepoot",
+    "niveau": "club78",
+    "url": "https://www.hoveniersbedrijfbeerepoot.nl",
+    "logo": "/images/sponsoren/hoveniersbedrijf-beerepoot.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "club78-autoschade-karsten",
+    "naam": "Autoschade Karsten",
+    "niveau": "club78",
+    "url": "https://www.autoschadekarsten.nl",
+    "logo": "/images/sponsoren/autoschade-karsten.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "club78-kapsalon-nooij",
+    "naam": "Kapsalon Nooij",
+    "niveau": "club78",
+    "url": "https://www.kapsalonnooij.nl",
+    "logo": "/images/sponsoren/kapsalon-nooij.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-transportbedrijf-groot",
+    "naam": "Transportbedrijf Groot",
+    "niveau": "bord",
+    "url": "https://www.transportbedrijfgroot.nl",
+    "logo": "/images/sponsoren/transportbedrijf-groot.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-bakkerij-klaver",
+    "naam": "Bakkerij Klaver",
+    "niveau": "bord",
+    "url": "https://www.bakkerijklaver.nl",
+    "logo": "/images/sponsoren/bakkerij-klaver.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-loonbedrijf-vriend",
+    "naam": "Loonbedrijf Vriend",
+    "niveau": "bord",
+    "url": "https://www.loonbedrijfvriend.nl",
+    "logo": "/images/sponsoren/loonbedrijf-vriend.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-rijschool-molenaar",
+    "naam": "Rijschool Molenaar",
+    "niveau": "bord",
+    "url": "https://www.rijschoolmolenaar.nl",
+    "logo": "/images/sponsoren/rijschool-molenaar.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-fysio-avenhorn",
+    "naam": "Fysiotherapie Avenhorn",
+    "niveau": "bord",
+    "url": "https://www.fysioavenhorn.nl",
+    "logo": "/images/sponsoren/fysio-avenhorn.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-schildersbedrijf-blank",
+    "naam": "Schildersbedrijf Blank",
+    "niveau": "bord",
+    "url": "https://www.schildersbedrijfblank.nl",
+    "logo": "/images/sponsoren/schildersbedrijf-blank.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-tuincentrum-koggenland",
+    "naam": "Tuincentrum Koggenland",
+    "niveau": "bord",
+    "url": "https://www.tuincentrumkoggenland.nl",
+    "logo": "/images/sponsoren/tuincentrum-koggenland.svg",
+    "inCarousel": false
+  },
+  {
+    "id": "bord-elektro-neefjes",
+    "naam": "Elektro Neefjes",
+    "niveau": "bord",
+    "url": "https://www.elektroneefjes.nl",
+    "logo": "/images/sponsoren/elektro-neefjes.svg",
+    "inCarousel": false
+  }
+]

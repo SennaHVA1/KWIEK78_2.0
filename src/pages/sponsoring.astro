@@ -1,0 +1,207 @@
+---
+/**
+ * Sponsoring.
+ *
+ * Op de oude site waren dit drie pagina's: Allstars, Club van '78 en
+ * bordsponsoring. Ze vertellen hetzelfde verhaal aan dezelfde lezer, dus ze
+ * staan nu onder elkaar op een pagina met een logoraster per niveau.
+ */
+import Basis from '../layouts/Basis.astro';
+import Paginakop from '../components/Paginakop.astro';
+import { fotoBestaat } from '../lib/fotos';
+import { getSponsorNiveaus, getContactpersoon, CLUBGEGEVENS } from '../lib/club';
+import type { SponsorNiveau } from '../lib/types';
+
+const niveaus = getSponsorNiveaus();
+const sponsorcommissie = getContactpersoon('Voorzitter sponsorcommissie');
+
+const uitleg: Record<SponsorNiveau, { tekst: string; bedrag: string }> = {
+  hoofdsponsor: {
+    tekst: 'Op het shirt van het eerste of van de hele jeugdafdeling, op het grootste bord langs veld 1 en met naamsvermelding bij elke thuiswedstrijd. Contracten lopen doorgaans drie jaar.',
+    bedrag: 'Op aanvraag',
+  },
+  allstars: {
+    tekst: 'Een bord langs het veld, je logo op de website en in de carousel op de homepage, en een uitnodiging voor de jaarlijkse sponsoravond.',
+    bedrag: 'Vanaf 750 euro per jaar',
+  },
+  club78: {
+    tekst: 'Voor ondernemers en oud-leden die de club willen steunen zonder groot bord. Je naam op het bord in de kantine en op deze pagina, en toegang tot de sponsoravond.',
+    bedrag: '250 euro per jaar',
+  },
+  bord: {
+    tekst: 'Een bord van twee bij een halve meter langs veld 1 of veld 2. Wij regelen productie en plaatsing, jij levert het ontwerp of laat het door ons maken.',
+    bedrag: 'Vanaf 400 euro per jaar, driejarig contract',
+  },
+};
+---
+
+<Basis
+  titel="Sponsoring"
+  omschrijving="Sponsor worden van v.v. Kwiek '78: hoofdsponsor, Allstars, Club van '78 en bordsponsoring. Met alle huidige sponsoren."
+>
+  <Paginakop
+    kicker="Sponsoring"
+    titel="Sponsoren"
+    intro="Zonder de ondernemers uit Avenhorn en omgeving zou hier geen kunstgras liggen. Hieronder staat wie ons steunt en hoe je meedoet."
+  />
+
+  {niveaus.map((niveau, index) => (
+    <section class:list={['niveau', index % 2 === 0 ? 'vlak-wit' : 'vlak-zwart', 'sectie']}>
+      <div class="omhulsel">
+        <div class="kolom">
+          <p class="kolom-kicker">{uitleg[niveau.niveau].bedrag}</p>
+          <div>
+            <h2 class="kop-sectie niveau-kop">{niveau.label}</h2>
+            <p class="niveau-uitleg">{uitleg[niveau.niveau].tekst}</p>
+
+            <ul class="logoraster">
+              {niveau.sponsoren.map((sponsor) => (
+                <li>
+                  <a class="logo" href={sponsor.url} target="_blank" rel="noopener noreferrer">
+                    {fotoBestaat(sponsor.logo) ? (
+                      <img src={sponsor.logo} alt={sponsor.naam} loading="lazy" decoding="async" />
+                    ) : (
+                      <span class="logo-woordmerk">{sponsor.naam}</span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {index < niveaus.length - 1 && <div class="baan baan--dun" aria-hidden="true"></div>}
+    </section>
+  ))}
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Sponsor worden                                                     -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie" id="sponsor-worden">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Meedoen</p>
+        <div class="worden">
+          <div class="worden-tekst">
+            <h2 class="kop-sectie">Sponsor worden</h2>
+            <div class="lopende-tekst">
+              <p>
+                Kwiek is een dorpsclub met ruim driehonderd leden. Op een gemiddelde zondag lopen er
+                tweehonderd mensen over het sportpark, en op zaterdagochtend is dat niet veel minder.
+                Een bord langs het veld wordt hier gezien.
+              </p>
+              <p>
+                Belangrijker nog: sponsorgeld gaat rechtstreeks naar de vereniging. Naar ballen,
+                naar kleding voor de jongste jeugd, naar het onderhoud van de kleedkamers.
+                Er zit geen kantoor tussen.
+              </p>
+              <h3>Hoe het gaat</h3>
+              <ol>
+                <li>Je neemt contact op, per mail of gewoon op zondag aan de bar.</li>
+                <li>We praten een half uur over wat bij je past.</li>
+                <li>Je krijgt een voorstel op papier, zonder verplichtingen.</li>
+              </ol>
+            </div>
+          </div>
+
+          <aside class="contactblok">
+            <p class="label">Sponsorcommissie</p>
+            {sponsorcommissie && (
+              <p class="contactblok-naam">{sponsorcommissie.naam}</p>
+            )}
+            <p class="contactblok-regel data">
+              <a class="link-onder" href={`mailto:${sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}`}>
+                {sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}
+              </a>
+            </p>
+            <p class="contactblok-regel data">
+              <a class="link-onder" href={`tel:${CLUBGEGEVENS.telefoon.replace(/\s/g, '')}`}>
+                {CLUBGEGEVENS.telefoon}
+              </a>
+            </p>
+            <p class="contactblok-adres zacht">
+              {CLUBGEGEVENS.sportpark}<br />
+              {CLUBGEGEVENS.straat}<br />
+              {CLUBGEGEVENS.postcode} {CLUBGEGEVENS.plaats}
+            </p>
+            <a class="knop knop--zwart" href={`mailto:${sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}`}>
+              Stuur een bericht
+            </a>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .niveau-kop { padding-bottom: 0.6rem; }
+  .niveau-uitleg {
+    max-width: 62ch;
+    line-height: 1.6;
+    color: var(--color-grijsdonker);
+    padding-bottom: 1.75rem;
+  }
+  .vlak-zwart .niveau-uitleg { color: var(--color-grijs); }
+
+  .logoraster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: 1px;
+    background: var(--kleur-lijn-licht);
+    border: 1px solid var(--kleur-lijn-licht);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .vlak-zwart .logoraster { background: var(--kleur-lijn-donker); border-color: var(--kleur-lijn-donker); }
+
+  .logo {
+    display: grid;
+    place-items: center;
+    min-height: 6.5rem;
+    padding: 1rem;
+    background: var(--color-wit);
+    transition: background-color 0.2s var(--ease-klap);
+  }
+  .logo:hover { background: var(--kleur-papier-op); }
+  @media (prefers-reduced-motion: reduce) { .logo { transition: none; } }
+
+  .logo img { max-height: 4rem; max-width: 100%; width: auto; object-fit: contain; }
+  .logo-woordmerk {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.015em;
+    color: var(--color-zwart);
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  /* Sponsor worden ---------------------------------------------------- */
+  .worden { display: grid; gap: 2.5rem; }
+  @media (min-width: 900px) {
+    .worden { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
+  }
+
+  .contactblok {
+    display: grid;
+    gap: 0.4rem;
+    justify-items: start;
+    border: 1px solid var(--kleur-lijn-licht);
+    padding: 1.75rem;
+  }
+  .contactblok-naam { font-weight: 700; font-size: var(--text-groot); letter-spacing: -0.015em; }
+  .contactblok-regel { font-size: var(--text-klein); }
+  .contactblok-adres {
+    font-size: var(--text-klein);
+    line-height: 1.7;
+    margin-top: 0.75rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+    width: 100%;
+  }
+  .contactblok .knop { margin-top: 1rem; }
+</style>

@@ -1,0 +1,338 @@
+---
+/**
+ * Detailpagina van een wedstrijd.
+ *
+ * Elke wedstrijd uit de adapter krijgt een eigen statische pagina. De
+ * opstelling is een plaatshouder: Sportlink levert die pas na het digitale
+ * wedstrijdformulier aan, en niet voor elke categorie.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Clubwapen from '../../components/Clubwapen.astro';
+import Klapbord from '../../components/Klapbord.astro';
+import Wedstrijdrij from '../../components/Wedstrijdrij.astro';
+import {
+  getAlleWedstrijden, getWedstrijd, isThuiswedstrijd, getTeams,
+} from '../../lib/sportlink';
+import { routeLink, CLUBGEGEVENS } from '../../lib/club';
+import { volledigeDatum, tijd, machineDatum, dagSleutel } from '../../lib/datum';
+
+export function getStaticPaths() {
+  return getAlleWedstrijden().map((wedstrijd) => ({
+    params: { wedstrijdcode: wedstrijd.wedstrijdcode },
+  }));
+}
+
+const { wedstrijdcode } = Astro.params;
+const wedstrijd = getWedstrijd(wedstrijdcode!)!;
+
+const heeftUitslag = wedstrijd.uitslag !== undefined;
+const isToekomst = !heeftUitslag && !wedstrijd.afgelast
+  && new Date(wedstrijd.datum).getTime() > Date.now();
+const thuis = isThuiswedstrijd(wedstrijd);
+
+const soortLabel: Record<typeof wedstrijd.competitie, string> = {
+  competitie: 'Competitiewedstrijd',
+  beker: 'Bekerwedstrijd',
+  oefen: 'Oefenwedstrijd',
+  zaal: 'Zaalwedstrijd',
+};
+
+/* Het eigen team opzoeken zodat we naar de teampagina kunnen linken. */
+const eigenTeamNaam = thuis ? wedstrijd.thuisteam : wedstrijd.uitteam;
+const eigenTeam = getTeams().find((t) => t.naam === eigenTeamNaam);
+
+/* De andere wedstrijden op dezelfde dag: handig als er meer kinderen spelen. */
+const zelfdeDag = getAlleWedstrijden().filter(
+  (w) => dagSleutel(w.datum) === dagSleutel(wedstrijd.datum) && w.wedstrijdcode !== wedstrijd.wedstrijdcode,
+);
+
+const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
+---
+
+<Basis
+  titel={titel}
+  omschrijving={`${titel} op ${volledigeDatum(wedstrijd.datum)} om ${tijd(wedstrijd.datum)}, ${wedstrijd.accommodatie}.`}
+>
+  <!-- ================================================================== -->
+  <!-- Wedstrijdpaneel                                                    -->
+  <!-- ================================================================== -->
+  <section class:list={['duel', 'vlak-zwart', wedstrijd.afgelast && 'is-afgelast']}>
+    <div class="omhulsel">
+      <div class="kolom duel-binnen">
+        <p class="kolom-kicker">
+          <a class="link-onder" href="/wedstrijden/programma">Wedstrijden</a>
+        </p>
+
+        <div class="duel-inhoud">
+          <p class="duel-soort">
+            {soortLabel[wedstrijd.competitie]}
+            <span class="duel-punt" aria-hidden="true"></span>
+            <time datetime={machineDatum(wedstrijd.datum)}>{volledigeDatum(wedstrijd.datum)}</time>
+          </p>
+
+          {wedstrijd.afgelast && (
+            <p class="duel-afgelast">
+              <span class="merk merk--afgelast">Afgelast</span>
+              <span>Deze wedstrijd gaat niet door. Een nieuwe datum volgt via de KNVB.</span>
+            </p>
+          )}
+
+          <h1 class="duel-uitslag">
+            <span class:list={['duel-club', wedstrijd.afgelast && 'doorgehaald']}>
+              <Clubwapen src={wedstrijd.thuisLogo} club={wedstrijd.thuisteam} formaat={64} />
+              <span class="duel-naam">{wedstrijd.thuisteam}</span>
+            </span>
+
+            <span class="duel-score data">
+              {heeftUitslag
+                ? `${wedstrijd.uitslag!.thuis} - ${wedstrijd.uitslag!.uit}`
+                : tijd(wedstrijd.datum)}
+            </span>
+
+            <span class:list={['duel-club', wedstrijd.afgelast && 'doorgehaald']}>
+              <Clubwapen src={wedstrijd.uitLogo} club={wedstrijd.uitteam} formaat={64} />
+              <span class="duel-naam">{wedstrijd.uitteam}</span>
+            </span>
+          </h1>
+
+          {isToekomst && (
+            <div class="duel-teller">
+              <p class="label">Aftellen naar de aftrap</p>
+              <Klapbord doel={wedstrijd.datum} compact />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+    <div class="baan baan--dun" aria-hidden="true"></div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Gegevens                                                           -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Wedstrijdgegevens</p>
+
+        <div class="detail-raster">
+          <div class="detail-blok">
+            <h2 class="kop-s">Waar en wanneer</h2>
+            <dl class="detail-lijst">
+              <div>
+                <dt>Accommodatie</dt>
+                <dd>{wedstrijd.accommodatie}</dd>
+              </div>
+              {wedstrijd.veld && (
+                <div>
+                  <dt>Veld</dt>
+                  <dd>{wedstrijd.veld}</dd>
+                </div>
+              )}
+              <div>
+                <dt>Aanvang</dt>
+                <dd class="data">{tijd(wedstrijd.datum)}</dd>
+              </div>
+              <div>
+                <dt>Wedstrijdcode</dt>
+                <dd class="data">{wedstrijd.wedstrijdcode}</dd>
+              </div>
+              <div>
+                <dt>Thuis of uit</dt>
+                <dd>{thuis ? `Thuis, op ${CLUBGEGEVENS.sportpark}` : 'Uitwedstrijd'}</dd>
+              </div>
+            </dl>
+            <a
+              class="knop knop--zwart"
+              href={routeLink(wedstrijd.accommodatie)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >Route plannen</a>
+          </div>
+
+          <div class="detail-blok">
+            <h2 class="kop-s">Arbitrage</h2>
+            {wedstrijd.scheidsrechters && wedstrijd.scheidsrechters.length > 0 ? (
+              <ul class="detail-namen">
+                {wedstrijd.scheidsrechters.map((naam, i) => (
+                  <li>
+                    <span class="detail-rol data">{i === 0 ? 'Scheidsrechter' : 'Assistent'}</span>
+                    <span>{naam}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="detail-leeg zacht">
+                De arbitrage is nog niet toegewezen. Bij de jeugd wordt vaak op de dag zelf
+                iemand aangewezen door de scheidsrechterscoordinator.
+              </p>
+            )}
+
+            <h2 class="kop-s detail-tweedekop">Opstelling</h2>
+            <div class="opstelling">
+              <p class="detail-leeg zacht">
+                De opstelling verschijnt hier zodra die is ingevuld.
+              </p>
+              <p class="opstelling-uitleg">
+                Sportlink levert de opstelling pas aan nadat het digitale wedstrijdformulier
+                is ingevuld, en niet voor elke leeftijdscategorie. Bij jeugdteams tonen we
+                daarbij nooit volledige achternamen.
+              </p>
+              {eigenTeam && (
+                <a class="knop knop--rand" href={`/teams/${eigenTeam.id}`}>Selectie van {eigenTeam.korteNaam}</a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Andere wedstrijden dezelfde dag                                    -->
+  <!-- ================================================================== -->
+  {zelfdeDag.length > 0 && (
+    <section class="vlak-wit sectie-onder">
+      <div class="omhulsel">
+        <div class="kolom">
+          <p class="kolom-kicker">Zelfde dag</p>
+          <div>
+            <h2 class="kop-sectie andere-kop">Verder op {volledigeDatum(wedstrijd.datum)}</h2>
+            <div class="rij-groep">
+              {zelfdeDag.map((ander) => <Wedstrijdrij wedstrijd={ander} />)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+</Basis>
+
+<style>
+  .duel-binnen { padding-block: clamp(1.5rem, 4vw, 2.75rem); }
+  .duel-inhoud { display: grid; gap: 1.5rem; }
+
+  .duel-soort {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: var(--text-klein);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+  }
+  .duel-punt { width: 0.5rem; height: 1px; background: currentColor; flex: none; }
+  .duel-soort time { color: var(--color-wit); }
+
+  .duel-afgelast {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    font-size: var(--text-klein);
+    position: relative;
+    z-index: 1;
+  }
+
+  .duel-uitslag {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: clamp(0.5rem, 2vw, 2rem);
+    position: relative;
+    z-index: 1;
+  }
+  .duel-club { display: grid; justify-items: center; gap: 0.6rem; text-align: center; }
+  .duel-naam {
+    font-size: clamp(0.9rem, 0.65rem + 1.1vw, 1.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .duel-score {
+    font-size: clamp(1.75rem, 1rem + 4vw, 4rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-blauw);
+    white-space: nowrap;
+  }
+
+  .duel-teller {
+    display: grid;
+    gap: 0.75rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    padding-top: 1.25rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ------------------------------------------------------------------ */
+  .detail-raster { display: grid; gap: 2.5rem; }
+  @media (min-width: 800px) {
+    .detail-raster { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; }
+  }
+  .detail-blok { display: grid; gap: 1rem; align-content: start; }
+  .detail-blok .knop { justify-self: start; }
+
+  .detail-lijst { display: grid; gap: 0; }
+  .detail-lijst > div {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.6rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+    font-size: var(--text-klein);
+  }
+  .detail-lijst > div:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
+  .detail-lijst dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+  }
+  .detail-lijst dd { font-weight: 500; }
+
+  .detail-namen { list-style: none; margin: 0; padding: 0; }
+  .detail-namen li {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.6rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+    font-size: var(--text-klein);
+  }
+  .detail-namen li:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
+  .detail-rol {
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+  }
+
+  .detail-tweedekop { margin-top: 1.25rem; }
+  .detail-leeg { font-size: var(--text-klein); }
+
+  .opstelling {
+    display: grid;
+    gap: 0.85rem;
+    justify-items: start;
+    border: 1px solid var(--kleur-lijn-licht);
+    padding: 1.1rem;
+    background:
+      repeating-linear-gradient(135deg,
+        transparent 0 9px,
+        color-mix(in srgb, var(--color-zwart) 3.5%, transparent) 9px 10px);
+  }
+  .opstelling-uitleg {
+    font-size: var(--text-mini);
+    line-height: 1.55;
+    color: var(--color-grijsdonker);
+    max-width: 44ch;
+  }
+
+  .sectie-onder { padding-bottom: var(--spacing-sectie); }
+  .andere-kop { padding-bottom: 1rem; }
+</style>

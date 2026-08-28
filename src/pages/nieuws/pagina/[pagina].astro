@@ -1,0 +1,28 @@
+---
+/**
+ * Nieuwsoverzicht, pagina twee en verder.
+ *
+ * Pagina 1 heeft bewust de schone URL /nieuws. Vandaar de aparte route: dan
+ * hoeft niemand naar /nieuws/pagina/1 te linken.
+ */
+import Basis from '../../../layouts/Basis.astro';
+import Nieuwsoverzicht from '../../../components/Nieuwsoverzicht.astro';
+import { getAantalNieuwsPaginas } from '../../../lib/nieuws';
+
+export function getStaticPaths() {
+  const totaal = getAantalNieuwsPaginas();
+  return Array.from({ length: Math.max(0, totaal - 1) }, (_, i) => ({
+    params: { pagina: String(i + 2) },
+  }));
+}
+
+const { pagina } = Astro.params;
+const nummer = Number(pagina);
+---
+
+<Basis
+  titel={`Nieuws, pagina ${nummer}`}
+  omschrijving="Ouder clubnieuws van v.v. Kwiek '78 uit Avenhorn."
+>
+  <Nieuwsoverzicht pagina={nummer} />
+</Basis>

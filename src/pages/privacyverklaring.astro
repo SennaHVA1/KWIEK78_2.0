@@ -1,0 +1,139 @@
+---
+/**
+ * Privacyverklaring.
+ *
+ * Deze tekst is een demo-opzet en geen juridisch advies. Voor oplevering moet
+ * hij door het bestuur worden nagelopen en waar nodig aangevuld, zeker de
+ * bewaartermijnen en de verwerkersovereenkomsten. Zie README.
+ */
+import Basis from '../layouts/Basis.astro';
+import Paginakop from '../components/Paginakop.astro';
+import { CLUBGEGEVENS, ADRES, getContactpersoon } from '../lib/club';
+
+const secretaris = getContactpersoon('Secretaris');
+---
+
+<Basis
+  titel="Privacyverklaring"
+  omschrijving={`Hoe v.v. Kwiek '78 omgaat met persoonsgegevens van leden, vrijwilligers en bezoekers van deze website.`}
+>
+  <Paginakop
+    kicker="Juridisch"
+    titel="Privacyverklaring"
+    intro={`Laatst bijgewerkt op 1 augustus 2026. ${CLUBGEGEVENS.naam} verwerkt persoonsgegevens van leden, vrijwilligers en bezoekers van deze site.`}
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Inhoud</p>
+        <div class="lopende-tekst">
+          <p class="demo-melding">
+            Let op: deze tekst is een opzet voor de demo. Voor de live site moet het bestuur hem
+            nalopen en aanvullen met de daadwerkelijke bewaartermijnen en verwerkers.
+          </p>
+
+          <h2>Wie zijn wij</h2>
+          <p>
+            {CLUBGEGEVENS.naam}, gevestigd aan {ADRES}, is verantwoordelijk voor de verwerking van
+            persoonsgegevens zoals beschreven in deze verklaring. De vereniging is ingeschreven bij
+            de KNVB onder clubcode {CLUBGEGEVENS.knvbClubcode}.
+          </p>
+
+          <h2>Welke gegevens verwerken wij</h2>
+          <p>Van leden verwerken wij:</p>
+          <ul>
+            <li>naam, adres, woonplaats, geboortedatum en geslacht</li>
+            <li>telefoonnummer en e-mailadres</li>
+            <li>rekeningnummer voor de incasso van de contributie</li>
+            <li>KNVB-relatiecode en teamindeling</li>
+            <li>gegevens over gespeelde wedstrijden, kaarten en schorsingen</li>
+          </ul>
+          <p>
+            Van bezoekers van deze website verwerken wij geen persoonsgegevens. Er staan geen
+            trackingcookies op de site en er wordt geen bezoekersstatistiek bijgehouden die tot
+            een persoon herleidbaar is.
+          </p>
+
+          <h2>Waarom wij deze gegevens verwerken</h2>
+          <ul>
+            <li>om het lidmaatschap uit te voeren en de contributie te innen</li>
+            <li>om je aan te melden bij de KNVB en in te delen in een team</li>
+            <li>om je te kunnen bereiken over trainingen, wedstrijden en diensten</li>
+            <li>omdat de wet ons daartoe verplicht, bijvoorbeeld voor de administratie</li>
+          </ul>
+
+          <h2>Ledenadministratie en Sportlink</h2>
+          <p>
+            De ledenadministratie voeren wij in Sportlink, het systeem dat de KNVB voorschrijft.
+            Sportlink is verwerker en heeft met de vereniging een verwerkersovereenkomst.
+            De gegevens die op deze website staan komen uit datzelfde systeem.
+          </p>
+
+          <h2>Wat er wel en niet op de website komt</h2>
+          <p>
+            Wij zijn terughoudend met wat er publiek zichtbaar is. Concreet:
+          </p>
+          <ul>
+            <li>bij jeugdteams tonen wij uitsluitend de voornaam en de eerste letter van de achternaam</li>
+            <li>bij verjaardagen tonen wij alleen de dag en de maand, nooit het geboortejaar</li>
+            <li>adressen, telefoonnummers en rekeningnummers van leden staan nooit op de site</li>
+            <li>
+              wie in Sportlink heeft aangegeven niet zichtbaar te willen zijn, staat nergens op deze
+              site. Dat stel je zelf in via de KNVB-app, onder Privacy-instellingen.
+            </li>
+          </ul>
+
+          <h2>Beeldmateriaal</h2>
+          <p>
+            Op wedstrijddagen worden foto's en video-opnamen gemaakt voor de website, social media
+            en Kwiek Inside. Bij aanmelding vragen wij hier toestemming voor, en die toestemming
+            kun je op elk moment intrekken. Wil je dat een foto wordt verwijderd, stuur dan een
+            bericht aan de webmaster; wij halen hem er dan zo snel mogelijk af.
+          </p>
+
+          <h2>Hoe lang wij gegevens bewaren</h2>
+          <p>
+            Wij bewaren gegevens niet langer dan nodig. Na beeindiging van het lidmaatschap worden
+            de gegevens binnen twee jaar verwijderd, met uitzondering van gegevens die wij wettelijk
+            langer moeten bewaren, zoals de financiele administratie.
+          </p>
+
+          <h2>Jouw rechten</h2>
+          <p>
+            Je hebt het recht je gegevens in te zien, te laten corrigeren of te laten verwijderen.
+            Ook kun je bezwaar maken tegen de verwerking en vragen om overdracht van je gegevens.
+            Een verzoek stuur je aan
+            {secretaris?.email ? (
+              <a href={`mailto:${secretaris.email}`}>{secretaris.email}</a>
+            ) : 'de secretaris'}.
+            Wij reageren binnen vier weken.
+          </p>
+          <p>
+            Kom je er met ons niet uit, dan kun je een klacht indienen bij de Autoriteit
+            Persoonsgegevens via
+            <a href="https://autoriteitpersoonsgegevens.nl" target="_blank" rel="noopener noreferrer">autoriteitpersoonsgegevens.nl</a>.
+          </p>
+
+          <h2>Vragen</h2>
+          <p>
+            Neem contact op via <a href={`mailto:${CLUBGEGEVENS.email}`}>{CLUBGEGEVENS.email}</a> of
+            kijk op de <a href="/contact">contactpagina</a>. Zie ook onze
+            <a href="/avg">uitleg over de AVG binnen de club</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .demo-melding {
+    font-size: var(--text-klein);
+    border-left: 3px solid var(--color-blauwdiep);
+    background: color-mix(in srgb, var(--color-blauwdiep) 8%, transparent);
+    padding: 0.85rem 1rem;
+    margin-bottom: 2rem !important;
+    line-height: 1.6;
+  }
+</style>

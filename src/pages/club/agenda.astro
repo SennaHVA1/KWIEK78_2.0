@@ -1,0 +1,55 @@
+---
+/**
+ * De clubagenda: activiteiten die niet in het wedstrijdprogramma staan.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import AgendaLijst from '../../components/AgendaLijst.astro';
+import { getAgenda } from '../../lib/club';
+
+const alles = getAgenda();
+const nu = Date.now();
+const komend = alles.filter((item) => new Date(item.eindDatum ?? item.datum).getTime() >= nu);
+const geweest = alles.filter((item) => new Date(item.eindDatum ?? item.datum).getTime() < nu).reverse();
+---
+
+<Basis
+  titel="Agenda"
+  omschrijving="De clubagenda van v.v. Kwiek '78: ledenvergadering, sponsoravond, onderhoudsdagen en alle andere activiteiten."
+>
+  <Paginakop
+    kicker="Club"
+    titel="Agenda"
+    intro="Alles wat er naast het voetballen gebeurt. Wedstrijden staan in het programma."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">{komend.length} {komend.length === 1 ? 'activiteit' : 'activiteiten'}</p>
+        <div>
+          <h2 class="kop-sectie blokkop">Komende activiteiten</h2>
+          <AgendaLijst
+            items={komend}
+            leegTekst="Er staan geen activiteiten meer op de agenda voor dit seizoen."
+          />
+        </div>
+      </div>
+
+      {geweest.length > 0 && (
+        <div class="kolom eerder">
+          <p class="kolom-kicker">Terugblik</p>
+          <div>
+            <h2 class="kop-sectie blokkop">Geweest</h2>
+            <AgendaLijst items={geweest} toonOmschrijving={false} />
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .blokkop { padding-bottom: 1.25rem; }
+  .eerder { margin-top: 3.5rem; }
+</style>

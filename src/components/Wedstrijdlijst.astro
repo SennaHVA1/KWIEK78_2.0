@@ -1,0 +1,62 @@
+---
+/**
+ * Een lijst wedstrijden, gegroepeerd per speeldag.
+ *
+ * De speeldag staat als kop boven de groep, in de kantlijn op desktop en
+ * erboven op mobiel. Dat is dezelfde kolomlogica als de rest van de site.
+ */
+import Wedstrijdrij from './Wedstrijdrij.astro';
+import { groepeerPerDag } from '../lib/datum';
+import type { Wedstrijd } from '../lib/types';
+
+interface Props {
+  wedstrijden: Wedstrijd[];
+  toonLocatie?: boolean;
+  /** Tekst wanneer er niets te tonen is. */
+  leegTekst?: string;
+  /**
+   * Kopniveau van de speeldag. Staat de lijst los op een pagina, dan is 2
+   * goed; hangt hij onder een sectiekop, geef dan 3 mee. Zo blijft de
+   * kopstructuur kloppen en slaat hij geen niveau over.
+   */
+  kopNiveau?: 2 | 3;
+}
+
+const {
+  wedstrijden,
+  toonLocatie = true,
+  leegTekst = 'Er staan op dit moment geen wedstrijden gepland.',
+  kopNiveau = 2,
+} = Astro.props;
+
+const Kop = `h${kopNiveau}` as 'h2' | 'h3';
+const dagen = groepeerPerDag(wedstrijden, (w) => w.datum);
+---
+
+{dagen.length === 0 ? (
+  <p class="lege-lijst zacht">{leegTekst}</p>
+) : (
+  <div class="wedstrijdlijst">
+    {dagen.map((dag) => (
+      <section class="kolom wedstrijddag" data-dag-groep>
+        <Kop class="kolom-kicker">{dag.label}</Kop>
+        <div class="rij-groep">
+          {dag.items.map((wedstrijd) => (
+            <Wedstrijdrij wedstrijd={wedstrijd} toonLocatie={toonLocatie} />
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+)}
+
+<style>
+  .wedstrijdlijst { display: grid; gap: 2.5rem; }
+  .wedstrijddag { align-items: start; }
+  .lege-lijst {
+    padding: 2rem 0;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    font-size: var(--text-klein);
+  }
+  :global(.vlak-wit) .lege-lijst { border-top-color: var(--kleur-lijn-licht); }
+</style>

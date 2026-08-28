@@ -1,0 +1,263 @@
+---
+/**
+ * De homepage.
+ *
+ * Volgorde is bewust: hero, eerstvolgende wedstrijd, nieuws, agenda,
+ * verjaardagen, sponsoren. De hoofdgebruiker is een ouder die zaterdagochtend
+ * om kwart over acht op de telefoon kijkt of de wedstrijd doorgaat. Daarom is
+ * de hero op mobiel laag gehouden: het scorebord staat vrijwel meteen in
+ * beeld en de knop naar het volledige programma is een tik ver.
+ */
+import Basis from '../layouts/Basis.astro';
+import Foto from '../components/Foto.astro';
+import EerstvolgendeWedstrijd from '../components/EerstvolgendeWedstrijd.astro';
+import NieuwsKaart from '../components/NieuwsKaart.astro';
+import AgendaLijst from '../components/AgendaLijst.astro';
+import Verjaardagen from '../components/Verjaardagen.astro';
+import SponsorCarousel from '../components/SponsorCarousel.astro';
+
+import { getEerstvolgendeWedstrijden, getVerjaardagenDezeWeek } from '../lib/sportlink';
+import { getLaatsteNieuws } from '../lib/nieuws';
+import { getKomendeAgenda, getCarouselSponsoren, CLUBGEGEVENS } from '../lib/club';
+
+/* Het scorebord toont het eerste elftal. Wil je de eerste wedstrijd van de
+   hele club, dan roep je getEerstvolgendeWedstrijden() aan zonder team-id. */
+const komendeWedstrijden = getEerstvolgendeWedstrijden('kwiek-78-1', 4);
+const nieuws = getLaatsteNieuws(4);
+const agenda = getKomendeAgenda(4);
+const jarigen = getVerjaardagenDezeWeek();
+const sponsoren = getCarouselSponsoren();
+---
+
+<Basis
+  titel="Home"
+  omschrijving="Voetbalvereniging Kwiek '78 uit Avenhorn. Programma, uitslagen, standen, teams en clubnieuws op een plek."
+>
+  <!-- ================================================================== -->
+  <!-- Hero                                                               -->
+  <!-- ================================================================== -->
+  <section class="hero vlak-zwart">
+    <div class="hero-beeld" aria-hidden="true">
+      <Foto
+        src="/images/club/sfeer-veld.webp"
+        alt=""
+        ratio="4 / 3"
+        prioriteit
+        plaatshouder="club/sfeer-veld.webp"
+      />
+    </div>
+
+    <div class="omhulsel hero-binnen">
+      <div class="kolom">
+        <p class="kolom-kicker">Avenhorn, sinds 1978</p>
+        <div class="hero-tekst">
+          <h1 class="hero-titel">
+            <span class="hero-vv">v.v.</span>
+            <span class="hero-naam">Kwiek '78</span>
+          </h1>
+          <p class="hero-onder">
+            Zwart-wit uit Avenhorn. Op zondag in de vijfde klasse, ruim driehonderd leden
+            en een kantine die na afloop altijd open is.
+          </p>
+          <div class="hero-knoppen">
+            <a class="knop knop--primair" href="/wedstrijden/programma">Programma</a>
+            <a class="knop knop--rand" href="/club/lid-worden">Word lid</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Eerstvolgende wedstrijd met klapbord                                -->
+  <!-- ================================================================== -->
+  <EerstvolgendeWedstrijd wedstrijden={komendeWedstrijden} />
+
+  <!-- ================================================================== -->
+  <!-- Laatste nieuws                                                      -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie" aria-labelledby="nieuws-kop">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Uit de club</p>
+        <div>
+          <div class="sectiekop">
+            <h2 class="kop-sectie" id="nieuws-kop">Laatste nieuws</h2>
+            <a class="knop knop--rand" href="/nieuws">Alle berichten</a>
+          </div>
+
+          <div class="nieuwsraster">
+            {nieuws.map((artikel, i) => (
+              <div class="verschijn" style={`transition-delay:${i * 60}ms`}>
+                <NieuwsKaart artikel={artikel} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Agenda en verjaardagen                                              -->
+  <!-- ================================================================== -->
+  <section class="vlak-zwart sectie" aria-labelledby="agenda-kop">
+    <div class="omhulsel">
+      <div class="tweeluik">
+        <div>
+          <div class="sectiekop">
+            <h2 class="kop-sectie" id="agenda-kop">Agenda</h2>
+            <a class="knop knop--rand" href="/club/agenda">Hele agenda</a>
+          </div>
+          <AgendaLijst items={agenda} toonOmschrijving={false} />
+        </div>
+
+        <div>
+          <div class="sectiekop">
+            <h2 class="kop-sectie" id="jarig-kop">Jarig deze week</h2>
+            <a class="knop knop--rand" href="/club/verjaardagen">Kalender</a>
+          </div>
+          <Verjaardagen leden={jarigen} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Hoofdsponsoren                                                      -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sponsors" aria-labelledby="sponsor-kop">
+    <div class="omhulsel sponsors-kop">
+      <h2 class="label" id="sponsor-kop">Mede mogelijk gemaakt door</h2>
+      <a class="knop knop--rand" href="/sponsoring">Sponsor worden</a>
+    </div>
+    <SponsorCarousel sponsoren={sponsoren} />
+    <p class="omhulsel sponsors-voet zacht">
+      Alle sponsoren en de mogelijkheden staan op de
+      <a href="/sponsoring">sponsoringpagina</a>. Liever even praten? Loop binnen bij {CLUBGEGEVENS.sportpark}.
+    </p>
+  </section>
+</Basis>
+
+<style>
+  /* ------------------------------------------------------------------ */
+  /* Hero                                                               */
+  /* ------------------------------------------------------------------ */
+  .hero {
+    position: relative;
+    display: grid;
+    isolation: isolate;
+    /* dvh en niet vh: anders springt de hero op iOS zodra de adresbalk
+       wegschuift. De vh-regel blijft staan als terugval. */
+    min-height: 46vh;
+    min-height: 46dvh;
+    align-content: end;
+    padding-top: clamp(2rem, 6vw, 5rem);
+  }
+  @media (min-width: 1024px) {
+    .hero {
+      min-height: 62vh;
+      min-height: 62dvh;
+      padding-top: 6rem;
+    }
+  }
+
+  .hero-beeld {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .hero-beeld :global(img),
+  .hero-beeld :global(.foto-plek) {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto !important;
+    object-fit: cover;
+    /* Zwart-wit, zoals het tenue. Geen kleurenfoto onder een zwarte laag. */
+    filter: grayscale(1) contrast(1.12) brightness(0.62);
+  }
+  .hero-beeld::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--color-zwart) 78%, transparent) 0%,
+        color-mix(in srgb, var(--color-zwart) 42%, transparent) 45%,
+        var(--color-zwart) 100%);
+  }
+
+  .hero-binnen { padding-bottom: clamp(2rem, 5vw, 3.5rem); }
+
+  .hero-titel { display: grid; gap: 0.2rem; }
+  .hero-vv {
+    font-family: var(--font-mono);
+    font-size: var(--text-klein);
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+  }
+  .hero-naam {
+    font-size: var(--text-kop-xl);
+    font-weight: 900;
+    font-stretch: 88%;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+  }
+
+  .hero-onder {
+    margin-top: 1rem;
+    max-width: 46ch;
+    font-size: var(--text-groot);
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--color-wit) 82%, transparent);
+  }
+
+  .hero-knoppen { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+
+  /* ------------------------------------------------------------------ */
+  /* Secties                                                            */
+  /* ------------------------------------------------------------------ */
+  .sectiekop {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.25rem;
+  }
+
+  .nieuwsraster {
+    display: grid;
+    gap: 1.75rem 2rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) { .nieuwsraster { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .nieuwsraster { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  .tweeluik { display: grid; gap: 2.75rem; }
+  @media (min-width: 900px) {
+    .tweeluik { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 3.5rem; }
+  }
+
+  .sponsors { padding-block: clamp(2.5rem, 4vw, 3.5rem); }
+  .sponsors-kop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.25rem;
+  }
+  .sponsors-voet {
+    padding-top: 1.25rem;
+    font-size: var(--text-klein);
+    max-width: 60ch;
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+/**
+ * Uitklapbare blokken.
+ *
+ * Gebouwd op details en summary. Dat is geen bibliotheek en geen eigen
+ * toetsenbordafhandeling: de browser regelt openen, sluiten, focus en de
+ * aankondiging aan schermlezers al correct. Alleen de opmaak is van ons.
+ *
+ * Het plusteken draait bij het openen. Dat is de enige beweging, en hij staat
+ * uit bij prefers-reduced-motion.
+ */
+interface Item {
+  vraag: string;
+  antwoord: string;
+}
+
+interface Props {
+  items: Item[];
+  /** Naam van de groep, voor schermlezers. */
+  label?: string;
+}
+
+const { items, label } = Astro.props;
+---
+
+<div class="accordeon" role="group" aria-label={label}>
+  {items.map((item) => (
+    <details class="accordeon-item">
+      <summary>
+        <span class="accordeon-vraag">{item.vraag}</span>
+        <span class="accordeon-teken" aria-hidden="true"></span>
+      </summary>
+      <div class="accordeon-antwoord lopende-tekst">
+        <p>{item.antwoord}</p>
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .accordeon-item { border-top: 1px solid var(--kleur-lijn-licht); }
+  :global(.vlak-zwart) .accordeon-item, :global(.vlak-inkt) .accordeon-item {
+    border-top-color: var(--kleur-lijn-donker);
+  }
+  .accordeon-item:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
+  :global(.vlak-zwart) .accordeon-item:last-child, :global(.vlak-inkt) .accordeon-item:last-child {
+    border-bottom-color: var(--kleur-lijn-donker);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+
+  .accordeon-vraag {
+    font-size: var(--text-basis);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  /* Een plus die een min wordt. Twee streepjes, de verticale draait weg. */
+  .accordeon-teken {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+  .accordeon-teken::before,
+  .accordeon-teken::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 2px;
+    background: var(--color-blauwdiep);
+    transition: transform 0.22s var(--ease-klap);
+  }
+  :global(.vlak-zwart) .accordeon-teken::before,
+  :global(.vlak-zwart) .accordeon-teken::after,
+  :global(.vlak-inkt) .accordeon-teken::before,
+  :global(.vlak-inkt) .accordeon-teken::after { background: var(--color-blauw); }
+  .accordeon-teken::after { transform: rotate(90deg); }
+  [open] .accordeon-teken::after { transform: rotate(0deg); }
+
+  .accordeon-antwoord {
+    padding-bottom: 1.15rem;
+    font-size: var(--text-klein);
+    max-width: 66ch;
+  }
+  .accordeon-antwoord p { color: var(--color-grijsdonker); }
+  :global(.vlak-zwart) .accordeon-antwoord p, :global(.vlak-inkt) .accordeon-antwoord p {
+    color: var(--color-grijs);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordeon-teken::before, .accordeon-teken::after { transition: none; }
+  }
+</style>

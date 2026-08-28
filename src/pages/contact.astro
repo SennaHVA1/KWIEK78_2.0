@@ -1,0 +1,458 @@
+---
+/**
+ * Contact.
+ *
+ * Met een lijst "wie benader je waarvoor", want de meeste vragen aan een
+ * clubbestuur horen bij iemand anders dan de voorzitter.
+ *
+ * De kaart wordt pas geladen na een klik, net als de video's. Dat scheelt een
+ * verzoek naar een externe partij voor iedereen die alleen het adres komt halen.
+ *
+ * HET CONTACTFORMULIER IS IN DEZE DEMO NIET ACTIEF. Na oplevering gaat de
+ * inzending via een eenvoudige formulierdienst naar info@kwiek78.nl; daar is
+ * geen Sportlink voor nodig.
+ */
+import Basis from '../layouts/Basis.astro';
+import Paginakop from '../components/Paginakop.astro';
+import Foto from '../components/Foto.astro';
+import { CLUBGEGEVENS, ADRES, routeLink, getContactpersoon } from '../lib/club';
+
+const wieWaarvoor = [
+  {
+    rol: 'Wedstrijdsecretariaat',
+    functie: 'Wedstrijdsecretaris senioren',
+    waarvoor: 'Wedstrijden verzetten, afgelastingen, scheidsrechters en het digitale wedstrijdformulier.',
+  },
+  {
+    rol: 'Ledenadministratie',
+    functie: 'Ledenadministratie',
+    waarvoor: 'Aanmelden, opzeggen, adreswijzigingen, contributie en overschrijvingen.',
+  },
+  {
+    rol: 'Kantine',
+    functie: 'Beheerder kantine',
+    waarvoor: 'Openingstijden, feestjes, catering en de kantinedienstroosters.',
+  },
+  {
+    rol: 'Webmaster',
+    functie: 'Webmaster',
+    waarvoor: 'Fouten op de site, een bericht dat mist, of een foto die eraf moet.',
+  },
+  {
+    rol: 'Jeugd',
+    functie: 'Voorzitter jeugdcommissie',
+    waarvoor: 'Teamindeling, trainingstijden en alles rond de jeugdafdeling.',
+  },
+  {
+    rol: 'Vertrouwenspersoon',
+    functie: 'Vertrouwenscontactpersoon',
+    waarvoor: 'Ongewenst gedrag, pesten of iets anders waar je met niemand over durft te beginnen.',
+  },
+].map((regel) => ({ ...regel, persoon: getContactpersoon(regel.functie) }));
+
+/* Kaartuitsnede rond het sportpark. */
+const kaartUrl =
+  'https://www.openstreetmap.org/export/embed.html?bbox=' +
+  `${CLUBGEGEVENS.lengtegraad - 0.008}%2C${CLUBGEGEVENS.breedtegraad - 0.004}%2C` +
+  `${CLUBGEGEVENS.lengtegraad + 0.008}%2C${CLUBGEGEVENS.breedtegraad + 0.004}` +
+  `&layer=mapnik&marker=${CLUBGEGEVENS.breedtegraad}%2C${CLUBGEGEVENS.lengtegraad}`;
+---
+
+<Basis
+  titel="Contact"
+  omschrijving={`Contactgegevens van v.v. Kwiek '78, ${ADRES}. Wie je waarvoor benadert, route en contactformulier.`}
+>
+  <Paginakop
+    kicker="Contact"
+    titel="Contact"
+    intro={`${CLUBGEGEVENS.sportpark}, ${ADRES}. Hieronder staat wie je waarvoor het beste kunt benaderen.`}
+  />
+
+  <!-- ================================================================== -->
+  <!-- Adres, kaart en route                                              -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Waar we zitten</p>
+
+        <div class="locatie">
+          <div class="locatie-tekst">
+            <h2 class="kop-sectie">{CLUBGEGEVENS.sportpark}</h2>
+            <address class="locatie-adres">
+              {CLUBGEGEVENS.straat}<br />
+              {CLUBGEGEVENS.postcode} {CLUBGEGEVENS.plaats}
+            </address>
+            <dl class="locatie-lijst">
+              <div>
+                <dt>Telefoon</dt>
+                <dd><a class="link-onder data" href={`tel:${CLUBGEGEVENS.telefoon.replace(/\s/g, '')}`}>{CLUBGEGEVENS.telefoon}</a></dd>
+              </div>
+              <div>
+                <dt>E-mail</dt>
+                <dd><a class="link-onder data" href={`mailto:${CLUBGEGEVENS.email}`}>{CLUBGEGEVENS.email}</a></dd>
+              </div>
+              <div>
+                <dt>KNVB-clubcode</dt>
+                <dd class="data">{CLUBGEGEVENS.knvbClubcode}</dd>
+              </div>
+            </dl>
+
+            <div class="lopende-tekst locatie-route">
+              <h3>Hoe je hier komt</h3>
+              <p>
+                Vanaf de A7 afslag Avenhorn, dan rechtdoor tot aan Het Veer. Het sportpark ligt
+                aan het eind van de weg, achter de sporthal. Parkeren kan op het terrein.
+              </p>
+              <p>
+                Met het openbaar vervoer: bus 137 vanaf station Hoorn, halte Avenhorn Dorp,
+                daarna tien minuten lopen.
+              </p>
+            </div>
+
+            <a class="knop knop--zwart" href={routeLink()} target="_blank" rel="noopener noreferrer">
+              Route plannen
+            </a>
+          </div>
+
+          <div class="kaart" data-kaart data-kaartbron={kaartUrl}>
+            <button type="button" class="kaart-knop" data-kaart-start>
+              <Foto
+                src="/images/club/kaart-sportpark.webp"
+                alt={`Kaart met de ligging van ${CLUBGEGEVENS.sportpark}`}
+                ratio="4 / 3"
+                plaatshouder="club/kaart-sportpark.webp"
+              />
+              <span class="kaart-overlay">
+                <span class="kaart-label data">Kaart laden</span>
+                <span class="kaart-uitleg">Er wordt pas contact gemaakt met OpenStreetMap nadat je hierop klikt.</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Wie benader je waarvoor                                            -->
+  <!-- ================================================================== -->
+  <section class="vlak-zwart sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Wie doet wat</p>
+        <div>
+          <h2 class="kop-sectie blokkop">Wie benader je waarvoor</h2>
+          <ul class="wieWaarvoor">
+            {wieWaarvoor.map((regel) => (
+              <li class="rol">
+                <div class="rol-kop">
+                  <h3 class="rol-titel">{regel.rol}</h3>
+                  {regel.persoon && <p class="rol-persoon data">{regel.persoon.naam}</p>}
+                </div>
+                <p class="rol-waarvoor zacht">{regel.waarvoor}</p>
+                {regel.persoon?.email && (
+                  <p class="rol-mail">
+                    <a class="link-onder data" href={`mailto:${regel.persoon.email}`}>{regel.persoon.email}</a>
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+          <p class="rol-noot zacht">
+            Weet je het niet? Stuur het naar <a href={`mailto:${CLUBGEGEVENS.email}`}>{CLUBGEGEVENS.email}</a>,
+            dan komt het bij de juiste persoon terecht.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Contactformulier                                                   -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Bericht sturen</p>
+
+        <div class="formulierblok">
+          <div class="formulier-uitleg">
+            <h2 class="kop-sectie">Stuur een bericht</h2>
+            <p class="zacht">
+              Liever niet bellen? Vul het formulier in. Je krijgt doorgaans binnen twee
+              werkdagen antwoord, behalve in de winterstop.
+            </p>
+            <p class="demo-melding">
+              <span class="merk merk--rand">Demo</span>
+              Dit formulier is nog niet aangesloten en verstuurt niets.
+            </p>
+          </div>
+
+          <form class="formulier" data-formulier novalidate>
+            <div class="veldrij">
+              <div class="veld">
+                <label for="cnaam">Naam</label>
+                <input type="text" id="cnaam" name="naam" autocomplete="name" required />
+                <p class="veld-fout" data-fout hidden>Vul je naam in.</p>
+              </div>
+              <div class="veld">
+                <label for="cemail">E-mailadres</label>
+                <input type="email" id="cemail" name="emailadres" autocomplete="email" required />
+                <p class="veld-fout" data-fout hidden>Vul een geldig e-mailadres in.</p>
+              </div>
+            </div>
+
+            <div class="veld">
+              <label for="conderwerp">Voor wie is het bericht?</label>
+              <select id="conderwerp" name="onderwerp" required>
+                <option value="">Kies een onderwerp</option>
+                {wieWaarvoor.map((regel) => <option value={regel.rol}>{regel.rol}</option>)}
+                <option value="anders">Iets anders</option>
+              </select>
+              <p class="veld-hulp">Zo komt je bericht meteen bij de juiste vrijwilliger.</p>
+              <p class="veld-fout" data-fout hidden>Maak een keuze.</p>
+            </div>
+
+            <div class="veld">
+              <label for="cbericht">Bericht</label>
+              <textarea id="cbericht" name="bericht" rows="6" required minlength="10"></textarea>
+              <p class="veld-fout" data-fout hidden>Schrijf een bericht van minimaal tien tekens.</p>
+            </div>
+
+            <div class="veld veld--vinkje">
+              <label class="vinkje">
+                <input type="checkbox" name="akkoord" required />
+                <span>
+                  Ik ga ermee akkoord dat mijn gegevens worden gebruikt om te reageren op dit bericht.
+                  Zie de <a href="/privacyverklaring">privacyverklaring</a>.
+                </span>
+              </label>
+              <p class="veld-fout" data-fout hidden>Zet een vinkje om het bericht te versturen.</p>
+            </div>
+
+            <p class="formulier-melding" data-melding role="status" hidden></p>
+
+            <button type="submit" class="knop knop--zwart">Bericht versturen</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .locatie { display: grid; gap: 2.5rem; }
+  @media (min-width: 900px) {
+    .locatie { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
+  }
+
+  .locatie-tekst { display: grid; gap: 1.1rem; justify-items: start; }
+  .locatie-adres { font-style: normal; font-size: var(--text-groot); line-height: 1.6; font-weight: 600; }
+
+  .locatie-lijst { display: grid; width: 100%; max-width: 30rem; }
+  .locatie-lijst > div {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.6rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+    font-size: var(--text-klein);
+  }
+  .locatie-lijst > div:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
+  .locatie-lijst dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+  }
+
+  .locatie-route { margin-top: 0.5rem; }
+
+  /* Kaart -------------------------------------------------------------- */
+  .kaart { position: relative; border: 1px solid var(--kleur-lijn-licht); }
+  .kaart-knop {
+    display: block;
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    color: inherit;
+  }
+  .kaart :global(img) { filter: grayscale(1) contrast(1.05); }
+
+  .kaart-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: grid;
+    gap: 0.3rem;
+    padding: 1rem;
+    background: color-mix(in srgb, var(--color-zwart) 88%, transparent);
+    color: var(--color-wit);
+    text-align: left;
+  }
+  .kaart-label {
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+  }
+  .kaart-uitleg { font-size: var(--text-mini); line-height: 1.5; color: var(--color-grijs); }
+
+  .kaart :global(iframe) { display: block; width: 100%; aspect-ratio: 4 / 3; border: 0; }
+
+  /* Wie waarvoor ------------------------------------------------------- */
+  .blokkop { padding-bottom: 1.25rem; }
+  .wieWaarvoor {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .rol {
+    display: grid;
+    gap: 0.3rem;
+    padding-block: 1.1rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+  }
+  .rol:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
+  .rol-kop { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+  .rol-titel { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
+  .rol-persoon {
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  .rol-waarvoor { font-size: var(--text-klein); max-width: 64ch; }
+  .rol-mail { font-size: var(--text-klein); }
+  .rol-mail a { color: var(--color-blauw); }
+  .rol-noot { font-size: var(--text-klein); margin-top: 1.25rem; }
+  .rol-noot a { color: var(--color-blauw); }
+
+  @media (min-width: 700px) {
+    .rol { grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); column-gap: 2rem; }
+    .rol-kop { grid-column: 1; display: grid; gap: 0.15rem; align-content: start; }
+    .rol-waarvoor { grid-column: 2; grid-row: 1; }
+    .rol-mail { grid-column: 2; grid-row: 2; }
+  }
+
+  /* Formulier ---------------------------------------------------------- */
+  .formulierblok { display: grid; gap: 2.5rem; }
+  @media (min-width: 900px) {
+    .formulierblok { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 3.5rem; align-items: start; }
+  }
+  .formulier-uitleg { display: grid; gap: 1rem; align-content: start; }
+  .formulier-uitleg .zacht { font-size: var(--text-klein); max-width: 42ch; line-height: 1.6; }
+
+  .demo-melding {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    font-size: var(--text-klein);
+    border-left: 3px solid var(--color-blauwdiep);
+    padding: 0.75rem 1rem;
+    background: color-mix(in srgb, var(--color-blauwdiep) 8%, transparent);
+  }
+
+  .formulier { display: grid; gap: 1.25rem; max-width: 40rem; }
+  .veldrij { display: grid; gap: 1.25rem; }
+  @media (min-width: 560px) { .veldrij { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  /* Het vinkje krijgt een gewone labeltekst, niet de mono-kop van de andere velden. */
+  .veld--vinkje > :global(label.vinkje) {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: inherit;
+  }
+  .vinkje {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: start;
+    line-height: 1.55;
+    cursor: pointer;
+  }
+  .vinkje input { width: 1.15rem; height: 1.15rem; margin-top: 0.15rem; accent-color: var(--color-blauwdiep); }
+
+  .formulier-melding {
+    font-size: var(--text-klein);
+    border-left: 3px solid var(--color-blauwdiep);
+    background: color-mix(in srgb, var(--color-blauwdiep) 10%, transparent);
+    padding: 0.8rem 1rem;
+    line-height: 1.55;
+  }
+  .formulier-melding[hidden] { display: none; }
+</style>
+
+<script>
+  /* ------------------------------------------------------------------ */
+  /* Kaart pas laden na een klik                                        */
+  /* ------------------------------------------------------------------ */
+  const kaart = document.querySelector<HTMLElement>('[data-kaart]');
+  kaart?.querySelector<HTMLButtonElement>('[data-kaart-start]')?.addEventListener('click', () => {
+    const bron = kaart.dataset.kaartbron;
+    if (!bron) return;
+    const frame = document.createElement('iframe');
+    frame.src = bron;
+    frame.title = "Kaart met de ligging van Sportpark Kwiek '78 in Avenhorn";
+    frame.loading = 'lazy';
+    frame.referrerPolicy = 'no-referrer';
+    kaart.replaceChildren(frame);
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* Validatie van het contactformulier                                 */
+  /* ------------------------------------------------------------------ */
+  for (const formulier of document.querySelectorAll<HTMLFormElement>('[data-formulier]')) {
+    const melding = formulier.querySelector<HTMLElement>('[data-melding]');
+
+    /** Toont of verbergt de foutmelding die bij een veld hoort. */
+    const toonFout = (veld: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+      const fout = veld.closest('.veld')?.querySelector<HTMLElement>('[data-fout]');
+      if (!fout) return;
+      fout.hidden = veld.checkValidity();
+    };
+
+    formulier.addEventListener('submit', (gebeurtenis) => {
+      gebeurtenis.preventDefault();
+      const velden = [...formulier.querySelectorAll<HTMLInputElement>('input, select, textarea')];
+      velden.forEach(toonFout);
+
+      const eersteFout = velden.find((veld) => !veld.checkValidity());
+      if (eersteFout) {
+        eersteFout.focus();
+        if (melding) {
+          melding.hidden = false;
+          melding.textContent = 'Er ontbreekt nog iets. De velden met een melding zijn nog niet in orde.';
+        }
+        return;
+      }
+
+      if (melding) {
+        melding.hidden = false;
+        melding.textContent =
+          'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; ' +
+          'na oplevering komt dit bericht binnen bij de gekozen vrijwilliger.';
+      }
+    });
+
+    formulier.addEventListener('blur', (gebeurtenis) => {
+      const doel = gebeurtenis.target;
+      if (doel instanceof HTMLInputElement || doel instanceof HTMLSelectElement || doel instanceof HTMLTextAreaElement) {
+        toonFout(doel);
+      }
+    }, true);
+  }
+</script>

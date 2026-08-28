@@ -1,0 +1,124 @@
+---
+/**
+ * Bestuur en commissies, gegroepeerd per commissie.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import Foto from '../../components/Foto.astro';
+import { getCommissies } from '../../lib/club';
+
+const commissies = getCommissies();
+
+/** Bestandsnaam voor een portret, afgeleid van de naam. */
+const portretPad = (naam: string) =>
+  '/images/bestuur/' +
+  naam.toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') +
+  '.webp';
+---
+
+<Basis
+  titel="Bestuur en commissies"
+  omschrijving="Wie doet wat bij v.v. Kwiek '78: het bestuur en alle commissies, met contactgegevens."
+>
+  <Paginakop
+    kicker="Club"
+    titel="Bestuur en commissies"
+    intro="Kwiek draait op vrijwilligers. Hieronder staat wie waarvoor te benaderen is, gegroepeerd per commissie."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel commissies">
+      {commissies.map((groep) => (
+        <section class="kolom commissie">
+          <p class="kolom-kicker">{groep.leden.length} {groep.leden.length === 1 ? 'persoon' : 'personen'}</p>
+          <div>
+            <h2 class="kop-sectie commissie-kop">{groep.commissie}</h2>
+            <ul class="personen">
+              {groep.leden.map((lid) => (
+                <li class="persoon">
+                  <Foto
+                    src={lid.foto ?? portretPad(lid.naam)}
+                    alt={`Portret van ${lid.naam}`}
+                    ratio="1 / 1"
+                    klasse="persoon-foto"
+                    plaatshouder="portret volgt"
+                  />
+                  <div class="persoon-tekst">
+                    <h3 class="persoon-naam">{lid.naam}</h3>
+                    <p class="persoon-functie data">{lid.functie}</p>
+                    {lid.email && (
+                      <p class="persoon-email">
+                        <a class="link-onder" href={`mailto:${lid.email}`}>{lid.email}</a>
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <section class="vlak-zwart sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Meehelpen</p>
+        <div class="oproep">
+          <h2 class="kop-sectie">Een commissie kan altijd iemand gebruiken</h2>
+          <p class="lopende-tekst">
+            Of het nu om een uur per maand gaat of om een vaste taak: er is altijd plek.
+            Meld je bij de vrijwilligerscoordinator of loop op een doordeweekse avond de kantine binnen.
+          </p>
+          <div class="oproep-knoppen">
+            <a class="knop knop--primair" href="/vrijwillige-diensten">Vrijwillige diensten</a>
+            <a class="knop knop--rand" href="/contact">Contact opnemen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .commissies { display: grid; gap: 3.25rem; }
+  .commissie-kop { padding-bottom: 1.25rem; }
+
+  .personen {
+    display: grid;
+    gap: 1.5rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .persoon {
+    display: grid;
+    gap: 0.75rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+    padding-top: 0.9rem;
+    align-content: start;
+  }
+  .persoon :global(.persoon-foto) { filter: grayscale(1) contrast(1.05); }
+
+  .persoon-tekst { display: grid; gap: 0.15rem; }
+  .persoon-naam { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
+  .persoon-functie {
+    font-size: var(--text-mini);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+  }
+  .persoon-email { font-size: var(--text-mini); word-break: break-all; }
+
+  .oproep { display: grid; gap: 1rem; }
+  .oproep-knoppen { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
+</style>

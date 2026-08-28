@@ -1,0 +1,27 @@
+# Cloudflare Pages leest dit bestand en zet deze kopregels op de responses.
+# Zie https://developers.cloudflare.com/pages/configuration/headers/
+
+# Lettertypes en gebundelde CSS krijgen een hash of veranderen nooit.
+# Die mogen een jaar in de cache.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Beeld verandert af en toe wel, dus een week.
+/images/*
+  Cache-Control: public, max-age=604800
+
+/documenten/*
+  Cache-Control: public, max-age=86400
+
+# Bewust geen Content-Security-Policy: de kaart en de video's laden een iframe
+# van OpenStreetMap en YouTube zodra de bezoeker daarop klikt. Een CSP hoort
+# daar rekening mee te houden en die stel je pas op als het eigen domein en de
+# definitieve embeds vaststaan.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=()

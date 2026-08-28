@@ -1,0 +1,101 @@
+[
+  {
+    "id": "seizoensopening-2026",
+    "datum": "2026-08-29T16:00:00+02:00",
+    "titel": "Seizoensopening met barbecue",
+    "omschrijving": "Na de laatste jeugdwedstrijd steken we de barbecue aan. Voor leden en hun ouders, aanmelden hoeft niet.",
+    "locatie": "Sportcafé de Koggenhal",
+    "categorie": "club"
+  },
+  {
+    "id": "kledinguitgifte-jeugd",
+    "datum": "2026-09-02T18:30:00+02:00",
+    "eindDatum": "2026-09-02T20:30:00+02:00",
+    "titel": "Kledinguitgifte jeugd",
+    "omschrijving": "Alle jeugdteams halen hun tenue op. Neem de oude set mee, gewassen graag.",
+    "locatie": "Materiaalhok bij kleedkamer 1",
+    "categorie": "jeugd"
+  },
+  {
+    "id": "algemene-ledenvergadering-2026",
+    "datum": "2026-09-11T20:00:00+02:00",
+    "titel": "Algemene ledenvergadering",
+    "omschrijving": "Jaarrekening 2025/2026, begroting, bestuursverkiezing en de plannen voor het kunstgrasveld. Stukken liggen vanaf 1 september in de kantine.",
+    "locatie": "Sportcafé de Koggenhal",
+    "categorie": "club"
+  },
+  {
+    "id": "start-grote-clubactie",
+    "datum": "2026-09-12T09:00:00+02:00",
+    "titel": "Start Grote Clubactie",
+    "omschrijving": "Uitgifte van de verkoopboekjes aan de jeugdteams, direct na de wedstrijden.",
+    "locatie": "Sportpark Kwiek '78",
+    "categorie": "jeugd"
+  },
+  {
+    "id": "sponsoravond-2026",
+    "datum": "2026-09-25T19:30:00+02:00",
+    "titel": "Sponsoravond",
+    "omschrijving": "Jaarlijkse avond voor alle sponsoren en de Club van '78. Met een rondleiding langs de nieuwe kleedkamers.",
+    "locatie": "Sportcafé de Koggenhal",
+    "categorie": "sponsor"
+  },
+  {
+    "id": "vrijwilligersavond-2026",
+    "datum": "2026-10-09T20:00:00+02:00",
+    "titel": "Vrijwilligersavond",
+    "omschrijving": "Voor iedereen die dit jaar een dienst heeft gedraaid, gefloten, gereden of gewassen. Hapje en drankje van de club.",
+    "locatie": "Sportcafé de Koggenhal",
+    "categorie": "club"
+  },
+  {
+    "id": "onderhoudsdag-najaar",
+    "datum": "2026-10-24T09:00:00+02:00",
+    "eindDatum": "2026-10-24T14:00:00+02:00",
+    "titel": "Onderhoudsdag sportpark",
+    "omschrijving": "Snoeien, hekwerk bijwerken en de dug-outs schoonmaken. Handschoenen en koffie zijn er.",
+    "locatie": "Sportpark Kwiek '78",
+    "categorie": "onderhoud"
+  },
+  {
+    "id": "sinterklaas-jeugd-2026",
+    "datum": "2026-11-28T14:00:00+01:00",
+    "titel": "Sinterklaasmiddag jongste jeugd",
+    "omschrijving": "Voor JO7 tot en met JO10 en de MO9. Na de wedstrijden in de kantine.",
+    "locatie": "Sportcafé de Koggenhal",
+    "categorie": "jeugd"
+  },
+  {
+    "id": "zaaltoernooi-2026",
+    "datum": "2026-11-27T19:00:00+01:00",
+    "titel": "Zaaltoernooi Dralco",
+    "omschrijving": "Het jaarlijkse zaaltoernooi voor senioren en JO17. Publiek welkom, entree gratis.",
+    "locatie": "Sporthal De Koggenhal",
+    "categorie": "club"
+  },
+  {
+    "id": "kerstbingo-2026",
+    "datum": "2026-12-19T20:00:00+01:00",
+    "titel": "Kerstbingo",
+    "omschrijving": "Traditiegetrouw de laatste zaterdag voor de kerst. Kaarten aan de deur, opbrengst voor de jeugdafdeling.",
+    "locatie": "Sportcafé de Koggenhal",
+    "categorie": "kantine"
+  },
+  {
+    "id": "winterstop-start",
+    "datum": "2026-12-21T00:00:00+01:00",
+    "eindDatum": "2027-01-10T00:00:00+01:00",
+    "titel": "Winterstop",
+    "omschrijving": "Geen competitie. De velden blijven dicht, de kantine is alleen open op zondagmiddag.",
+    "locatie": "Sportpark Kwiek '78",
+    "categorie": "club"
+  },
+  {
+    "id": "nieuwjaarsreceptie-2027",
+    "datum": "2027-01-03T15:00:00+01:00",
+    "titel": "Nieuwjaarsreceptie",
+    "omschrijving": "Met de traditionele wedstrijd oud-Kwiek tegen de selectie om twee uur.",
+    "locatie": "Sportpark Kwiek '78",
+    "categorie": "club"
+  }
+]

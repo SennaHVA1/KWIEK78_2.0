@@ -1,0 +1,1325 @@
+[
+  {
+    "id": "kz-2026-08-29",
+    "datum": "2026-08-29",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Astrid Klaver",
+      "Ria Zwart"
+    ]
+  },
+  {
+    "id": "sm-2026-08-29",
+    "datum": "2026-08-29",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Nooij",
+      "Fam. Zwart"
+    ]
+  },
+  {
+    "id": "kzo1-2026-08-30",
+    "datum": "2026-08-30",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ilse Reijne",
+      "Truus Karsten"
+    ]
+  },
+  {
+    "id": "kzo2-2026-08-30",
+    "datum": "2026-08-30",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Joke Kok",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "bd-2026-08-30",
+    "datum": "2026-08-30",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Cees Balk"
+    ]
+  },
+  {
+    "id": "kz-2026-09-05",
+    "datum": "2026-09-05",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Truus Karsten",
+      "Wilma Bakker"
+    ]
+  },
+  {
+    "id": "sm-2026-09-05",
+    "datum": "2026-09-05",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Groot",
+      "Fam. Blank"
+    ]
+  },
+  {
+    "id": "kzo1-2026-09-06",
+    "datum": "2026-09-06",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Els Bregman",
+      "Jaap Sijm"
+    ]
+  },
+  {
+    "id": "kzo2-2026-09-06",
+    "datum": "2026-09-06",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Marloes Vriend",
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "bd-2026-09-06",
+    "datum": "2026-09-06",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "kz-2026-09-12",
+    "datum": "2026-09-12",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Simone Schouten",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "sm-2026-09-12",
+    "datum": "2026-09-12",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Overtoom",
+      "Fam. Nooij"
+    ]
+  },
+  {
+    "id": "kzo1-2026-09-13",
+    "datum": "2026-09-13",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ria Zwart",
+      "Bianca Groenland"
+    ]
+  },
+  {
+    "id": "kzo2-2026-09-13",
+    "datum": "2026-09-13",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ans Karsten",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "bd-2026-09-13",
+    "datum": "2026-09-13",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "kz-2026-09-19",
+    "datum": "2026-09-19",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Truus Karsten",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "sm-2026-09-19",
+    "datum": "2026-09-19",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Blank",
+      "Fam. Overtoom"
+    ]
+  },
+  {
+    "id": "kzo1-2026-09-20",
+    "datum": "2026-09-20",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Anja Klaver",
+      "Ans Karsten"
+    ]
+  },
+  {
+    "id": "kzo2-2026-09-20",
+    "datum": "2026-09-20",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Astrid Klaver",
+      "Riet Sijm"
+    ]
+  },
+  {
+    "id": "bd-2026-09-20",
+    "datum": "2026-09-20",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Wilma Sneekes"
+    ]
+  },
+  {
+    "id": "kz-2026-09-26",
+    "datum": "2026-09-26",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ellen Wagenaar",
+      "Sandra Bood"
+    ]
+  },
+  {
+    "id": "sm-2026-09-26",
+    "datum": "2026-09-26",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Bood",
+      "Fam. Duin"
+    ]
+  },
+  {
+    "id": "kzo1-2026-09-27",
+    "datum": "2026-09-27",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Sandra Bood",
+      "Simone Schouten"
+    ]
+  },
+  {
+    "id": "kzo2-2026-09-27",
+    "datum": "2026-09-27",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Sandra Bood",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "bd-2026-09-27",
+    "datum": "2026-09-27",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "kz-2026-10-03",
+    "datum": "2026-10-03",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ilse Reijne",
+      "Marloes Vriend"
+    ]
+  },
+  {
+    "id": "sm-2026-10-03",
+    "datum": "2026-10-03",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Koning",
+      "Fam. Nooij"
+    ]
+  },
+  {
+    "id": "kzo1-2026-10-04",
+    "datum": "2026-10-04",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Marloes Vriend",
+      "Ellen Wagenaar"
+    ]
+  },
+  {
+    "id": "kzo2-2026-10-04",
+    "datum": "2026-10-04",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Carla Kramer",
+      "Ellen Wagenaar"
+    ]
+  },
+  {
+    "id": "bd-2026-10-04",
+    "datum": "2026-10-04",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Cees Balk"
+    ]
+  },
+  {
+    "id": "kz-2026-10-10",
+    "datum": "2026-10-10",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Corrie Neefjes",
+      "Ria Zwart"
+    ]
+  },
+  {
+    "id": "sm-2026-10-10",
+    "datum": "2026-10-10",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Bakker",
+      "Fam. Overtoom"
+    ]
+  },
+  {
+    "id": "kzo1-2026-10-11",
+    "datum": "2026-10-11",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ria Zwart",
+      "Anja Klaver"
+    ]
+  },
+  {
+    "id": "kzo2-2026-10-11",
+    "datum": "2026-10-11",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ans Overtoom",
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "bd-2026-10-11",
+    "datum": "2026-10-11",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Cees Balk"
+    ]
+  },
+  {
+    "id": "kz-2026-10-17",
+    "datum": "2026-10-17",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Tanja Broersen",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "sm-2026-10-17",
+    "datum": "2026-10-17",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Vriend",
+      "Fam. Klaver"
+    ]
+  },
+  {
+    "id": "kzo1-2026-10-18",
+    "datum": "2026-10-18",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Joke Kok",
+      "Ellen Wagenaar"
+    ]
+  },
+  {
+    "id": "kzo2-2026-10-18",
+    "datum": "2026-10-18",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ans Karsten",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "bd-2026-10-18",
+    "datum": "2026-10-18",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Ron Kramer"
+    ]
+  },
+  {
+    "id": "kz-2026-10-24",
+    "datum": "2026-10-24",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Corrie Neefjes",
+      "Bianca Groenland"
+    ]
+  },
+  {
+    "id": "sm-2026-10-24",
+    "datum": "2026-10-24",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Sijm",
+      "Fam. Groot"
+    ]
+  },
+  {
+    "id": "kzo1-2026-10-25",
+    "datum": "2026-10-25",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Anja Klaver",
+      "Sandra Bood"
+    ]
+  },
+  {
+    "id": "kzo2-2026-10-25",
+    "datum": "2026-10-25",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ans Overtoom",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "bd-2026-10-25",
+    "datum": "2026-10-25",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "kz-2026-10-31",
+    "datum": "2026-10-31",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Corrie Neefjes",
+      "Anja Klaver"
+    ]
+  },
+  {
+    "id": "sm-2026-10-31",
+    "datum": "2026-10-31",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Ligthart",
+      "Fam. Karsten"
+    ]
+  },
+  {
+    "id": "kzo1-2026-11-01",
+    "datum": "2026-11-01",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ria Zwart",
+      "Simone Schouten"
+    ]
+  },
+  {
+    "id": "kzo2-2026-11-01",
+    "datum": "2026-11-01",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ans Karsten",
+      "Anja Klaver"
+    ]
+  },
+  {
+    "id": "bd-2026-11-01",
+    "datum": "2026-11-01",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Nico Ruiter"
+    ]
+  },
+  {
+    "id": "kz-2026-11-07",
+    "datum": "2026-11-07",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ellen Wagenaar",
+      "Joke Kok"
+    ]
+  },
+  {
+    "id": "sm-2026-11-07",
+    "datum": "2026-11-07",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Schaper",
+      "Fam. Koning"
+    ]
+  },
+  {
+    "id": "kzo1-2026-11-08",
+    "datum": "2026-11-08",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Truus Karsten",
+      "Ans Overtoom"
+    ]
+  },
+  {
+    "id": "kzo2-2026-11-08",
+    "datum": "2026-11-08",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Joke Kok",
+      "Bianca Groenland"
+    ]
+  },
+  {
+    "id": "bd-2026-11-08",
+    "datum": "2026-11-08",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Michel Bood"
+    ]
+  },
+  {
+    "id": "kz-2026-11-14",
+    "datum": "2026-11-14",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ellen Wagenaar",
+      "Ans Overtoom"
+    ]
+  },
+  {
+    "id": "sm-2026-11-14",
+    "datum": "2026-11-14",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Vriend",
+      "Fam. Sijm"
+    ]
+  },
+  {
+    "id": "kzo1-2026-11-15",
+    "datum": "2026-11-15",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ans Overtoom",
+      "Truus Karsten"
+    ]
+  },
+  {
+    "id": "kzo2-2026-11-15",
+    "datum": "2026-11-15",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Simone Schouten",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "bd-2026-11-15",
+    "datum": "2026-11-15",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Piet Schuit"
+    ]
+  },
+  {
+    "id": "kz-2026-11-21",
+    "datum": "2026-11-21",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Simone Schouten",
+      "Joke Kok"
+    ]
+  },
+  {
+    "id": "sm-2026-11-21",
+    "datum": "2026-11-21",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Blank",
+      "Fam. Karsten"
+    ]
+  },
+  {
+    "id": "kzo1-2026-11-22",
+    "datum": "2026-11-22",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Anja Klaver",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "kzo2-2026-11-22",
+    "datum": "2026-11-22",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Tanja Broersen",
+      "Anja Klaver"
+    ]
+  },
+  {
+    "id": "bd-2026-11-22",
+    "datum": "2026-11-22",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Ron Kramer"
+    ]
+  },
+  {
+    "id": "kz-2026-11-28",
+    "datum": "2026-11-28",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ria Zwart",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "sm-2026-11-28",
+    "datum": "2026-11-28",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Sijm",
+      "Fam. Overtoom"
+    ]
+  },
+  {
+    "id": "kzo1-2026-11-29",
+    "datum": "2026-11-29",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Anja Klaver",
+      "Marja Ligthart"
+    ]
+  },
+  {
+    "id": "kzo2-2026-11-29",
+    "datum": "2026-11-29",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Joke Kok",
+      "Truus Karsten"
+    ]
+  },
+  {
+    "id": "bd-2026-11-29",
+    "datum": "2026-11-29",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Nico Ruiter"
+    ]
+  },
+  {
+    "id": "kz-2026-12-05",
+    "datum": "2026-12-05",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Astrid Klaver",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "sm-2026-12-05",
+    "datum": "2026-12-05",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Kaandorp",
+      "Fam. Ligthart"
+    ]
+  },
+  {
+    "id": "kzo1-2026-12-06",
+    "datum": "2026-12-06",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Wilma Bakker",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "kzo2-2026-12-06",
+    "datum": "2026-12-06",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ans Karsten",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "bd-2026-12-06",
+    "datum": "2026-12-06",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Wilma Sneekes"
+    ]
+  },
+  {
+    "id": "kz-2026-12-12",
+    "datum": "2026-12-12",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Anja Klaver",
+      "Marja Ligthart"
+    ]
+  },
+  {
+    "id": "sm-2026-12-12",
+    "datum": "2026-12-12",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Overtoom",
+      "Fam. Kaandorp"
+    ]
+  },
+  {
+    "id": "kzo1-2026-12-13",
+    "datum": "2026-12-13",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Jaap Sijm",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "kzo2-2026-12-13",
+    "datum": "2026-12-13",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Tanja Broersen",
+      "Jaap Sijm"
+    ]
+  },
+  {
+    "id": "bd-2026-12-13",
+    "datum": "2026-12-13",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Michel Bood"
+    ]
+  },
+  {
+    "id": "kz-2026-12-19",
+    "datum": "2026-12-19",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ans Overtoom",
+      "Corrie Neefjes"
+    ]
+  },
+  {
+    "id": "sm-2026-12-19",
+    "datum": "2026-12-19",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Klaver",
+      "Fam. Nooij"
+    ]
+  },
+  {
+    "id": "kzo1-2026-12-20",
+    "datum": "2026-12-20",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Sandra Bood",
+      "Tanja Broersen"
+    ]
+  },
+  {
+    "id": "kzo2-2026-12-20",
+    "datum": "2026-12-20",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Marja Ligthart",
+      "Tanja Broersen"
+    ]
+  },
+  {
+    "id": "bd-2026-12-20",
+    "datum": "2026-12-20",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Marnix Sijm"
+    ]
+  },
+  {
+    "id": "kz-2027-01-16",
+    "datum": "2027-01-16",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Bianca Groenland",
+      "Ans Overtoom"
+    ]
+  },
+  {
+    "id": "sm-2027-01-16",
+    "datum": "2027-01-16",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Zwart",
+      "Fam. Overtoom"
+    ]
+  },
+  {
+    "id": "kzo1-2027-01-17",
+    "datum": "2027-01-17",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Riet Sijm",
+      "Ilse Reijne"
+    ]
+  },
+  {
+    "id": "kzo2-2027-01-17",
+    "datum": "2027-01-17",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Truus Karsten",
+      "Ans Overtoom"
+    ]
+  },
+  {
+    "id": "bd-2027-01-17",
+    "datum": "2027-01-17",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Ron Kramer"
+    ]
+  },
+  {
+    "id": "kz-2027-01-23",
+    "datum": "2027-01-23",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Wilma Bakker",
+      "Bianca Groenland"
+    ]
+  },
+  {
+    "id": "sm-2027-01-23",
+    "datum": "2027-01-23",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Overtoom",
+      "Fam. Kaandorp"
+    ]
+  },
+  {
+    "id": "kzo1-2027-01-24",
+    "datum": "2027-01-24",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ellen Wagenaar",
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "kzo2-2027-01-24",
+    "datum": "2027-01-24",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Nadine Kuip",
+      "Ans Karsten"
+    ]
+  },
+  {
+    "id": "bd-2027-01-24",
+    "datum": "2027-01-24",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Cees Balk"
+    ]
+  },
+  {
+    "id": "kz-2027-01-30",
+    "datum": "2027-01-30",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ellen Wagenaar",
+      "Tanja Broersen"
+    ]
+  },
+  {
+    "id": "sm-2027-01-30",
+    "datum": "2027-01-30",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Zwart",
+      "Fam. Kaandorp"
+    ]
+  },
+  {
+    "id": "kzo1-2027-01-31",
+    "datum": "2027-01-31",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Joke Kok",
+      "Ans Overtoom"
+    ]
+  },
+  {
+    "id": "kzo2-2027-01-31",
+    "datum": "2027-01-31",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Truus Karsten",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "bd-2027-01-31",
+    "datum": "2027-01-31",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Wilma Sneekes"
+    ]
+  },
+  {
+    "id": "kz-2027-02-06",
+    "datum": "2027-02-06",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Ilse Reijne",
+      "Corrie Neefjes"
+    ]
+  },
+  {
+    "id": "sm-2027-02-06",
+    "datum": "2027-02-06",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Beerepoot",
+      "Fam. Nooij"
+    ]
+  },
+  {
+    "id": "kzo1-2027-02-07",
+    "datum": "2027-02-07",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Truus Karsten",
+      "Ans Karsten"
+    ]
+  },
+  {
+    "id": "kzo2-2027-02-07",
+    "datum": "2027-02-07",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ellen Wagenaar",
+      "Joke Kok"
+    ]
+  },
+  {
+    "id": "bd-2027-02-07",
+    "datum": "2027-02-07",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Michel Bood"
+    ]
+  },
+  {
+    "id": "kz-2027-02-13",
+    "datum": "2027-02-13",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Bianca Groenland",
+      "Nadine Kuip"
+    ]
+  },
+  {
+    "id": "sm-2027-02-13",
+    "datum": "2027-02-13",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Duin",
+      "Fam. Vriend"
+    ]
+  },
+  {
+    "id": "kzo1-2027-02-14",
+    "datum": "2027-02-14",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ria Zwart",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "kzo2-2027-02-14",
+    "datum": "2027-02-14",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ilse Reijne",
+      "Els Bregman"
+    ]
+  },
+  {
+    "id": "bd-2027-02-14",
+    "datum": "2027-02-14",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Piet Schuit"
+    ]
+  },
+  {
+    "id": "kz-2027-02-20",
+    "datum": "2027-02-20",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Anja Klaver",
+      "Bianca Groenland"
+    ]
+  },
+  {
+    "id": "sm-2027-02-20",
+    "datum": "2027-02-20",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Bood",
+      "Fam. Koning"
+    ]
+  },
+  {
+    "id": "kzo1-2027-02-21",
+    "datum": "2027-02-21",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Marloes Vriend",
+      "Ilse Reijne"
+    ]
+  },
+  {
+    "id": "kzo2-2027-02-21",
+    "datum": "2027-02-21",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Nadine Kuip",
+      "Sandra Bood"
+    ]
+  },
+  {
+    "id": "bd-2027-02-21",
+    "datum": "2027-02-21",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Wilma Sneekes"
+    ]
+  },
+  {
+    "id": "kz-2027-02-27",
+    "datum": "2027-02-27",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Nadine Kuip",
+      "Ans Karsten"
+    ]
+  },
+  {
+    "id": "sm-2027-02-27",
+    "datum": "2027-02-27",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Duin",
+      "Fam. Sijm"
+    ]
+  },
+  {
+    "id": "kzo1-2027-02-28",
+    "datum": "2027-02-28",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Sandra Bood",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "kzo2-2027-02-28",
+    "datum": "2027-02-28",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ria Zwart",
+      "Carla Kramer"
+    ]
+  },
+  {
+    "id": "bd-2027-02-28",
+    "datum": "2027-02-28",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Gerard Kok"
+    ]
+  },
+  {
+    "id": "kz-2027-03-06",
+    "datum": "2027-03-06",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Anja Klaver",
+      "Wilma Bakker"
+    ]
+  },
+  {
+    "id": "sm-2027-03-06",
+    "datum": "2027-03-06",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Vriend",
+      "Fam. Koning"
+    ]
+  },
+  {
+    "id": "kzo1-2027-03-07",
+    "datum": "2027-03-07",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Ilse Reijne",
+      "Jaap Sijm"
+    ]
+  },
+  {
+    "id": "kzo2-2027-03-07",
+    "datum": "2027-03-07",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Riet Sijm",
+      "Corrie Neefjes"
+    ]
+  },
+  {
+    "id": "bd-2027-03-07",
+    "datum": "2027-03-07",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Gerard Kok"
+    ]
+  },
+  {
+    "id": "kz-2027-03-13",
+    "datum": "2027-03-13",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Corrie Neefjes",
+      "Anja Klaver"
+    ]
+  },
+  {
+    "id": "sm-2027-03-13",
+    "datum": "2027-03-13",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Nooij",
+      "Fam. Koning"
+    ]
+  },
+  {
+    "id": "kzo1-2027-03-14",
+    "datum": "2027-03-14",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Astrid Klaver",
+      "Bianca Groenland"
+    ]
+  },
+  {
+    "id": "kzo2-2027-03-14",
+    "datum": "2027-03-14",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Ans Overtoom",
+      "Marloes Vriend"
+    ]
+  },
+  {
+    "id": "bd-2027-03-14",
+    "datum": "2027-03-14",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Gerard Kok"
+    ]
+  },
+  {
+    "id": "kz-2027-03-20",
+    "datum": "2027-03-20",
+    "soort": "kantine-zaterdag",
+    "tijd": "08:00 - 13:00",
+    "namen": [
+      "Riet Sijm",
+      "Astrid Klaver"
+    ]
+  },
+  {
+    "id": "sm-2027-03-20",
+    "datum": "2027-03-20",
+    "soort": "schoonmaak",
+    "tijd": "13:00 - 15:00",
+    "namen": [
+      "Fam. Karsten",
+      "Fam. Klaver"
+    ]
+  },
+  {
+    "id": "kzo1-2027-03-21",
+    "datum": "2027-03-21",
+    "soort": "kantine-zondag",
+    "tijd": "12:00 - 16:00",
+    "namen": [
+      "Anja Klaver",
+      "Ellen Wagenaar"
+    ]
+  },
+  {
+    "id": "kzo2-2027-03-21",
+    "datum": "2027-03-21",
+    "soort": "kantine-zondag",
+    "tijd": "16:00 - 20:00",
+    "namen": [
+      "Marloes Vriend",
+      "Marja Ligthart"
+    ]
+  },
+  {
+    "id": "bd-2027-03-21",
+    "datum": "2027-03-21",
+    "soort": "bestuursdienst",
+    "tijd": "12:00 - 18:00",
+    "namen": [
+      "Astrid Klaver"
+    ]
+  }
+]

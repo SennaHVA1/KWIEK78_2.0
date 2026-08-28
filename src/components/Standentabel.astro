@@ -1,0 +1,149 @@
+---
+/**
+ * Een poulestand.
+ *
+ * De eigen ploeg krijgt de accentkleur, want dat is de regel die je zoekt.
+ * Onder 640 pixels vallen de kolommen winst, gelijk en verlies weg; positie,
+ * team, gespeeld, saldo en punten blijven. Dat past zonder horizontaal
+ * schuiven op een telefoon.
+ */
+import { CLUB } from '../lib/sportlink';
+import { datumZonderDag } from '../lib/datum';
+import type { Poulestand } from '../lib/types';
+
+interface Props {
+  stand: Poulestand | null;
+  /** Reden waarom er geen stand is, wanneer stand null is. */
+  geenStandTekst?: string;
+}
+
+const {
+  stand,
+  geenStandTekst = 'Voor deze poule publiceert de KNVB geen stand.',
+} = Astro.props;
+
+const saldo = (voor: number, tegen: number) => {
+  const verschil = voor - tegen;
+  return verschil > 0 ? `+${verschil}` : String(verschil);
+};
+---
+
+{stand === null ? (
+  <p class="geen-stand zacht">{geenStandTekst}</p>
+) : (
+  <div class="stand">
+    <div class="tabel-schuif">
+      <table class="tabel">
+        <caption class="alleen-schermlezer">
+          Stand van {stand.pouleNaam}, bijgewerkt op {datumZonderDag(stand.bijgewerkt)}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" class="kol-positie"><span class="alleen-schermlezer">Positie</span><span aria-hidden="true">#</span></th>
+            <th scope="col">Team</th>
+            <th scope="col" class="num">G</th>
+            <th scope="col" class="num kol-weg">W</th>
+            <th scope="col" class="num kol-weg">GL</th>
+            <th scope="col" class="num kol-weg">V</th>
+            <th scope="col" class="num">Saldo</th>
+            <th scope="col" class="num">Ptn</th>
+          </tr>
+        </thead>
+        <tbody>
+          {stand.regels.map((regel) => {
+            const eigen = regel.team.startsWith(CLUB);
+            return (
+              <tr class:list={[eigen && 'is-eigen']}>
+                <td class="num kol-positie data">{regel.positie}</td>
+                <th scope="row" class="kol-team">{regel.team}</th>
+                <td class="num">{regel.gespeeld}</td>
+                <td class="num kol-weg">{regel.gewonnen}</td>
+                <td class="num kol-weg">{regel.gelijk}</td>
+                <td class="num kol-weg">{regel.verloren}</td>
+                <td class="num kol-saldo">
+                  {saldo(regel.doelpuntenVoor, regel.doelpuntenTegen)}
+                  <span class="kol-doelpunten"> ({regel.doelpuntenVoor}-{regel.doelpuntenTegen})</span>
+                </td>
+                <td class="num kol-punten">{regel.punten}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="stand-voet data">
+      {stand.pouleNaam}
+      <span class="stand-scheiding" aria-hidden="true"></span>
+      bijgewerkt op {datumZonderDag(stand.bijgewerkt)}
+    </p>
+  </div>
+)}
+
+<style>
+  .stand { display: grid; gap: 0.75rem; }
+
+  .tabel th[scope="row"] { border-bottom: 1px solid var(--kleur-lijn-licht); font-weight: 600; }
+  :global(.vlak-zwart) .tabel th[scope="row"],
+  :global(.vlak-inkt) .tabel th[scope="row"] { border-bottom-color: var(--kleur-lijn-donker); }
+  .tabel th[scope="row"] {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    letter-spacing: 0;
+    text-transform: none;
+    white-space: normal;
+  }
+  .tabel td { font-size: var(--text-klein); }
+
+  .kol-positie { width: 2.5rem; text-align: right; padding-right: 0.9rem !important; }
+  .kol-punten { font-weight: 700; }
+  .kol-doelpunten { color: var(--color-grijs); }
+  :global(.vlak-wit) .kol-doelpunten { color: var(--color-grijsdonker); }
+
+  /* De eigen ploeg is de regel waarvoor je de tabel opent. */
+  .is-eigen td, .is-eigen th {
+    background: color-mix(in srgb, var(--color-blauwdiep) 13%, transparent);
+    font-weight: 700;
+  }
+  :global(.vlak-zwart) .is-eigen td, :global(.vlak-zwart) .is-eigen th,
+  :global(.vlak-inkt) .is-eigen td, :global(.vlak-inkt) .is-eigen th {
+    background: color-mix(in srgb, var(--color-blauw) 18%, transparent);
+    color: var(--color-blauw);
+  }
+  :global(.vlak-wit) .is-eigen td, :global(.vlak-wit) .is-eigen th { color: var(--color-blauwdiep); }
+
+  .stand-voet {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    font-size: var(--text-mini);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  :global(.vlak-wit) .stand-voet { color: var(--color-grijsdonker); }
+  .stand-scheiding { width: 0.5rem; height: 1px; background: currentColor; flex: none; }
+
+  .geen-stand {
+    font-size: var(--text-klein);
+    padding: 1.1rem;
+    border: 1px solid var(--kleur-lijn-licht);
+    max-width: 60ch;
+  }
+  :global(.vlak-zwart) .geen-stand, :global(.vlak-inkt) .geen-stand { border-color: var(--kleur-lijn-donker); }
+
+  .alleen-schermlezer {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 639px) {
+    .kol-weg { display: none; }
+    .kol-doelpunten { display: none; }
+  }
+</style>

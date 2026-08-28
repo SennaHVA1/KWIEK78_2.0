@@ -1,0 +1,115 @@
+---
+/**
+ * Een nieuwsbericht in een lijst.
+ *
+ * Geen kaart met afgeronde hoeken en schaduw: een blok met een haarlijn
+ * erboven, de datum in de kantlijn en de foto strak in het raster.
+ */
+import Foto from './Foto.astro';
+import { datumZonderDag, machineDatum } from '../lib/datum';
+import type { Artikel } from '../lib/types';
+
+interface Props {
+  artikel: Artikel;
+  /** Grote variant, voor het eerste bericht in een overzicht. */
+  groot?: boolean;
+  /**
+   * Kopniveau van de titel. Staat de lijst los op een pagina, dan is 2 goed;
+   * hangt hij onder een sectiekop, geef dan 3 mee.
+   */
+  kopNiveau?: 2 | 3;
+}
+
+const { artikel, groot = false, kopNiveau = 3 } = Astro.props;
+const Kop = `h${kopNiveau}` as 'h2' | 'h3';
+---
+
+<article class:list={['nieuwskaart', groot && 'nieuwskaart--groot']}>
+  <a class="nieuwskaart-link" href={`/nieuws/${artikel.slug}`}>
+    <div class="nieuwskaart-beeld">
+      <Foto
+        src={artikel.afbeelding}
+        alt={`Foto bij het bericht: ${artikel.titel}`}
+        ratio={groot ? '16 / 9' : '4 / 3'}
+        plaatshouder="foto volgt"
+      />
+    </div>
+
+    <div class="nieuwskaart-tekst">
+      <p class="nieuwskaart-meta data">
+        <time datetime={machineDatum(artikel.datum)}>{datumZonderDag(artikel.datum)}</time>
+        {artikel.bron === 'facebook' && <span class="nieuwskaart-bron">via Facebook</span>}
+      </p>
+      <Kop class:list={[groot ? 'kop-m' : 'kop-s']}>{artikel.titel}</Kop>
+      <p class="nieuwskaart-samenvatting">{artikel.samenvatting}</p>
+      <span class="nieuwskaart-lees data">Lees verder</span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .nieuwskaart { border-top: 1px solid var(--kleur-lijn-donker); }
+  :global(.vlak-wit) .nieuwskaart { border-top-color: var(--kleur-lijn-licht); }
+
+  .nieuwskaart-link {
+    display: grid;
+    gap: 1rem;
+    padding-top: 1.1rem;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    align-content: start;
+  }
+
+  .nieuwskaart-beeld { overflow: hidden; }
+  .nieuwskaart-beeld :global(img) {
+    transition: transform 0.5s var(--ease-klap);
+  }
+  .nieuwskaart-link:hover .nieuwskaart-beeld :global(img) { transform: scale(1.03); }
+  @media (prefers-reduced-motion: reduce) {
+    .nieuwskaart-beeld :global(img) { transition: none; }
+    .nieuwskaart-link:hover .nieuwskaart-beeld :global(img) { transform: none; }
+  }
+
+  .nieuwskaart-tekst { display: grid; gap: 0.5rem; align-content: start; }
+
+  .nieuwskaart-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  :global(.vlak-wit) .nieuwskaart-meta { color: var(--color-grijsdonker); }
+  .nieuwskaart-bron { color: var(--color-blauw); }
+  :global(.vlak-wit) .nieuwskaart-bron { color: var(--color-blauwdiep); }
+
+  .nieuwskaart-samenvatting {
+    font-size: var(--text-klein);
+    line-height: 1.6;
+    color: var(--color-grijs);
+    max-width: 52ch;
+  }
+  :global(.vlak-wit) .nieuwskaart-samenvatting { color: var(--color-grijsdonker); }
+
+  .nieuwskaart-lees {
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+    margin-top: 0.15rem;
+  }
+  :global(.vlak-wit) .nieuwskaart-lees { color: var(--color-blauwdiep); }
+  .nieuwskaart-link:hover .nieuwskaart-lees { text-decoration: underline; text-underline-offset: 0.25em; }
+
+  @media (min-width: 720px) {
+    .nieuwskaart--groot .nieuwskaart-link {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+  }
+</style>

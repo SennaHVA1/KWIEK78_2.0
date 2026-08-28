@@ -1,0 +1,133 @@
+---
+/**
+ * AVG binnen de club: praktische uitleg voor leden, ouders en vrijwilligers.
+ *
+ * De privacyverklaring is de formele tekst. Deze pagina legt uit wat het in de
+ * praktijk betekent, want daar hebben ouders meer aan.
+ *
+ * Demo-tekst. Voor oplevering nalopen door het bestuur.
+ */
+import Basis from '../layouts/Basis.astro';
+import Paginakop from '../components/Paginakop.astro';
+import Accordeon from '../components/Accordeon.astro';
+import { getContactpersoon } from '../lib/club';
+
+const webmaster = getContactpersoon('Webmaster');
+
+const vragen = [
+  {
+    vraag: 'Staat de achternaam van mijn kind op de site?',
+    antwoord: 'Nee. Bij alle jeugdteams tonen wij uitsluitend de voornaam en de eerste letter van de achternaam. Dat geldt op de teampagina, bij de opstelling en in de verjaardagskalender. Deze regel staat vast in de code van de website en kan niet per ongeluk worden omgezet.',
+  },
+  {
+    vraag: 'Hoe zorg ik dat mijn kind helemaal niet op de site komt?',
+    antwoord: 'Dat stel je zelf in via de KNVB-app, onder Privacy-instellingen. Zet je het privacyniveau op afgeschermd, dan haalt de website het lid volledig uit alle overzichten. Je hoeft daarvoor niemand te mailen en het werkt direct bij de eerstvolgende publicatie.',
+  },
+  {
+    vraag: 'Staat het geboortejaar bij de verjaardagen?',
+    antwoord: 'Nee, alleen de dag en de maand. Het geboortejaar wordt niet uit Sportlink overgenomen naar de website. Voor een felicitatie is het niet nodig, en een volledige geboortedatum is een gegeven waarmee misbruik mogelijk is.',
+  },
+  {
+    vraag: 'Er staat een foto van mij op de site die ik eraf wil.',
+    antwoord: `Stuur een bericht aan de webmaster met de link naar de pagina. Wij halen de foto er zo snel mogelijk af, uiterlijk binnen een week. Je hoeft geen reden op te geven. ${webmaster?.email ? `Mailen kan naar ${webmaster.email}.` : ''}`,
+  },
+  {
+    vraag: 'Worden er cookies geplaatst?',
+    antwoord: 'Niet door ons. De website houdt geen bezoekersstatistieken bij en plaatst geen trackingcookies. Video en kaart worden pas geladen nadat je erop klikt; pas dan maakt je browser contact met YouTube of OpenStreetMap. Daarom is er ook geen cookiebanner: er valt niets toe te staan.',
+  },
+  {
+    vraag: 'Wie mag bij de ledengegevens?',
+    antwoord: 'Alleen de ledenadministratie, de penningmeester en de secretaris hebben toegang tot het volledige ledenbestand in Sportlink. Trainers en leiders zien uitsluitend de gegevens van hun eigen team, en niet de bankgegevens.',
+  },
+  {
+    vraag: 'Wat gebeurt er met mijn gegevens als ik opzeg?',
+    antwoord: 'Je lidmaatschap wordt beeindigd bij de KNVB en je gegevens worden binnen twee jaar uit het ledenbestand verwijderd. De financiele administratie bewaren wij zeven jaar, omdat de belastingdienst dat voorschrijft.',
+  },
+  {
+    vraag: 'Bij wie kan ik terecht met een klacht?',
+    antwoord: 'Bij de secretaris. Kom je er met de club niet uit, dan kun je terecht bij de Autoriteit Persoonsgegevens. Voor zaken die niets met gegevens te maken hebben maar wel met veiligheid of gedrag, zijn er twee vertrouwenscontactpersonen; die vind je op de bestuurspagina.',
+  },
+];
+---
+
+<Basis
+  titel="AVG"
+  omschrijving="Wat de AVG in de praktijk betekent bij v.v. Kwiek '78: welke gegevens zichtbaar zijn, wat je zelf kunt instellen en bij wie je terecht kunt."
+>
+  <Paginakop
+    kicker="Juridisch"
+    titel="AVG in de praktijk"
+    intro="De privacyverklaring is de formele tekst. Hier staat wat het in de praktijk betekent voor leden, ouders en vrijwilligers."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Kort gezegd</p>
+        <div class="samenvatting">
+          <div class="lopende-tekst">
+            <p>
+              Kwiek gaat zuinig om met gegevens. Op de website staat alleen wat nodig is om te
+              weten wanneer en waar er gespeeld wordt en wie je waarvoor kunt benaderen.
+            </p>
+            <p>
+              Drie afspraken die de club zichzelf heeft opgelegd en die verder gaan dan de wet
+              vereist:
+            </p>
+            <ul>
+              <li>bij de jeugd nooit een volledige achternaam, ook niet met toestemming</li>
+              <li>bij verjaardagen nooit een geboortejaar</li>
+              <li>geen trackingcookies, geen bezoekersstatistieken, geen cookiebanner</li>
+            </ul>
+          </div>
+
+          <aside class="uitlichting">
+            <p class="label">Zelf instellen</p>
+            <p class="uitlichting-tekst">
+              Je zichtbaarheid regel je in de KNVB-app onder Privacy-instellingen.
+              Zet je die op afgeschermd, dan verdwijn je volledig van deze site.
+            </p>
+            <a class="knop knop--zwart" href="/privacyverklaring">Privacyverklaring</a>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <section class="vlak-zwart sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Vragen</p>
+        <div>
+          <h2 class="kop-sectie vragen-kop">Veelgestelde vragen</h2>
+          <Accordeon items={vragen} label="Veelgestelde vragen over privacy" />
+          <p class="vragen-voet zacht">
+            Staat je vraag er niet bij? Stuur een bericht via de <a href="/contact">contactpagina</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .samenvatting { display: grid; gap: 2.25rem; }
+  @media (min-width: 900px) {
+    .samenvatting { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
+  }
+
+  .uitlichting {
+    display: grid;
+    gap: 0.7rem;
+    justify-items: start;
+    border: 1px solid var(--kleur-lijn-licht);
+    padding: 1.5rem;
+  }
+  .uitlichting-tekst { font-size: var(--text-klein); line-height: 1.6; }
+
+  .vragen-kop { padding-bottom: 1.25rem; }
+  .vragen-voet { font-size: var(--text-klein); margin-top: 1.5rem; }
+  .vragen-voet a { color: var(--color-blauw); }
+</style>

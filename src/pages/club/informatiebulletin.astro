@@ -1,0 +1,177 @@
+---
+/**
+ * Informatiebulletin en documenten.
+ *
+ * De richtlijnen voor het kunstgras stonden op de oude site op een eigen
+ * pagina met een enkele PDF erop. Die staan nu hieronder als sectie: de
+ * belangrijkste regels leesbaar op de pagina zelf, met het document ernaast.
+ * Dat scheelt een pagina en het scheelt vooral een klik voor de trainer die
+ * op het veld even wil nakijken of het mag.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import Accordeon from '../../components/Accordeon.astro';
+import { getBulletins, getKunstgrasrichtlijnen } from '../../lib/club';
+import { datumZonderDag } from '../../lib/datum';
+
+const documenten = getBulletins();
+const kunstgras = getKunstgrasrichtlijnen();
+
+const kunstgrasregels = [
+  {
+    vraag: 'Welk schoeisel is toegestaan?',
+    antwoord: 'Kunstgrasnoppen of multinoppen. IJzeren studs mogen niet: die trekken de vezels los en beschadigen de mat blijvend. Zaalschoenen mogen bij techniektrainingen, maar geven bij nat weer te weinig grip.',
+  },
+  {
+    vraag: 'Waarom mag er niet gegeten of gedronken worden op het veld?',
+    antwoord: 'Suikerresten trekken vuil aan en tasten de infill aan. Bidons zijn geen probleem, mits ze water bevatten. Sportdrank en kauwgom horen aan de kant, niet op de mat.',
+  },
+  {
+    vraag: 'Mogen doelen verplaatst worden?',
+    antwoord: 'Alleen tillend en met minimaal vier personen. Slepen laat sporen achter die er niet meer uit gaan. De kleine doelen hebben wieltjes, daar mag je wel mee rijden.',
+  },
+  {
+    vraag: 'Wat te doen bij vorst of sneeuw?',
+    antwoord: 'Bij bevroren mat wordt er niet gespeeld en niet getraind: bevroren vezels breken af. Sneeuw wordt niet weggeschoven maar laten liggen tot hij smelt. De consul bepaalt of het veld open gaat.',
+  },
+  {
+    vraag: 'Wie ruimt op na de training?',
+    antwoord: 'Het team dat als laatste op het veld staat. Doelen terug op de plek, pionnen en hesjes mee naar het materiaalhok, en de laatste kijkt of er niets is blijven liggen.',
+  },
+];
+---
+
+<Basis
+  titel="Informatiebulletin"
+  omschrijving="Het informatiebulletin, de clubdocumenten en de richtlijnen voor het gebruik van het kunstgras."
+>
+  <Paginakop
+    kicker="Club"
+    titel="Informatiebulletin"
+    intro="Alle documenten van de club op een plek: het clubboekje, de reglementen, de contributie en de richtlijnen voor het kunstgras."
+  />
+
+  <!-- ================================================================== -->
+  <!-- Documenten                                                         -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Downloads</p>
+        <div>
+          <h2 class="kop-sectie blokkop">Documenten</h2>
+          <ul class="documenten">
+            {documenten.map((document) => (
+              <li class="document">
+                <a class="document-link" href={document.bestand} download>
+                  <span class="document-soort data" aria-hidden="true">PDF</span>
+                  <span class="document-tekst">
+                    <span class="document-titel">{document.titel}</span>
+                    <span class="document-omschrijving zacht">{document.omschrijving}</span>
+                  </span>
+                  <span class="document-meta data">
+                    {datumZonderDag(document.datum)}
+                    <span class="document-scheiding" aria-hidden="true"></span>
+                    {document.grootte}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="documenten-noot zacht">
+            De bestanden zijn in deze demo nog niet aanwezig. De club levert ze aan bij oplevering.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Richtlijnen kunstgras                                              -->
+  <!-- ================================================================== -->
+  <section class="vlak-zwart sectie" id="kunstgras">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Kunstgras</p>
+        <div class="kunstgras">
+          <div class="kunstgras-tekst">
+            <h2 class="kop-sectie">Richtlijnen gebruik kunstgras</h2>
+            <p class="kunstgras-intro">
+              Het kunstgrasveld ligt er sinds 2021 en moet nog zeker tien jaar mee.
+              Dat lukt alleen als iedereen zich aan een paar afspraken houdt.
+              Trainers en leiders worden geacht deze regels te kennen.
+            </p>
+            {kunstgras && (
+              <a class="knop knop--primair" href={kunstgras.bestand} download>
+                Volledige richtlijnen ({kunstgras.grootte})
+              </a>
+            )}
+          </div>
+
+          <div class="kunstgras-regels">
+            <Accordeon items={kunstgrasregels} label="Veelgestelde vragen over het kunstgras" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .blokkop { padding-bottom: 1.25rem; }
+
+  .documenten { list-style: none; margin: 0; padding: 0; }
+  .document { border-top: 1px solid var(--kleur-lijn-licht); }
+  .document:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
+
+  .document-link {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.35rem 1rem;
+    padding-block: 1rem;
+    text-decoration: none;
+    color: inherit !important;
+    align-items: start;
+    transition: background-color 0.15s var(--ease-klap);
+  }
+  .document-link:hover { background: var(--kleur-papier-op); }
+  @media (prefers-reduced-motion: reduce) { .document-link { transition: none; } }
+
+  .document-soort {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    padding: 0.35rem 0;
+    border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .document-tekst { display: grid; gap: 0.2rem; }
+  .document-titel { font-weight: 700; letter-spacing: -0.01em; }
+  .document-omschrijving { font-size: var(--text-klein); max-width: 60ch; }
+
+  .document-meta {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-mini);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+  }
+  .document-scheiding { width: 0.45rem; height: 1px; background: currentColor; flex: none; }
+
+  .documenten-noot { font-size: var(--text-mini); margin-top: 1rem; max-width: 60ch; }
+
+  .kunstgras { display: grid; gap: 2.25rem; }
+  @media (min-width: 900px) {
+    .kunstgras { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 3.5rem; align-items: start; }
+  }
+  .kunstgras-tekst { display: grid; gap: 1rem; justify-items: start; }
+  .kunstgras-intro { color: var(--color-grijs); max-width: 44ch; line-height: 1.6; }
+</style>

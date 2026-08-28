@@ -1,0 +1,1162 @@
+[
+  {
+    "relatiecode": "KWK-3006",
+    "voornaam": "Lucas",
+    "achternaam": "Sijm",
+    "dag": 2,
+    "maand": 1,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9004",
+    "voornaam": "Astrid",
+    "achternaam": "Klaver",
+    "dag": 5,
+    "maand": 1,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3005",
+    "voornaam": "Mees",
+    "achternaam": "Vriend",
+    "dag": 7,
+    "maand": 1,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-1007",
+    "voornaam": "Niels",
+    "achternaam": "Vriend",
+    "dag": 8,
+    "maand": 1,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3011",
+    "voornaam": "Cas",
+    "achternaam": "Molenaar",
+    "dag": 16,
+    "maand": 1,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-6005",
+    "voornaam": "Sofie",
+    "achternaam": "Klaver",
+    "dag": 24,
+    "maand": 1,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-6002",
+    "voornaam": "Jill",
+    "achternaam": "Kaandorp",
+    "dag": 30,
+    "maand": 1,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-2015",
+    "voornaam": "Martijn",
+    "achternaam": "Broersen",
+    "dag": 4,
+    "maand": 2,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9020",
+    "voornaam": "Klaas",
+    "achternaam": "Neefjes",
+    "dag": 5,
+    "maand": 2,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9035",
+    "voornaam": "Riet",
+    "achternaam": "Sijm",
+    "dag": 7,
+    "maand": 2,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4013",
+    "voornaam": "Vince",
+    "achternaam": "Beerepoot",
+    "dag": 7,
+    "maand": 2,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9024",
+    "voornaam": "Anja",
+    "achternaam": "Klaver",
+    "dag": 14,
+    "maand": 2,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3007",
+    "voornaam": "Noud",
+    "achternaam": "Beerepoot",
+    "dag": 15,
+    "maand": 2,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-4012",
+    "voornaam": "Roan",
+    "achternaam": "Klaver",
+    "dag": 19,
+    "maand": 2,
+    "team": "JO12-1",
+    "privacyniveau": 2
+  },
+  {
+    "relatiecode": "KWK-4005",
+    "voornaam": "Owen",
+    "achternaam": "Bakker",
+    "dag": 20,
+    "maand": 2,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-1017",
+    "voornaam": "Timo",
+    "achternaam": "Sneekes",
+    "dag": 22,
+    "maand": 2,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 2
+  },
+  {
+    "relatiecode": "KWK-9044",
+    "voornaam": "Ilse",
+    "achternaam": "Reijne",
+    "dag": 23,
+    "maand": 2,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4009",
+    "voornaam": "Ties",
+    "achternaam": "Molenaar",
+    "dag": 25,
+    "maand": 2,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-5004",
+    "voornaam": "Britt",
+    "achternaam": "Overtoom",
+    "dag": 1,
+    "maand": 3,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6001",
+    "voornaam": "Evi",
+    "achternaam": "Sijm",
+    "dag": 1,
+    "maand": 3,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-2003",
+    "voornaam": "Dave",
+    "achternaam": "Vlaar",
+    "dag": 2,
+    "maand": 3,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5013",
+    "voornaam": "Roos",
+    "achternaam": "Koning",
+    "dag": 3,
+    "maand": 3,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9013",
+    "voornaam": "Ted",
+    "achternaam": "Bijl",
+    "dag": 6,
+    "maand": 3,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9047",
+    "voornaam": "Ria",
+    "achternaam": "Zwart",
+    "dag": 7,
+    "maand": 3,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4002",
+    "voornaam": "Sem",
+    "achternaam": "Nooij",
+    "dag": 12,
+    "maand": 3,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-5010",
+    "voornaam": "Anouk",
+    "achternaam": "Beerepoot",
+    "dag": 18,
+    "maand": 3,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1002",
+    "voornaam": "Lars",
+    "achternaam": "Beerepoot",
+    "dag": 19,
+    "maand": 3,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9034",
+    "voornaam": "Corrie",
+    "achternaam": "Neefjes",
+    "dag": 21,
+    "maand": 3,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9002",
+    "voornaam": "Wilma",
+    "achternaam": "Sneekes",
+    "dag": 30,
+    "maand": 3,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2014",
+    "voornaam": "Freek",
+    "achternaam": "Wit",
+    "tussenvoegsel": "de",
+    "dag": 8,
+    "maand": 4,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4008",
+    "voornaam": "Julian",
+    "achternaam": "Vriend",
+    "dag": 8,
+    "maand": 4,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9040",
+    "voornaam": "Dirk",
+    "achternaam": "Zwaan",
+    "dag": 11,
+    "maand": 4,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4004",
+    "voornaam": "Fedde",
+    "achternaam": "Sijm",
+    "dag": 12,
+    "maand": 4,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-2005",
+    "voornaam": "Roy",
+    "achternaam": "Bakker",
+    "dag": 12,
+    "maand": 4,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5002",
+    "voornaam": "Isa",
+    "achternaam": "Kaandorp",
+    "dag": 13,
+    "maand": 4,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1008",
+    "voornaam": "Jesse",
+    "achternaam": "Kuip",
+    "dag": 15,
+    "maand": 4,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6003",
+    "voornaam": "Lynn",
+    "achternaam": "Bakker",
+    "dag": 15,
+    "maand": 4,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9031",
+    "voornaam": "Marja",
+    "achternaam": "Ligthart",
+    "dag": 20,
+    "maand": 4,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9048",
+    "voornaam": "Joke",
+    "achternaam": "Kok",
+    "dag": 22,
+    "maand": 4,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4011",
+    "voornaam": "Sam",
+    "achternaam": "Koning",
+    "dag": 6,
+    "maand": 5,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-3003",
+    "voornaam": "Ravi",
+    "achternaam": "Klaver",
+    "dag": 8,
+    "maand": 5,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-3004",
+    "voornaam": "Jurre",
+    "achternaam": "Bakker",
+    "dag": 11,
+    "maand": 5,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9043",
+    "voornaam": "Tanja",
+    "achternaam": "Broersen",
+    "dag": 13,
+    "maand": 5,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6008",
+    "voornaam": "Zoe",
+    "achternaam": "Vriend",
+    "dag": 15,
+    "maand": 5,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-2002",
+    "voornaam": "Sander",
+    "achternaam": "Koning",
+    "dag": 16,
+    "maand": 5,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1009",
+    "voornaam": "Tygo",
+    "achternaam": "Bakker",
+    "dag": 16,
+    "maand": 5,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4007",
+    "voornaam": "Liam",
+    "achternaam": "Karsten",
+    "dag": 17,
+    "maand": 5,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9033",
+    "voornaam": "Ans",
+    "achternaam": "Karsten",
+    "dag": 18,
+    "maand": 5,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9027",
+    "voornaam": "Paul",
+    "achternaam": "Overtoom",
+    "dag": 19,
+    "maand": 5,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2013",
+    "voornaam": "Chris",
+    "achternaam": "Ligthart",
+    "dag": 21,
+    "maand": 5,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9017",
+    "voornaam": "Jaap",
+    "achternaam": "Sijm",
+    "dag": 23,
+    "maand": 5,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6004",
+    "voornaam": "Nova",
+    "achternaam": "Overtoom",
+    "dag": 25,
+    "maand": 5,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-2006",
+    "voornaam": "Tim",
+    "achternaam": "Kaandorp",
+    "dag": 2,
+    "maand": 6,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9005",
+    "voornaam": "Ron",
+    "achternaam": "Kramer",
+    "dag": 4,
+    "maand": 6,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3012",
+    "voornaam": "Teun",
+    "achternaam": "Blank",
+    "dag": 10,
+    "maand": 6,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9016",
+    "voornaam": "Ans",
+    "achternaam": "Overtoom",
+    "dag": 13,
+    "maand": 6,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5015",
+    "voornaam": "Elin",
+    "achternaam": "Schaper",
+    "dag": 15,
+    "maand": 6,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3009",
+    "voornaam": "Guus",
+    "achternaam": "Karsten",
+    "dag": 17,
+    "maand": 6,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9009",
+    "voornaam": "Erwin",
+    "achternaam": "Sneekes",
+    "dag": 20,
+    "maand": 6,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2004",
+    "voornaam": "Marnix",
+    "achternaam": "Sijm",
+    "dag": 21,
+    "maand": 6,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9030",
+    "voornaam": "Cor",
+    "achternaam": "Bood",
+    "dag": 22,
+    "maand": 6,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2001",
+    "voornaam": "Bas",
+    "achternaam": "Reijne",
+    "dag": 24,
+    "maand": 6,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9045",
+    "voornaam": "Bianca",
+    "achternaam": "Groenland",
+    "dag": 28,
+    "maand": 6,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5003",
+    "voornaam": "Noor",
+    "achternaam": "Bakker",
+    "dag": 28,
+    "maand": 6,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9041",
+    "voornaam": "Els",
+    "achternaam": "Bregman",
+    "dag": 29,
+    "maand": 6,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9019",
+    "voornaam": "Piet",
+    "achternaam": "Schuit",
+    "dag": 30,
+    "maand": 6,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1004",
+    "voornaam": "Bart",
+    "achternaam": "Groot",
+    "dag": 1,
+    "maand": 7,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2009",
+    "voornaam": "Danny",
+    "achternaam": "Karsten",
+    "dag": 7,
+    "maand": 7,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3015",
+    "voornaam": "Wessel",
+    "achternaam": "Duin",
+    "dag": 8,
+    "maand": 7,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9021",
+    "voornaam": "Robert",
+    "achternaam": "Appelman",
+    "dag": 9,
+    "maand": 7,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3002",
+    "voornaam": "Tijn",
+    "achternaam": "Overtoom",
+    "dag": 13,
+    "maand": 7,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-5011",
+    "voornaam": "Kim",
+    "achternaam": "Karsten",
+    "dag": 15,
+    "maand": 7,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5012",
+    "voornaam": "Iris",
+    "achternaam": "Blank",
+    "dag": 19,
+    "maand": 7,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5006",
+    "voornaam": "Amber",
+    "achternaam": "Groot",
+    "dag": 23,
+    "maand": 7,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9006",
+    "voornaam": "Carla",
+    "achternaam": "Kramer",
+    "dag": 24,
+    "maand": 7,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9008",
+    "voornaam": "Marloes",
+    "achternaam": "Vriend",
+    "dag": 28,
+    "maand": 7,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1001",
+    "voornaam": "Rick",
+    "achternaam": "Kaandorp",
+    "dag": 30,
+    "maand": 7,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1013",
+    "voornaam": "Kevin",
+    "achternaam": "Boer",
+    "tussenvoegsel": "de",
+    "dag": 1,
+    "maand": 8,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3016",
+    "voornaam": "Levi",
+    "achternaam": "Schaper",
+    "dag": 1,
+    "maand": 8,
+    "team": "JO17-1",
+    "privacyniveau": 2
+  },
+  {
+    "relatiecode": "KWK-9022",
+    "voornaam": "Marnix",
+    "achternaam": "Sijm",
+    "dag": 3,
+    "maand": 8,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4001",
+    "voornaam": "Jip",
+    "achternaam": "Kaandorp",
+    "dag": 7,
+    "maand": 8,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-1015",
+    "voornaam": "Wouter",
+    "achternaam": "Blank",
+    "dag": 10,
+    "maand": 8,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9011",
+    "voornaam": "Peter",
+    "achternaam": "Bood",
+    "dag": 16,
+    "maand": 8,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3013",
+    "voornaam": "Jort",
+    "achternaam": "Ligthart",
+    "dag": 18,
+    "maand": 8,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-5001",
+    "voornaam": "Fleur",
+    "achternaam": "Sijm",
+    "dag": 20,
+    "maand": 8,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9015",
+    "voornaam": "Wilma",
+    "achternaam": "Bakker",
+    "dag": 20,
+    "maand": 8,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9036",
+    "voornaam": "Ger",
+    "achternaam": "Overtoom",
+    "dag": 22,
+    "maand": 8,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9001",
+    "voornaam": "Cees",
+    "achternaam": "Balk",
+    "dag": 24,
+    "maand": 8,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9026",
+    "voornaam": "Marcel",
+    "achternaam": "Duin",
+    "dag": 25,
+    "maand": 8,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6009",
+    "voornaam": "Puck",
+    "achternaam": "Molenaar",
+    "dag": 2,
+    "maand": 9,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-4006",
+    "voornaam": "Tobias",
+    "achternaam": "Groot",
+    "dag": 2,
+    "maand": 9,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9012",
+    "voornaam": "Nico",
+    "achternaam": "Ruiter",
+    "dag": 6,
+    "maand": 9,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1011",
+    "voornaam": "Ruben",
+    "achternaam": "Molenaar",
+    "dag": 6,
+    "maand": 9,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1010",
+    "voornaam": "Sem",
+    "achternaam": "Klaver",
+    "dag": 9,
+    "maand": 9,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3014",
+    "voornaam": "Sven",
+    "achternaam": "Koning",
+    "dag": 9,
+    "maand": 9,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9025",
+    "voornaam": "Jeroen",
+    "achternaam": "Pronk",
+    "dag": 13,
+    "maand": 9,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9029",
+    "voornaam": "Wouter",
+    "achternaam": "Klaver",
+    "dag": 14,
+    "maand": 9,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4003",
+    "voornaam": "Boaz",
+    "achternaam": "Overtoom",
+    "dag": 16,
+    "maand": 9,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9010",
+    "voornaam": "Sandra",
+    "achternaam": "Bood",
+    "dag": 16,
+    "maand": 9,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1005",
+    "voornaam": "Milan",
+    "achternaam": "Schaper",
+    "dag": 25,
+    "maand": 9,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5014",
+    "voornaam": "Marit",
+    "achternaam": "Duin",
+    "dag": 26,
+    "maand": 9,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9023",
+    "voornaam": "Nadine",
+    "achternaam": "Kuip",
+    "dag": 28,
+    "maand": 9,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3008",
+    "voornaam": "Finn",
+    "achternaam": "Groot",
+    "dag": 29,
+    "maand": 9,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-9046",
+    "voornaam": "Ellen",
+    "achternaam": "Wagenaar",
+    "dag": 5,
+    "maand": 10,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5007",
+    "voornaam": "Femke",
+    "achternaam": "Nooij",
+    "dag": 11,
+    "maand": 10,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5009",
+    "voornaam": "Sanne",
+    "achternaam": "Molenaar",
+    "dag": 14,
+    "maand": 10,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6007",
+    "voornaam": "Yara",
+    "achternaam": "Nooij",
+    "dag": 25,
+    "maand": 10,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-1014",
+    "voornaam": "Stan",
+    "achternaam": "Neefjes",
+    "dag": 29,
+    "maand": 10,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2012",
+    "voornaam": "Erik",
+    "achternaam": "Zwart",
+    "dag": 8,
+    "maand": 11,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2010",
+    "voornaam": "Bram",
+    "achternaam": "Overtoom",
+    "dag": 9,
+    "maand": 11,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1012",
+    "voornaam": "Joey",
+    "achternaam": "Karsten",
+    "dag": 12,
+    "maand": 11,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6006",
+    "voornaam": "Tess",
+    "achternaam": "Groot",
+    "dag": 16,
+    "maand": 11,
+    "team": "MO9-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-1016",
+    "voornaam": "Thijs",
+    "achternaam": "Bruin",
+    "dag": 25,
+    "maand": 11,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-3001",
+    "voornaam": "Sepp",
+    "achternaam": "Kaandorp",
+    "dag": 26,
+    "maand": 11,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-3010",
+    "voornaam": "Bram",
+    "achternaam": "Nooij",
+    "dag": 27,
+    "maand": 11,
+    "team": "JO17-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-1006",
+    "voornaam": "Daan",
+    "achternaam": "Rood",
+    "dag": 28,
+    "maand": 11,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9003",
+    "voornaam": "Gerard",
+    "achternaam": "Kok",
+    "dag": 29,
+    "maand": 11,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9032",
+    "voornaam": "Wim",
+    "achternaam": "Groot",
+    "dag": 29,
+    "maand": 11,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9018",
+    "voornaam": "Truus",
+    "achternaam": "Karsten",
+    "dag": 1,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-4010",
+    "voornaam": "Daniel",
+    "achternaam": "Blank",
+    "dag": 7,
+    "maand": 12,
+    "team": "JO12-1",
+    "privacyniveau": 1
+  },
+  {
+    "relatiecode": "KWK-2007",
+    "voornaam": "Jordy",
+    "achternaam": "Groenland",
+    "dag": 11,
+    "maand": 12,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9007",
+    "voornaam": "Michel",
+    "achternaam": "Bood",
+    "dag": 12,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2011",
+    "voornaam": "Vincent",
+    "achternaam": "Nooij",
+    "dag": 15,
+    "maand": 12,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9037",
+    "voornaam": "Jan",
+    "achternaam": "Vlaar",
+    "dag": 16,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9028",
+    "voornaam": "Ronald",
+    "achternaam": "Kuip",
+    "dag": 17,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-1003",
+    "voornaam": "Youri",
+    "achternaam": "Sijm",
+    "dag": 18,
+    "maand": 12,
+    "team": "Kwiek '78 1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-6010",
+    "voornaam": "Fenna",
+    "achternaam": "Beerepoot",
+    "dag": 19,
+    "maand": 12,
+    "team": "MO9-1",
+    "privacyniveau": 2
+  },
+  {
+    "relatiecode": "KWK-9038",
+    "voornaam": "Nico",
+    "achternaam": "Balk",
+    "dag": 22,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9039",
+    "voornaam": "Piet",
+    "achternaam": "Kaandorp",
+    "dag": 22,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5008",
+    "voornaam": "Lotte",
+    "achternaam": "Vriend",
+    "dag": 23,
+    "maand": 12,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-5005",
+    "voornaam": "Merel",
+    "achternaam": "Klaver",
+    "dag": 24,
+    "maand": 12,
+    "team": "VR1",
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9014",
+    "voornaam": "Hans",
+    "achternaam": "Wagenaar",
+    "dag": 25,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-9042",
+    "voornaam": "Simone",
+    "achternaam": "Schouten",
+    "dag": 25,
+    "maand": 12,
+    "privacyniveau": 0
+  },
+  {
+    "relatiecode": "KWK-2008",
+    "voornaam": "Mike",
+    "achternaam": "Schouten",
+    "dag": 29,
+    "maand": 12,
+    "team": "Kwiek '78 2",
+    "privacyniveau": 0
+  }
+]

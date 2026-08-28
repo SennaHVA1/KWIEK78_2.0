@@ -1,0 +1,118 @@
+---
+/**
+ * De basislayout. Elke pagina zit hierin.
+ */
+import '../styles/global.css';
+import Navigatie from '../components/Navigatie.astro';
+import Voettekst from '../components/Voettekst.astro';
+import { CLUBGEGEVENS, IS_DEMO } from '../lib/club';
+
+interface Props {
+  titel: string;
+  omschrijving: string;
+  /** Zet op false voor pagina's die niet in Google horen. */
+  indexeerbaar?: boolean;
+}
+
+const { titel, omschrijving, indexeerbaar = true } = Astro.props;
+const volledigeTitel = titel === 'Home'
+  ? `${CLUBGEGEVENS.naam} - Avenhorn`
+  : `${titel} - ${CLUBGEGEVENS.naam}`;
+const canoniek = new URL(Astro.url.pathname, Astro.site ?? 'https://www.kwiek78.nl').href;
+---
+
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{volledigeTitel}</title>
+    <meta name="description" content={omschrijving} />
+    <link rel="canonical" href={canoniek} />
+    {/* Zolang IS_DEMO aanstaat blijft de hele site uit de zoekmachines. */}
+    {(IS_DEMO || !indexeerbaar) && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta name="theme-color" content="#0B0B0C" />
+    <link rel="icon" href="/images/logos/kwiek-78.png" />
+    <link rel="apple-touch-icon" href="/images/logos/kwiek-78-wapen.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={CLUBGEGEVENS.naam} />
+    <meta property="og:title" content={volledigeTitel} />
+    <meta property="og:description" content={omschrijving} />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:url" content={canoniek} />
+
+    <!-- Lettertypes staan lokaal, dus geen verzoek naar een externe server. -->
+    <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jetbrains-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'SportsClub',
+        name: CLUBGEGEVENS.naam,
+        foundingDate: String(CLUBGEGEVENS.opgericht),
+        sport: 'Voetbal',
+        url: 'https://www.kwiek78.nl',
+        telephone: CLUBGEGEVENS.telefoon,
+        email: CLUBGEGEVENS.email,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: CLUBGEGEVENS.straat,
+          postalCode: CLUBGEGEVENS.postcode,
+          addressLocality: CLUBGEGEVENS.plaats,
+          addressRegion: CLUBGEGEVENS.provincie,
+          addressCountry: 'NL',
+        },
+        sameAs: [CLUBGEGEVENS.facebook, CLUBGEGEVENS.x, CLUBGEGEVENS.youtube],
+      })}
+    />
+  </head>
+
+  <body>
+    <a class="sla-over" href="#inhoud">Naar de inhoud</a>
+    <Navigatie />
+    <main id="inhoud">
+      <slot />
+    </main>
+    <Voettekst />
+
+    <script>
+      /**
+       * Elementen laten verschijnen zodra ze in beeld komen.
+       * Met IntersectionObserver, niet met een scroll-listener, en volledig
+       * uit bij prefers-reduced-motion.
+       */
+      const wilBeweging = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const doelen = document.querySelectorAll<HTMLElement>('.verschijn');
+
+      if (!wilBeweging || !('IntersectionObserver' in window)) {
+        doelen.forEach((el) => el.classList.add('is-zichtbaar'));
+      } else {
+        const waarnemer = new IntersectionObserver(
+          (waarnemingen) => {
+            for (const waarneming of waarnemingen) {
+              if (!waarneming.isIntersecting) continue;
+              waarneming.target.classList.add('is-zichtbaar');
+              waarnemer.unobserve(waarneming.target);
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        doelen.forEach((el) => waarnemer.observe(el));
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+  main { flex: 1 0 auto; }
+  html.geen-scroll { overflow: hidden; }
+</style>

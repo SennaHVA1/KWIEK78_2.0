@@ -1,0 +1,72 @@
+---
+/**
+ * Ereleden en leden van verdienste.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import { getEreleden } from '../../lib/club';
+
+const alle = getEreleden();
+const groepen = [
+  { soort: 'erelid' as const, titel: 'Ereleden', uitleg: 'Benoemd door de algemene ledenvergadering, voor het leven aan de club verbonden.' },
+  { soort: 'lid-van-verdienste' as const, titel: 'Leden van verdienste', uitleg: 'Voor wie zich jarenlang buitengewoon heeft ingezet voor Kwiek.' },
+];
+---
+
+<Basis
+  titel="Ereleden"
+  omschrijving="De ereleden en leden van verdienste van v.v. Kwiek '78."
+>
+  <Paginakop
+    kicker="Club"
+    titel="Ereleden"
+    intro="Mensen zonder wie deze club er anders uit had gezien. Hun namen staan ook op het bord in de kantine."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel ereleden">
+      {groepen.map((groep) => {
+        const leden = alle.filter((lid) => lid.soort === groep.soort);
+        return (
+          <section class="kolom">
+            <p class="kolom-kicker">{groep.titel}</p>
+            <div>
+              <h2 class="kop-sectie eer-kop">{groep.titel}</h2>
+              <p class="eer-uitleg zacht">{groep.uitleg}</p>
+              <ol class="eerlijst">
+                {leden.map((lid) => (
+                  <li class="eer">
+                    <span class="eer-jaar data">{lid.sinds}</span>
+                    <div>
+                      <h3 class="eer-naam">{lid.naam}</h3>
+                      <p class="eer-toelichting zacht">{lid.toelichting}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .ereleden { display: grid; gap: 3.5rem; }
+  .eer-kop { padding-bottom: 0.5rem; }
+  .eer-uitleg { font-size: var(--text-klein); max-width: 60ch; padding-bottom: 1.25rem; }
+
+  .eerlijst { list-style: none; margin: 0; padding: 0; }
+  .eer {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.95rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+  }
+  .eer:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
+  .eer-jaar { font-size: var(--text-klein); font-weight: 700; color: var(--color-blauwdiep); }
+  .eer-naam { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
+  .eer-toelichting { font-size: var(--text-klein); max-width: 62ch; margin-top: 0.15rem; }
+</style>

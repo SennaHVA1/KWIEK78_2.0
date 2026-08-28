@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+dev.log
+preview.log
+
+# De originele foto's van de club, 12 tot 13 MB per stuk.
+# Ze horen niet in een git-repo: de verkleinde webp-versies in
+# public/images staan er wel in, dus de site bouwt overal.
+# Zie IMAGES.md voor de werkwijze met npm run fotos.
+_bronfotos/

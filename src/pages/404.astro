@@ -1,0 +1,84 @@
+---
+/**
+ * Pagina niet gevonden.
+ *
+ * Geen grap over een misser of een gemiste kans, wel meteen de vier links
+ * waar iemand die verdwaalt doorgaans naartoe wil.
+ */
+import Basis from '../layouts/Basis.astro';
+import { getEerstvolgendeWedstrijd } from '../lib/sportlink';
+import { korteDatum, tijd } from '../lib/datum';
+
+const volgende = getEerstvolgendeWedstrijd();
+---
+
+<Basis
+  titel="Pagina niet gevonden"
+  omschrijving="Deze pagina bestaat niet of is verplaatst."
+  indexeerbaar={false}
+>
+  <section class="vlak-zwart fout">
+    <div class="omhulsel">
+      <div class="kolom fout-binnen">
+        <p class="kolom-kicker">Foutmelding 404</p>
+        <div class="fout-tekst">
+          <h1 class="kop-l">Deze pagina bestaat niet</h1>
+          <p class="fout-uitleg">
+            De link klopt niet meer of de pagina is bij de vernieuwing van de site verdwenen.
+            Hieronder staat waar de meeste mensen naar op zoek zijn.
+          </p>
+
+          <ul class="fout-links">
+            <li><a class="link-onder" href="/wedstrijden/programma">Programma</a></li>
+            <li><a class="link-onder" href="/wedstrijden/uitslagen">Uitslagen</a></li>
+            <li><a class="link-onder" href="/vrijwillige-diensten">Vrijwillige diensten</a></li>
+            <li><a class="link-onder" href="/nieuws">Nieuws</a></li>
+            <li><a class="link-onder" href="/contact">Contact</a></li>
+          </ul>
+
+          {volgende && (
+            <p class="fout-volgende data">
+              Eerstvolgende wedstrijd: {volgende.thuisteam} tegen {volgende.uitteam},
+              {' '}{korteDatum(volgende.datum)} om {tijd(volgende.datum)}.
+              {' '}<a class="link-onder" href={`/wedstrijd/${volgende.wedstrijdcode}`}>Details</a>
+            </p>
+          )}
+
+          <a class="knop knop--primair fout-knop" href="/">Terug naar de homepage</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .fout { display: grid; align-content: center; min-height: 70vh; min-height: 70dvh; }
+  .fout-binnen { padding-block: clamp(3rem, 8vw, 6rem); }
+  .fout-tekst { display: grid; gap: 1.25rem; justify-items: start; }
+  .fout-uitleg { max-width: 52ch; color: var(--color-grijs); line-height: 1.6; }
+
+  .fout-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 1.25rem 0;
+    border-block: 1px solid var(--kleur-lijn-donker);
+    width: 100%;
+    max-width: 44rem;
+  }
+  .fout-links a {
+    font-family: var(--font-mono);
+    font-size: var(--text-klein);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+    text-decoration: none;
+  }
+
+  .fout-volgende { font-size: var(--text-klein); color: var(--color-grijs); max-width: 56ch; line-height: 1.7; }
+  .fout-volgende a { color: var(--color-blauw); }
+  .fout-knop { margin-top: 0.5rem; }
+</style>

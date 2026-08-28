@@ -1,0 +1,457 @@
+---
+/**
+ * De hoofdnavigatie.
+ *
+ * Twee niveaus, meer niet. Op desktop een enkele regel met uitklapmenu's,
+ * onder 1280 pixels een schermvullend overlaymenu waarin alle groepen
+ * openstaan. Geen accordeon in een accordeon: op mobiel scroll je door een
+ * platte lijst en zie je in een oogopslag waar alles staat.
+ */
+import { MENU, isActief } from '../lib/menu';
+
+const pad = Astro.url.pathname;
+---
+
+<header class="kop">
+  <div class="omhulsel kop-binnen">
+    <a class="merknaam" href="/">
+      <img class="merknaam-logo" src="/images/logos/kwiek-78-wit.png" alt="" width="52" height="30" />
+      <span class="merknaam-tekst">
+        <span class="merknaam-club">v.v. Kwiek '78</span>
+        <span class="merknaam-plaats">Avenhorn</span>
+      </span>
+    </a>
+
+    <nav class="hoofdmenu" aria-label="Hoofdmenu">
+      <ul class="hoofdmenu-lijst">
+        {MENU.map((groep) => {
+          const actief = isActief(pad, groep);
+          return (
+            <li class:list={['hoofdmenu-item', groep.kinderen && 'heeft-submenu']}>
+              {groep.kinderen ? (
+                <>
+                  <button
+                    type="button"
+                    class:list={['hoofdmenu-knop', actief && 'is-actief']}
+                    aria-expanded="false"
+                    data-uitklap
+                  >
+                    {groep.label}
+                    <svg class="pijl" width="9" height="6" viewBox="0 0 9 6" aria-hidden="true">
+                      <path d="M1 1l3.5 3.5L8 1" fill="none" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                  </button>
+                  <div class="submenu" hidden>
+                    <ul>
+                      {groep.kinderen.map((kind) => (
+                        <li>
+                          <a href={kind.href} class:list={[pad.replace(/\/$/, '') === kind.href.replace(/\/$/, '') && 'is-actief']}>
+                            <span class="submenu-label">{kind.label}</span>
+                            {kind.omschrijving && <span class="submenu-uitleg">{kind.omschrijving}</span>}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <a
+                  class:list={['hoofdmenu-knop', actief && 'is-actief']}
+                  href={groep.href}
+                  target={groep.extern ? '_blank' : undefined}
+                  rel={groep.extern ? 'noopener noreferrer' : undefined}
+                >
+                  {groep.label}
+                  {groep.extern && (
+                    <svg class="extern" width="9" height="9" viewBox="0 0 9 9" aria-hidden="true">
+                      <path d="M2 7L7 2M7 2H3.2M7 2v3.8" fill="none" stroke="currentColor" stroke-width="1.4" />
+                    </svg>
+                  )}
+                  {groep.extern && <span class="alleen-schermlezer">Opent in een nieuw tabblad</span>}
+                </a>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <button type="button" class="hamburger" aria-expanded="false" aria-controls="overlaymenu" data-overlay-open>
+      <span class="hamburger-streepjes" aria-hidden="true"><span></span><span></span></span>
+      <span class="hamburger-tekst">Menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Schermvullend menu voor telefoon en tablet. -->
+<div class="overlay" id="overlaymenu" hidden data-overlay>
+  <div class="overlay-kop omhulsel">
+    <span class="overlay-titel">Menu</span>
+    <button type="button" class="overlay-sluit" data-overlay-close>
+      <span aria-hidden="true">Sluiten</span>
+      <span class="alleen-schermlezer">Menu sluiten</span>
+    </button>
+  </div>
+
+  <nav class="overlay-inhoud omhulsel" aria-label="Menu">
+    {MENU.map((groep) => (
+      <section class="overlay-groep">
+        {groep.kinderen ? (
+          <>
+            {/* Geen h2: het overlaymenu staat in de bron boven de h1 van de
+                pagina, en dan zou de kopstructuur niet meer kloppen. Het is
+                een groepslabel, dus dat hoort het ook te zijn. */}
+            <p class="overlay-groepkop" id={`overlaygroep-${groep.label.toLowerCase().replace(/\s+/g, '-')}`}>
+              {groep.label}
+            </p>
+            <ul aria-labelledby={`overlaygroep-${groep.label.toLowerCase().replace(/\s+/g, '-')}`}>
+              {groep.kinderen.map((kind) => (
+                <li>
+                  <a href={kind.href} class:list={[pad.replace(/\/$/, '') === kind.href.replace(/\/$/, '') && 'is-actief']}>
+                    {kind.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <a
+            class:list={['overlay-enkel', isActief(pad, groep) && 'is-actief']}
+            href={groep.href}
+            target={groep.extern ? '_blank' : undefined}
+            rel={groep.extern ? 'noopener noreferrer' : undefined}
+          >
+            {groep.label}
+            {groep.extern && (
+              <svg class="extern" width="11" height="11" viewBox="0 0 9 9" aria-hidden="true">
+                <path d="M2 7L7 2M7 2H3.2M7 2v3.8" fill="none" stroke="currentColor" stroke-width="1.4" />
+              </svg>
+            )}
+          </a>
+        )}
+      </section>
+    ))}
+  </nav>
+</div>
+
+<style>
+  /* ------------------------------------------------------------------ */
+  /* Balk                                                               */
+  /* ------------------------------------------------------------------ */
+  .kop {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--color-zwart);
+    border-bottom: 1px solid var(--kleur-lijn-donker);
+  }
+  .kop-binnen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 64px;
+  }
+  @media (min-width: 1280px) {
+    .kop-binnen { min-height: 76px; }
+  }
+
+  .merknaam {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: var(--color-wit);
+    flex: none;
+  }
+  .merknaam-logo { width: 52px; height: auto; }
+  .merknaam-tekst { display: grid; line-height: 1.1; }
+  .merknaam-club {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: -0.015em;
+  }
+  .merknaam-plaats {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Menu op desktop                                                    */
+  /* ------------------------------------------------------------------ */
+  .hoofdmenu { display: none; }
+  @media (min-width: 1280px) { .hoofdmenu { display: block; } }
+
+  .hoofdmenu-lijst {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .hoofdmenu-item { position: relative; }
+
+  .hoofdmenu-knop {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: var(--color-wit);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.55rem 0.6rem;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap);
+  }
+  .hoofdmenu-knop:hover { color: var(--color-blauw); }
+  .hoofdmenu-knop.is-actief {
+    color: var(--color-blauw);
+    border-bottom-color: var(--color-blauw);
+  }
+  .pijl, .extern { flex: none; opacity: 0.65; }
+  [aria-expanded="true"] .pijl { transform: rotate(180deg); }
+
+  .submenu {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    min-width: 15rem;
+    background: var(--kleur-inkt);
+    border: 1px solid var(--kleur-lijn-donker);
+    padding: 0.4rem;
+    z-index: 50;
+  }
+  .submenu[hidden] { display: none; }
+  .submenu ul { list-style: none; margin: 0; padding: 0; }
+  .submenu a {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.55rem 0.7rem;
+    text-decoration: none;
+    color: var(--color-wit);
+  }
+  .submenu a:hover { background: var(--kleur-inkt-op); }
+  .submenu a.is-actief { color: var(--color-blauw); }
+  .submenu-label { font-size: var(--text-klein); font-weight: 600; }
+  .submenu-uitleg { font-size: var(--text-mini); color: var(--color-grijs); }
+
+  /* ------------------------------------------------------------------ */
+  /* Hamburger                                                          */
+  /* ------------------------------------------------------------------ */
+  .hamburger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: none;
+    border: 1px solid var(--kleur-lijn-donker);
+    color: var(--color-wit);
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .hamburger:hover { border-color: var(--color-wit); }
+  @media (min-width: 1280px) { .hamburger { display: none; } }
+
+  .hamburger-streepjes { display: grid; gap: 4px; width: 16px; }
+  .hamburger-streepjes span { display: block; height: 2px; background: currentColor; }
+
+  /* ------------------------------------------------------------------ */
+  /* Overlaymenu                                                        */
+  /* ------------------------------------------------------------------ */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: var(--color-zwart);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
+  }
+  .overlay[hidden] { display: none; }
+
+  .overlay-kop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 64px;
+    border-bottom: 1px solid var(--kleur-lijn-donker);
+    flex: none;
+    position: sticky;
+    top: 0;
+    background: var(--color-zwart);
+  }
+  .overlay-titel {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  .overlay-sluit {
+    background: none;
+    border: 1px solid var(--kleur-lijn-donker);
+    color: var(--color-wit);
+    cursor: pointer;
+    padding: 0.5rem 0.85rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .overlay-inhoud { padding-block: 1.75rem 4rem; display: grid; gap: 1.75rem; }
+  .overlay-groep ul { list-style: none; margin: 0; padding: 0; }
+
+  .overlay-groepkop {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+    border-bottom: 1px solid var(--kleur-lijn-donker);
+  }
+  .overlay-groep a {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 0;
+    text-decoration: none;
+    color: var(--color-wit);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .overlay-groep a.is-actief { color: var(--color-blauw); }
+  .overlay-enkel {
+    font-family: var(--font-display);
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    border-bottom: 1px solid var(--kleur-lijn-donker);
+    padding-bottom: 0.9rem !important;
+  }
+
+  .alleen-schermlezer {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hoofdmenu-knop { transition: none; }
+  }
+</style>
+
+<script>
+  /* ------------------------------------------------------------------ */
+  /* Uitklapmenu's op desktop                                           */
+  /* ------------------------------------------------------------------ */
+  const items = [...document.querySelectorAll<HTMLElement>('.heeft-submenu')];
+
+  function sluitAlles(behalve?: HTMLElement) {
+    for (const item of items) {
+      if (item === behalve) continue;
+      item.querySelector('[data-uitklap]')?.setAttribute('aria-expanded', 'false');
+      item.querySelector('.submenu')?.setAttribute('hidden', '');
+    }
+  }
+
+  for (const item of items) {
+    const knop = item.querySelector<HTMLButtonElement>('[data-uitklap]');
+    const paneel = item.querySelector<HTMLElement>('.submenu');
+    if (!knop || !paneel) continue;
+
+    const zet = (open: boolean) => {
+      knop.setAttribute('aria-expanded', String(open));
+      if (open) paneel.removeAttribute('hidden');
+      else paneel.setAttribute('hidden', '');
+    };
+
+    knop.addEventListener('click', () => {
+      const open = knop.getAttribute('aria-expanded') === 'true';
+      sluitAlles(item);
+      zet(!open);
+    });
+
+    // Voor de muis: openen bij hover, zodat het aanvoelt als een gewoon menu.
+    item.addEventListener('pointerenter', (gebeurtenis) => {
+      if ((gebeurtenis as PointerEvent).pointerType !== 'mouse') return;
+      sluitAlles(item);
+      zet(true);
+    });
+    item.addEventListener('pointerleave', (gebeurtenis) => {
+      if ((gebeurtenis as PointerEvent).pointerType !== 'mouse') return;
+      zet(false);
+    });
+
+    // Sluiten zodra de focus het menu verlaat, anders blijft hij bij tabben open.
+    item.addEventListener('focusout', () => {
+      window.setTimeout(() => {
+        if (!item.contains(document.activeElement)) zet(false);
+      }, 0);
+    });
+  }
+
+  document.addEventListener('click', (gebeurtenis) => {
+    const doel = gebeurtenis.target as Node;
+    if (!items.some((item) => item.contains(doel))) sluitAlles();
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* Overlaymenu                                                        */
+  /* ------------------------------------------------------------------ */
+  const overlay = document.querySelector<HTMLElement>('[data-overlay]');
+  const openKnop = document.querySelector<HTMLButtonElement>('[data-overlay-open]');
+  const sluitKnop = document.querySelector<HTMLButtonElement>('[data-overlay-close]');
+
+  function zetOverlay(open: boolean) {
+    if (!overlay || !openKnop) return;
+    if (open) overlay.removeAttribute('hidden');
+    else overlay.setAttribute('hidden', '');
+    openKnop.setAttribute('aria-expanded', String(open));
+    document.documentElement.classList.toggle('geen-scroll', open);
+    if (open) sluitKnop?.focus();
+    else openKnop.focus();
+  }
+
+  openKnop?.addEventListener('click', () => zetOverlay(true));
+  sluitKnop?.addEventListener('click', () => zetOverlay(false));
+
+  document.addEventListener('keydown', (gebeurtenis) => {
+    if (gebeurtenis.key !== 'Escape') return;
+    if (overlay && !overlay.hasAttribute('hidden')) zetOverlay(false);
+    else sluitAlles();
+  });
+
+  // Bij het draaien naar landschap of het verbreden van het venster kan het
+  // overlaymenu overbodig worden. Dan hoort hij dicht te gaan.
+  const breed = window.matchMedia('(min-width: 1280px)');
+  breed.addEventListener('change', (gebeurtenis) => {
+    if (gebeurtenis.matches && overlay && !overlay.hasAttribute('hidden')) zetOverlay(false);
+  });
+</script>

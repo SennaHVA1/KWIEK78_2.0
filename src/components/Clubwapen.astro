@@ -1,0 +1,65 @@
+---
+/**
+ * Clubwapen van een tegenstander of van Kwiek zelf.
+ *
+ * De wapens zijn wit met zwarte inhoud, zodat hetzelfde bestand werkt op de
+ * zwarte wedstrijdpanelen en op de witte roosterpagina's. Ontbreekt een
+ * bestand, dan komt er een tegel met de eerste letters van de clubnaam.
+ */
+import { fotoBestaat } from '../lib/fotos';
+
+interface Props {
+  src?: string;
+  club: string;
+  /** Zijde in pixels. */
+  formaat?: number;
+}
+
+const { src, club, formaat = 36 } = Astro.props;
+const aanwezig = fotoBestaat(src);
+
+/** Eerste letters van de clubnaam, zonder teamnummer. */
+const letters = club
+  .replace(/\s+(\d+|[A-Z]{1,2}O?\d+-\d+|VR\d+)$/i, '')
+  .split(/\s+/)
+  .filter((woord) => /[a-z]/i.test(woord))
+  .map((woord) => woord[0])
+  .join('')
+  .slice(0, 3)
+  .toUpperCase();
+---
+
+{aanwezig ? (
+  <img
+    class="wapen"
+    src={src}
+    alt=""
+    width={formaat}
+    height={formaat}
+    loading="lazy"
+    decoding="async"
+    style={`width:${formaat}px;height:${formaat}px;`}
+  />
+) : (
+  <span class="wapen wapen--tekst" style={`width:${formaat}px;height:${formaat}px;`} aria-hidden="true">
+    {letters}
+  </span>
+)}
+
+<style>
+  .wapen {
+    flex: none;
+    object-fit: contain;
+    background: var(--color-wit);
+    border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
+  }
+  .wapen--tekst {
+    display: grid;
+    place-items: center;
+    color: var(--color-zwart);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+</style>

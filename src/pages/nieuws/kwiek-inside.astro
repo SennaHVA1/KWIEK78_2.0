@@ -1,0 +1,69 @@
+---
+/**
+ * Kwiek Inside, de videoserie van de club.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import VideoKaart from '../../components/VideoKaart.astro';
+import { getVideos, CLUBGEGEVENS } from '../../lib/club';
+
+const videos = getVideos();
+const zonderId = videos.filter((v) => !v.youtubeId).length;
+---
+
+<Basis
+  titel="Kwiek Inside"
+  omschrijving="Kwiek Inside, de eigen videoserie van v.v. Kwiek '78 over de mensen achter de club."
+>
+  <Paginakop
+    kicker="Nieuws"
+    titel="Kwiek Inside"
+    intro="Onze eigen serie over de mensen achter de club. Gemaakt door leden, met beeld uit het archief van Cor Bood."
+  >
+    <p class="kop-extra">
+      <a class="knop knop--rand" href={CLUBGEGEVENS.youtube} target="_blank" rel="noopener noreferrer">
+        Naar het YouTube-kanaal
+      </a>
+      <a class="knop knop--rand" href="/nieuws">Alle berichten</a>
+    </p>
+  </Paginakop>
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      {zonderId > 0 && (
+        <p class="notitie">
+          <span class="merk merk--rand">Demo</span>
+          De video-id's van YouTube zijn nog niet aangeleverd. Deze kaarten wijzen daarom naar
+          het kanaal. Zodra de id's er zijn speelt de aflevering hier af, pas nadat er op de
+          thumbnail is geklikt.
+        </p>
+      )}
+
+      <div class="videoraster">
+        {videos.map((video) => <VideoKaart video={video} />)}
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .kop-extra { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.5rem; }
+
+  .notitie {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    font-size: var(--text-klein);
+    color: var(--color-grijsdonker);
+    border-left: 3px solid var(--color-blauwdiep);
+    padding: 0.8rem 1rem;
+    margin-bottom: 2rem;
+    max-width: 68ch;
+    line-height: 1.6;
+  }
+
+  .videoraster { display: grid; gap: 2rem; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .videoraster { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .videoraster { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.25rem; } }
+</style>

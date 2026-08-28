@@ -1,0 +1,134 @@
+---
+/**
+ * Detailpagina van een nieuwsbericht.
+ *
+ * De titel komt uit de eerste regel van het Facebookbericht, de rest is de
+ * body. Zie src/lib/nieuws.ts voor hoe die splitsing werkt.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Foto from '../../components/Foto.astro';
+import NieuwsKaart from '../../components/NieuwsKaart.astro';
+import { getNieuws, getArtikel } from '../../lib/nieuws';
+import { naarHtml } from '../../lib/markdown';
+import { volledigeDatum, machineDatum } from '../../lib/datum';
+
+export function getStaticPaths() {
+  return getNieuws().map((artikel) => ({ params: { slug: artikel.slug } }));
+}
+
+const { slug } = Astro.params;
+const artikel = getArtikel(slug!)!;
+const body = naarHtml(artikel.body);
+
+/* Drie andere berichten onderaan, nooit dit bericht zelf. */
+const meer = getNieuws().filter((a) => a.slug !== artikel.slug).slice(0, 3);
+---
+
+<Basis titel={artikel.titel} omschrijving={artikel.samenvatting}>
+  <article>
+    <!-- ============================================================== -->
+    <!-- Kop                                                            -->
+    <!-- ============================================================== -->
+    <header class="artikelkop vlak-zwart">
+      <div class="omhulsel">
+        <div class="kolom artikelkop-binnen">
+          <p class="kolom-kicker">
+            <a class="link-onder" href="/nieuws">Nieuws</a>
+          </p>
+          <div>
+            <p class="artikel-meta data">
+              <time datetime={machineDatum(artikel.datum)}>{volledigeDatum(artikel.datum)}</time>
+              {artikel.bron === 'facebook' && (
+                <>
+                  <span class="artikel-punt" aria-hidden="true"></span>
+                  <span class="artikel-bron">Overgenomen van Facebook</span>
+                </>
+              )}
+            </p>
+            <h1 class="kop-l">{artikel.titel}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="baan baan--dun" aria-hidden="true"></div>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- Body                                                           -->
+    <!-- ============================================================== -->
+    <div class="vlak-wit sectie">
+      <div class="omhulsel">
+        <div class="kolom">
+          <p class="kolom-kicker">Bericht</p>
+          <div class="artikel-body">
+            {artikel.afbeelding && (
+              <div class="artikel-beeld">
+                <Foto
+                  src={artikel.afbeelding}
+                  alt={`Foto bij het bericht: ${artikel.titel}`}
+                  ratio="16 / 9"
+                  prioriteit
+                />
+              </div>
+            )}
+
+            <div class="lopende-tekst" set:html={body} />
+
+            {artikel.facebookUrl && (
+              <p class="artikel-origineel">
+                <a class="knop knop--rand" href={artikel.facebookUrl} target="_blank" rel="noopener noreferrer">
+                  Origineel op Facebook
+                </a>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Meer berichten                                                 -->
+    <!-- ============================================================== -->
+    {meer.length > 0 && (
+      <aside class="vlak-wit meer">
+        <div class="omhulsel">
+          <div class="kolom">
+            <p class="kolom-kicker">Verder lezen</p>
+            <div>
+              <h2 class="kop-sectie meer-kop">Meer uit de club</h2>
+              <div class="meer-raster">
+                {meer.map((ander) => <NieuwsKaart artikel={ander} />)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    )}
+  </article>
+</Basis>
+
+<style>
+  .artikelkop-binnen { padding-block: clamp(1.75rem, 4vw, 3rem); }
+
+  .artikel-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+    margin-bottom: 0.85rem;
+  }
+  .artikel-punt { width: 0.5rem; height: 1px; background: currentColor; flex: none; }
+  .artikel-bron { color: var(--color-blauw); }
+
+  .artikel-body { display: grid; gap: 1.75rem; }
+  .artikel-beeld { max-width: 46rem; }
+  .artikel-origineel { margin-top: 0.5rem; }
+
+  .meer { padding-bottom: var(--spacing-sectie); }
+  .meer-kop { padding-bottom: 1.25rem; }
+  .meer-raster { display: grid; gap: 1.75rem; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .meer-raster { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>

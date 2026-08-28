@@ -1,0 +1,256 @@
+---
+/**
+ * HET KLAPBORD
+ *
+ * De aftelklok naar de eerstvolgende wedstrijd, uitgevoerd als een mechanisch
+ * splitflapbord: de cijfers klappen om zoals op een oud scorebord. Dit is het
+ * signature-element van de site en het enige plek waar echt beweging zit.
+ *
+ * Beslissingen:
+ *   - De beginwaarden worden tijdens de build al gerenderd. Er is dus geen
+ *     lege of springende teller bij het laden.
+ *   - Bij prefers-reduced-motion klappen de cijfers niet, ze wisselen gewoon.
+ *   - Het is een aria-live-gebied met beleefde meldingen, en de losse cijfers
+ *     staan op aria-hidden zodat een schermlezer niet elke seconde
+ *     losse getallen voorleest. De volledige tekst staat in de verborgen
+ *     samenvatting.
+ *   - Geen dependency: de teller is een setInterval van dertig regels.
+ */
+import { datumEnTijd } from '../lib/datum';
+
+interface Props {
+  /** ISO-datum van de aftrap. */
+  doel: string;
+  /** Compacte variant voor smallere plekken. */
+  compact?: boolean;
+}
+
+const { doel, compact = false } = Astro.props;
+
+/* Beginwaarde berekenen tijdens de build, zodat de eerste render al klopt. */
+const resterend = Math.max(0, new Date(doel).getTime() - Date.now());
+const seconden = Math.floor(resterend / 1000);
+const begin = {
+  dagen: Math.floor(seconden / 86400),
+  uren: Math.floor((seconden % 86400) / 3600),
+  minuten: Math.floor((seconden % 3600) / 60),
+  seconden: seconden % 60,
+};
+
+const groepen = [
+  { sleutel: 'dagen', label: 'dagen', waarde: begin.dagen },
+  { sleutel: 'uren', label: 'uren', waarde: begin.uren },
+  { sleutel: 'minuten', label: 'min', waarde: begin.minuten },
+  { sleutel: 'seconden', label: 'sec', waarde: begin.seconden },
+];
+
+const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0').split('');
+---
+
+<div class:list={['klapbord', compact && 'klapbord--compact']} data-klapbord data-doel={doel}>
+  <div class="klapbord-rij">
+    {groepen.map((groep) => (
+      <div class="klapbord-groep">
+        <div class="klapbord-cijfers" data-groep={groep.sleutel} aria-hidden="true">
+          {cijfers(groep.waarde).map((cijfer) => (
+            <span class="klap"><span class="klap-waarde">{cijfer}</span></span>
+          ))}
+        </div>
+        <span class="klapbord-label" aria-hidden="true">{groep.label}</span>
+      </div>
+    ))}
+  </div>
+
+  <p class="klapbord-samenvatting" data-klapbord-tekst aria-live="polite">
+    Nog {begin.dagen} dagen, {begin.uren} uur en {begin.minuten} minuten tot de aftrap op {datumEnTijd(doel)}.
+  </p>
+
+  <p class="klapbord-afgelopen" data-klapbord-afgelopen hidden>
+    De wedstrijd is begonnen.
+  </p>
+</div>
+
+<style>
+  .klapbord {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+  }
+
+  .klapbord-rij {
+    display: flex;
+    gap: clamp(0.5rem, 2vw, 1.1rem);
+    align-items: flex-start;
+  }
+
+  .klapbord-groep {
+    display: grid;
+    gap: 0.4rem;
+    justify-items: center;
+  }
+
+  .klapbord-cijfers { display: flex; gap: 3px; }
+
+  /* Een cel van het klapbord. De naad in het midden is wat het bord een bord
+     maakt, ook wanneer er niets beweegt. */
+  .klap {
+    position: relative;
+    display: block;
+    width: clamp(1.9rem, 7.5vw, 3.1rem);
+    padding: clamp(0.35rem, 1.4vw, 0.6rem) 0;
+    background: var(--kleur-inkt-op);
+    perspective: 260px;
+    overflow: hidden;
+  }
+  .klap::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-blauw) 55%, transparent);
+    z-index: 2;
+  }
+
+  .klap-waarde {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: clamp(1.35rem, 5.4vw, 2.35rem);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    transform-origin: center center;
+    backface-visibility: hidden;
+  }
+
+  .klap-waarde.klapt {
+    animation: klappen 0.26s var(--ease-klap);
+  }
+
+  @keyframes klappen {
+    0%   { transform: rotateX(0deg); }
+    49%  { transform: rotateX(-90deg); }
+    51%  { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+  }
+
+  .klapbord-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  .klapbord-groep:last-child .klapbord-label { color: var(--color-blauw); }
+
+  /* Alleen voor schermlezers. */
+  .klapbord-samenvatting {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .klapbord-afgelopen {
+    font-family: var(--font-mono);
+    font-size: var(--text-klein);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+  }
+
+  .klapbord--compact .klap { width: clamp(1.5rem, 5vw, 2.1rem); }
+  .klapbord--compact .klap-waarde { font-size: clamp(1rem, 3.4vw, 1.4rem); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .klap-waarde.klapt { animation: none; }
+  }
+</style>
+
+<script>
+  /**
+   * Aftellen. Een interval van een seconde, cijfer voor cijfer bijwerken en
+   * alleen de cijfers die echt veranderen laten omklappen.
+   */
+  type Groep = 'dagen' | 'uren' | 'minuten' | 'seconden';
+
+  const GEEN_BEWEGING = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function zetCijfer(cel: HTMLElement, nieuw: string) {
+    const waarde = cel.querySelector<HTMLElement>('.klap-waarde');
+    if (!waarde || waarde.textContent === nieuw) return;
+
+    if (GEEN_BEWEGING.matches) {
+      waarde.textContent = nieuw;
+      return;
+    }
+
+    waarde.classList.remove('klapt');
+    // Reflow forceren zodat de animatie opnieuw start bij snel opeenvolgende
+    // wisselingen (de seconden).
+    void waarde.offsetWidth;
+    waarde.classList.add('klapt');
+    // Halverwege de klap de waarde omzetten: dan lijkt het alsof het blad
+    // omslaat en er een ander cijfer onder vandaan komt.
+    window.setTimeout(() => { waarde.textContent = nieuw; }, 128);
+  }
+
+  function zetGroep(bord: HTMLElement, groep: Groep, waarde: number) {
+    const houder = bord.querySelector<HTMLElement>(`[data-groep="${groep}"]`);
+    if (!houder) return;
+    const cijfers = String(Math.min(waarde, 99)).padStart(2, '0');
+    const cellen = houder.querySelectorAll<HTMLElement>('.klap');
+    cellen.forEach((cel, i) => zetCijfer(cel, cijfers[i]));
+  }
+
+  function start(bord: HTMLElement) {
+    const doel = bord.dataset.doel;
+    if (!doel) return;
+    const aftrap = new Date(doel).getTime();
+    const tekst = bord.querySelector<HTMLElement>('[data-klapbord-tekst]');
+    const afgelopen = bord.querySelector<HTMLElement>('[data-klapbord-afgelopen]');
+    const rij = bord.querySelector<HTMLElement>('.klapbord-rij');
+    let vorigeMinuut = -1;
+
+    const tik = () => {
+      const over = aftrap - Date.now();
+
+      if (over <= 0) {
+        rij?.setAttribute('hidden', '');
+        afgelopen?.removeAttribute('hidden');
+        if (tekst) tekst.textContent = 'De wedstrijd is begonnen.';
+        window.clearInterval(interval);
+        return;
+      }
+
+      const totaal = Math.floor(over / 1000);
+      const dagen = Math.floor(totaal / 86400);
+      const uren = Math.floor((totaal % 86400) / 3600);
+      const minuten = Math.floor((totaal % 3600) / 60);
+      const seconden = totaal % 60;
+
+      zetGroep(bord, 'dagen', dagen);
+      zetGroep(bord, 'uren', uren);
+      zetGroep(bord, 'minuten', minuten);
+      zetGroep(bord, 'seconden', seconden);
+
+      // De voorleestekst maar een keer per minuut bijwerken, anders ratelt een
+      // schermlezer de hele minuut door.
+      if (tekst && minuten !== vorigeMinuut) {
+        vorigeMinuut = minuten;
+        tekst.textContent = `Nog ${dagen} dagen, ${uren} uur en ${minuten} minuten tot de aftrap.`;
+      }
+    };
+
+    tik();
+    const interval = window.setInterval(tik, 1000);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-klapbord]').forEach(start);
+</script>

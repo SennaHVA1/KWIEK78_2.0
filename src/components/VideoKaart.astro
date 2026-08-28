@@ -1,0 +1,181 @@
+---
+/**
+ * Een aflevering van Kwiek Inside.
+ *
+ * De YouTube-iframe wordt pas geplaatst nadat er op de thumbnail is geklikt.
+ * Een ingesloten YouTube-speler kost ongeveer een megabyte aan JavaScript per
+ * stuk; met zes afleveringen op een pagina zou de site onbruikbaar worden op
+ * een telefoon langs het veld. Nu staat er een afbeelding met een knop en
+ * gebeurt er pas iets als de bezoeker dat wil.
+ *
+ * Zolang het YouTube-id nog niet is aangeleverd (youtubeId is null) wijst de
+ * kaart naar het kanaal van de club. Dan staat er nooit een lege speler.
+ */
+import Foto from './Foto.astro';
+import { datumZonderDag } from '../lib/datum';
+import { CLUBGEGEVENS } from '../lib/club';
+import type { Video } from '../lib/types';
+
+interface Props {
+  video: Video;
+}
+
+const { video } = Astro.props;
+const heeftId = Boolean(video.youtubeId);
+---
+
+<article class="videokaart">
+  {heeftId ? (
+    <div class="videokaart-speler" data-video data-youtube={video.youtubeId} data-titel={video.titel}>
+      <button type="button" class="videokaart-knop" data-video-start>
+        <Foto
+          src={`/images/kwiek-inside/${video.id}.webp`}
+          alt={`Beeld uit ${video.titel}`}
+          ratio="16 / 9"
+          plaatshouder={`kwiek-inside/${video.id}.webp`}
+        />
+        <span class="videokaart-play" aria-hidden="true">
+          <svg width="22" height="24" viewBox="0 0 22 24"><path d="M1 1l20 11L1 23z" fill="currentColor" /></svg>
+        </span>
+        <span class="videokaart-duur data" aria-hidden="true">{video.duur}</span>
+        <span class="alleen-schermlezer">Video afspelen: {video.titel}</span>
+      </button>
+    </div>
+  ) : (
+    <a class="videokaart-speler videokaart-speler--link" href={CLUBGEGEVENS.youtube} target="_blank" rel="noopener noreferrer">
+      <Foto
+        src={`/images/kwiek-inside/${video.id}.webp`}
+        alt={`Beeld uit ${video.titel}`}
+        ratio="16 / 9"
+        plaatshouder={`kwiek-inside/${video.id}.webp`}
+      />
+      <span class="videokaart-play" aria-hidden="true">
+        <svg width="22" height="24" viewBox="0 0 22 24"><path d="M1 1l20 11L1 23z" fill="currentColor" /></svg>
+      </span>
+      <span class="videokaart-duur data" aria-hidden="true">{video.duur}</span>
+      <span class="alleen-schermlezer">Bekijk {video.titel} op het YouTube-kanaal van de club, opent in een nieuw tabblad</span>
+    </a>
+  )}
+
+  <div class="videokaart-tekst">
+    <p class="videokaart-datum data">{datumZonderDag(video.datum)}</p>
+    <h2 class="kop-s">{video.titel}</h2>
+    <p class="videokaart-omschrijving zacht">{video.omschrijving}</p>
+  </div>
+</article>
+
+<style>
+  .videokaart { display: grid; gap: 0.9rem; border-top: 1px solid var(--kleur-lijn-donker); padding-top: 1rem; }
+  :global(.vlak-wit) .videokaart { border-top-color: var(--kleur-lijn-licht); }
+
+  .videokaart-speler {
+    position: relative;
+    display: block;
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  .videokaart-knop {
+    display: block;
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+  }
+  .videokaart-speler :global(img) {
+    filter: grayscale(1) contrast(1.1) brightness(0.8);
+    transition: filter 0.3s var(--ease-klap);
+  }
+  .videokaart-speler:hover :global(img) { filter: grayscale(0.2) contrast(1.05) brightness(0.95); }
+  @media (prefers-reduced-motion: reduce) {
+    .videokaart-speler :global(img) { transition: none; }
+  }
+
+  .videokaart-play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+  .videokaart-play svg {
+    color: var(--color-zwart);
+    background: var(--color-blauw);
+    padding: 1rem 1.1rem 1rem 1.25rem;
+    box-sizing: content-box;
+    transition: background-color 0.2s var(--ease-klap);
+  }
+  .videokaart-speler:hover .videokaart-play svg { background: var(--color-wit); }
+
+  .videokaart-duur {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    background: var(--color-zwart);
+    color: var(--color-wit);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    pointer-events: none;
+  }
+
+  .videokaart-tekst { display: grid; gap: 0.35rem; }
+  .videokaart-datum {
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+  :global(.vlak-wit) .videokaart-datum { color: var(--color-grijsdonker); }
+  .videokaart-omschrijving { font-size: var(--text-klein); line-height: 1.6; max-width: 46ch; }
+
+  /* De ingesloten speler neemt de plek van de thumbnail over. */
+  .videokaart-speler :global(iframe) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+  }
+
+  .alleen-schermlezer {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  /**
+   * Pas na een klik wordt de YouTube-iframe aangemaakt. Daarvoor staat er
+   * alleen een afbeelding op de pagina en gaat er geen enkel verzoek naar
+   * YouTube of Google.
+   *
+   * youtube-nocookie.com in plaats van youtube.com: dan wordt er pas een
+   * cookie geplaatst als de bezoeker daadwerkelijk kijkt.
+   */
+  for (const houder of document.querySelectorAll<HTMLElement>('[data-video]')) {
+    const knop = houder.querySelector<HTMLButtonElement>('[data-video-start]');
+    knop?.addEventListener('click', () => {
+      const id = houder.dataset.youtube;
+      const titel = houder.dataset.titel ?? 'Video';
+      if (!id) return;
+
+      const speler = document.createElement('iframe');
+      speler.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+      speler.title = titel;
+      speler.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture';
+      speler.setAttribute('allowfullscreen', '');
+      speler.loading = 'lazy';
+
+      houder.replaceChildren(speler);
+      speler.focus();
+    });
+  }
+</script>

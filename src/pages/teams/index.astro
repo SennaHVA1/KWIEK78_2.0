@@ -1,0 +1,102 @@
+---
+/**
+ * Overzicht van de teams die op de site staan.
+ *
+ * Voor de demo zijn dat er zes. In productie bepaalt de club welke teams uit
+ * Sportlink hier verschijnen.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import Foto from '../../components/Foto.astro';
+import { getTeamsPerCategorie, getEerstvolgendeWedstrijd } from '../../lib/sportlink';
+import { korteDatum, tijd } from '../../lib/datum';
+
+const categorieen = getTeamsPerCategorie();
+---
+
+<Basis
+  titel="Teams"
+  omschrijving="De teams van v.v. Kwiek '78 met programma, uitslagen, stand en selectie."
+>
+  <Paginakop
+    kicker="Teams"
+    titel="Onze teams"
+    intro="Elk team heeft een eigen pagina met programma, uitslagen, stand, selectie en trainingstijden."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel teams">
+      {categorieen.map((categorie) => (
+        <section class="kolom">
+          <p class="kolom-kicker">{categorie.label}</p>
+          <ul class="teamraster">
+            {categorie.teams.map((team) => {
+              const volgende = getEerstvolgendeWedstrijd(team.id);
+              return (
+                <li class="teamkaart">
+                  <a href={`/teams/${team.id}`}>
+                    <Foto
+                      src={team.teamfoto}
+                      alt={`Teamfoto van ${team.naam}`}
+                      ratio="4 / 3"
+                      plaatshouder={`teams/${team.id}.webp`}
+                    />
+                    <div class="teamkaart-tekst">
+                      <h2 class="kop-s">{team.naam}</h2>
+                      <p class="teamkaart-poule data">{team.pouleNaam}</p>
+                      <p class="teamkaart-volgende zacht">
+                        {volgende
+                          ? `Volgende wedstrijd ${korteDatum(volgende.datum)} om ${tijd(volgende.datum)}`
+                          : 'Geen wedstrijd gepland'}
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .teams { display: grid; gap: 3rem; }
+
+  .teamraster {
+    display: grid;
+    gap: 1.75rem;
+    grid-template-columns: 1fr;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 640px) { .teamraster { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  .teamkaart { border-top: 1px solid var(--kleur-lijn-licht); }
+  .teamkaart a {
+    display: grid;
+    gap: 0.9rem;
+    padding-top: 1rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .teamkaart :global(img) {
+    filter: grayscale(1) contrast(1.08);
+    transition: filter 0.3s var(--ease-klap);
+  }
+  .teamkaart a:hover :global(img) { filter: grayscale(0) contrast(1); }
+  @media (prefers-reduced-motion: reduce) {
+    .teamkaart :global(img) { transition: none; }
+  }
+
+  .teamkaart-tekst { display: grid; gap: 0.25rem; }
+  .teamkaart-poule {
+    font-size: var(--text-mini);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-blauwdiep);
+  }
+  .teamkaart-volgende { font-size: var(--text-klein); }
+</style>

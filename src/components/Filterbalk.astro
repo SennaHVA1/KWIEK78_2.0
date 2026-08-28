@@ -1,0 +1,146 @@
+---
+/**
+ * Filterknoppen boven een wedstrijdlijst.
+ *
+ * Zelf geschreven, geen dependency: de knoppen zetten een data-attribuut en
+ * een script verbergt de rijen die niet passen. Speeldagen waarvan alle
+ * rijen verdwijnen worden ook verborgen, anders houd je een lege kop over.
+ *
+ * Zonder JavaScript staan alle wedstrijden er gewoon: de filters zijn een
+ * verbetering, geen voorwaarde.
+ */
+interface Groep {
+  /** Naam van het data-attribuut op de rij, bijvoorbeeld "team". */
+  sleutel: string;
+  label: string;
+  opties: { waarde: string; label: string }[];
+}
+
+interface Props {
+  groepen: Groep[];
+}
+
+const { groepen } = Astro.props;
+---
+
+<div class="filterbalk" data-filterbalk>
+  {groepen.map((groep) => (
+    <fieldset class="filtergroep">
+      <legend class="filtergroep-kop">{groep.label}</legend>
+      <div class="filtergroep-knoppen">
+        <button type="button" class="filterknop is-gekozen" data-filter={groep.sleutel} data-waarde="">
+          Alle
+        </button>
+        {groep.opties.map((optie) => (
+          <button type="button" class="filterknop" data-filter={groep.sleutel} data-waarde={optie.waarde}>
+            {optie.label}
+          </button>
+        ))}
+      </div>
+    </fieldset>
+  ))}
+
+  <p class="filter-uitkomst data" data-filter-uitkomst aria-live="polite"></p>
+</div>
+
+<style>
+  .filterbalk {
+    display: grid;
+    gap: 1.1rem;
+    padding-bottom: 1.75rem;
+  }
+
+  .filtergroep { border: 0; padding: 0; margin: 0; display: grid; gap: 0.55rem; }
+  .filtergroep-kop {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+    padding: 0;
+  }
+  :global(.vlak-wit) .filtergroep-kop { color: var(--color-grijsdonker); }
+
+  .filtergroep-knoppen { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+  .filterknop {
+    background: none;
+    border: 1px solid var(--kleur-lijn-donker);
+    color: inherit;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.7rem;
+    transition: background-color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap), color 0.15s var(--ease-klap);
+  }
+  :global(.vlak-wit) .filterknop { border-color: color-mix(in srgb, var(--color-zwart) 30%, transparent); }
+  .filterknop:hover { border-color: currentColor; }
+  .filterknop.is-gekozen {
+    background: var(--color-blauw);
+    border-color: var(--color-blauw);
+    color: var(--color-zwart);
+  }
+  @media (prefers-reduced-motion: reduce) { .filterknop { transition: none; } }
+
+  .filter-uitkomst {
+    font-size: var(--text-mini);
+    letter-spacing: 0.08em;
+    color: var(--color-grijs);
+    min-height: 1.2em;
+  }
+  :global(.vlak-wit) .filter-uitkomst { color: var(--color-grijsdonker); }
+</style>
+
+<script>
+  const balk = document.querySelector<HTMLElement>('[data-filterbalk]');
+
+  if (balk) {
+    const uitkomst = balk.querySelector<HTMLElement>('[data-filter-uitkomst]');
+    const rijen = [...document.querySelectorAll<HTMLElement>('[data-wedstrijdrij]')];
+    const groepen = [...document.querySelectorAll<HTMLElement>('[data-dag-groep]')];
+    const keuze: Record<string, string> = {};
+
+    function pasToe() {
+      let zichtbaar = 0;
+
+      for (const rij of rijen) {
+        const past = Object.entries(keuze).every(
+          ([sleutel, waarde]) => !waarde || rij.dataset[sleutel] === waarde,
+        );
+        rij.hidden = !past;
+        if (past) zichtbaar++;
+      }
+
+      // Speeldagen zonder zichtbare rijen verbergen we ook.
+      for (const groep of groepen) {
+        const heeftRijen = [...groep.querySelectorAll<HTMLElement>('[data-wedstrijdrij]')]
+          .some((rij) => !rij.hidden);
+        groep.hidden = !heeftRijen;
+      }
+
+      if (uitkomst) {
+        const gefilterd = Object.values(keuze).some(Boolean);
+        if (!gefilterd) uitkomst.textContent = `${rijen.length} wedstrijden`;
+        else if (zichtbaar === 0) uitkomst.textContent = 'Geen wedstrijden die aan dit filter voldoen.';
+        else uitkomst.textContent = `${zichtbaar} van ${rijen.length} wedstrijden`;
+      }
+    }
+
+    for (const knop of balk.querySelectorAll<HTMLButtonElement>('[data-filter]')) {
+      knop.addEventListener('click', () => {
+        const sleutel = knop.dataset.filter!;
+        keuze[sleutel] = knop.dataset.waarde ?? '';
+        for (const zus of balk.querySelectorAll<HTMLButtonElement>(`[data-filter="${sleutel}"]`)) {
+          zus.classList.toggle('is-gekozen', zus === knop);
+        }
+        pasToe();
+      });
+    }
+
+    pasToe();
+  }
+</script>

@@ -1,0 +1,38 @@
+[
+  { "naam": "Cees Balk", "functie": "Voorzitter", "commissie": "Dagelijks bestuur", "foto": "/images/bestuur/cees-balk.webp", "email": "voorzitter@kwiek78.nl" },
+  { "naam": "Wilma Sneekes", "functie": "Secretaris", "commissie": "Dagelijks bestuur", "foto": "/images/bestuur/wilma-sneekes.webp", "email": "secretaris@kwiek78.nl" },
+  { "naam": "Gerard Kok", "functie": "Penningmeester", "commissie": "Dagelijks bestuur", "foto": "/images/bestuur/gerard-kok.webp", "email": "penningmeester@kwiek78.nl" },
+  { "naam": "Astrid Klaver", "functie": "Bestuurslid jeugdzaken", "commissie": "Dagelijks bestuur", "email": "jeugd@kwiek78.nl" },
+  { "naam": "Ron Kramer", "functie": "Bestuurslid sponsoring", "commissie": "Dagelijks bestuur", "email": "sponsoring@kwiek78.nl" },
+
+  { "naam": "Michel Bood", "functie": "Voorzitter jeugdcommissie", "commissie": "Jeugdcommissie", "email": "jeugd@kwiek78.nl" },
+  { "naam": "Marloes Vriend", "functie": "Coördinator onderbouw", "commissie": "Jeugdcommissie" },
+  { "naam": "Erwin Sneekes", "functie": "Coördinator bovenbouw", "commissie": "Jeugdcommissie" },
+  { "naam": "Sandra Bood", "functie": "Wedstrijdsecretaris jeugd", "commissie": "Jeugdcommissie", "email": "wedstrijdsecretariaat.jeugd@kwiek78.nl" },
+  { "naam": "Peter Bood", "functie": "Scheidsrechterszaken jeugd", "commissie": "Jeugdcommissie" },
+
+  { "naam": "Nico Ruiter", "functie": "Wedstrijdsecretaris senioren", "commissie": "Wedstrijdsecretariaat", "email": "wedstrijdsecretariaat@kwiek78.nl" },
+  { "naam": "Ted Bijl", "functie": "Scheidsrechterscoördinator", "commissie": "Wedstrijdsecretariaat" },
+  { "naam": "Hans Wagenaar", "functie": "Consul", "commissie": "Wedstrijdsecretariaat" },
+
+  { "naam": "Wilma Bakker", "functie": "Beheerder kantine", "commissie": "Kantinecommissie", "email": "kantine@kwiek78.nl" },
+  { "naam": "Ans Overtoom", "functie": "Inkoop", "commissie": "Kantinecommissie" },
+  { "naam": "Jaap Sijm", "functie": "Roosters kantinedienst", "commissie": "Kantinecommissie" },
+  { "naam": "Truus Karsten", "functie": "Vrijwilligerscoördinator", "commissie": "Kantinecommissie", "email": "vrijwilligers@kwiek78.nl" },
+
+  { "naam": "Piet Schuit", "functie": "Voorzitter accommodatie", "commissie": "Accommodatie en onderhoud", "email": "accommodatie@kwiek78.nl" },
+  { "naam": "Klaas Neefjes", "functie": "Veldonderhoud", "commissie": "Accommodatie en onderhoud" },
+  { "naam": "Robert Appelman", "functie": "Materialen", "commissie": "Accommodatie en onderhoud" },
+
+  { "naam": "Ron Kramer", "functie": "Voorzitter sponsorcommissie", "commissie": "Sponsorcommissie", "email": "sponsoring@kwiek78.nl" },
+  { "naam": "Carla Kramer", "functie": "Sponsorwerving", "commissie": "Sponsorcommissie" },
+  { "naam": "Dave Vlaar", "functie": "Bordsponsoring", "commissie": "Sponsorcommissie" },
+  { "naam": "Nadine Kuip", "functie": "Club van '78", "commissie": "Sponsorcommissie" },
+
+  { "naam": "Marnix Sijm", "functie": "Ledenadministratie", "commissie": "Ledenadministratie en communicatie", "email": "ledenadministratie@kwiek78.nl" },
+  { "naam": "Youri Sijm", "functie": "Webmaster", "commissie": "Ledenadministratie en communicatie", "email": "webmaster@kwiek78.nl" },
+  { "naam": "Femke Nooij", "functie": "Social media en Kwiek Inside", "commissie": "Ledenadministratie en communicatie" },
+
+  { "naam": "Anja Klaver", "functie": "Vertrouwenscontactpersoon", "commissie": "Vertrouwenscontactpersonen", "email": "vertrouwenspersoon@kwiek78.nl" },
+  { "naam": "Jeroen Pronk", "functie": "Vertrouwenscontactpersoon", "commissie": "Vertrouwenscontactpersonen", "email": "vertrouwenspersoon@kwiek78.nl" }
+]

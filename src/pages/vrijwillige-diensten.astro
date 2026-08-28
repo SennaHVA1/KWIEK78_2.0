@@ -1,0 +1,299 @@
+---
+/**
+ * Vrijwillige diensten.
+ *
+ * Op de oude site was dit een pagina met een knop naar een PDF. Nu staat het
+ * rooster gewoon op de pagina, in vier blokken: kantinedienst zaterdag,
+ * kantinedienst zondag, bestuursdienst en schoonmaak.
+ *
+ * Onder 640 pixels valt de tabel uit elkaar in kaarten. Dat is bewust: een
+ * tabel van vier kolommen die je horizontaal moet schuiven is op een telefoon
+ * onbruikbaar, en juist daar wordt dit rooster gecheckt.
+ *
+ * Standaard staan de komende zes weken open, met een knop voor het hele
+ * seizoen. Zonder JavaScript staat het volledige rooster er meteen: het
+ * inkorten is een verbetering, geen voorwaarde.
+ */
+import Basis from '../layouts/Basis.astro';
+import Paginakop from '../components/Paginakop.astro';
+import { getDienstenrooster, getContactpersoon } from '../lib/club';
+import { langeDatum, datumZonderDag } from '../lib/datum';
+
+const rooster = getDienstenrooster();
+const coordinator = getContactpersoon('Vrijwilligerscoördinator');
+
+/* Grens tussen "komende weken" en "rest van het seizoen": zes weken vanaf nu. */
+const vandaag = new Date().toISOString().slice(0, 10);
+const overZesWeken = new Date(Date.now() + 42 * 86400000).toISOString().slice(0, 10);
+
+const isKomend = (datum: string) => datum >= vandaag && datum <= overZesWeken;
+const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
+---
+
+<Basis
+  titel="Vrijwillige diensten"
+  omschrijving="Het dienstenrooster van v.v. Kwiek '78: kantinedienst zaterdag en zondag, bestuursdienst en schoonmaak."
+>
+  <Paginakop
+    kicker="Club"
+    titel="Vrijwillige diensten"
+    intro="Het volledige rooster staat hier op de pagina. Geen PDF, geen download: gewoon kijken wanneer je aan de beurt bent."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      {/* In dezelfde kolom als de roosters, zodat de knoppen uitlijnen met de
+          tabellen eronder. */}
+      <div class="kolom">
+        <p class="kolom-kicker">Periode</p>
+        <div class="balk" data-diensten>
+          <div class="balk-knoppen">
+            <button type="button" class="dienstknop is-gekozen" data-toon="komend">Komende zes weken</button>
+            <button type="button" class="dienstknop" data-toon="alles">Hele seizoen</button>
+          </div>
+          <p class="balk-telling data" data-telling>{totaal} diensten in het seizoen</p>
+        </div>
+      </div>
+
+      <div class="roosters">
+        {rooster.map((blok) => {
+          const komend = blok.diensten.filter((dienst) => isKomend(dienst.datum)).length;
+          return (
+            <section class="kolom roosterblok">
+              <p class="kolom-kicker">{blok.diensten.length} diensten</p>
+              <div>
+                <div class="roosterkop">
+                  <h2 class="kop-sectie">{blok.label}</h2>
+                  <span class="merk merk--rand">{komend} de komende zes weken</span>
+                </div>
+
+                <table class="rooster">
+                  <caption class="alleen-schermlezer">{blok.label}, seizoen 2026/2027</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Datum</th>
+                      <th scope="col">Tijd</th>
+                      <th scope="col">Namen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {blok.diensten.map((dienst) => (
+                      <tr class:list={[!isKomend(dienst.datum) && 'is-later']} data-datum={dienst.datum}>
+                        <td data-label="Datum">
+                          <span class="rooster-datum">{langeDatum(`${dienst.datum}T00:00`)}</span>
+                          <span class="rooster-jaar data">{datumZonderDag(`${dienst.datum}T00:00`).split(' ').pop()}</span>
+                        </td>
+                        <td data-label="Tijd" class="data">{dienst.tijd}</td>
+                        <td data-label="Namen">{dienst.namen.join(', ')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <p class="rooster-leeg zacht" data-leeg hidden>
+                  Er staan de komende zes weken geen diensten van dit soort gepland.
+                </p>
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <section class="vlak-zwart sectie">
+    <div class="omhulsel">
+      <div class="kolom">
+        <p class="kolom-kicker">Ruilen</p>
+        <div class="ruilen">
+          <h2 class="kop-sectie">Kun je niet?</h2>
+          <div class="lopende-tekst">
+            <p>
+              Ruil onderling en geef daarna even door wie het overneemt. Zo blijft het rooster kloppen
+              en staat er zaterdagochtend altijd iemand achter de bar.
+            </p>
+            <p>
+              Kom je er niet uit, dan lost {coordinator ? coordinator.naam : 'de vrijwilligerscoordinator'} het op.
+              Alleen niet komen opdagen is geen optie: dan staat er iemand in zijn eentje.
+            </p>
+          </div>
+          <div class="ruilen-knoppen">
+            {coordinator?.email && (
+              <a class="knop knop--primair" href={`mailto:${coordinator.email}`}>Mail de coordinator</a>
+            )}
+            <a class="knop knop--rand" href="/contact">Alle contactgegevens</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .balk {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 2rem;
+  }
+  .balk-knoppen { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+
+  .dienstknop {
+    background: none;
+    border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
+    color: inherit;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.8rem;
+    transition: background-color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap), color 0.15s var(--ease-klap);
+  }
+  .dienstknop:hover { border-color: var(--color-zwart); }
+  .dienstknop.is-gekozen {
+    background: var(--color-zwart);
+    border-color: var(--color-zwart);
+    color: var(--color-wit);
+  }
+  @media (prefers-reduced-motion: reduce) { .dienstknop { transition: none; } }
+
+  .balk-telling {
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+  }
+
+  .roosters { display: grid; gap: 3.5rem; }
+  .roosterkop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.1rem;
+  }
+
+  /* Tabel op desktop -------------------------------------------------- */
+  .rooster { width: 100%; border-collapse: collapse; }
+  .rooster th {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 2px solid var(--color-zwart);
+    white-space: nowrap;
+  }
+  .rooster td {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--kleur-lijn-licht);
+    font-size: var(--text-klein);
+    vertical-align: top;
+  }
+  .rooster tr[hidden] { display: none; }
+  .rooster-datum { display: block; font-weight: 600; }
+  .rooster-jaar { display: none; }
+
+  .rooster-leeg { font-size: var(--text-klein); padding-block: 1rem; }
+  .rooster-leeg[hidden] { display: none; }
+
+  /* Kaarten op mobiel ------------------------------------------------- */
+  @media (max-width: 639px) {
+    .rooster, .rooster tbody, .rooster tr, .rooster td { display: block; width: 100%; }
+    .rooster thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+    .rooster tr {
+      border: 1px solid var(--kleur-lijn-licht);
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .rooster td {
+      border: 0;
+      padding: 0.2rem 0;
+      display: grid;
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      gap: 0.75rem;
+      align-items: baseline;
+    }
+    .rooster td::before {
+      content: attr(data-label);
+      font-family: var(--font-mono);
+      font-size: var(--text-mini);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-grijsdonker);
+    }
+    .rooster td:first-child { border-bottom: 1px solid var(--kleur-lijn-licht); padding-bottom: 0.5rem; margin-bottom: 0.4rem; }
+  }
+
+  .ruilen { display: grid; gap: 1rem; }
+  .ruilen-knoppen { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+  .alleen-schermlezer {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  /**
+   * Rooster inkorten tot de komende zes weken, of alles tonen.
+   *
+   * Zonder JavaScript staat het volledige rooster op de pagina. Dit script
+   * kort het bij het laden in tot de komende weken, want dat is wat de meeste
+   * mensen komen halen.
+   */
+  const balk = document.querySelector<HTMLElement>('[data-diensten]');
+
+  if (balk) {
+    const knoppen = [...balk.querySelectorAll<HTMLButtonElement>('[data-toon]')];
+    const telling = balk.querySelector<HTMLElement>('[data-telling]');
+    const laterRijen = [...document.querySelectorAll<HTMLTableRowElement>('tr.is-later')];
+    const alleRijen = [...document.querySelectorAll<HTMLTableRowElement>('tr[data-datum]')];
+    const legeMeldingen = [...document.querySelectorAll<HTMLElement>('[data-leeg]')];
+
+    const toon = (modus: string) => {
+      const kort = modus === 'komend';
+      for (const rij of laterRijen) rij.hidden = kort;
+
+      // Een blok zonder zichtbare rijen krijgt een uitleg in plaats van een lege tabel.
+      for (const melding of legeMeldingen) {
+        const blok = melding.closest('div');
+        const tabel = blok?.querySelector('table');
+        const zichtbaar = tabel
+          ? [...tabel.querySelectorAll<HTMLTableRowElement>('tr[data-datum]')].some((rij) => !rij.hidden)
+          : true;
+        melding.hidden = zichtbaar;
+        if (tabel) tabel.hidden = !zichtbaar;
+      }
+
+      const zichtbaar = alleRijen.filter((rij) => !rij.hidden).length;
+      if (telling) {
+        telling.textContent = kort
+          ? `${zichtbaar} diensten de komende zes weken`
+          : `${alleRijen.length} diensten in het seizoen`;
+      }
+
+      for (const knop of knoppen) knop.classList.toggle('is-gekozen', knop.dataset.toon === modus);
+    };
+
+    for (const knop of knoppen) {
+      knop.addEventListener('click', () => toon(knop.dataset.toon!));
+    }
+
+    toon('komend');
+  }
+</script>

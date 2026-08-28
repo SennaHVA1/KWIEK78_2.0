@@ -1,0 +1,53 @@
+---
+/**
+ * Beelddrager met plaatshouder.
+ *
+ * Staat het bestand er nog niet, dan komt er een plaatshouder met dezelfde
+ * verhouding en de verwachte bestandsnaam erin. Zo verschuift de layout niet
+ * als de club het materiaal later aanlevert, en zie je in de demo meteen
+ * welk bestand er nog mist.
+ */
+import { fotoBestaat } from '../lib/fotos';
+
+interface Props {
+  src?: string | null;
+  alt: string;
+  /** Verhouding als CSS-waarde, bijvoorbeeld "16 / 9". */
+  ratio?: string;
+  klasse?: string;
+  laden?: 'lazy' | 'eager';
+  /** Alleen de eerste foto boven de vouw krijgt hoge prioriteit. */
+  prioriteit?: boolean;
+  /** Tekst in de plaatshouder. Standaard de verwachte bestandsnaam. */
+  plaatshouder?: string;
+}
+
+const {
+  src,
+  alt,
+  ratio = '16 / 9',
+  klasse = '',
+  laden = 'lazy',
+  prioriteit = false,
+  plaatshouder,
+} = Astro.props;
+
+const aanwezig = fotoBestaat(src);
+const bestandsnaam = src ? src.split('/').pop() : 'foto volgt';
+---
+
+{aanwezig ? (
+  <img
+    src={src}
+    alt={alt}
+    class={klasse}
+    loading={prioriteit ? 'eager' : laden}
+    decoding={prioriteit ? 'sync' : 'async'}
+    fetchpriority={prioriteit ? 'high' : undefined}
+    style={`aspect-ratio: ${ratio}; width: 100%; object-fit: cover;`}
+  />
+) : (
+  <div class={`foto-plek ${klasse}`} style={`aspect-ratio: ${ratio};`} role="img" aria-label={alt}>
+    <span>{plaatshouder ?? bestandsnaam}</span>
+  </div>
+)}

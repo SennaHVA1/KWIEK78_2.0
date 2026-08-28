@@ -1,0 +1,124 @@
+---
+/**
+ * De hoofdsponsoren, doorlopend.
+ *
+ * Zelf geschreven, geen carouselbibliotheek: het is een spoor dat schuift met
+ * een CSS-animatie en een tweede, verborgen kopie zodat de lus naadloos is.
+ *
+ * Pauzeert bij hover en bij toetsenbordfocus. Bij prefers-reduced-motion
+ * staat de animatie helemaal uit en wordt het een gewone, horizontaal
+ * scrollbare rij. Elke logo is een link naar de site van de sponsor, met
+ * rel="noopener noreferrer".
+ */
+import { fotoBestaat } from '../lib/fotos';
+import type { Sponsor } from '../lib/types';
+
+interface Props {
+  sponsoren: Sponsor[];
+}
+
+const { sponsoren } = Astro.props;
+
+/* Het spoor twee keer afdrukken. De tweede reeks is puur decor: die staat op
+   aria-hidden en is niet met de tab-toets te bereiken. */
+const spoor = [
+  { sponsoren, kopie: false },
+  { sponsoren, kopie: true },
+];
+---
+
+<div class="carousel" data-carousel>
+  <div class="carousel-spoor">
+    {spoor.map((reeks) => (
+      <ul class="carousel-reeks" aria-hidden={reeks.kopie ? 'true' : undefined}>
+        {reeks.sponsoren.map((sponsor) => (
+          <li>
+            <a
+              class="carousel-logo"
+              href={sponsor.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabindex={reeks.kopie ? -1 : undefined}
+            >
+              {fotoBestaat(sponsor.logo) ? (
+                <img src={sponsor.logo} alt={sponsor.naam} loading="lazy" decoding="async" />
+              ) : (
+                <span class="carousel-woordmerk">{sponsor.naam}</span>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>
+
+<style>
+  .carousel {
+    overflow: hidden;
+    border-block: 1px solid var(--kleur-lijn-licht);
+    padding-block: 1.5rem;
+    /* De randen laten vervagen, zodat het spoor niet lijkt af te breken. */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
+  }
+
+  .carousel-spoor {
+    display: flex;
+    width: max-content;
+    animation: schuiven 46s linear infinite;
+  }
+  .carousel:hover .carousel-spoor,
+  .carousel:focus-within .carousel-spoor { animation-play-state: paused; }
+
+  @keyframes schuiven {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .carousel-reeks {
+    display: flex;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    list-style: none;
+    margin: 0;
+    padding: 0 clamp(1rem, 2.5vw, 2.25rem);
+  }
+
+  .carousel-logo {
+    display: grid;
+    place-items: center;
+    height: 3.5rem;
+    padding-inline: 0.5rem;
+    filter: grayscale(1) contrast(1.15);
+    opacity: 0.72;
+    transition: opacity 0.2s var(--ease-klap), filter 0.2s var(--ease-klap);
+  }
+  .carousel-logo:hover, .carousel-logo:focus-visible {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+  .carousel-logo img { max-height: 3.5rem; width: auto; object-fit: contain; }
+
+  .carousel-woordmerk {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+      scroll-snap-type: x proximity;
+    }
+    .carousel-spoor { animation: none; }
+    /* De tweede reeks heeft zonder animatie geen functie meer. */
+    .carousel-reeks[aria-hidden="true"] { display: none; }
+    .carousel-reeks li { scroll-snap-align: start; }
+    .carousel-logo { transition: none; }
+  }
+</style>

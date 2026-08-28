@@ -1,0 +1,543 @@
+[
+  {
+    "pouleId": "5E-04",
+    "pouleNaam": "Vijfde klasse 04 zondag",
+    "bijgewerkt": "2026-11-16",
+    "regels": [
+      {
+        "positie": 1,
+        "team": "RKEDO 2",
+        "gespeeld": 8,
+        "gewonnen": 6,
+        "gelijk": 1,
+        "verloren": 1,
+        "punten": 19,
+        "doelpuntenVoor": 22,
+        "doelpuntenTegen": 9
+      },
+      {
+        "positie": 2,
+        "team": "Beemster 1",
+        "gespeeld": 8,
+        "gewonnen": 5,
+        "gelijk": 2,
+        "verloren": 1,
+        "punten": 17,
+        "doelpuntenVoor": 18,
+        "doelpuntenTegen": 10
+      },
+      {
+        "positie": 3,
+        "team": "Kwadijk 1",
+        "gespeeld": 8,
+        "gewonnen": 5,
+        "gelijk": 0,
+        "verloren": 3,
+        "punten": 15,
+        "doelpuntenVoor": 20,
+        "doelpuntenTegen": 12
+      },
+      {
+        "positie": 4,
+        "team": "Victoria O 1",
+        "gespeeld": 8,
+        "gewonnen": 4,
+        "gelijk": 1,
+        "verloren": 3,
+        "punten": 13,
+        "doelpuntenVoor": 17,
+        "doelpuntenTegen": 12
+      },
+      {
+        "positie": 5,
+        "team": "Kwiek '78 1",
+        "gespeeld": 8,
+        "gewonnen": 4,
+        "gelijk": 1,
+        "verloren": 3,
+        "punten": 13,
+        "doelpuntenVoor": 16,
+        "doelpuntenTegen": 13
+      },
+      {
+        "positie": 6,
+        "team": "Hauwert '65 1",
+        "gespeeld": 8,
+        "gewonnen": 3,
+        "gelijk": 3,
+        "verloren": 2,
+        "punten": 12,
+        "doelpuntenVoor": 14,
+        "doelpuntenTegen": 12
+      },
+      {
+        "positie": 7,
+        "team": "Dirkshorn 1",
+        "gespeeld": 7,
+        "gewonnen": 3,
+        "gelijk": 2,
+        "verloren": 2,
+        "punten": 11,
+        "doelpuntenVoor": 13,
+        "doelpuntenTegen": 12
+      },
+      {
+        "positie": 8,
+        "team": "KSV 1",
+        "gespeeld": 8,
+        "gewonnen": 3,
+        "gelijk": 2,
+        "verloren": 3,
+        "punten": 11,
+        "doelpuntenVoor": 13,
+        "doelpuntenTegen": 13
+      },
+      {
+        "positie": 9,
+        "team": "Koedijk 4",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 3,
+        "verloren": 2,
+        "punten": 9,
+        "doelpuntenVoor": 11,
+        "doelpuntenTegen": 13
+      },
+      {
+        "positie": 10,
+        "team": "Oosthuizen 1",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 2,
+        "verloren": 3,
+        "punten": 8,
+        "doelpuntenVoor": 10,
+        "doelpuntenTegen": 14
+      },
+      {
+        "positie": 11,
+        "team": "Purmerend 3",
+        "gespeeld": 7,
+        "gewonnen": 1,
+        "gelijk": 2,
+        "verloren": 4,
+        "punten": 5,
+        "doelpuntenVoor": 8,
+        "doelpuntenTegen": 18
+      },
+      {
+        "positie": 12,
+        "team": "De Wherevogels 2",
+        "gespeeld": 7,
+        "gewonnen": 1,
+        "gelijk": 1,
+        "verloren": 5,
+        "punten": 4,
+        "doelpuntenVoor": 9,
+        "doelpuntenTegen": 17
+      },
+      {
+        "positie": 13,
+        "team": "Sporting Andijk 1",
+        "gespeeld": 7,
+        "gewonnen": 0,
+        "gelijk": 0,
+        "verloren": 7,
+        "punten": 0,
+        "doelpuntenVoor": 6,
+        "doelpuntenTegen": 22
+      }
+    ]
+  },
+  {
+    "pouleId": "RES6E-02",
+    "pouleNaam": "Reserve zesde klasse 02 zondag",
+    "bijgewerkt": "2026-11-16",
+    "regels": [
+      {
+        "positie": 1,
+        "team": "Beemster 3",
+        "gespeeld": 8,
+        "gewonnen": 6,
+        "gelijk": 1,
+        "verloren": 1,
+        "punten": 19,
+        "doelpuntenVoor": 24,
+        "doelpuntenTegen": 8
+      },
+      {
+        "positie": 2,
+        "team": "Kwiek '78 2",
+        "gespeeld": 8,
+        "gewonnen": 5,
+        "gelijk": 1,
+        "verloren": 2,
+        "punten": 16,
+        "doelpuntenVoor": 21,
+        "doelpuntenTegen": 10
+      },
+      {
+        "positie": 3,
+        "team": "KSV 3",
+        "gespeeld": 8,
+        "gewonnen": 4,
+        "gelijk": 2,
+        "verloren": 2,
+        "punten": 14,
+        "doelpuntenVoor": 18,
+        "doelpuntenTegen": 11
+      },
+      {
+        "positie": 4,
+        "team": "Oosthuizen 3",
+        "gespeeld": 8,
+        "gewonnen": 4,
+        "gelijk": 1,
+        "verloren": 3,
+        "punten": 13,
+        "doelpuntenVoor": 16,
+        "doelpuntenTegen": 13
+      },
+      {
+        "positie": 5,
+        "team": "Koedijk 5",
+        "gespeeld": 8,
+        "gewonnen": 3,
+        "gelijk": 2,
+        "verloren": 3,
+        "punten": 11,
+        "doelpuntenVoor": 14,
+        "doelpuntenTegen": 14
+      },
+      {
+        "positie": 6,
+        "team": "Zouaven 5",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 2,
+        "verloren": 3,
+        "punten": 8,
+        "doelpuntenVoor": 12,
+        "doelpuntenTegen": 16
+      },
+      {
+        "positie": 7,
+        "team": "Spirit '30 3",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 1,
+        "verloren": 4,
+        "punten": 7,
+        "doelpuntenVoor": 11,
+        "doelpuntenTegen": 18
+      },
+      {
+        "positie": 8,
+        "team": "Purmerend 4",
+        "gespeeld": 7,
+        "gewonnen": 1,
+        "gelijk": 1,
+        "verloren": 5,
+        "punten": 4,
+        "doelpuntenVoor": 9,
+        "doelpuntenTegen": 20
+      },
+      {
+        "positie": 9,
+        "team": "Kwadijk 2",
+        "gespeeld": 7,
+        "gewonnen": 0,
+        "gelijk": 3,
+        "verloren": 4,
+        "punten": 3,
+        "doelpuntenVoor": 7,
+        "doelpuntenTegen": 22
+      }
+    ]
+  },
+  {
+    "pouleId": "JO17-4H-01",
+    "pouleNaam": "Onder 17 vierde klasse 01",
+    "bijgewerkt": "2026-11-16",
+    "regels": [
+      {
+        "positie": 1,
+        "team": "Kwiek '78 JO17-1",
+        "gespeeld": 7,
+        "gewonnen": 6,
+        "gelijk": 1,
+        "verloren": 0,
+        "punten": 19,
+        "doelpuntenVoor": 28,
+        "doelpuntenTegen": 9
+      },
+      {
+        "positie": 2,
+        "team": "Koedijk JO17-2",
+        "gespeeld": 7,
+        "gewonnen": 5,
+        "gelijk": 1,
+        "verloren": 1,
+        "punten": 16,
+        "doelpuntenVoor": 24,
+        "doelpuntenTegen": 12
+      },
+      {
+        "positie": 3,
+        "team": "Spirit '30 JO17-1",
+        "gespeeld": 7,
+        "gewonnen": 4,
+        "gelijk": 2,
+        "verloren": 1,
+        "punten": 14,
+        "doelpuntenVoor": 21,
+        "doelpuntenTegen": 13
+      },
+      {
+        "positie": 4,
+        "team": "Sporting Andijk JO17-1",
+        "gespeeld": 7,
+        "gewonnen": 3,
+        "gelijk": 0,
+        "verloren": 4,
+        "punten": 9,
+        "doelpuntenVoor": 18,
+        "doelpuntenTegen": 17
+      },
+      {
+        "positie": 5,
+        "team": "Hauwert '65 JO17-1",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 2,
+        "verloren": 3,
+        "punten": 8,
+        "doelpuntenVoor": 14,
+        "doelpuntenTegen": 18
+      },
+      {
+        "positie": 6,
+        "team": "Victoria O JO17-1",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 1,
+        "verloren": 4,
+        "punten": 7,
+        "doelpuntenVoor": 13,
+        "doelpuntenTegen": 21
+      },
+      {
+        "positie": 7,
+        "team": "RKEDO JO17-2",
+        "gespeeld": 7,
+        "gewonnen": 1,
+        "gelijk": 1,
+        "verloren": 5,
+        "punten": 4,
+        "doelpuntenVoor": 10,
+        "doelpuntenTegen": 26
+      },
+      {
+        "positie": 8,
+        "team": "Beemster JO17-1",
+        "gespeeld": 7,
+        "gewonnen": 0,
+        "gelijk": 2,
+        "verloren": 5,
+        "punten": 2,
+        "doelpuntenVoor": 8,
+        "doelpuntenTegen": 20
+      }
+    ]
+  },
+  {
+    "pouleId": "JO12-6-03",
+    "pouleNaam": "Onder 12 zesde klasse 03",
+    "bijgewerkt": "2026-11-16",
+    "regels": [
+      {
+        "positie": 1,
+        "team": "Vrone JO12-1",
+        "gespeeld": 7,
+        "gewonnen": 6,
+        "gelijk": 0,
+        "verloren": 1,
+        "punten": 18,
+        "doelpuntenVoor": 31,
+        "doelpuntenTegen": 14
+      },
+      {
+        "positie": 2,
+        "team": "Kwiek '78 JO12-1",
+        "gespeeld": 7,
+        "gewonnen": 5,
+        "gelijk": 1,
+        "verloren": 1,
+        "punten": 16,
+        "doelpuntenVoor": 29,
+        "doelpuntenTegen": 15
+      },
+      {
+        "positie": 3,
+        "team": "Koedijk JO12-2",
+        "gespeeld": 7,
+        "gewonnen": 4,
+        "gelijk": 1,
+        "verloren": 2,
+        "punten": 13,
+        "doelpuntenVoor": 24,
+        "doelpuntenTegen": 18
+      },
+      {
+        "positie": 4,
+        "team": "Sporting Andijk JO12-1",
+        "gespeeld": 7,
+        "gewonnen": 3,
+        "gelijk": 2,
+        "verloren": 2,
+        "punten": 11,
+        "doelpuntenVoor": 22,
+        "doelpuntenTegen": 20
+      },
+      {
+        "positie": 5,
+        "team": "Hauwert '65 JO12-1",
+        "gespeeld": 7,
+        "gewonnen": 3,
+        "gelijk": 0,
+        "verloren": 4,
+        "punten": 9,
+        "doelpuntenVoor": 19,
+        "doelpuntenTegen": 23
+      },
+      {
+        "positie": 6,
+        "team": "Beemster JO12-1",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 1,
+        "verloren": 4,
+        "punten": 7,
+        "doelpuntenVoor": 17,
+        "doelpuntenTegen": 26
+      },
+      {
+        "positie": 7,
+        "team": "Kwadijk JO12-1",
+        "gespeeld": 7,
+        "gewonnen": 1,
+        "gelijk": 1,
+        "verloren": 5,
+        "punten": 4,
+        "doelpuntenVoor": 13,
+        "doelpuntenTegen": 29
+      },
+      {
+        "positie": 8,
+        "team": "KSV JO12-2",
+        "gespeeld": 7,
+        "gewonnen": 0,
+        "gelijk": 2,
+        "verloren": 5,
+        "punten": 2,
+        "doelpuntenVoor": 11,
+        "doelpuntenTegen": 21
+      }
+    ]
+  },
+  {
+    "pouleId": "VR4-01",
+    "pouleNaam": "Vierde klasse 01 vrouwen zaterdag",
+    "bijgewerkt": "2026-11-16",
+    "regels": [
+      {
+        "positie": 1,
+        "team": "Purmerend VR1",
+        "gespeeld": 7,
+        "gewonnen": 6,
+        "gelijk": 1,
+        "verloren": 0,
+        "punten": 19,
+        "doelpuntenVoor": 23,
+        "doelpuntenTegen": 7
+      },
+      {
+        "positie": 2,
+        "team": "Vrone VR1",
+        "gespeeld": 7,
+        "gewonnen": 5,
+        "gelijk": 1,
+        "verloren": 1,
+        "punten": 16,
+        "doelpuntenVoor": 20,
+        "doelpuntenTegen": 10
+      },
+      {
+        "positie": 3,
+        "team": "Kwiek '78 VR1",
+        "gespeeld": 7,
+        "gewonnen": 4,
+        "gelijk": 2,
+        "verloren": 1,
+        "punten": 14,
+        "doelpuntenVoor": 18,
+        "doelpuntenTegen": 11
+      },
+      {
+        "positie": 4,
+        "team": "Beemster VR1",
+        "gespeeld": 7,
+        "gewonnen": 3,
+        "gelijk": 2,
+        "verloren": 2,
+        "punten": 11,
+        "doelpuntenVoor": 15,
+        "doelpuntenTegen": 13
+      },
+      {
+        "positie": 5,
+        "team": "KSV VR1",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 1,
+        "verloren": 4,
+        "punten": 7,
+        "doelpuntenVoor": 11,
+        "doelpuntenTegen": 18
+      },
+      {
+        "positie": 6,
+        "team": "De Wherevogels VR1",
+        "gespeeld": 7,
+        "gewonnen": 2,
+        "gelijk": 0,
+        "verloren": 5,
+        "punten": 6,
+        "doelpuntenVoor": 14,
+        "doelpuntenTegen": 15
+      },
+      {
+        "positie": 7,
+        "team": "Oosthuizen VR1",
+        "gespeeld": 7,
+        "gewonnen": 1,
+        "gelijk": 1,
+        "verloren": 5,
+        "punten": 4,
+        "doelpuntenVoor": 9,
+        "doelpuntenTegen": 21
+      },
+      {
+        "positie": 8,
+        "team": "Sporting Andijk VR1",
+        "gespeeld": 7,
+        "gewonnen": 0,
+        "gelijk": 2,
+        "verloren": 5,
+        "punten": 2,
+        "doelpuntenVoor": 6,
+        "doelpuntenTegen": 21
+      }
+    ]
+  }
+]

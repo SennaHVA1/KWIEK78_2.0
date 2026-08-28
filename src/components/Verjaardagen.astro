@@ -1,0 +1,89 @@
+---
+/**
+ * Jarige leden.
+ *
+ * Alleen naam en dag, nooit een geboortejaar. Namen lopen via toonNaamVerjaardag(),
+ * die het privacyniveau uit Sportlink respecteert; afgeschermde leden staan er
+ * helemaal niet tussen omdat de adapter ze er al uit haalt.
+ */
+import { toonNaamVerjaardag } from '../lib/sportlink';
+import { MAANDNAMEN } from '../lib/datum';
+import type { Verjaardag } from '../lib/types';
+
+interface Props {
+  leden: Verjaardag[];
+  /** Maand erbij zetten. Uit in de kalender, waar de maand al boven staat. */
+  toonMaand?: boolean;
+  leegTekst?: string;
+}
+
+const { leden, toonMaand = true, leegTekst = 'Deze week is er niemand jarig.' } = Astro.props;
+
+const zichtbaar = leden
+  .map((lid) => ({ lid, naam: toonNaamVerjaardag(lid) }))
+  .filter((regel): regel is { lid: Verjaardag; naam: string } => regel.naam !== null);
+---
+
+{zichtbaar.length === 0 ? (
+  <p class="verjaardagen-leeg zacht">{leegTekst}</p>
+) : (
+  <ul class="verjaardagen">
+    {zichtbaar.map(({ lid, naam }) => (
+      <li class="verjaardag">
+        <span class="verjaardag-dag data">
+          {lid.dag}{toonMaand && <span class="verjaardag-maand"> {MAANDNAMEN[lid.maand - 1].slice(0, 3)}</span>}
+        </span>
+        <span class="verjaardag-naam">{naam}</span>
+        {lid.team && <span class="verjaardag-team data">{lid.team}</span>}
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .verjaardagen { list-style: none; margin: 0; padding: 0; }
+
+  .verjaardag {
+    display: grid;
+    grid-template-columns: 3.4rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-block: 0.6rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+  }
+  :global(.vlak-wit) .verjaardag { border-top-color: var(--kleur-lijn-licht); }
+  .verjaardag:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
+  :global(.vlak-wit) .verjaardag:last-child { border-bottom-color: var(--kleur-lijn-licht); }
+
+  .verjaardag-dag {
+    font-size: var(--text-klein);
+    font-weight: 700;
+    color: var(--color-blauw);
+    white-space: nowrap;
+  }
+  :global(.vlak-wit) .verjaardag-dag { color: var(--color-blauwdiep); }
+  .verjaardag-maand { font-weight: 400; }
+
+  .verjaardag-naam {
+    font-size: var(--text-klein);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .verjaardag-team {
+    font-size: var(--text-mini);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+    white-space: nowrap;
+  }
+  :global(.vlak-wit) .verjaardag-team { color: var(--color-grijsdonker); }
+
+  .verjaardagen-leeg {
+    font-size: var(--text-klein);
+    padding-block: 1rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+  }
+  :global(.vlak-wit) .verjaardagen-leeg { border-top-color: var(--kleur-lijn-licht); }
+</style>

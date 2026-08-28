@@ -1,0 +1,147 @@
+---
+/**
+ * Het nieuwsoverzicht met paginering. Gedeeld door /nieuws en /nieuws/pagina/[n],
+ * zodat beide routes precies hetzelfde tonen.
+ */
+import Paginakop from './Paginakop.astro';
+import NieuwsKaart from './NieuwsKaart.astro';
+import { getNieuwsPagina } from '../lib/nieuws';
+import { CLUBGEGEVENS } from '../lib/club';
+
+interface Props {
+  pagina: number;
+}
+
+const { pagina } = Astro.props;
+const { artikelen, totaalPaginas, totaalArtikelen } = getNieuwsPagina(pagina);
+
+const paginaUrl = (nummer: number) => (nummer === 1 ? '/nieuws' : `/nieuws/pagina/${nummer}`);
+const nummers = Array.from({ length: totaalPaginas }, (_, i) => i + 1);
+---
+
+<Paginakop
+  kicker={pagina === 1 ? 'Nieuws' : `Pagina ${pagina} van ${totaalPaginas}`}
+  titel="Clubnieuws"
+  intro="Berichten van de club, zoals ze ook op onze Facebookpagina verschijnen."
+>
+  <p class="kop-extra">
+    <a class="knop knop--rand" href="/nieuws/kwiek-inside">Kwiek Inside</a>
+    <a class="knop knop--rand" href={CLUBGEGEVENS.facebook} target="_blank" rel="noopener noreferrer">
+      Facebookpagina
+    </a>
+  </p>
+</Paginakop>
+
+<section class="vlak-wit sectie">
+  <div class="omhulsel">
+    {artikelen.length === 0 ? (
+      <p class="zacht">Er zijn nog geen berichten geplaatst.</p>
+    ) : (
+      <>
+        <div class="overzicht">
+          {artikelen.map((artikel, i) => (
+            <NieuwsKaart artikel={artikel} groot={pagina === 1 && i === 0} kopNiveau={2} />
+          ))}
+        </div>
+
+        {totaalPaginas > 1 && (
+          <nav class="paginering" aria-label="Paginering nieuws">
+            <a
+              class:list={['paginering-stap', pagina === 1 && 'is-uit']}
+              href={pagina === 1 ? undefined : paginaUrl(pagina - 1)}
+              aria-disabled={pagina === 1 ? 'true' : undefined}
+            >Vorige</a>
+
+            <ul>
+              {nummers.map((nummer) => (
+                <li>
+                  <a
+                    class:list={['paginering-nummer', nummer === pagina && 'is-hier']}
+                    href={paginaUrl(nummer)}
+                    aria-current={nummer === pagina ? 'page' : undefined}
+                  >{nummer}</a>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              class:list={['paginering-stap', pagina === totaalPaginas && 'is-uit']}
+              href={pagina === totaalPaginas ? undefined : paginaUrl(pagina + 1)}
+              aria-disabled={pagina === totaalPaginas ? 'true' : undefined}
+            >Volgende</a>
+          </nav>
+        )}
+
+        <p class="overzicht-telling data">{totaalArtikelen} berichten</p>
+      </>
+    )}
+  </div>
+</section>
+
+<style>
+  .kop-extra { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.5rem; }
+
+  .overzicht {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .overzicht { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .overzicht > :global(.nieuwskaart--groot) { grid-column: 1 / -1; }
+  }
+  @media (min-width: 1024px) {
+    .overzicht { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.25rem; }
+  }
+
+  .paginering {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+  }
+  .paginering ul {
+    display: flex;
+    gap: 0.3rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .paginering a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-zwart) !important;
+    border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
+    padding: 0.5rem 0.8rem;
+    min-width: 2.4rem;
+  }
+  .paginering a:hover { border-color: var(--color-zwart); }
+  .paginering-nummer.is-hier {
+    background: var(--color-zwart);
+    color: var(--color-wit) !important;
+    border-color: var(--color-zwart);
+  }
+  .paginering-stap.is-uit {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .overzicht-telling {
+    margin-top: 1.25rem;
+    font-size: var(--text-mini);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+  }
+</style>

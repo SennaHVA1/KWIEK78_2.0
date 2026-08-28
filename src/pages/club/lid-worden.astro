@@ -1,0 +1,555 @@
+---
+/**
+ * Lid worden en lidmaatschap wijzigen, op een pagina met een tabwissel.
+ *
+ * Op de oude site waren dit twee losse pagina's, terwijl het dezelfde
+ * handeling is bij dezelfde ledenadministratie.
+ *
+ * DE FORMULIEREN ZIJN IN DEZE DEMO NIET ACTIEF.
+ *
+ * Het aanmeldformulier gaat straks via het Sportlink-artikel
+ * `aanmeldenaspirantlid-form`. Dat werkt als volgt:
+ *
+ *   POST https://data.sportlink.com/aanmeldenaspirantlid-form?client_id=<ID>
+ *
+ * Sportlink maakt van de inzending direct een aspirant-lid in het
+ * ledenbestand van de club, inclusief incassomachtiging. De veldnamen
+ * hieronder zijn daarom al gekozen zoals Sportlink ze verwacht:
+ * voornaam, tussenvoegsel, achternaam, geboortedatum, geslacht, emailadres,
+ * telefoonnummer, straat, huisnummer, postcode, woonplaats, iban,
+ * vorigevereniging, relatiecodevorigevereniging.
+ *
+ * Het wijzigingsformulier heeft geen Sportlink-tegenhanger en gaat naar de
+ * ledenadministratie per e-mail.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import { getTeamsPerCategorie } from '../../lib/sportlink';
+import { getContactpersoon } from '../../lib/club';
+
+const categorieen = getTeamsPerCategorie();
+const ledenadministratie = getContactpersoon('Ledenadministratie');
+---
+
+<Basis
+  titel="Lid worden"
+  omschrijving="Aanmelden als lid van v.v. Kwiek '78 of een bestaand lidmaatschap wijzigen."
+>
+  <Paginakop
+    kicker="Club"
+    titel="Lid worden"
+    intro="Aanmelden of iets wijzigen aan een bestaand lidmaatschap. Beide gaan naar dezelfde ledenadministratie."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel">
+      <p class="demo-melding">
+        <span class="merk merk--rand">Demo</span>
+        De formulieren op deze pagina zijn nog niet aangesloten. Ze laten wel precies zien
+        welke gegevens er straks gevraagd worden.
+      </p>
+
+      <!-- ============================================================== -->
+      <!-- Tabwissel                                                      -->
+      <!-- ============================================================== -->
+      <div class="tabs" data-tabs>
+        <div class="tablijst" role="tablist" aria-label="Kies wat je wilt doen">
+          <button
+            type="button"
+            role="tab"
+            id="tab-aanmelden"
+            aria-controls="paneel-aanmelden"
+            aria-selected="true"
+            class="tab is-gekozen"
+          >Aanmelden als lid</button>
+          <button
+            type="button"
+            role="tab"
+            id="tab-wijzigen"
+            aria-controls="paneel-wijzigen"
+            aria-selected="false"
+            tabindex="-1"
+            class="tab"
+          >Lidmaatschap wijzigen</button>
+        </div>
+
+        <!-- ------------------------------------------------------------ -->
+        <!-- Aanmelden                                                    -->
+        <!-- ------------------------------------------------------------ -->
+        <div role="tabpanel" id="paneel-aanmelden" aria-labelledby="tab-aanmelden" tabindex="0" class="paneel">
+          <div class="paneel-binnen">
+            <div class="paneel-tekst">
+              <h2 class="kop-sectie">Aanmelden als lid</h2>
+              <div class="lopende-tekst">
+                <p>
+                  Nieuwe leden zijn welkom, van vijf jaar tot vijfenzestig plus.
+                  Je mag altijd eerst drie keer meetrainen voordat je beslist.
+                </p>
+                <h3>Hoe het daarna gaat</h3>
+                <ol>
+                  <li>Je vult dit formulier in.</li>
+                  <li>De ledenadministratie neemt binnen een week contact op.</li>
+                  <li>Je wordt ingedeeld bij een team en krijgt de trainingstijden.</li>
+                  <li>De contributie wordt in twee termijnen geincasseerd, in oktober en in februari.</li>
+                </ol>
+                <p>
+                  Was je eerder lid van een andere vereniging? Dan hebben we je relatiecode nodig
+                  voor de overschrijving bij de KNVB.
+                </p>
+              </div>
+            </div>
+
+            <form class="formulier" data-formulier novalidate>
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="voornaam">Voornaam</label>
+                  <input type="text" id="voornaam" name="voornaam" autocomplete="given-name" required />
+                  <p class="veld-fout" data-fout hidden>Vul een voornaam in.</p>
+                </div>
+                <div class="veld">
+                  <label for="tussenvoegsel">Tussenvoegsel</label>
+                  <input type="text" id="tussenvoegsel" name="tussenvoegsel" autocomplete="additional-name" />
+                  <p class="veld-hulp">Bijvoorbeeld van, de of van der. Mag leeg blijven.</p>
+                </div>
+              </div>
+
+              <div class="veld">
+                <label for="achternaam">Achternaam</label>
+                <input type="text" id="achternaam" name="achternaam" autocomplete="family-name" required />
+                <p class="veld-fout" data-fout hidden>Vul een achternaam in.</p>
+              </div>
+
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="geboortedatum">Geboortedatum</label>
+                  <input type="date" id="geboortedatum" name="geboortedatum" autocomplete="bday" required />
+                  <p class="veld-hulp">Bepaalt in welke leeftijdscategorie je wordt ingedeeld.</p>
+                  <p class="veld-fout" data-fout hidden>Vul een geboortedatum in.</p>
+                </div>
+                <div class="veld">
+                  <label for="geslacht">Geslacht</label>
+                  <select id="geslacht" name="geslacht" required>
+                    <option value="">Kies</option>
+                    <option value="M">Man</option>
+                    <option value="V">Vrouw</option>
+                    <option value="X">Zeg ik liever niet</option>
+                  </select>
+                  <p class="veld-hulp">De KNVB vraagt dit voor de teamindeling.</p>
+                  <p class="veld-fout" data-fout hidden>Maak een keuze.</p>
+                </div>
+              </div>
+
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="emailadres">E-mailadres</label>
+                  <input type="email" id="emailadres" name="emailadres" autocomplete="email" required />
+                  <p class="veld-fout" data-fout hidden>Vul een geldig e-mailadres in.</p>
+                </div>
+                <div class="veld">
+                  <label for="telefoonnummer">Telefoonnummer</label>
+                  <input
+                    type="tel"
+                    id="telefoonnummer"
+                    name="telefoonnummer"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    pattern="[0-9 +()-]{10,}"
+                    required
+                  />
+                  <p class="veld-hulp">Bij jeugdleden het nummer van een ouder of verzorger.</p>
+                  <p class="veld-fout" data-fout hidden>Vul een telefoonnummer van minimaal tien tekens in.</p>
+                </div>
+              </div>
+
+              <div class="veldrij veldrij--drie">
+                <div class="veld veld--breed">
+                  <label for="straat">Straat</label>
+                  <input type="text" id="straat" name="straat" autocomplete="address-line1" required />
+                  <p class="veld-fout" data-fout hidden>Vul een straatnaam in.</p>
+                </div>
+                <div class="veld">
+                  <label for="huisnummer">Huisnummer</label>
+                  <input type="text" id="huisnummer" name="huisnummer" required />
+                  <p class="veld-fout" data-fout hidden>Vul een huisnummer in.</p>
+                </div>
+              </div>
+
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="postcode">Postcode</label>
+                  <input
+                    type="text"
+                    id="postcode"
+                    name="postcode"
+                    autocomplete="postal-code"
+                    pattern="[1-9][0-9]{3}\s?[A-Za-z]{2}"
+                    placeholder="1633 HE"
+                    required
+                  />
+                  <p class="veld-fout" data-fout hidden>Vul een Nederlandse postcode in, bijvoorbeeld 1633 HE.</p>
+                </div>
+                <div class="veld">
+                  <label for="woonplaats">Woonplaats</label>
+                  <input type="text" id="woonplaats" name="woonplaats" autocomplete="address-level2" required />
+                  <p class="veld-fout" data-fout hidden>Vul een woonplaats in.</p>
+                </div>
+              </div>
+
+              <div class="veld">
+                <label for="iban">IBAN</label>
+                <input
+                  type="text"
+                  id="iban"
+                  name="iban"
+                  placeholder="NL00 BANK 0000 0000 00"
+                  pattern="[A-Za-z]{2}[0-9]{2}\s?([A-Za-z0-9]\s?){10,26}"
+                  required
+                />
+                <p class="veld-hulp">Voor de incasso van de contributie in twee termijnen.</p>
+                <p class="veld-fout" data-fout hidden>Vul een geldig IBAN in.</p>
+              </div>
+
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="vorigevereniging">Vorige vereniging</label>
+                  <input type="text" id="vorigevereniging" name="vorigevereniging" />
+                  <p class="veld-hulp">Alleen invullen als je eerder lid was.</p>
+                </div>
+                <div class="veld">
+                  <label for="relatiecodevorigevereniging">KNVB-relatiecode</label>
+                  <input type="text" id="relatiecodevorigevereniging" name="relatiecodevorigevereniging" />
+                  <p class="veld-hulp">Staat in de KNVB-app onder je profiel.</p>
+                </div>
+              </div>
+
+              <div class="veld">
+                <label for="voorkeurteam">Voorkeur categorie</label>
+                <select id="voorkeurteam" name="voorkeurteam">
+                  <option value="">Geen voorkeur, deel mij maar in</option>
+                  {categorieen.map((categorie) => (
+                    <optgroup label={categorie.label}>
+                      {categorie.teams.map((team) => (
+                        <option value={team.id}>{team.naam}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <p class="veld-hulp">De technische commissie bepaalt uiteindelijk de indeling.</p>
+              </div>
+
+              <div class="veld">
+                <label for="opmerkingen">Opmerkingen</label>
+                <textarea id="opmerkingen" name="opmerkingen" rows="4"></textarea>
+                <p class="veld-hulp">Bijvoorbeeld of je broer of zus al lid is, of dat je liever met een vriendje in een team zit.</p>
+              </div>
+
+              <fieldset class="akkoorden">
+                <legend>Akkoord</legend>
+                <div class="veld veld--vinkje">
+                  <label class="vinkje">
+                    <input type="checkbox" name="akkoordprivacy" required />
+                    <span>
+                      Ik ga akkoord met de <a href="/privacyverklaring">privacyverklaring</a> van de club.
+                    </span>
+                  </label>
+                  <p class="veld-fout" data-fout hidden>Zonder akkoord kunnen we de aanmelding niet verwerken.</p>
+                </div>
+
+                <div class="veld veld--vinkje">
+                  <label class="vinkje">
+                    <input type="checkbox" name="akkoordbeeld" />
+                    <span>
+                      Foto's waarop ik herkenbaar sta mogen op de website en social media van de club.
+                      Dit mag je altijd later weer intrekken.
+                    </span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <p class="formulier-melding" data-melding role="status" hidden></p>
+
+              <button type="submit" class="knop knop--zwart">Aanmelding versturen</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ------------------------------------------------------------ -->
+        <!-- Wijzigen                                                     -->
+        <!-- ------------------------------------------------------------ -->
+        <div role="tabpanel" id="paneel-wijzigen" aria-labelledby="tab-wijzigen" tabindex="0" class="paneel" hidden>
+          <div class="paneel-binnen">
+            <div class="paneel-tekst">
+              <h2 class="kop-sectie">Lidmaatschap wijzigen</h2>
+              <div class="lopende-tekst">
+                <p>
+                  Verhuisd, ander rekeningnummer, of stoppen? Geef het hier door.
+                  Alles komt bij dezelfde persoon terecht.
+                </p>
+                <h3>Let op bij opzeggen</h3>
+                <p>
+                  Opzeggen kan tot en met 31 mei. Zeg je later op, dan is de club de KNVB-afdracht
+                  voor het nieuwe seizoen al kwijt en brengen we die in rekening.
+                  Dat staat ook in het huishoudelijk reglement.
+                </p>
+                {ledenadministratie?.email && (
+                  <p>
+                    Liever even mailen? Dat kan naar{' '}
+                    <a href={`mailto:${ledenadministratie.email}`}>{ledenadministratie.email}</a>.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <form class="formulier" data-formulier novalidate>
+              <div class="veld">
+                <label for="wnaam">Naam van het lid</label>
+                <input type="text" id="wnaam" name="naam" autocomplete="name" required />
+                <p class="veld-fout" data-fout hidden>Vul de naam van het lid in.</p>
+              </div>
+
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="wrelatiecode">KNVB-relatiecode</label>
+                  <input type="text" id="wrelatiecode" name="relatiecode" />
+                  <p class="veld-hulp">Handig maar niet verplicht. Staat in de KNVB-app.</p>
+                </div>
+                <div class="veld">
+                  <label for="wemail">E-mailadres</label>
+                  <input type="email" id="wemail" name="emailadres" autocomplete="email" required />
+                  <p class="veld-fout" data-fout hidden>Vul een geldig e-mailadres in.</p>
+                </div>
+              </div>
+
+              <div class="veld">
+                <label for="wsoort">Wat wil je wijzigen?</label>
+                <select id="wsoort" name="soort" required>
+                  <option value="">Kies een wijziging</option>
+                  <option value="adres">Adreswijziging</option>
+                  <option value="bank">Ander rekeningnummer</option>
+                  <option value="contact">Ander e-mailadres of telefoonnummer</option>
+                  <option value="vorm">Andere lidmaatschapsvorm</option>
+                  <option value="team">Verzoek tot ander team</option>
+                  <option value="opzegging">Opzegging</option>
+                </select>
+                <p class="veld-fout" data-fout hidden>Maak een keuze.</p>
+              </div>
+
+              <div class="veld">
+                <label for="wingang">Gewenste ingangsdatum</label>
+                <input type="date" id="wingang" name="ingangsdatum" />
+                <p class="veld-hulp">Laat leeg als het zo snel mogelijk moet ingaan.</p>
+              </div>
+
+              <div class="veld">
+                <label for="wtoelichting">Toelichting</label>
+                <textarea id="wtoelichting" name="toelichting" rows="5" required></textarea>
+                <p class="veld-hulp">Bij een adreswijziging: het nieuwe adres. Bij een opzegging: kort de reden, dat helpt de club.</p>
+                <p class="veld-fout" data-fout hidden>Vul een toelichting in.</p>
+              </div>
+
+              <p class="formulier-melding" data-melding role="status" hidden></p>
+
+              <button type="submit" class="knop knop--zwart">Wijziging doorgeven</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .demo-melding {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    font-size: var(--text-klein);
+    border-left: 3px solid var(--color-blauwdiep);
+    padding: 0.75rem 1rem;
+    background: color-mix(in srgb, var(--color-blauwdiep) 8%, transparent);
+    margin-bottom: 2.25rem;
+    max-width: 70ch;
+  }
+
+  /* Tabs -------------------------------------------------------------- */
+  .tablijst {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--kleur-lijn-licht);
+    margin-bottom: 2.25rem;
+    overflow-x: auto;
+  }
+  .tab {
+    background: none;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    color: var(--color-grijsdonker);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--text-klein);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.1rem;
+    white-space: nowrap;
+    transition: color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap);
+  }
+  .tab:first-child { padding-left: 0; }
+  .tab:hover { color: var(--color-zwart); }
+  .tab.is-gekozen { color: var(--color-zwart); border-bottom-color: var(--color-blauwdiep); }
+  @media (prefers-reduced-motion: reduce) { .tab { transition: none; } }
+
+  .paneel[hidden] { display: none; }
+  .paneel:focus-visible { outline-offset: 6px; }
+
+  .paneel-binnen { display: grid; gap: 2.5rem; }
+  @media (min-width: 950px) {
+    .paneel-binnen { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 4rem; align-items: start; }
+    .paneel-tekst { position: sticky; top: 6rem; }
+  }
+  .paneel-tekst { display: grid; gap: 1rem; align-content: start; }
+
+  /* Formulier --------------------------------------------------------- */
+  .formulier { display: grid; gap: 1.25rem; max-width: 40rem; }
+  .veldrij { display: grid; gap: 1.25rem; }
+  @media (min-width: 560px) {
+    .veldrij { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .veldrij--drie { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+  }
+
+  .akkoorden {
+    border: 0;
+    padding: 1.25rem 0 0;
+    margin: 0.5rem 0 0;
+    border-top: 1px solid var(--kleur-lijn-licht);
+    display: grid;
+    gap: 0.9rem;
+  }
+  .akkoorden legend {
+    font-family: var(--font-mono);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-grijsdonker);
+    padding: 0;
+  }
+  /* Het vinkje krijgt een gewone labeltekst, niet de mono-kop van de andere velden. */
+  .veld--vinkje > :global(label.vinkje) {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: inherit;
+  }
+  .vinkje {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: start;
+    line-height: 1.55;
+    cursor: pointer;
+  }
+  .vinkje input {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.15rem;
+    accent-color: var(--color-blauwdiep);
+  }
+
+  .formulier-melding {
+    font-size: var(--text-klein);
+    border-left: 3px solid var(--color-blauwdiep);
+    background: color-mix(in srgb, var(--color-blauwdiep) 10%, transparent);
+    padding: 0.8rem 1rem;
+    line-height: 1.55;
+  }
+  .formulier-melding[hidden] { display: none; }
+</style>
+
+<script>
+  /* ------------------------------------------------------------------ */
+  /* Tabwissel                                                          */
+  /* Zelf geschreven, met de toetsenbordafspraken die bij een tablist    */
+  /* horen: pijltjes wisselen, Home en End springen naar begin en eind.  */
+  /* ------------------------------------------------------------------ */
+  const tabhouder = document.querySelector<HTMLElement>('[data-tabs]');
+
+  if (tabhouder) {
+    const tabs = [...tabhouder.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+
+    const kies = (index: number, verplaatsFocus = true) => {
+      tabs.forEach((tab, i) => {
+        const gekozen = i === index;
+        tab.setAttribute('aria-selected', String(gekozen));
+        tab.tabIndex = gekozen ? 0 : -1;
+        tab.classList.toggle('is-gekozen', gekozen);
+        const paneel = document.getElementById(tab.getAttribute('aria-controls')!);
+        if (paneel) paneel.hidden = !gekozen;
+      });
+      if (verplaatsFocus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => kies(i, false));
+      tab.addEventListener('keydown', (gebeurtenis) => {
+        const toets = gebeurtenis.key;
+        if (toets === 'ArrowRight') kies((i + 1) % tabs.length);
+        else if (toets === 'ArrowLeft') kies((i - 1 + tabs.length) % tabs.length);
+        else if (toets === 'Home') kies(0);
+        else if (toets === 'End') kies(tabs.length - 1);
+        else return;
+        gebeurtenis.preventDefault();
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Validatie en demo-melding                                          */
+  /* ------------------------------------------------------------------ */
+  for (const formulier of document.querySelectorAll<HTMLFormElement>('[data-formulier]')) {
+    const melding = formulier.querySelector<HTMLElement>('[data-melding]');
+
+    /** Toont of verbergt de foutmelding die bij een veld hoort. */
+    const toonFout = (veld: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+      const fout = veld.closest('.veld')?.querySelector<HTMLElement>('[data-fout]');
+      if (!fout) return;
+      fout.hidden = veld.checkValidity();
+    };
+
+    formulier.addEventListener('submit', (gebeurtenis) => {
+      gebeurtenis.preventDefault();
+
+      const velden = [...formulier.querySelectorAll<HTMLInputElement>('input, select, textarea')];
+      velden.forEach(toonFout);
+
+      const eersteFout = velden.find((veld) => !veld.checkValidity());
+      if (eersteFout) {
+        eersteFout.focus();
+        if (melding) {
+          melding.hidden = false;
+          melding.textContent = 'Er ontbreekt nog iets. De velden met een melding zijn nog niet in orde.';
+        }
+        return;
+      }
+
+      if (melding) {
+        melding.hidden = false;
+        melding.textContent =
+          'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; ' +
+          'na oplevering gaat de aanmelding rechtstreeks naar de ledenadministratie.';
+      }
+    });
+
+    // Meteen na het verlaten van een veld terugkoppelen, niet al tijdens het typen.
+    formulier.addEventListener('blur', (gebeurtenis) => {
+      const doel = gebeurtenis.target;
+      if (doel instanceof HTMLInputElement || doel instanceof HTMLSelectElement || doel instanceof HTMLTextAreaElement) {
+        toonFout(doel);
+      }
+    }, true);
+  }
+</script>

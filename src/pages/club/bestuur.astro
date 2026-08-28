@@ -1,65 +1,75 @@
 ---
 /**
- * Bestuur en commissies, gegroepeerd per commissie.
+ * Bestuur en commissies.
+ *
+ * Geen portretten: de club heeft ze niet en gaten opvullen met plaatshouders
+ * maakt een pagina onrustiger, niet completer. Wat mensen hier komen halen is
+ * een naam en een manier om die persoon te bereiken, en dat staat er nu
+ * zonder omweg.
  */
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
-import Foto from '../../components/Foto.astro';
-import { getCommissies } from '../../lib/club';
+import { getCommissies, CLUBGEGEVENS } from '../../lib/club';
 
 const commissies = getCommissies();
 
-/** Bestandsnaam voor een portret, afgeleid van de naam. */
-const portretPad = (naam: string) =>
-  '/images/bestuur/' +
-  naam.toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') +
-  '.webp';
+/** Algemeen e-mailadres per commissie, voor onder de kop. */
+const commissieMail: Record<string, string> = {
+  Jeugdcommissie: 'jeugd@kwiek78.nl',
+  Wedstrijdsecretariaat: 'wedstrijdsecretariaat@kwiek78.nl',
+  Ledenadministratie: 'ledenadministratie@kwiek78.nl',
+  Sponsorcommissie: 'sponsoring@kwiek78.nl',
+};
 ---
 
 <Basis
   titel="Bestuur en commissies"
-  omschrijving="Wie doet wat bij v.v. Kwiek '78: het bestuur en alle commissies, met contactgegevens."
+  omschrijving="Wie doet wat bij v.v. Kwiek '78: het bestuur en alle commissies, met telefoonnummers en e-mailadressen."
 >
   <Paginakop
     kicker="Club"
-    titel="Bestuur en commissies"
-    intro="Kwiek draait op vrijwilligers. Hieronder staat wie waarvoor te benaderen is, gegroepeerd per commissie."
+    titel="Wie doet wat"
+    intro="Kwiek draait op vrijwilligers. Hieronder staat wie je waarvoor kunt bereiken."
   />
 
   <section class="vlak-wit sectie">
     <div class="omhulsel commissies">
       {commissies.map((groep) => (
-        <section class="kolom commissie">
-          <p class="kolom-kicker">{groep.leden.length} {groep.leden.length === 1 ? 'persoon' : 'personen'}</p>
-          <div>
-            <h2 class="kop-sectie commissie-kop">{groep.commissie}</h2>
-            <ul class="personen">
-              {groep.leden.map((lid) => (
-                <li class="persoon">
-                  <Foto
-                    src={lid.foto ?? portretPad(lid.naam)}
-                    alt={`Portret van ${lid.naam}`}
-                    ratio="1 / 1"
-                    klasse="persoon-foto"
-                    plaatshouder="portret volgt"
-                  />
-                  <div class="persoon-tekst">
-                    <h3 class="persoon-naam">{lid.naam}</h3>
-                    <p class="persoon-functie data">{lid.functie}</p>
-                    {lid.email && (
-                      <p class="persoon-email">
-                        <a class="link-onder" href={`mailto:${lid.email}`}>{lid.email}</a>
-                      </p>
+        <section class="commissie">
+          <header class="commissie-kop">
+            <h2 class="kop-sectie">{groep.commissie}</h2>
+            {commissieMail[groep.commissie] && (
+              <a class="commissie-mail link-onder" href={`mailto:${commissieMail[groep.commissie]}`}>
+                {commissieMail[groep.commissie]}
+              </a>
+            )}
+          </header>
+
+          <ul class="personen">
+            {groep.leden.map((lid) => (
+              <li class:list={['persoon', lid.vacant && 'is-vacant']}>
+                <p class="persoon-functie">{lid.functie}</p>
+                <p class="persoon-naam">{lid.naam}</p>
+                {(lid.telefoon || lid.email) && (
+                  <p class="persoon-contact">
+                    {lid.telefoon && (
+                      <a class="link-onder data" href={`tel:${lid.telefoon.replace(/[^0-9+]/g, '')}`}>
+                        {lid.telefoon}
+                      </a>
                     )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+                    {lid.email && (
+                      <a class="link-onder" href={`mailto:${lid.email}`}>{lid.email}</a>
+                    )}
+                  </p>
+                )}
+                {lid.vacant && (
+                  <p class="persoon-oproep">
+                    Deze functie is nog niet ingevuld. Iets voor jou? Laat het het bestuur weten.
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
         </section>
       ))}
     </div>
@@ -69,18 +79,18 @@ const portretPad = (naam: string) =>
 
   <section class="vlak-zwart sectie">
     <div class="omhulsel">
-      <div class="kolom">
-        <p class="kolom-kicker">Meehelpen</p>
-        <div class="oproep">
+      <div class="oproep">
+        <div>
+          <p class="kolom-kicker">Meehelpen</p>
           <h2 class="kop-sectie">Een commissie kan altijd iemand gebruiken</h2>
-          <p class="lopende-tekst">
-            Of het nu om een uur per maand gaat of om een vaste taak: er is altijd plek.
-            Meld je bij de vrijwilligerscoordinator of loop op een doordeweekse avond de kantine binnen.
+          <p class="oproep-tekst">
+            Of het nu om een uur per maand gaat of om een vaste taak: er is plek.
+            Loop op een doordeweekse avond de kantine binnen of stuur een bericht.
           </p>
-          <div class="oproep-knoppen">
-            <a class="knop knop--primair" href="/vrijwillige-diensten">Vrijwillige diensten</a>
-            <a class="knop knop--rand" href="/contact">Contact opnemen</a>
-          </div>
+        </div>
+        <div class="oproep-knoppen">
+          <a class="knop knop--primair" href={`mailto:${CLUBGEGEVENS.email}`}>Stuur een bericht</a>
+          <a class="knop knop--rand" href="/vrijwillige-diensten">Vrijwillige diensten</a>
         </div>
       </div>
     </div>
@@ -88,13 +98,24 @@ const portretPad = (naam: string) =>
 </Basis>
 
 <style>
-  .commissies { display: grid; gap: 3.25rem; }
-  .commissie-kop { padding-bottom: 1.25rem; }
+  .commissies { display: grid; gap: 2.5rem; }
+
+  .commissie-kop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    flex-wrap: wrap;
+    padding-bottom: 0.9rem;
+    border-bottom: 2px solid var(--color-zwart);
+    margin-bottom: 1.25rem;
+  }
+  .commissie-mail { font-size: var(--text-klein); font-weight: 600; }
 
   .personen {
     display: grid;
-    gap: 1.5rem 2rem;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 1px;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     list-style: none;
     margin: 0;
     padding: 0;
@@ -102,23 +123,56 @@ const portretPad = (naam: string) =>
 
   .persoon {
     display: grid;
-    gap: 0.75rem;
-    border-top: 1px solid var(--kleur-lijn-licht);
-    padding-top: 0.9rem;
+    gap: 0.1rem;
     align-content: start;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-op);
   }
-  .persoon :global(.persoon-foto) { filter: grayscale(1) contrast(1.05); }
-
-  .persoon-tekst { display: grid; gap: 0.15rem; }
-  .persoon-naam { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
   .persoon-functie {
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
+    font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: var(--color-blauwdiep);
+  }
+  .persoon-naam {
+    font-family: var(--font-smal);
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .persoon-contact {
+    display: grid;
+    gap: 0.1rem;
+    margin-top: 0.35rem;
+    font-size: var(--text-klein);
+  }
+  .persoon-contact a { width: fit-content; word-break: break-word; }
+
+  .is-vacant {
+    background: transparent;
+    border: 1.5px dashed color-mix(in srgb, var(--color-zwart) 22%, transparent);
+  }
+  .is-vacant .persoon-naam { color: var(--color-grijsdonker); }
+  .persoon-oproep {
+    margin-top: 0.35rem;
+    font-size: var(--text-mini);
+    line-height: 1.5;
     color: var(--color-grijsdonker);
   }
-  .persoon-email { font-size: var(--text-mini); word-break: break-all; }
 
-  .oproep { display: grid; gap: 1rem; }
-  .oproep-knoppen { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
+  /* Oproep ------------------------------------------------------------ */
+  .oproep { display: grid; gap: 1.5rem; align-items: center; }
+  @media (min-width: 900px) {
+    .oproep { grid-template-columns: minmax(0, 1fr) auto; gap: 3rem; }
+  }
+  .oproep-tekst {
+    margin-top: 0.6rem;
+    max-width: 52ch;
+    color: var(--color-grijs);
+    line-height: 1.6;
+  }
+  .oproep-knoppen { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 </style>

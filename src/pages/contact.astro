@@ -19,9 +19,14 @@ import { CLUBGEGEVENS, ADRES, routeLink, getContactpersoon } from '../lib/club';
 
 const wieWaarvoor = [
   {
-    rol: 'Wedstrijdsecretariaat',
-    functie: 'Wedstrijdsecretaris senioren',
-    waarvoor: 'Wedstrijden verzetten, afgelastingen, scheidsrechters en het digitale wedstrijdformulier.',
+    rol: 'Wedstrijdzaken zaterdag',
+    functie: 'Wedstrijdsecretaris zaterdag',
+    waarvoor: 'Jeugdwedstrijden, afgelastingen op zaterdag en het verzetten van wedstrijden.',
+  },
+  {
+    rol: 'Wedstrijdzaken zondag',
+    functie: 'Wedstrijdsecretaris zondag',
+    waarvoor: 'Seniorenwedstrijden, afgelastingen op zondag en het digitale wedstrijdformulier.',
   },
   {
     rol: 'Ledenadministratie',
@@ -29,24 +34,29 @@ const wieWaarvoor = [
     waarvoor: 'Aanmelden, opzeggen, adreswijzigingen, contributie en overschrijvingen.',
   },
   {
-    rol: 'Kantine',
-    functie: 'Beheerder kantine',
-    waarvoor: 'Openingstijden, feestjes, catering en de kantinedienstroosters.',
-  },
-  {
-    rol: 'Webmaster',
-    functie: 'Webmaster',
-    waarvoor: 'Fouten op de site, een bericht dat mist, of een foto die eraf moet.',
-  },
-  {
     rol: 'Jeugd',
-    functie: 'Voorzitter jeugdcommissie',
+    functie: 'Jeugdzaken',
     waarvoor: 'Teamindeling, trainingstijden en alles rond de jeugdafdeling.',
   },
   {
-    rol: 'Vertrouwenspersoon',
-    functie: 'Vertrouwenscontactpersoon',
-    waarvoor: 'Ongewenst gedrag, pesten of iets anders waar je met niemand over durft te beginnen.',
+    rol: 'Kantine',
+    functie: 'Kantine',
+    waarvoor: 'Openingstijden, feestjes, catering en de kantinedienstroosters.',
+  },
+  {
+    rol: 'Sponsoring',
+    functie: 'Sponsorcommissie',
+    waarvoor: 'Bordsponsoring, de Club van 78, de All Stars en alles wat daarbij hoort.',
+  },
+  {
+    rol: 'Scheidsrechters',
+    functie: 'Scheidsrechterscoördinator',
+    waarvoor: 'Indeling van scheidsrechters, cursussen en vragen over de arbitrage.',
+  },
+  {
+    rol: 'Bestuur',
+    functie: 'Voorzitter',
+    waarvoor: 'Alles wat nergens anders past, en zaken die het bestuur aangaan.',
   },
 ].map((regel) => ({ ...regel, persoon: getContactpersoon(regel.functie) }));
 
@@ -186,7 +196,7 @@ const kaartUrl =
               werkdagen antwoord, behalve in de winterstop.
             </p>
             <p class="demo-melding">
-              <span class="merk merk--rand">Demo</span>
+              <span class="merk merk--zacht">Demo</span>
               Dit formulier is nog niet aangesloten en verstuurt niets.
             </p>
           </div>
@@ -263,7 +273,7 @@ const kaartUrl =
   }
   .locatie-lijst > div:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
   .locatie-lijst dt {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -284,7 +294,7 @@ const kaartUrl =
     position: relative;
     color: inherit;
   }
-  .kaart :global(img) { filter: grayscale(1) contrast(1.05); }
+  .kaart :global(img) { }
 
   .kaart-overlay {
     position: absolute;
@@ -358,13 +368,14 @@ const kaartUrl =
     gap: 0.7rem;
     flex-wrap: wrap;
     font-size: var(--text-klein);
-    border-left: 3px solid var(--color-blauwdiep);
-    padding: 0.75rem 1rem;
-    background: color-mix(in srgb, var(--color-blauwdiep) 8%, transparent);
+    color: var(--color-grijsdonker);
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
   }
 
   .formulier { display: grid; gap: 1.25rem; max-width: 40rem; }
-  .veldrij { display: grid; gap: 1.25rem; }
+  .veldrij { display: grid; gap: 1.25rem; align-items: start; }
   @media (min-width: 560px) { .veldrij { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
   /* Het vinkje krijgt een gewone labeltekst, niet de mono-kop van de andere velden. */
@@ -388,9 +399,9 @@ const kaartUrl =
 
   .formulier-melding {
     font-size: var(--text-klein);
-    border-left: 3px solid var(--color-blauwdiep);
-    background: color-mix(in srgb, var(--color-blauwdiep) 10%, transparent);
-    padding: 0.8rem 1rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
+    padding: 0.9rem 1.1rem;
     line-height: 1.55;
   }
   .formulier-melding[hidden] { display: none; }

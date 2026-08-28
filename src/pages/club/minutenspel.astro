@@ -110,7 +110,8 @@ const penningmeester = getContactpersoon('Penningmeester');
   .teller {
     display: grid;
     gap: 0.6rem;
-    border: 1px solid var(--kleur-lijn-licht);
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
     padding: 1.5rem;
   }
   .teller-getal { display: flex; align-items: baseline; gap: 0.5rem; }
@@ -136,7 +137,7 @@ const penningmeester = getContactpersoon('Penningmeester');
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
     letter-spacing: 0.12em;
     text-transform: uppercase;

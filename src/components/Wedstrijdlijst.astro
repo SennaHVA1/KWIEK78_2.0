@@ -2,8 +2,9 @@
 /**
  * Een lijst wedstrijden, gegroepeerd per speeldag.
  *
- * De speeldag staat als kop boven de groep, in de kantlijn op desktop en
- * erboven op mobiel. Dat is dezelfde kolomlogica als de rest van de site.
+ * De speeldag staat als balk boven de groep in plaats van als kickertje in
+ * de kantlijn. Een parkeerplaats vol ouders scant op de dag, niet op een
+ * subtiel label.
  */
 import Wedstrijdrij from './Wedstrijdrij.astro';
 import { groepeerPerDag } from '../lib/datum';
@@ -12,12 +13,10 @@ import type { Wedstrijd } from '../lib/types';
 interface Props {
   wedstrijden: Wedstrijd[];
   toonLocatie?: boolean;
-  /** Tekst wanneer er niets te tonen is. */
   leegTekst?: string;
   /**
    * Kopniveau van de speeldag. Staat de lijst los op een pagina, dan is 2
-   * goed; hangt hij onder een sectiekop, geef dan 3 mee. Zo blijft de
-   * kopstructuur kloppen en slaat hij geen niveau over.
+   * goed; hangt hij onder een sectiekop, geef dan 3 mee.
    */
   kopNiveau?: 2 | 3;
 }
@@ -31,32 +30,79 @@ const {
 
 const Kop = `h${kopNiveau}` as 'h2' | 'h3';
 const dagen = groepeerPerDag(wedstrijden, (w) => w.datum);
+
+/** "zaterdag 29 augustus" wordt "Zaterdag" plus "29 augustus". */
+const splits = (label: string) => {
+  const [dag, ...rest] = label.split(' ');
+  return { dag: dag.charAt(0).toUpperCase() + dag.slice(1), datum: rest.join(' ') };
+};
 ---
 
 {dagen.length === 0 ? (
   <p class="lege-lijst zacht">{leegTekst}</p>
 ) : (
   <div class="wedstrijdlijst">
-    {dagen.map((dag) => (
-      <section class="kolom wedstrijddag" data-dag-groep>
-        <Kop class="kolom-kicker">{dag.label}</Kop>
-        <div class="rij-groep">
-          {dag.items.map((wedstrijd) => (
-            <Wedstrijdrij wedstrijd={wedstrijd} toonLocatie={toonLocatie} />
-          ))}
-        </div>
-      </section>
-    ))}
+    {dagen.map((dag) => {
+      const deel = splits(dag.label);
+      return (
+        <section class="wedstrijddag" data-dag-groep>
+          <Kop class="dagkop">
+            <span class="dagkop-dag">{deel.dag}</span>
+            <span class="dagkop-datum">{deel.datum}</span>
+            <span class="dagkop-aantal">{dag.items.length}</span>
+          </Kop>
+          <div class="rij-groep">
+            {dag.items.map((wedstrijd) => (
+              <Wedstrijdrij wedstrijd={wedstrijd} toonLocatie={toonLocatie} />
+            ))}
+          </div>
+        </section>
+      );
+    })}
   </div>
 )}
 
 <style>
-  .wedstrijdlijst { display: grid; gap: 2.5rem; }
-  .wedstrijddag { align-items: start; }
+  .wedstrijdlijst { display: grid; gap: 2rem; }
+
+  .dagkop {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.2;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-klein);
+    background: var(--kleur-papier-diep);
+    margin-bottom: 0.4rem;
+  }
+  :global(.vlak-zwart) .dagkop, :global(.vlak-inkt) .dagkop { background: var(--kleur-inkt-op); }
+
+  .dagkop-datum {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    font-weight: 500;
+    color: var(--color-grijsdonker);
+  }
+  :global(.vlak-zwart) .dagkop-datum, :global(.vlak-inkt) .dagkop-datum { color: var(--color-grijs); }
+
+  .dagkop-aantal {
+    margin-left: auto;
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-blauwdiep);
+  }
+  :global(.vlak-zwart) .dagkop-aantal, :global(.vlak-inkt) .dagkop-aantal { color: var(--color-blauw); }
+
   .lege-lijst {
-    padding: 2rem 0;
-    border-top: 1px solid var(--kleur-lijn-donker);
+    padding: 1.5rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
     font-size: var(--text-klein);
   }
-  :global(.vlak-wit) .lege-lijst { border-top-color: var(--kleur-lijn-licht); }
+  :global(.vlak-zwart) .lege-lijst, :global(.vlak-inkt) .lege-lijst { background: var(--kleur-inkt-op); }
 </style>

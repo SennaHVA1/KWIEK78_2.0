@@ -113,11 +113,14 @@ countdown, de sponsorcarousel, de accordeons, de tabs, de filters en het
 overlaymenu zijn allemaal met de hand geschreven. Lettertypes staan lokaal in
 `/public/fonts`, dus de site doet geen enkel verzoek naar een externe server.
 
-**Vormgeving.** Zwart als basis, wit als tegenhanger, `#6092b7` als enige
-accent. Zes benoemde kleuren, een typeschaal en een spacingschaal, alles
-daaruit afgeleid. Radius 0 overal en geen enkele schaduw: de taal komt van het
-wedstrijdformulier en het krijtbord in de kantine, niet van een
-SaaS-landingspagina.
+**Vormgeving.** Zwart als chrome, wit als leesvlak, #6092b7 als enige accent in
+twee trappen. Zes benoemde kleuren, een typeschaal en een spacingschaal, alles
+daaruit afgeleid.
+
+Typografie: **Anton** voor de koppen, de stem van een wedstrijdposter, en
+**Barlow** voor al het andere, inclusief knoppen, labels en tabellen. Bewust
+geen monospace: die gaf de site het karakter van een spreadsheet, en dit is een
+voetbalclub. Foto's staan in kleur.
 
 **Het klapbord.** De countdown naar de eerstvolgende wedstrijd is een
 mechanisch splitflapbord; de cijfers klappen om. Dat is het enige echte visuele
@@ -137,8 +140,8 @@ homepage is daarom laag gehouden zodat het wedstrijdblok bijna meteen in beeld
 staat, en het volledige programma is vanaf de homepage in een tik bereikbaar.
 Via het menu is het er twee: Menu, dan Wedstrijden > Programma.
 
-**De afgelast-staat.** Een afgelaste wedstrijd is doorgestreept, blauw
-gearceerd en gemerkt. Zichtbaar op het programma, op de wedstrijddetailpagina
+**De afgelast-staat.** Een afgelaste wedstrijd krijgt een blauwe balk aan de
+zijkant, doorgestreepte clubnamen en een blauw label. Zichtbaar op het programma, op de wedstrijddetailpagina
 en op de teampagina. Dat is het moment waarop een clubsite zich bewijst, dus
 het is expliciet ontworpen en niet als randgeval afgedaan.
 
@@ -146,7 +149,10 @@ het is expliciet ontworpen en niet als randgeval afgedaan.
 
 ## Waar de dummydata staat
 
-Alles in `src/data/`, als losse JSON-bestanden.
+Alles in `src/data/`, als losse JSON-bestanden. Het bestuur, de commissies, de
+ereleden en de sponsoren zijn **echte gegevens** die de club heeft aangeleverd.
+Wedstrijden, teams, standen, verjaardagen, nieuws, agenda, diensten en het
+minutenspel zijn voorbeeldmateriaal.
 
 | Bestand | Inhoud | Toekomstige bron |
 |---|---|---|
@@ -157,9 +163,9 @@ Alles in `src/data/`, als losse JSON-bestanden.
 | `nieuws.json` | 10 berichten in Facebook-vorm | Facebook Graph API |
 | `agenda.json` | 12 activiteiten | eigen beheer |
 | `diensten.json` | 135 vrijwilligersdiensten | eigen beheer |
-| `sponsoren.json` | 22 sponsoren in vier niveaus | eigen beheer |
-| `bestuur.json` | 29 bestuurs- en commissieleden | eigen beheer |
-| `ereleden.json` | 12 ereleden en leden van verdienste | eigen beheer |
+| `sponsoren.json` | 8 sponsoren, echte namen | eigen beheer |
+| `bestuur.json` | 21 functies, **echte gegevens** | eigen beheer |
+| `ereleden.json` | 26 namen, **echte gegevens** | eigen beheer |
 | `bulletins.json` | 5 documenten | eigen beheer |
 | `minutenspel.json` | 66 verkochte minuten | eigen beheer |
 | `videos.json` | 6 afleveringen Kwiek Inside | eigen beheer |
@@ -308,9 +314,8 @@ Zie **IMAGES.md** voor de volledige lijst met verwachte bestandsnamen en
 formaten. Kort samengevat ontbreekt nog:
 
 - teamfoto's van JO17-1, JO12-1 en MO9-1
-- portretten van 29 bestuurs- en commissieleden
 - thumbnails en YouTube-id's voor de zes afleveringen van Kwiek Inside
-- echte logo's van 19 sponsoren en van de tegenstanders
+- echte logo's van vijf sponsoren en van de tegenstanders
 - de vijf PDF-documenten voor het informatiebulletin
 - een kaartuitsnede voor de contactpagina
 

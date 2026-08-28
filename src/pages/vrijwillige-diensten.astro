@@ -20,7 +20,7 @@ import { getDienstenrooster, getContactpersoon } from '../lib/club';
 import { langeDatum, datumZonderDag } from '../lib/datum';
 
 const rooster = getDienstenrooster();
-const coordinator = getContactpersoon('Vrijwilligerscoördinator');
+const coordinator = getContactpersoon('Kantine');
 
 /* Grens tussen "komende weken" en "rest van het seizoen": zes weken vanaf nu. */
 const vandaag = new Date().toISOString().slice(0, 10);
@@ -64,7 +64,7 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
               <div>
                 <div class="roosterkop">
                   <h2 class="kop-sectie">{blok.label}</h2>
-                  <span class="merk merk--rand">{komend} de komende zes weken</span>
+                  <span class="merk merk--zacht">{komend} de komende zes weken</span>
                 </div>
 
                 <table class="rooster">
@@ -147,7 +147,7 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
     border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
     color: inherit;
     cursor: pointer;
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
     font-weight: 700;
     letter-spacing: 0.09em;
@@ -183,7 +183,7 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
   /* Tabel op desktop -------------------------------------------------- */
   .rooster { width: 100%; border-collapse: collapse; }
   .rooster th {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
     letter-spacing: 0.13em;
     text-transform: uppercase;
@@ -226,7 +226,7 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
     }
     .rooster td::before {
       content: attr(data-label);
-      font-family: var(--font-mono);
+      font-family: var(--font-smal);
       font-size: var(--text-mini);
       letter-spacing: 0.1em;
       text-transform: uppercase;

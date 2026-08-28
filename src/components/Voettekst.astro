@@ -104,24 +104,20 @@ const socials = [
   .voet-blok { display: grid; gap: 1rem; align-content: start; }
   .voet-blok img { width: 90px; }
   .voet-blok ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
-  .voet-blok a { color: var(--color-wit); text-decoration: none; font-size: var(--text-klein); }
+  .voet-blok a { color: var(--color-wit); text-decoration: none; font-size: 1rem; }
   .voet-blok .knop { justify-self: start; }
 
   .voet-kop {
-    font-family: var(--font-mono);
-    font-size: var(--text-mini);
+    font-family: var(--font-smal);
+    font-size: var(--text-kop-s);
     font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--color-grijs);
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--kleur-lijn-donker);
+    color: var(--color-wit);
   }
   .voet-kop--tweede { margin-top: 0.75rem; }
 
-  .voet-adres { font-style: normal; font-size: var(--text-klein); line-height: 1.7; }
-  .voet-adres strong { font-weight: 700; }
-  .voet-contact { font-size: var(--text-klein); line-height: 1.8; }
+  .voet-adres { font-style: normal; font-size: 1rem; line-height: 1.7; color: var(--color-grijs); }
+  .voet-adres strong { font-family: var(--font-smal); font-size: 1.25rem; font-weight: 700; color: var(--color-wit); }
+  .voet-contact { font-size: 1rem; line-height: 1.8; }
   .voet-contact a { color: var(--color-blauw); text-decoration: none; }
 
   .voet-onder {
@@ -132,7 +128,7 @@ const socials = [
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 0.5rem 1.5rem;
-    font-size: var(--text-mini);
+    font-size: var(--text-klein);
     color: var(--color-grijs);
   }
   .voet-demo { color: var(--color-blauw); }

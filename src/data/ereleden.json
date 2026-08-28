@@ -1,15 +1,117 @@
 [
-  { "naam": "Nico Balk", "soort": "erelid", "sinds": 1998, "toelichting": "Medeoprichter in 1978 en twintig jaar voorzitter. Onder zijn bestuur kwam het clubhuis er en werd veld 2 aangelegd." },
-  { "naam": "Riet Sijm", "soort": "erelid", "sinds": 2003, "toelichting": "Dertig jaar achter de bar en jarenlang het geheugen van de ledenadministratie." },
-  { "naam": "Ger Overtoom", "soort": "erelid", "sinds": 2009, "toelichting": "Jeugdvoorzitter van 1985 tot 2004. Bedenker van het minutenspel." },
-  { "naam": "Piet Kaandorp", "soort": "erelid", "sinds": 2014, "toelichting": "Veertig jaar consul en verzorger. Keurde het veld af als het echt niet kon en anders nooit." },
-  { "naam": "Corrie Neefjes", "soort": "erelid", "sinds": 2019, "toelichting": "Vanaf de oprichting betrokken bij de kantine en de kerstbingo." },
-  { "naam": "Jan Vlaar", "soort": "erelid", "sinds": 2023, "toelichting": "Trainer van het eerste in drie periodes, goed voor twee kampioenschappen." },
-
-  { "naam": "Wim Groot", "soort": "lid-van-verdienste", "sinds": 2007, "toelichting": "Twintig jaar leider van het tweede." },
-  { "naam": "Ans Karsten", "soort": "lid-van-verdienste", "sinds": 2011, "toelichting": "Wasvrouw van de selectie en organisator van de sponsoravond." },
-  { "naam": "Klaas Neefjes", "soort": "lid-van-verdienste", "sinds": 2015, "toelichting": "Veldonderhoud, elke dinsdagochtend, sinds 1999." },
-  { "naam": "Truus Karsten", "soort": "lid-van-verdienste", "sinds": 2018, "toelichting": "Vrijwilligerscoördinator en de reden dat het dienstenrooster altijd rondkomt." },
-  { "naam": "Cor Bood", "soort": "lid-van-verdienste", "sinds": 2021, "toelichting": "Clubfotograaf en beheerder van het archief waar Kwiek Inside uit put." },
-  { "naam": "Marja Ligthart", "soort": "lid-van-verdienste", "sinds": 2024, "toelichting": "Vijftien jaar coördinator van de jongste jeugd." }
+  {
+    "naam": "Diana Schouten",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Doetie de Vries",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Arno Zijp",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Dave Imming",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Cor Kuiper",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Coos Imming",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Henk van Veenen",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Jaap Siebeling",
+    "soort": "erelid"
+  },
+  {
+    "naam": "Ringer Toren",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Klaas Vink",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Haye van Dellen",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Maarten de Wit",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Piet Lakeman",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "H. Schouten",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "D. Koning",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Wim Damen",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Bert Kalsbeek",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Berend de Weerd",
+    "soort": "erelid",
+    "overleden": true
+  },
+  {
+    "naam": "Eric Janken",
+    "soort": "lid-van-verdienste"
+  },
+  {
+    "naam": "Rita Schoenmaker",
+    "soort": "lid-van-verdienste"
+  },
+  {
+    "naam": "Ben Dekker",
+    "soort": "lid-van-verdienste"
+  },
+  {
+    "naam": "Jan de Hart",
+    "soort": "lid-van-verdienste"
+  },
+  {
+    "naam": "Jaap Sneek",
+    "soort": "lid-van-verdienste",
+    "overleden": true
+  },
+  {
+    "naam": "Piet Dikstaal",
+    "soort": "lid-van-verdienste"
+  },
+  {
+    "naam": "Remco Robelus",
+    "soort": "lid-van-verdienste"
+  },
+  {
+    "naam": "Ron Lakeman",
+    "soort": "lid-van-verdienste"
+  }
 ]

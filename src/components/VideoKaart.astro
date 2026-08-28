@@ -87,10 +87,8 @@ const heeftId = Boolean(video.youtubeId);
     color: inherit;
   }
   .videokaart-speler :global(img) {
-    filter: grayscale(1) contrast(1.1) brightness(0.8);
-    transition: filter 0.3s var(--ease-klap);
-  }
-  .videokaart-speler:hover :global(img) { filter: grayscale(0.2) contrast(1.05) brightness(0.95); }
+    }
+  .videokaart-speler:hover :global(img) { }
   @media (prefers-reduced-motion: reduce) {
     .videokaart-speler :global(img) { transition: none; }
   }

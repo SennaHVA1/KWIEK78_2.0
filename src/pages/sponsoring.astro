@@ -3,57 +3,95 @@
  * Sponsoring.
  *
  * Op de oude site waren dit drie pagina's: Allstars, Club van '78 en
- * bordsponsoring. Ze vertellen hetzelfde verhaal aan dezelfde lezer, dus ze
- * staan nu onder elkaar op een pagina met een logoraster per niveau.
+ * bordsponsoring. Ze staan nu onder elkaar, maar wel als drie verschillende
+ * verhalen, want dat zijn het ook:
+ *
+ *   Bedrijven      een logo op het shirt of een bord langs het veld
+ *   Club van '78   particulieren, 78 euro per jaar, bepalen zelf waar het heen gaat
+ *   All Stars      particulieren, een bedrag per doelpunt van het eerste
+ *
+ * De laatste twee zijn geen sponsors met een logo maar mensen. Ze in hetzelfde
+ * logoraster zetten was de reden dat de pagina niet klopte.
+ *
+ * DE FORMULIEREN ZIJN IN DEZE DEMO NIET ACTIEF. Na oplevering gaan ze naar
+ * sponsoring@kwiek78.nl.
  */
 import Basis from '../layouts/Basis.astro';
 import Paginakop from '../components/Paginakop.astro';
 import { fotoBestaat } from '../lib/fotos';
 import { getSponsorNiveaus, getContactpersoon, CLUBGEGEVENS } from '../lib/club';
-import type { SponsorNiveau } from '../lib/types';
 
 const niveaus = getSponsorNiveaus();
-const sponsorcommissie = getContactpersoon('Voorzitter sponsorcommissie');
+const sponsorcommissie = getContactpersoon('Sponsorcommissie');
 
-const uitleg: Record<SponsorNiveau, { tekst: string; bedrag: string }> = {
-  hoofdsponsor: {
-    tekst: 'Op het shirt van het eerste of van de hele jeugdafdeling, op het grootste bord langs veld 1 en met naamsvermelding bij elke thuiswedstrijd. Contracten lopen doorgaans drie jaar.',
-    bedrag: 'Op aanvraag',
-  },
-  allstars: {
-    tekst: 'Een bord langs het veld, je logo op de website en in de carousel op de homepage, en een uitnodiging voor de jaarlijkse sponsoravond.',
-    bedrag: 'Vanaf 750 euro per jaar',
-  },
-  club78: {
-    tekst: 'Voor ondernemers en oud-leden die de club willen steunen zonder groot bord. Je naam op het bord in de kantine en op deze pagina, en toegang tot de sponsoravond.',
-    bedrag: '250 euro per jaar',
-  },
-  bord: {
-    tekst: 'Een bord van twee bij een halve meter langs veld 1 of veld 2. Wij regelen productie en plaatsing, jij levert het ontwerp of laat het door ons maken.',
-    bedrag: 'Vanaf 400 euro per jaar, driejarig contract',
-  },
-};
+/* Contactpersonen van de Club van '78, aangeleverd door de club. */
+const club78Contact = [
+  { naam: 'Gerard Tammer', telefoon: '06-53245016' },
+  { naam: 'Frank Imming', telefoon: '06-39782839' },
+];
+
+const gerealiseerd = [
+  { wat: 'Dug-outs', waar: 'langs het hoofdveld' },
+  { wat: 'De tribune', waar: 'aan de lange zijde' },
+  { wat: 'Het pannaveld', waar: 'naast het kunstgras' },
+  { wat: 'Meubilair', waar: 'in de kantine' },
+];
 ---
 
 <Basis
   titel="Sponsoring"
-  omschrijving="Sponsor worden van v.v. Kwiek '78: hoofdsponsor, Allstars, Club van '78 en bordsponsoring. Met alle huidige sponsoren."
+  omschrijving="Sponsor worden van v.v. Kwiek '78: bedrijfssponsoring, de Club van '78 en de All Stars."
 >
   <Paginakop
-    kicker="Sponsoring"
-    titel="Sponsoren"
-    intro="Zonder de ondernemers uit Avenhorn en omgeving zou hier geen kunstgras liggen. Hieronder staat wie ons steunt en hoe je meedoet."
+    kicker="Steun de club"
+    titel="Sponsoring"
+    intro="Er zijn drie manieren om mee te doen. Een voor bedrijven, en twee voor iedereen die Kwiek een warm hart toedraagt."
   />
 
-  {niveaus.map((niveau, index) => (
-    <section class:list={['niveau', index % 2 === 0 ? 'vlak-wit' : 'vlak-zwart', 'sectie']}>
-      <div class="omhulsel">
-        <div class="kolom">
-          <p class="kolom-kicker">{uitleg[niveau.niveau].bedrag}</p>
-          <div>
-            <h2 class="kop-sectie niveau-kop">{niveau.label}</h2>
-            <p class="niveau-uitleg">{uitleg[niveau.niveau].tekst}</p>
+  <!-- ================================================================== -->
+  <!-- Drie wegen, in een oogopslag                                       -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit keuze-sectie">
+    <div class="omhulsel">
+      <ul class="keuzes">
+        <li class="keuze">
+          <p class="keuze-wie">Voor bedrijven</p>
+          <h2 class="keuze-titel">Bedrijfssponsoring</h2>
+          <p class="keuze-tekst">Een logo op het shirt of een bord langs het veld.</p>
+          <a class="knop knop--rand" href="#bedrijven">Bekijk</a>
+        </li>
+        <li class="keuze keuze--uitgelicht">
+          <p class="keuze-wie">Voor iedereen</p>
+          <h2 class="keuze-titel">Club van '78</h2>
+          <p class="keuze-tekst">78 euro per jaar. De leden bepalen zelf waar het geld heen gaat.</p>
+          <a class="knop knop--primair" href="#club-van-78">Aanmelden</a>
+        </li>
+        <li class="keuze">
+          <p class="keuze-wie">Voor iedereen</p>
+          <h2 class="keuze-titel">All Stars</h2>
+          <p class="keuze-tekst">Een bedrag naar keuze per doelpunt van het eerste.</p>
+          <a class="knop knop--rand" href="#all-stars">Meedoen</a>
+        </li>
+      </ul>
+    </div>
+  </section>
 
+  <!-- ================================================================== -->
+  <!-- Bedrijven                                                          -->
+  <!-- ================================================================== -->
+  <section class="vlak-papier sectie" id="bedrijven">
+    <div class="omhulsel">
+      <p class="kolom-kicker">Onze sponsoren</p>
+      <h2 class="kop-sectie sectie-kop">Bedrijven die Kwiek steunen</h2>
+      <p class="sectie-intro">
+        Op een gemiddelde zondag lopen er tweehonderd mensen over het sportpark, en op
+        zaterdagochtend niet veel minder. Een bord langs het veld wordt hier gezien.
+      </p>
+
+      {niveaus.map((niveau) => (
+        niveau.sponsoren.length > 0 && (
+          <div class="niveau">
+            <h3 class="niveau-kop">{niveau.label}</h3>
             <ul class="logoraster">
               {niveau.sponsoren.map((sponsor) => (
                 <li>
@@ -68,68 +106,296 @@ const uitleg: Record<SponsorNiveau, { tekst: string; bedrag: string }> = {
               ))}
             </ul>
           </div>
+        )
+      ))}
+
+      <div class="bord">
+        <div>
+          <h3 class="niveau-kop">Bordsponsoring</h3>
+          <p class="bord-tekst">
+            Een bord van twee bij een halve meter langs veld 1 of veld 2. Wij regelen productie
+            en plaatsing, jij levert het ontwerp of laat het door ons maken. Neem contact op voor
+            de mogelijkheden en de tarieven.
+          </p>
         </div>
+        <a class="knop knop--zwart" href={`mailto:${sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}`}>
+          Vraag de mogelijkheden op
+        </a>
       </div>
-      {index < niveaus.length - 1 && <div class="baan baan--dun" aria-hidden="true"></div>}
-    </section>
-  ))}
+    </div>
+  </section>
 
   <div class="baan" aria-hidden="true"></div>
 
   <!-- ================================================================== -->
-  <!-- Sponsor worden                                                     -->
+  <!-- Club van '78                                                       -->
   <!-- ================================================================== -->
-  <section class="vlak-wit sectie" id="sponsor-worden">
+  <section class="vlak-zwart sectie" id="club-van-78">
     <div class="omhulsel">
-      <div class="kolom">
-        <p class="kolom-kicker">Meedoen</p>
-        <div class="worden">
-          <div class="worden-tekst">
-            <h2 class="kop-sectie">Sponsor worden</h2>
-            <div class="lopende-tekst">
-              <p>
-                Kwiek is een dorpsclub met ruim driehonderd leden. Op een gemiddelde zondag lopen er
-                tweehonderd mensen over het sportpark, en op zaterdagochtend is dat niet veel minder.
-                Een bord langs het veld wordt hier gezien.
-              </p>
-              <p>
-                Belangrijker nog: sponsorgeld gaat rechtstreeks naar de vereniging. Naar ballen,
-                naar kleding voor de jongste jeugd, naar het onderhoud van de kleedkamers.
-                Er zit geen kantoor tussen.
-              </p>
-              <h3>Hoe het gaat</h3>
-              <ol>
-                <li>Je neemt contact op, per mail of gewoon op zondag aan de bar.</li>
-                <li>We praten een half uur over wat bij je past.</li>
-                <li>Je krijgt een voorstel op papier, zonder verplichtingen.</li>
-              </ol>
+      <p class="kolom-kicker">78 euro per jaar</p>
+      <h2 class="kop-l club78-kop">Club van '78</h2>
+      <p class="club78-lead">
+        De club voor iedereen die Kwiek '78 een warm hart toedraagt.
+      </p>
+
+      <div class="club78">
+        <div class="club78-tekst lopende-tekst">
+          <p>
+            De Club van '78 is een eigen club binnen de vereniging. De leden brengen samen geld
+            bijeen en bepalen zelf waar dat binnen Kwiek in wordt geïnvesteerd. Twee keer per
+            jaar komt de club bij elkaar: eerst het formele deel, daarna gewoon bijpraten.
+          </p>
+          <p>
+            Iedereen kan meedoen. Spelende leden, niet-spelende leden, fans, familie.
+            Je betaalt 78 euro per jaar, dat wordt in november geïncasseerd.
+          </p>
+          <h3>Wat je ervoor terugkrijgt</h3>
+          <ul>
+            <li>Je stem in waar het geld heen gaat</li>
+            <li>Twee bijeenkomsten per jaar</li>
+            <li>Een jaarlijks uitje, georganiseerd door de feestcommissie</li>
+            <li>Je naam op het bord van de Club van '78 in de kantine</li>
+          </ul>
+        </div>
+
+        <aside class="gerealiseerd">
+          <p class="label">Hier ging het geld naartoe</p>
+          <ul>
+            {gerealiseerd.map((item) => (
+              <li>
+                <span class="gerealiseerd-wat">{item.wat}</span>
+                <span class="gerealiseerd-waar">{item.waar}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="gerealiseerd-noot">
+            Vragen? Bel {club78Contact.map((c, i) => (
+              <>
+                {i > 0 && ' of '}
+                {c.naam} op <a class="link-onder" href={`tel:${c.telefoon.replace(/[^0-9+]/g, '')}`}>{c.telefoon}</a>
+              </>
+            ))}.
+          </p>
+        </aside>
+      </div>
+
+      <!-- Aanmeldformulier Club van '78 -->
+      <div class="formulierblok">
+        <h3 class="formulier-kop">Aanmelden voor de Club van '78</h3>
+        <p class="demo-melding">
+          <span class="merk merk--afgelast">Demo</span>
+          Dit formulier is nog niet aangesloten en verstuurt niets.
+        </p>
+
+        <form class="formulier" data-formulier novalidate>
+          <div class="veldrij">
+            <div class="veld">
+              <label for="c78-voornaam">Voornaam</label>
+              <input type="text" id="c78-voornaam" name="voornaam" autocomplete="given-name" required />
+              <p class="veld-fout" data-fout hidden>Vul een voornaam in.</p>
+            </div>
+            <div class="veld">
+              <label for="c78-achternaam">Achternaam</label>
+              <input type="text" id="c78-achternaam" name="achternaam" autocomplete="family-name" required />
+              <p class="veld-fout" data-fout hidden>Vul een achternaam in.</p>
             </div>
           </div>
 
-          <aside class="contactblok">
-            <p class="label">Sponsorcommissie</p>
-            {sponsorcommissie && (
-              <p class="contactblok-naam">{sponsorcommissie.naam}</p>
-            )}
-            <p class="contactblok-regel data">
-              <a class="link-onder" href={`mailto:${sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}`}>
-                {sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}
-              </a>
-            </p>
-            <p class="contactblok-regel data">
-              <a class="link-onder" href={`tel:${CLUBGEGEVENS.telefoon.replace(/\s/g, '')}`}>
-                {CLUBGEGEVENS.telefoon}
-              </a>
-            </p>
-            <p class="contactblok-adres zacht">
-              {CLUBGEGEVENS.sportpark}<br />
-              {CLUBGEGEVENS.straat}<br />
-              {CLUBGEGEVENS.postcode} {CLUBGEGEVENS.plaats}
-            </p>
-            <a class="knop knop--zwart" href={`mailto:${sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}`}>
-              Stuur een bericht
+          <div class="veldrij">
+            <div class="veld">
+              <label for="c78-adres">Adres</label>
+              <input type="text" id="c78-adres" name="adres" autocomplete="street-address" required />
+              <p class="veld-fout" data-fout hidden>Vul een adres in.</p>
+            </div>
+            <div class="veld">
+              <label for="c78-woonplaats">Woonplaats</label>
+              <input type="text" id="c78-woonplaats" name="woonplaats" autocomplete="address-level2" required />
+              <p class="veld-fout" data-fout hidden>Vul een woonplaats in.</p>
+            </div>
+          </div>
+
+          <div class="veldrij">
+            <div class="veld">
+              <label for="c78-email">E-mailadres</label>
+              <input type="email" id="c78-email" name="emailadres" autocomplete="email" required />
+              <p class="veld-fout" data-fout hidden>Vul een geldig e-mailadres in.</p>
+            </div>
+            <div class="veld">
+              <label for="c78-iban">Bankrekeningnummer</label>
+              <input
+                type="text"
+                id="c78-iban"
+                name="iban"
+                placeholder="NL00 BANK 0000 0000 00"
+                pattern="[A-Za-z]{2}[0-9]{2}\s?([A-Za-z0-9]\s?){10,26}"
+                required
+              />
+              <p class="veld-fout" data-fout hidden>Vul een geldig IBAN in.</p>
+            </div>
+          </div>
+
+          <div class="veld veld--halve">
+            <label for="c78-datum">Datum inschrijving</label>
+            <input type="date" id="c78-datum" name="datum" required />
+            <p class="veld-fout" data-fout hidden>Kies een datum.</p>
+          </div>
+
+          <div class="veld veld--vinkje">
+            <label class="vinkje">
+              <input type="checkbox" name="machtiging" required />
+              <span>
+                Ik verleen tot wederopzegging machtiging aan het bestuur van de Club van '78 om
+                jaarlijks 78 euro van bovengenoemde rekening af te schrijven. De eerste
+                afschrijving is eenmalig 78 euro, daarna volgt de incasso ieder jaar in november.
+              </span>
+            </label>
+            <p class="veld-fout" data-fout hidden>Zonder machtiging kunnen we de aanmelding niet verwerken.</p>
+          </div>
+
+          <p class="formulier-melding" data-melding role="status" hidden></p>
+
+          <div class="formulier-knoppen">
+            <button type="submit" class="knop knop--primair">Aanmelding versturen</button>
+            <a class="knop knop--rand" href="/documenten/inschrijfformulier-club-van-78.pdf" download>
+              Liever op papier
             </a>
-          </aside>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- All Stars                                                          -->
+  <!-- ================================================================== -->
+  <section class="vlak-wit sectie" id="all-stars">
+    <div class="omhulsel">
+      <p class="kolom-kicker">Per doelpunt</p>
+      <h2 class="kop-l allstars-kop">All Stars</h2>
+
+      <div class="allstars">
+        <div class="allstars-tekst lopende-tekst">
+          <p>
+            De All Stars doneren een bedrag per doelpunt dat het eerste elftal in de competitie
+            maakt. Hoeveel je geeft bepaal je zelf; het minimum is een euro per goal.
+          </p>
+          <p>
+            Van de opbrengst wordt elk jaar een barbecue voor alle All Stars georganiseerd.
+            Wat er overblijft gaat naar de club.
+          </p>
+          <p>
+            Hoe meer er gescoord wordt, hoe leuker het wordt. En je kijkt vanaf dat moment
+            net even anders naar een 5-0.
+          </p>
+        </div>
+
+        <aside class="rekenvoorbeeld">
+          <p class="label">Wat kost het ongeveer</p>
+          <p class="reken-uitleg">
+            Het eerste maakte vorig seizoen ongeveer veertig competitiedoelpunten.
+          </p>
+          <ul class="reken-lijst">
+            <li><span class="reken-bedrag">1 euro</span><span class="reken-uit">ongeveer 40 euro per jaar</span></li>
+            <li><span class="reken-bedrag">2,50 euro</span><span class="reken-uit">ongeveer 100 euro per jaar</span></li>
+            <li><span class="reken-bedrag">5 euro</span><span class="reken-uit">ongeveer 200 euro per jaar</span></li>
+          </ul>
+        </aside>
+      </div>
+
+      <!-- Aanmeldformulier All Stars -->
+      <div class="formulierblok">
+        <h3 class="formulier-kop">Meedoen met de All Stars</h3>
+        <p class="demo-melding">
+          <span class="merk merk--afgelast">Demo</span>
+          Dit formulier is nog niet aangesloten en verstuurt niets.
+        </p>
+
+        <form class="formulier" data-formulier novalidate>
+          <div class="veldrij">
+            <div class="veld">
+              <label for="as-naam">Voor- en achternaam</label>
+              <input type="text" id="as-naam" name="naam" autocomplete="name" required />
+              <p class="veld-fout" data-fout hidden>Vul je naam in.</p>
+            </div>
+            <div class="veld">
+              <label for="as-email">E-mailadres</label>
+              <input type="email" id="as-email" name="emailadres" autocomplete="email" required />
+              <p class="veld-fout" data-fout hidden>Vul een geldig e-mailadres in.</p>
+            </div>
+          </div>
+
+          <div class="veldrij">
+            <div class="veld">
+              <label for="as-telefoon">Telefoonnummer</label>
+              <input
+                type="tel"
+                id="as-telefoon"
+                name="telefoonnummer"
+                autocomplete="tel"
+                inputmode="tel"
+                pattern="[0-9 +()-]{10,}"
+                required
+              />
+              <p class="veld-fout" data-fout hidden>Vul een telefoonnummer in.</p>
+            </div>
+            <div class="veld">
+              <label for="as-bedrag">Bedrag per doelpunt</label>
+              <input
+                type="number"
+                id="as-bedrag"
+                name="bedrag"
+                min="1"
+                step="0.5"
+                placeholder="1,00"
+                required
+              />
+              <p class="veld-hulp">Minimaal 1 euro. Je mag altijd meer.</p>
+              <p class="veld-fout" data-fout hidden>Vul een bedrag van minimaal 1 euro in.</p>
+            </div>
+          </div>
+
+          <p class="formulier-melding" data-melding role="status" hidden></p>
+          <button type="submit" class="knop knop--primair">Aanmelden als All Star</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Contact                                                            -->
+  <!-- ================================================================== -->
+  <section class="vlak-papier sectie">
+    <div class="omhulsel">
+      <div class="contact">
+        <div>
+          <p class="kolom-kicker">Liever even praten</p>
+          <h2 class="kop-sectie">Sponsorcommissie</h2>
+          <p class="contact-tekst">
+            Wil je eerst weten wat er mogelijk is, zonder verplichtingen? Bel of mail
+            {sponsorcommissie ? ` ${sponsorcommissie.naam}` : ' de sponsorcommissie'}, of loop op
+            zondag even de kantine binnen.
+          </p>
+        </div>
+
+        <div class="contact-gegevens">
+          {sponsorcommissie?.telefoon && (
+            <a class="contact-regel" href={`tel:${sponsorcommissie.telefoon.replace(/[^0-9+]/g, '')}`}>
+              <span class="contact-soort">Telefoon</span>
+              <span class="contact-waarde data">{sponsorcommissie.telefoon}</span>
+            </a>
+          )}
+          <a class="contact-regel" href={`mailto:${sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}`}>
+            <span class="contact-soort">E-mail</span>
+            <span class="contact-waarde">{sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}</span>
+          </a>
+          <span class="contact-regel contact-regel--stil">
+            <span class="contact-soort">Langskomen</span>
+            <span class="contact-waarde">{CLUBGEGEVENS.sportpark}, {CLUBGEGEVENS.straat}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -137,71 +403,279 @@ const uitleg: Record<SponsorNiveau, { tekst: string; bedrag: string }> = {
 </Basis>
 
 <style>
-  .niveau-kop { padding-bottom: 0.6rem; }
-  .niveau-uitleg {
-    max-width: 62ch;
-    line-height: 1.6;
-    color: var(--color-grijsdonker);
-    padding-bottom: 1.75rem;
-  }
-  .vlak-zwart .niveau-uitleg { color: var(--color-grijs); }
-
-  .logoraster {
+  /* Drie wegen ---------------------------------------------------------- */
+  .keuze-sectie { padding-block: clamp(2rem, 4vw, 3rem); }
+  .keuzes {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
-    gap: 1px;
-    background: var(--kleur-lijn-licht);
-    border: 1px solid var(--kleur-lijn-licht);
+    gap: 1rem;
+    grid-template-columns: 1fr;
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  .vlak-zwart .logoraster { background: var(--kleur-lijn-donker); border-color: var(--kleur-lijn-donker); }
+  @media (min-width: 800px) { .keuzes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
+  .keuze {
+    display: grid;
+    gap: 0.35rem;
+    align-content: start;
+    padding: 1.5rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-op);
+  }
+  .keuze--uitgelicht { background: var(--color-zwart); color: var(--color-wit); }
+  .keuze--uitgelicht .keuze-tekst { color: var(--color-grijs); }
+  .keuze--uitgelicht .keuze-wie { color: var(--color-blauw); }
+
+  .keuze-wie {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-blauwdiep);
+  }
+  .keuze-titel { font-family: var(--font-display); font-size: 1.75rem; line-height: 1.05; }
+  .keuze-tekst { font-size: var(--text-klein); color: var(--color-grijsdonker); line-height: 1.5; }
+  .keuze .knop { justify-self: start; margin-top: 0.6rem; }
+
+  /* Gedeeld -------------------------------------------------------------- */
+  .sectie-kop { margin-bottom: 0.6rem; }
+  .sectie-intro { max-width: 60ch; color: var(--color-grijsdonker); margin-bottom: 2rem; }
+
+  .niveau + .niveau { margin-top: 2.25rem; }
+  .niveau-kop {
+    font-family: var(--font-smal);
+    font-size: var(--text-kop-s);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .logoraster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
   .logo {
     display: grid;
     place-items: center;
-    min-height: 6.5rem;
-    padding: 1rem;
+    min-height: 7rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-vlak);
     background: var(--color-wit);
-    transition: background-color 0.2s var(--ease-klap);
+    transition: transform 0.2s var(--ease-klap);
   }
-  .logo:hover { background: var(--kleur-papier-op); }
-  @media (prefers-reduced-motion: reduce) { .logo { transition: none; } }
-
-  .logo img { max-height: 4rem; max-width: 100%; width: auto; object-fit: contain; }
+  .logo:hover { transform: translateY(-2px); }
+  @media (prefers-reduced-motion: reduce) {
+    .logo { transition: none; }
+    .logo:hover { transform: none; }
+  }
+  .logo img { max-height: 3.5rem; max-width: 100%; width: auto; object-fit: contain; }
   .logo-woordmerk {
-    font-family: var(--font-display);
+    font-family: var(--font-smal);
     font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: -0.015em;
+    font-size: 1.05rem;
     color: var(--color-zwart);
     text-align: center;
     line-height: 1.25;
   }
 
-  /* Sponsor worden ---------------------------------------------------- */
-  .worden { display: grid; gap: 2.5rem; }
+  .bord {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
+  }
+  @media (min-width: 800px) { .bord { grid-template-columns: minmax(0, 1fr) auto; gap: 2.5rem; } }
+  .bord-tekst { max-width: 58ch; color: var(--color-grijsdonker); margin-top: 0.5rem; }
+
+  /* Club van 78 ---------------------------------------------------------- */
+  .club78-kop { margin-bottom: 0.35rem; }
+  .club78-lead {
+    font-size: var(--text-groot);
+    color: var(--color-blauw);
+    margin-bottom: 2rem;
+  }
+  .club78 { display: grid; gap: 2.25rem; }
   @media (min-width: 900px) {
-    .worden { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
+    .club78 { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
+  }
+  .club78-tekst p, .club78-tekst li { color: var(--color-grijs); }
+  .club78-tekst h3 { color: var(--color-wit); }
+
+  .gerealiseerd {
+    padding: 1.5rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-inkt-op);
+  }
+  .gerealiseerd ul { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+  .gerealiseerd li { display: grid; gap: 0.05rem; }
+  .gerealiseerd-wat { font-family: var(--font-smal); font-size: 1.2rem; font-weight: 700; }
+  .gerealiseerd-waar { font-size: var(--text-klein); color: var(--color-grijs); }
+  .gerealiseerd-noot {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    font-size: var(--text-klein);
+    color: var(--color-grijs);
+    line-height: 1.6;
+  }
+  .gerealiseerd-noot a { color: var(--color-blauw); }
+
+  /* All Stars ------------------------------------------------------------ */
+  .allstars-kop { margin-bottom: 1.25rem; }
+  .allstars { display: grid; gap: 2.25rem; }
+  @media (min-width: 900px) {
+    .allstars { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
   }
 
-  .contactblok {
-    display: grid;
-    gap: 0.4rem;
-    justify-items: start;
-    border: 1px solid var(--kleur-lijn-licht);
-    padding: 1.75rem;
+  .rekenvoorbeeld {
+    padding: 1.5rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
   }
-  .contactblok-naam { font-weight: 700; font-size: var(--text-groot); letter-spacing: -0.015em; }
-  .contactblok-regel { font-size: var(--text-klein); }
-  .contactblok-adres {
-    font-size: var(--text-klein);
-    line-height: 1.7;
-    margin-top: 0.75rem;
-    padding-top: 0.9rem;
+  .reken-uitleg { margin-top: 0.5rem; font-size: var(--text-klein); color: var(--color-grijsdonker); }
+  .reken-lijst { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.7rem; }
+  .reken-lijst li { display: grid; gap: 0.05rem; }
+  .reken-bedrag {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    line-height: 1.1;
+    color: var(--color-blauwdiep);
+  }
+  .reken-uit { font-size: var(--text-klein); color: var(--color-grijsdonker); }
+
+  /* Formulieren ---------------------------------------------------------- */
+  .formulierblok {
+    margin-top: 3rem;
+    padding-top: 2.25rem;
     border-top: 1px solid var(--kleur-lijn-licht);
-    width: 100%;
   }
-  .contactblok .knop { margin-top: 1rem; }
+  .vlak-zwart .formulierblok { border-top-color: var(--kleur-lijn-donker); }
+  .formulier-kop {
+    font-family: var(--font-smal);
+    font-size: var(--text-kop-s);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .demo-melding {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    font-size: var(--text-klein);
+    color: var(--color-grijsdonker);
+    margin-bottom: 1.75rem;
+  }
+  .vlak-zwart .demo-melding { color: var(--color-grijs); }
+
+  .formulier { display: grid; gap: 1.25rem; max-width: 46rem; }
+  .veldrij { display: grid; gap: 1.25rem; align-items: start; }
+  @media (min-width: 640px) { .veldrij { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .veld--halve { max-width: 22rem; }
+
+  .veld--vinkje > :global(label.vinkje) {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    font-weight: 400;
+    color: inherit;
+  }
+  .vinkje {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: start;
+    line-height: 1.55;
+    cursor: pointer;
+  }
+  .vinkje input { width: 1.15rem; height: 1.15rem; margin-top: 0.2rem; accent-color: var(--color-blauw); }
+
+  .formulier-melding {
+    font-size: var(--text-klein);
+    border-radius: var(--radius-klein);
+    background: var(--kleur-papier-diep);
+    padding: 0.85rem 1rem;
+    line-height: 1.55;
+  }
+  .vlak-zwart .formulier-melding { background: var(--kleur-inkt-op); }
+  .formulier-melding[hidden] { display: none; }
+
+  .formulier-knoppen { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+  /* Contact --------------------------------------------------------------- */
+  .contact { display: grid; gap: 2rem; }
+  @media (min-width: 900px) {
+    .contact { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: 3.5rem; align-items: center; }
+  }
+  .contact-tekst { margin-top: 0.6rem; max-width: 52ch; color: var(--color-grijsdonker); }
+
+  .contact-gegevens { display: grid; gap: 0.5rem; }
+  .contact-regel {
+    display: grid;
+    gap: 0.05rem;
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-vlak);
+    background: var(--color-wit);
+    text-decoration: none;
+    color: inherit !important;
+  }
+  .contact-regel--stil { background: transparent; }
+  .contact-soort {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-blauwdiep);
+  }
+  .contact-waarde { font-weight: 600; word-break: break-word; }
 </style>
+
+<script>
+  /* Validatie, gedeeld door beide formulieren op deze pagina. */
+  for (const formulier of document.querySelectorAll<HTMLFormElement>('[data-formulier]')) {
+    const melding = formulier.querySelector<HTMLElement>('[data-melding]');
+
+    const toonFout = (veld: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+      const fout = veld.closest('.veld')?.querySelector<HTMLElement>('[data-fout]');
+      if (!fout) return;
+      fout.hidden = veld.checkValidity();
+    };
+
+    formulier.addEventListener('submit', (gebeurtenis) => {
+      gebeurtenis.preventDefault();
+      const velden = [...formulier.querySelectorAll<HTMLInputElement>('input, select, textarea')];
+      velden.forEach(toonFout);
+
+      const eersteFout = velden.find((veld) => !veld.checkValidity());
+      if (eersteFout) {
+        eersteFout.focus();
+        if (melding) {
+          melding.hidden = false;
+          melding.textContent = 'Er ontbreekt nog iets. De velden met een melding zijn nog niet in orde.';
+        }
+        return;
+      }
+
+      if (melding) {
+        melding.hidden = false;
+        melding.textContent =
+          'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; na oplevering ' +
+          'komt de aanmelding binnen bij de sponsorcommissie.';
+      }
+    });
+
+    formulier.addEventListener('blur', (gebeurtenis) => {
+      const doel = gebeurtenis.target;
+      if (doel instanceof HTMLInputElement || doel instanceof HTMLSelectElement || doel instanceof HTMLTextAreaElement) {
+        toonFout(doel);
+      }
+    }, true);
+  }
+</script>

@@ -12,7 +12,7 @@ import Paginakop from '../components/Paginakop.astro';
 import Accordeon from '../components/Accordeon.astro';
 import { getContactpersoon } from '../lib/club';
 
-const webmaster = getContactpersoon('Webmaster');
+const webmaster = getContactpersoon('Secretaris');
 
 const vragen = [
   {
@@ -122,7 +122,8 @@ const vragen = [
     display: grid;
     gap: 0.7rem;
     justify-items: start;
-    border: 1px solid var(--kleur-lijn-licht);
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
     padding: 1.5rem;
   }
   .uitlichting-tekst { font-size: var(--text-klein); line-height: 1.6; }

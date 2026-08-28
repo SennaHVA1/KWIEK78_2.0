@@ -1,7 +1,8 @@
 ---
 /**
- * De kop van een binnenpagina. Zwarte band met de kolomindeling van de site:
- * kicker in de kantlijn, titel en intro in de hoofdkolom.
+ * De kop van een binnenpagina. Zwarte band, kicker in het accent, titel in de
+ * displayletter. Kort houden: de titel moet in een oogopslag zeggen waar je
+ * bent, de intro is een enkele zin en geen inleiding.
  */
 interface Props {
   kicker: string;
@@ -13,26 +14,22 @@ const { kicker, titel, intro } = Astro.props;
 ---
 
 <section class="paginakop vlak-zwart">
-  <div class="omhulsel">
-    <div class="kolom paginakop-binnen">
-      <p class="kolom-kicker">{kicker}</p>
-      <div>
-        <h1 class="kop-l">{titel}</h1>
-        {intro && <p class="paginakop-intro">{intro}</p>}
-        <slot />
-      </div>
-    </div>
+  <div class="omhulsel paginakop-binnen">
+    <p class="kolom-kicker">{kicker}</p>
+    <h1 class="kop-l">{titel}</h1>
+    {intro && <p class="paginakop-intro">{intro}</p>}
+    <slot />
   </div>
   <div class="baan baan--dun" aria-hidden="true"></div>
 </section>
 
 <style>
-  .paginakop-binnen { padding-block: clamp(2rem, 5vw, 3.75rem); }
+  .paginakop-binnen { padding-block: clamp(2.25rem, 5vw, 4rem); }
   .paginakop-intro {
     margin-top: 0.9rem;
-    max-width: 58ch;
+    max-width: 56ch;
     font-size: var(--text-groot);
     color: var(--color-grijs);
-    line-height: 1.55;
+    line-height: 1.5;
   }
 </style>

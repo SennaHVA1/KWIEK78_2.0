@@ -217,7 +217,7 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
     align-items: center;
     gap: 0.6rem;
     flex-wrap: wrap;
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-klein);
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -287,7 +287,7 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
   }
   .detail-lijst > div:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
   .detail-lijst dt {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -319,8 +319,8 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
     display: grid;
     gap: 0.85rem;
     justify-items: start;
-    border: 1px solid var(--kleur-lijn-licht);
-    padding: 1.1rem;
+    border-radius: var(--radius-vlak);
+    padding: 1.25rem;
     background:
       repeating-linear-gradient(135deg,
         transparent 0 9px,

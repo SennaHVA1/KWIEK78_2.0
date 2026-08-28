@@ -2,19 +2,17 @@
 /**
  * HET SCOREBORD
  *
- * De eerstvolgende wedstrijd, uitgevoerd als een scorebordpaneel: zwart,
- * over de volle breedte, met beide clubwapens, de aftrap en het klapbord.
+ * De eerstvolgende wedstrijd, over de volle breedte, met beide clubwapens en
+ * de afteller. Dit blok staat op de tweede plek van de homepage omdat het de
+ * vraag beantwoordt waarvoor de meeste mensen hier komen: wanneer en waar.
  *
- * Dit blok staat op de tweede plek van de homepage omdat het de vraag
- * beantwoordt waarvoor de meeste mensen hier komen: wanneer en waar wordt er
- * gespeeld.
+ * Bewust weinig velden. Eerder stonden hier vier losse gegevens in een
+ * rasterlijst en dat las als een formulier; nu staat er een zin.
  *
- * Waarom er meerdere wedstrijden worden meegegeven:
- * de site wordt statisch gebouwd. Wordt hij een paar weken niet opnieuw
- * gebouwd, dan zou de aftrap in het verleden liggen en de teller op nul
- * staan. Daarom worden de eerstvolgende paar wedstrijden alle gerenderd en
- * verbergt een klein script alles behalve de eerste die nog moet komen. Er
- * wordt niets in JavaScript opgebouwd, alleen zichtbaar gemaakt.
+ * Waarom er meerdere wedstrijden worden meegegeven: de site wordt statisch
+ * gebouwd. Wordt hij een paar weken niet opnieuw gebouwd, dan zou de aftrap
+ * in het verleden liggen. Daarom worden de eerstvolgende paar wedstrijden
+ * alle gerenderd en toont een klein script de eerste die nog moet komen.
  */
 import Klapbord from './Klapbord.astro';
 import Clubwapen from './Clubwapen.astro';
@@ -30,123 +28,81 @@ interface Props {
 const { wedstrijden } = Astro.props;
 
 const soortLabel: Record<Wedstrijd['competitie'], string> = {
-  competitie: 'Competitiewedstrijd',
-  beker: 'Bekerwedstrijd',
+  competitie: 'Competitie',
+  beker: 'Beker',
   oefen: 'Oefenwedstrijd',
-  zaal: 'Zaalwedstrijd',
+  zaal: 'Zaalvoetbal',
 };
 ---
 
 <section class="scorebord vlak-zwart" aria-labelledby="eerstvolgende-kop" data-scorebord>
-  <div class="baan" aria-hidden="true"></div>
+  <div class="omhulsel scorebord-binnen">
+    <p class="kolom-kicker" id="eerstvolgende-kop">Eerstvolgende wedstrijd</p>
 
-  <div class="omhulsel">
-    <div class="kolom scorebord-binnen">
-      <p class="kolom-kicker" id="eerstvolgende-kop">Eerstvolgende wedstrijd</p>
+    {wedstrijden.length === 0 && (
+      <p class="scorebord-leeg zacht">
+        Er staat op dit moment geen wedstrijd gepland. Zodra het programma bekend is staat hij hier.
+      </p>
+    )}
 
-      <div class="scorebord-inhoud">
-        {wedstrijden.length === 0 && (
-          <p class="scorebord-leeg zacht">
-            Er staat op dit moment geen wedstrijd gepland. Zodra het programma bekend is staat hij hier.
+    {wedstrijden.map((wedstrijd, index) => (
+      <article class="scorebord-wedstrijd" data-wedstrijd data-aftrap={wedstrijd.datum} hidden={index > 0}>
+        <div class="scorebord-links">
+          <h2 class="scorebord-duel">
+            <span class="scorebord-club">
+              <Clubwapen src={wedstrijd.thuisLogo} club={wedstrijd.thuisteam} formaat={52} />
+              <span>{wedstrijd.thuisteam}</span>
+            </span>
+            <span class="scorebord-tegen">tegen</span>
+            <span class="scorebord-club">
+              <Clubwapen src={wedstrijd.uitLogo} club={wedstrijd.uitteam} formaat={52} />
+              <span>{wedstrijd.uitteam}</span>
+            </span>
+          </h2>
+
+          <p class="scorebord-wanneer">
+            <span class="merk merk--afgelast">{soortLabel[wedstrijd.competitie]}</span>
+            <time datetime={machineDatum(wedstrijd.datum)}>
+              {langeDatum(wedstrijd.datum)} om {tijd(wedstrijd.datum)}
+            </time>
           </p>
-        )}
+          <p class="scorebord-waar zacht">
+            {wedstrijd.accommodatie}{wedstrijd.veld ? `, ${wedstrijd.veld}` : ''}
+          </p>
 
-        {wedstrijden.map((wedstrijd, index) => (
-          <article class="scorebord-wedstrijd" data-wedstrijd data-aftrap={wedstrijd.datum} hidden={index > 0}>
-            <p class="scorebord-soort">
-              {soortLabel[wedstrijd.competitie]}
-              <span class="scorebord-punt" aria-hidden="true"></span>
-              <time datetime={machineDatum(wedstrijd.datum)}>
-                {langeDatum(wedstrijd.datum)}, {tijd(wedstrijd.datum)}
-              </time>
-            </p>
+          <div class="scorebord-knoppen">
+            <a class="knop knop--primair" href="/wedstrijden/programma">Heel het programma</a>
+            <a class="knop knop--rand" href={`/wedstrijd/${wedstrijd.wedstrijdcode}`}>Wedstrijddetails</a>
+            <a
+              class="knop knop--rand"
+              href={routeLink(wedstrijd.accommodatie)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >Route</a>
+          </div>
+        </div>
 
-            <h2 class="scorebord-duel">
-              <span class="scorebord-club">
-                <Clubwapen src={wedstrijd.thuisLogo} club={wedstrijd.thuisteam} formaat={56} />
-                <span>{wedstrijd.thuisteam}</span>
-              </span>
-              <span class="scorebord-tegen" aria-label="tegen">tegen</span>
-              <span class="scorebord-club">
-                <Clubwapen src={wedstrijd.uitLogo} club={wedstrijd.uitteam} formaat={56} />
-                <span>{wedstrijd.uitteam}</span>
-              </span>
-            </h2>
-
-            <dl class="scorebord-gegevens data">
-              <div>
-                <dt>Waar</dt>
-                <dd>{wedstrijd.accommodatie}</dd>
-              </div>
-              {wedstrijd.veld && (
-                <div>
-                  <dt>Veld</dt>
-                  <dd>{wedstrijd.veld}</dd>
-                </div>
-              )}
-              <div>
-                <dt>Aanvang</dt>
-                <dd>{tijd(wedstrijd.datum)}</dd>
-              </div>
-              <div>
-                <dt>Code</dt>
-                <dd>{wedstrijd.wedstrijdcode}</dd>
-              </div>
-            </dl>
-
-            <div class="scorebord-teller">
-              <Klapbord doel={wedstrijd.datum} />
-            </div>
-
-            <div class="scorebord-knoppen">
-              <a class="knop knop--primair" href={`/wedstrijd/${wedstrijd.wedstrijdcode}`}>Wedstrijddetails</a>
-              <a class="knop knop--rand" href="/wedstrijden/programma">Heel het programma</a>
-              <a
-                class="knop knop--rand"
-                href={routeLink(wedstrijd.accommodatie)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >Route</a>
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
+        <div class="scorebord-teller">
+          <p class="scorebord-tellerkop">Aftrap over</p>
+          <Klapbord doel={wedstrijd.datum} />
+        </div>
+      </article>
+    ))}
   </div>
 </section>
 
 <style>
-  .scorebord { position: relative; }
-  .scorebord-binnen { padding-block: clamp(2rem, 5vw, 3.5rem); }
-  .scorebord-inhoud { display: grid; gap: clamp(1.5rem, 3vw, 2.25rem); }
-  .scorebord-wedstrijd { display: grid; gap: clamp(1.25rem, 3vw, 2rem); }
+  .scorebord-binnen { padding-block: clamp(2.25rem, 5vw, 3.75rem); }
+
+  .scorebord-wedstrijd { display: grid; gap: 2rem; align-items: center; }
   .scorebord-wedstrijd[hidden] { display: none; }
 
-  .scorebord-soort {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    font-family: var(--font-mono);
-    font-size: var(--text-klein);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-blauw);
-  }
-  .scorebord-punt {
-    width: 0.5rem;
-    height: 1px;
-    background: currentColor;
-    flex: none;
-  }
-  .scorebord-soort time { color: var(--color-wit); }
+  .scorebord-links { display: grid; gap: 1rem; }
 
   .scorebord-duel {
     display: grid;
-    gap: 0.7rem;
-    font-size: clamp(1.5rem, 1rem + 3.2vw, 3rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
+    gap: 0.5rem;
+    font-size: clamp(1.6rem, 1rem + 3.2vw, 3.25rem);
     line-height: 1;
   }
   .scorebord-club {
@@ -157,72 +113,58 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
   }
   .scorebord-club > span { min-width: 0; overflow-wrap: anywhere; }
   .scorebord-tegen {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
-    font-weight: 400;
-    letter-spacing: 0.2em;
+    font-weight: 700;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--color-grijs);
-    padding-left: calc(56px + 0.85rem);
+    padding-left: calc(52px + 0.85rem);
   }
 
-  .scorebord-gegevens {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.9rem 1.5rem;
-    font-size: var(--text-klein);
-    border-top: 1px solid var(--kleur-lijn-donker);
-    padding-top: 1.1rem;
+  .scorebord-wanneer {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    font-family: var(--font-smal);
+    font-size: 1.35rem;
+    font-weight: 600;
   }
-  .scorebord-gegevens dt {
-    font-size: var(--text-mini);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-grijs);
-    margin-bottom: 0.15rem;
-  }
-  .scorebord-gegevens dd { font-weight: 500; }
+  .scorebord-waar { font-size: var(--text-klein); margin-top: -0.6rem; }
 
-  .scorebord-teller {
-    border-top: 1px solid var(--kleur-lijn-donker);
-    padding-top: 1.25rem;
-  }
-
-  .scorebord-knoppen { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .scorebord-knoppen { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
   .scorebord-leeg { padding-block: 1.5rem; }
 
-  /* Pas vanaf 1150 in twee kolommen. Bij 1024 komt de kantlijn van de kolom
-     erbij; splitsen we daar al, dan wordt het paneel te smal voor de namen. */
-  @media (min-width: 1150px) {
+  .scorebord-teller {
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+    padding: 1.5rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-inkt);
+  }
+  .scorebord-tellerkop {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+  }
+
+  @media (min-width: 1000px) {
     .scorebord-wedstrijd {
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-      grid-template-areas:
-        "soort    teller"
-        "duel     teller"
-        "gegevens knoppen";
-      column-gap: 3rem;
-      align-items: start;
+      grid-template-columns: minmax(0, 1.25fr) auto;
+      gap: 3rem;
     }
-    .scorebord-soort { grid-area: soort; }
-    .scorebord-duel { grid-area: duel; }
-    .scorebord-gegevens { grid-area: gegevens; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .scorebord-teller {
-      grid-area: teller;
-      border-top: 0;
-      padding-top: 0;
-      align-self: center;
-    }
-    .scorebord-knoppen { grid-area: knoppen; align-self: start; padding-top: 1.1rem; }
   }
 </style>
 
 <script>
   /**
-   * Toon de eerste wedstrijd die nog moet beginnen.
-   *
-   * Zonder dit zou een demo die twee weken niet opnieuw is gebouwd een
-   * afgelopen wedstrijd met een teller op nul laten zien. Alle kandidaten
-   * staan al in de HTML, dit script zet alleen zichtbaarheid om.
+   * Toon de eerste wedstrijd die nog moet beginnen. Alle kandidaten staan al
+   * in de HTML; dit script zet alleen zichtbaarheid om.
    */
   const bord = document.querySelector<HTMLElement>('[data-scorebord]');
   if (bord) {

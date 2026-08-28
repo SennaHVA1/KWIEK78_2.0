@@ -44,7 +44,7 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
   <section class="vlak-wit sectie">
     <div class="omhulsel">
       <p class="demo-melding">
-        <span class="merk merk--rand">Demo</span>
+        <span class="merk merk--zacht">Demo</span>
         De formulieren op deze pagina zijn nog niet aangesloten. Ze laten wel precies zien
         welke gegevens er straks gevraagd worden.
       </p>
@@ -365,9 +365,10 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
     gap: 0.7rem;
     flex-wrap: wrap;
     font-size: var(--text-klein);
-    border-left: 3px solid var(--color-blauwdiep);
-    padding: 0.75rem 1rem;
-    background: color-mix(in srgb, var(--color-blauwdiep) 8%, transparent);
+    color: var(--color-grijsdonker);
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
     margin-bottom: 2.25rem;
     max-width: 70ch;
   }
@@ -387,18 +388,17 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
     margin-bottom: -1px;
     color: var(--color-grijsdonker);
     cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: var(--text-klein);
+    font-family: var(--font-smal);
+    font-size: 1.3rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.85rem 1.1rem;
+    padding: 0.75rem 1.1rem;
     white-space: nowrap;
     transition: color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap);
   }
   .tab:first-child { padding-left: 0; }
   .tab:hover { color: var(--color-zwart); }
   .tab.is-gekozen { color: var(--color-zwart); border-bottom-color: var(--color-blauwdiep); }
+  .tablijst { border-bottom-width: 2px; }
   @media (prefers-reduced-motion: reduce) { .tab { transition: none; } }
 
   .paneel[hidden] { display: none; }
@@ -413,7 +413,7 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
 
   /* Formulier --------------------------------------------------------- */
   .formulier { display: grid; gap: 1.25rem; max-width: 40rem; }
-  .veldrij { display: grid; gap: 1.25rem; }
+  .veldrij { display: grid; gap: 1.25rem; align-items: start; }
   @media (min-width: 560px) {
     .veldrij { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .veldrij--drie { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
@@ -428,12 +428,10 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
     gap: 0.9rem;
   }
   .akkoorden legend {
-    font-family: var(--font-mono);
-    font-size: var(--text-mini);
+    font-family: var(--font-smal);
+    font-size: var(--text-kop-s);
     font-weight: 700;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: var(--color-grijsdonker);
+    color: var(--color-zwart);
     padding: 0;
   }
   /* Het vinkje krijgt een gewone labeltekst, niet de mono-kop van de andere velden. */
@@ -462,9 +460,9 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
 
   .formulier-melding {
     font-size: var(--text-klein);
-    border-left: 3px solid var(--color-blauwdiep);
-    background: color-mix(in srgb, var(--color-blauwdiep) 10%, transparent);
-    padding: 0.8rem 1rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
+    padding: 0.9rem 1.1rem;
     line-height: 1.55;
   }
   .formulier-melding[hidden] { display: none; }

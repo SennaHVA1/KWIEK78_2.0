@@ -243,7 +243,7 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
   }
 
   .teamkop-beeld { display: grid; gap: 0.6rem; }
-  .teamkop-beeld :global(img) { filter: grayscale(1) contrast(1.08); }
+  .teamkop-beeld :global(img) { }
   .teamkop-bijschrift { font-size: var(--text-mini); }
 
   /* Blokken ---------------------------------------------------------- */
@@ -272,7 +272,7 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
 
   .positiegroep + .positiegroep { margin-top: 1.75rem; }
   .positiegroep-kop {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
     font-weight: 700;
     letter-spacing: 0.18em;

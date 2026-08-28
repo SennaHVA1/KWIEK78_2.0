@@ -1,16 +1,19 @@
 ---
 /**
  * Ereleden en leden van verdienste.
+ *
+ * Alleen namen, want meer heeft de club niet aangeleverd en meer is ook niet
+ * nodig. Een erelijst hoort een erelijst te zijn: groot gezet, rustig, en
+ * niet weggestopt in een tabel.
  */
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import { getEreleden } from '../../lib/club';
 
 const alle = getEreleden();
-const groepen = [
-  { soort: 'erelid' as const, titel: 'Ereleden', uitleg: 'Benoemd door de algemene ledenvergadering, voor het leven aan de club verbonden.' },
-  { soort: 'lid-van-verdienste' as const, titel: 'Leden van verdienste', uitleg: 'Voor wie zich jarenlang buitengewoon heeft ingezet voor Kwiek.' },
-];
+const ereleden = alle.filter((l) => l.soort === 'erelid' && !l.overleden);
+const overleden = alle.filter((l) => l.soort === 'erelid' && l.overleden);
+const verdienste = alle.filter((l) => l.soort === 'lid-van-verdienste');
 ---
 
 <Basis
@@ -24,49 +27,70 @@ const groepen = [
   />
 
   <section class="vlak-wit sectie">
-    <div class="omhulsel ereleden">
-      {groepen.map((groep) => {
-        const leden = alle.filter((lid) => lid.soort === groep.soort);
-        return (
-          <section class="kolom">
-            <p class="kolom-kicker">{groep.titel}</p>
-            <div>
-              <h2 class="kop-sectie eer-kop">{groep.titel}</h2>
-              <p class="eer-uitleg zacht">{groep.uitleg}</p>
-              <ol class="eerlijst">
-                {leden.map((lid) => (
-                  <li class="eer">
-                    <span class="eer-jaar data">{lid.sinds}</span>
-                    <div>
-                      <h3 class="eer-naam">{lid.naam}</h3>
-                      <p class="eer-toelichting zacht">{lid.toelichting}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </section>
-        );
-      })}
+    <div class="omhulsel eregalerij">
+      <section>
+        <h2 class="kop-sectie eer-kop">Ereleden</h2>
+        <ul class="namen">
+          {ereleden.map((lid) => <li>{lid.naam}</li>)}
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="kop-sectie eer-kop">In herinnering</h2>
+        <p class="eer-uitleg">
+          Ereleden van Kwiek '78 die zijn overleden. Zij blijven op de lijst staan.
+        </p>
+        <ul class="namen namen--stil">
+          {overleden.map((lid) => (
+            <li>{lid.naam} <span class="kruis" aria-label="overleden">&#8224;</span></li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="kop-sectie eer-kop">Leden van verdienste</h2>
+        <ul class="namen">
+          {verdienste.map((lid) => (
+            <li>
+              {lid.naam}
+              {lid.overleden && <span class="kruis" aria-label="overleden"> &#8224;</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   </section>
 </Basis>
 
 <style>
-  .ereleden { display: grid; gap: 3.5rem; }
-  .eer-kop { padding-bottom: 0.5rem; }
-  .eer-uitleg { font-size: var(--text-klein); max-width: 60ch; padding-bottom: 1.25rem; }
+  .eregalerij { display: grid; gap: 3rem; }
 
-  .eerlijst { list-style: none; margin: 0; padding: 0; }
-  .eer {
-    display: grid;
-    grid-template-columns: 4.5rem minmax(0, 1fr);
-    gap: 1rem;
-    padding-block: 0.95rem;
-    border-top: 1px solid var(--kleur-lijn-licht);
+  .eer-kop {
+    padding-bottom: 0.9rem;
+    border-bottom: 2px solid var(--color-zwart);
+    margin-bottom: 1.25rem;
   }
-  .eer:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
-  .eer-jaar { font-size: var(--text-klein); font-weight: 700; color: var(--color-blauwdiep); }
-  .eer-naam { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
-  .eer-toelichting { font-size: var(--text-klein); max-width: 62ch; margin-top: 0.15rem; }
+  .eer-uitleg {
+    font-size: var(--text-klein);
+    color: var(--color-grijsdonker);
+    max-width: 58ch;
+    margin: -0.5rem 0 1.25rem;
+  }
+
+  .namen {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.55rem 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .namen li {
+    font-family: var(--font-smal);
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .namen--stil li { color: var(--color-grijsdonker); font-weight: 600; }
+  .kruis { color: var(--color-blauwdiep); }
 </style>

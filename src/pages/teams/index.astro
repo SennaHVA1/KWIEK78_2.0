@@ -83,10 +83,8 @@ const categorieen = getTeamsPerCategorie();
     color: inherit;
   }
   .teamkaart :global(img) {
-    filter: grayscale(1) contrast(1.08);
-    transition: filter 0.3s var(--ease-klap);
-  }
-  .teamkaart a:hover :global(img) { filter: grayscale(0) contrast(1); }
+    }
+  .teamkaart a:hover :global(img) { }
   @media (prefers-reduced-motion: reduce) {
     .teamkaart :global(img) { transition: none; }
   }

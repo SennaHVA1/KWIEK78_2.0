@@ -1,19 +1,16 @@
 ---
 /**
- * HET KLAPBORD
+ * DE AFTELLER
  *
- * De aftelklok naar de eerstvolgende wedstrijd, uitgevoerd als een mechanisch
- * splitflapbord: de cijfers klappen om zoals op een oud scorebord. Dit is het
- * signature-element van de site en het enige plek waar echt beweging zit.
+ * De klok naar de eerstvolgende wedstrijd. De cijfers klappen om als op een
+ * oud scorebord: dat is het enige echte bewegende element op de site en het
+ * staat op de plek waar de meeste mensen naartoe komen.
  *
  * Beslissingen:
- *   - De beginwaarden worden tijdens de build al gerenderd. Er is dus geen
- *     lege of springende teller bij het laden.
+ *   - De beginwaarden staan al in de HTML, dus geen lege of springende teller.
  *   - Bij prefers-reduced-motion klappen de cijfers niet, ze wisselen gewoon.
- *   - Het is een aria-live-gebied met beleefde meldingen, en de losse cijfers
- *     staan op aria-hidden zodat een schermlezer niet elke seconde
- *     losse getallen voorleest. De volledige tekst staat in de verborgen
- *     samenvatting.
+ *   - Het is een aria-live-gebied; de losse cijfers staan op aria-hidden zodat
+ *     een schermlezer niet elke seconde getallen voorleest.
  *   - Geen dependency: de teller is een setInterval van dertig regels.
  */
 import { datumEnTijd } from '../lib/datum';
@@ -27,7 +24,6 @@ interface Props {
 
 const { doel, compact = false } = Astro.props;
 
-/* Beginwaarde berekenen tijdens de build, zodat de eerste render al klopt. */
 const resterend = Math.max(0, new Date(doel).getTime() - Date.now());
 const seconden = Math.floor(resterend / 1000);
 const begin = {
@@ -39,7 +35,7 @@ const begin = {
 
 const groepen = [
   { sleutel: 'dagen', label: 'dagen', waarde: begin.dagen },
-  { sleutel: 'uren', label: 'uren', waarde: begin.uren },
+  { sleutel: 'uren', label: 'uur', waarde: begin.uren },
   { sleutel: 'minuten', label: 'min', waarde: begin.minuten },
   { sleutel: 'seconden', label: 'sec', waarde: begin.seconden },
 ];
@@ -61,44 +57,33 @@ const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0'
     ))}
   </div>
 
-  <p class="klapbord-samenvatting" data-klapbord-tekst aria-live="polite">
+  <p class="alleen-schermlezer" data-klapbord-tekst aria-live="polite">
     Nog {begin.dagen} dagen, {begin.uren} uur en {begin.minuten} minuten tot de aftrap op {datumEnTijd(doel)}.
   </p>
 
-  <p class="klapbord-afgelopen" data-klapbord-afgelopen hidden>
-    De wedstrijd is begonnen.
-  </p>
+  <p class="klapbord-afgelopen" data-klapbord-afgelopen hidden>De wedstrijd is begonnen.</p>
 </div>
 
 <style>
-  .klapbord {
-    display: grid;
-    gap: 0.75rem;
-    justify-items: start;
-  }
+  .klapbord { display: grid; gap: 0.75rem; justify-items: start; }
 
   .klapbord-rij {
     display: flex;
-    gap: clamp(0.5rem, 2vw, 1.1rem);
+    gap: clamp(0.4rem, 1.6vw, 0.9rem);
     align-items: flex-start;
   }
 
-  .klapbord-groep {
-    display: grid;
-    gap: 0.4rem;
-    justify-items: center;
-  }
+  .klapbord-groep { display: grid; gap: 0.35rem; justify-items: center; }
+  .klapbord-cijfers { display: flex; gap: 4px; }
 
-  .klapbord-cijfers { display: flex; gap: 3px; }
-
-  /* Een cel van het klapbord. De naad in het midden is wat het bord een bord
-     maakt, ook wanneer er niets beweegt. */
+  /* Een cel. De naad in het midden is wat het een bord maakt, ook stilstaand. */
   .klap {
     position: relative;
     display: block;
-    width: clamp(1.9rem, 7.5vw, 3.1rem);
-    padding: clamp(0.35rem, 1.4vw, 0.6rem) 0;
+    width: clamp(2.1rem, 8vw, 3.4rem);
+    padding: clamp(0.4rem, 1.5vw, 0.65rem) 0;
     background: var(--kleur-inkt-op);
+    border-radius: var(--radius-klein);
     perspective: 260px;
     overflow: hidden;
   }
@@ -109,25 +94,21 @@ const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0'
     right: 0;
     top: 50%;
     height: 1px;
-    background: color-mix(in srgb, var(--color-blauw) 55%, transparent);
+    background: color-mix(in srgb, var(--color-zwart) 55%, transparent);
     z-index: 2;
   }
 
   .klap-waarde {
     display: block;
-    font-family: var(--font-mono);
-    font-size: clamp(1.35rem, 5.4vw, 2.35rem);
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 6vw, 2.6rem);
     line-height: 1;
     text-align: center;
     font-variant-numeric: tabular-nums;
     transform-origin: center center;
     backface-visibility: hidden;
   }
-
-  .klap-waarde.klapt {
-    animation: klappen 0.26s var(--ease-klap);
-  }
+  .klap-waarde.klapt { animation: klappen 0.26s var(--ease-klap); }
 
   @keyframes klappen {
     0%   { transform: rotateX(0deg); }
@@ -137,36 +118,24 @@ const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0'
   }
 
   .klapbord-label {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
-    letter-spacing: 0.16em;
+    font-weight: 700;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--color-grijs);
   }
   .klapbord-groep:last-child .klapbord-label { color: var(--color-blauw); }
 
-  /* Alleen voor schermlezers. */
-  .klapbord-samenvatting {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
   .klapbord-afgelopen {
-    font-family: var(--font-mono);
-    font-size: var(--text-klein);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-family: var(--font-smal);
+    font-size: 1.15rem;
+    font-weight: 700;
     color: var(--color-blauw);
   }
 
-  .klapbord--compact .klap { width: clamp(1.5rem, 5vw, 2.1rem); }
-  .klapbord--compact .klap-waarde { font-size: clamp(1rem, 3.4vw, 1.4rem); }
+  .klapbord--compact .klap { width: clamp(1.7rem, 5.5vw, 2.4rem); }
+  .klapbord--compact .klap-waarde { font-size: clamp(1.15rem, 3.8vw, 1.6rem); }
 
   @media (prefers-reduced-motion: reduce) {
     .klap-waarde.klapt { animation: none; }
@@ -174,10 +143,6 @@ const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0'
 </style>
 
 <script>
-  /**
-   * Aftellen. Een interval van een seconde, cijfer voor cijfer bijwerken en
-   * alleen de cijfers die echt veranderen laten omklappen.
-   */
   type Groep = 'dagen' | 'uren' | 'minuten' | 'seconden';
 
   const GEEN_BEWEGING = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -192,9 +157,7 @@ const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0'
     }
 
     waarde.classList.remove('klapt');
-    // Reflow forceren zodat de animatie opnieuw start bij snel opeenvolgende
-    // wisselingen (de seconden).
-    void waarde.offsetWidth;
+    void waarde.offsetWidth;   // reflow, anders start de animatie niet opnieuw
     waarde.classList.add('klapt');
     // Halverwege de klap de waarde omzetten: dan lijkt het alsof het blad
     // omslaat en er een ander cijfer onder vandaan komt.
@@ -205,8 +168,7 @@ const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0'
     const houder = bord.querySelector<HTMLElement>(`[data-groep="${groep}"]`);
     if (!houder) return;
     const cijfers = String(Math.min(waarde, 99)).padStart(2, '0');
-    const cellen = houder.querySelectorAll<HTMLElement>('.klap');
-    cellen.forEach((cel, i) => zetCijfer(cel, cijfers[i]));
+    houder.querySelectorAll<HTMLElement>('.klap').forEach((cel, i) => zetCijfer(cel, cijfers[i]));
   }
 
   function start(bord: HTMLElement) {
@@ -240,8 +202,7 @@ const cijfers = (waarde: number) => String(Math.min(waarde, 99)).padStart(2, '0'
       zetGroep(bord, 'minuten', minuten);
       zetGroep(bord, 'seconden', seconden);
 
-      // De voorleestekst maar een keer per minuut bijwerken, anders ratelt een
-      // schermlezer de hele minuut door.
+      // De voorleestekst maar een keer per minuut bijwerken.
       if (tekst && minuten !== vorigeMinuut) {
         vorigeMinuut = minuten;
         tekst.textContent = `Nog ${dagen} dagen, ${uren} uur en ${minuten} minuten tot de aftrap.`;

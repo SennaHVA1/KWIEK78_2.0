@@ -95,21 +95,20 @@ const totaal = getVerjaardagen().length;
     display: inline-flex;
     align-items: baseline;
     gap: 0.4rem;
-    border: 1px solid color-mix(in srgb, var(--color-zwart) 22%, transparent);
-    padding: 0.45rem 0.7rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--kleur-papier-diep);
+    padding: 0.45rem 0.95rem;
     text-decoration: none;
     color: var(--color-zwart) !important;
-    font-family: var(--font-mono);
-    font-size: var(--text-mini);
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
+    font-family: var(--font-smal);
+    font-size: 1rem;
+    font-weight: 600;
     transition: background-color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap);
   }
-  .maandknop:hover { border-color: var(--color-zwart); }
+  .maandknop:hover { background: color-mix(in srgb, var(--color-blauwdiep) 18%, transparent); }
   .maandknop.is-gekozen {
-    background: var(--color-zwart);
-    border-color: var(--color-zwart);
+    background: var(--color-blauwdiep);
     color: var(--color-wit) !important;
   }
   @media (prefers-reduced-motion: reduce) { .maandknop { transition: none; } }

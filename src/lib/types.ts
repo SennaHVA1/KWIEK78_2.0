@@ -156,7 +156,14 @@ export type Artikel = {
   facebookUrl?: string;
 };
 
-export type SponsorNiveau = 'hoofdsponsor' | 'allstars' | 'club78' | 'bord';
+/**
+ * Sponsorniveau.
+ *
+ * De Club van '78 en de All Stars staan hier bewust niet tussen: dat zijn geen
+ * bedrijven met een logo maar particulieren die meebetalen. Die krijgen een
+ * eigen sectie op de sponsoringpagina.
+ */
+export type SponsorNiveau = 'hoofdsponsor' | 'partner';
 
 export type Sponsor = {
   id: string;
@@ -171,11 +178,14 @@ export type Sponsor = {
 };
 
 export type Bestuurslid = {
+  /** Kan ook een duo zijn, bijvoorbeeld twee mensen die samen de secretaris doen. */
   naam: string;
   functie: string;
   commissie: string;
-  foto?: string;
   email?: string;
+  telefoon?: string;
+  /** Voor een functie die niet is ingevuld. Dan staat er geen naam maar Vacant. */
+  vacant?: boolean;
 };
 
 export type AgendaItem = {
@@ -207,8 +217,8 @@ export type MinutenspelClaim = {
 export type Erelid = {
   naam: string;
   soort: 'erelid' | 'lid-van-verdienste';
-  sinds: number;
-  toelichting: string;
+  /** Overleden ereleden staan op de lijst met een kruisje erachter. */
+  overleden?: boolean;
 };
 
 export type Bulletin = {

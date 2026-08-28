@@ -31,7 +31,7 @@ const canoniek = new URL(Astro.url.pathname, Astro.site ?? 'https://www.kwiek78.
     {/* Zolang IS_DEMO aanstaat blijft de hele site uit de zoekmachines. */}
     {(IS_DEMO || !indexeerbaar) && <meta name="robots" content="noindex, nofollow" />}
 
-    <meta name="theme-color" content="#0B0B0C" />
+    <meta name="theme-color" content="#14161A" />
     <link rel="icon" href="/images/logos/kwiek-78.png" />
     <link rel="apple-touch-icon" href="/images/logos/kwiek-78-wapen.png" />
 
@@ -43,8 +43,8 @@ const canoniek = new URL(Astro.url.pathname, Astro.site ?? 'https://www.kwiek78.
     <meta property="og:url" content={canoniek} />
 
     <!-- Lettertypes staan lokaal, dus geen verzoek naar een externe server. -->
-    <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/jetbrains-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/barlow-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <script
       is:inline

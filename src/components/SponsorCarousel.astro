@@ -90,12 +90,10 @@ const spoor = [
     place-items: center;
     height: 3.5rem;
     padding-inline: 0.5rem;
-    filter: grayscale(1) contrast(1.15);
     opacity: 0.72;
-    transition: opacity 0.2s var(--ease-klap), filter 0.2s var(--ease-klap);
+    transition: opacity 0.2s var(--ease-klap);
   }
   .carousel-logo:hover, .carousel-logo:focus-visible {
-    filter: grayscale(0);
     opacity: 1;
   }
   .carousel-logo img { max-height: 3.5rem; width: auto; object-fit: contain; }

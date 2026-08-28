@@ -55,7 +55,7 @@ const dagDeel = (iso: string) => {
             </p>
             {toonOmschrijving && <p class="agenda-omschrijving zacht">{item.omschrijving}</p>}
           </div>
-          <span class="merk merk--rand agenda-merk">{categorieLabel[item.categorie]}</span>
+          <span class="merk merk--zacht agenda-merk">{categorieLabel[item.categorie]}</span>
         </li>
       );
     })}
@@ -81,11 +81,12 @@ const dagDeel = (iso: string) => {
     place-items: center;
     width: 3.1rem;
     padding: 0.35rem 0;
-    border: 1px solid var(--kleur-lijn-donker);
+    border-radius: var(--radius-klein);
+    background: var(--kleur-papier-diep);
     line-height: 1.1;
   }
-  :global(.vlak-wit) .agenda-datum { border-color: var(--kleur-lijn-licht); }
-  .agenda-dag { font-size: 1.15rem; font-weight: 700; }
+  :global(.vlak-zwart) .agenda-datum, :global(.vlak-inkt) .agenda-datum { background: var(--kleur-inkt-op); }
+  .agenda-dag { font-family: var(--font-display); font-size: 1.35rem; }
   .agenda-maand {
     font-size: var(--text-mini);
     text-transform: uppercase;
@@ -95,7 +96,7 @@ const dagDeel = (iso: string) => {
   :global(.vlak-wit) .agenda-maand { color: var(--color-grijsdonker); }
 
   .agenda-inhoud { grid-area: inhoud; display: grid; gap: 0.25rem; }
-  .agenda-titel { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
+  .agenda-titel { font-family: var(--font-smal); font-size: 1.25rem; font-weight: 700; }
   .agenda-meta {
     display: flex;
     align-items: center;

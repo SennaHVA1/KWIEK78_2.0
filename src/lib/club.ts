@@ -155,9 +155,7 @@ export function eersteKomendeDienstDatum(vanaf: Date = new Date()): string {
 
 export const SPONSORLABELS: Record<SponsorNiveau, string> = {
   hoofdsponsor: 'Hoofdsponsoren',
-  allstars: 'Allstars',
-  club78: "Club van '78",
-  bord: 'Bordsponsoren',
+  partner: 'Partners van de club',
 };
 
 /** Alle sponsoren. */
@@ -172,7 +170,7 @@ export function getSponsorenPerNiveau(niveau: SponsorNiveau): Sponsor[] {
 
 /** Alle niveaus met hun sponsoren, in de volgorde waarin ze op de pagina staan. */
 export function getSponsorNiveaus(): { niveau: SponsorNiveau; label: string; sponsoren: Sponsor[] }[] {
-  const volgorde: SponsorNiveau[] = ['hoofdsponsor', 'allstars', 'club78', 'bord'];
+  const volgorde: SponsorNiveau[] = ['hoofdsponsor', 'partner'];
   return volgorde.map((niveau) => ({
     niveau,
     label: SPONSORLABELS[niveau],
@@ -192,14 +190,12 @@ export function getCarouselSponsoren(): Sponsor[] {
 /** Alle bestuurs- en commissieleden, gegroepeerd per commissie. */
 export function getCommissies(): { commissie: string; leden: Bestuurslid[] }[] {
   const volgorde = [
-    'Dagelijks bestuur',
+    'Bestuur',
     'Jeugdcommissie',
     'Wedstrijdsecretariaat',
-    'Kantinecommissie',
-    'Accommodatie en onderhoud',
+    'Ledenadministratie',
     'Sponsorcommissie',
-    'Ledenadministratie en communicatie',
-    'Vertrouwenscontactpersonen',
+    'Scheidsrechters en consul',
   ];
   return volgorde
     .map((commissie) => ({ commissie, leden: bestuur.filter((l) => l.commissie === commissie) }))
@@ -208,7 +204,7 @@ export function getCommissies(): { commissie: string; leden: Bestuurslid[] }[] {
 
 /** Het dagelijks bestuur, voor de contactpagina. */
 export function getDagelijksBestuur(): Bestuurslid[] {
-  return bestuur.filter((l) => l.commissie === 'Dagelijks bestuur');
+  return bestuur.filter((l) => l.commissie === 'Bestuur');
 }
 
 /** Zoekt een contactpersoon op functie. Voor de contactpagina. */
@@ -220,8 +216,13 @@ export function getContactpersoon(functie: string): Bestuurslid | undefined {
    Ereleden, documenten, minutenspel, video
    ========================================================================== */
 
+/**
+ * Ereleden en leden van verdienste, in de volgorde waarin de club ze zelf
+ * op het bord in de kantine heeft staan. Bewust niet alfabetisch gesorteerd:
+ * die volgorde is er een van benoeming en dat hoort zo te blijven.
+ */
 export function getEreleden(): Erelid[] {
-  return [...ereleden].sort((a, b) => a.sinds - b.sinds);
+  return ereleden;
 }
 
 export function getBulletins(): Bulletin[] {

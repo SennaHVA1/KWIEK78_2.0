@@ -168,16 +168,16 @@ const pad = Astro.url.pathname;
   .merknaam-tekst { display: grid; line-height: 1.1; }
   .merknaam-club {
     font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 0.95rem;
-    letter-spacing: -0.015em;
+    font-size: 1.2rem;
+    line-height: 1;
   }
   .merknaam-plaats {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
-    letter-spacing: 0.18em;
+    font-weight: 600;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-grijs);
+    color: var(--color-blauw);
   }
 
   /* ------------------------------------------------------------------ */
@@ -204,34 +204,35 @@ const pad = Astro.url.pathname;
     border: 0;
     cursor: pointer;
     color: var(--color-wit);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
+    font-family: var(--font-smal);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.015em;
     text-decoration: none;
-    padding: 0.55rem 0.6rem;
+    padding: 0.5rem 0.7rem;
     white-space: nowrap;
-    border-bottom: 2px solid transparent;
+    border-radius: var(--radius-klein);
+    border-bottom: 0;
     transition: color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap);
   }
   .hoofdmenu-knop:hover { color: var(--color-blauw); }
   .hoofdmenu-knop.is-actief {
-    color: var(--color-blauw);
-    border-bottom-color: var(--color-blauw);
+    color: var(--color-zwart);
+    background: var(--color-wit);
   }
   .pijl, .extern { flex: none; opacity: 0.65; }
   [aria-expanded="true"] .pijl { transform: rotate(180deg); }
 
   .submenu {
     position: absolute;
-    top: calc(100% + 1px);
+    top: calc(100% + 0.4rem);
     left: 0;
-    min-width: 15rem;
+    min-width: 16rem;
     background: var(--kleur-inkt);
-    border: 1px solid var(--kleur-lijn-donker);
-    padding: 0.4rem;
+    border-radius: var(--radius-vlak);
+    padding: 0.5rem;
     z-index: 50;
+    box-shadow: 0 12px 30px rgb(0 0 0 / 0.35);
   }
   .submenu[hidden] { display: none; }
   .submenu ul { list-style: none; margin: 0; padding: 0; }
@@ -242,9 +243,10 @@ const pad = Astro.url.pathname;
     text-decoration: none;
     color: var(--color-wit);
   }
+  .submenu a { border-radius: var(--radius-klein); }
   .submenu a:hover { background: var(--kleur-inkt-op); }
   .submenu a.is-actief { color: var(--color-blauw); }
-  .submenu-label { font-size: var(--text-klein); font-weight: 600; }
+  .submenu-label { font-size: 1rem; font-weight: 600; }
   .submenu-uitleg { font-size: var(--text-mini); color: var(--color-grijs); }
 
   /* ------------------------------------------------------------------ */
@@ -255,17 +257,19 @@ const pad = Astro.url.pathname;
     align-items: center;
     gap: 0.55rem;
     background: none;
-    border: 1px solid var(--kleur-lijn-donker);
-    color: var(--color-wit);
+    border: 0;
+    background: var(--color-blauw);
+    color: var(--color-zwart);
     cursor: pointer;
-    padding: 0.5rem 0.75rem;
-    font-family: var(--font-mono);
-    font-size: var(--text-mini);
+    padding: 0.6rem 0.95rem;
+    border-radius: var(--radius-klein);
+    font-family: var(--font-smal);
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
-  .hamburger:hover { border-color: var(--color-wit); }
+  .hamburger:hover { background: var(--color-wit); }
   @media (min-width: 1280px) { .hamburger { display: none; } }
 
   .hamburger-streepjes { display: grid; gap: 4px; width: 16px; }
@@ -298,57 +302,51 @@ const pad = Astro.url.pathname;
     background: var(--color-zwart);
   }
   .overlay-titel {
-    font-family: var(--font-mono);
-    font-size: var(--text-mini);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--color-grijs);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: var(--color-wit);
   }
   .overlay-sluit {
-    background: none;
-    border: 1px solid var(--kleur-lijn-donker);
+    background: var(--kleur-inkt-op);
+    border: 0;
+    border-radius: var(--radius-klein);
     color: var(--color-wit);
     cursor: pointer;
-    padding: 0.5rem 0.85rem;
-    font-family: var(--font-mono);
-    font-size: var(--text-mini);
+    padding: 0.6rem 0.95rem;
+    font-family: var(--font-smal);
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .overlay-inhoud { padding-block: 1.75rem 4rem; display: grid; gap: 1.75rem; }
   .overlay-groep ul { list-style: none; margin: 0; padding: 0; }
 
   .overlay-groepkop {
-    font-family: var(--font-mono);
+    font-family: var(--font-smal);
     font-size: var(--text-mini);
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-grijs);
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.35rem;
-    border-bottom: 1px solid var(--kleur-lijn-donker);
+    color: var(--color-blauw);
+    margin-bottom: 0.4rem;
   }
   .overlay-groep a {
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0.6rem 0;
+    padding: 0.55rem 0;
     text-decoration: none;
     color: var(--color-wit);
-    font-size: 1.0625rem;
+    font-family: var(--font-smal);
+    font-size: 1.35rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
   }
   .overlay-groep a.is-actief { color: var(--color-blauw); }
   .overlay-enkel {
-    font-family: var(--font-display);
-    font-size: 1.25rem !important;
-    font-weight: 800 !important;
-    border-bottom: 1px solid var(--kleur-lijn-donker);
-    padding-bottom: 0.9rem !important;
+    font-family: var(--font-display) !important;
+    font-size: 1.6rem !important;
+    font-weight: 400 !important;
   }
 
   .alleen-schermlezer {

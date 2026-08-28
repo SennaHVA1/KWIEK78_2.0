@@ -152,8 +152,15 @@ export type Artikel = {
   /** Markdown. */
   body: string;
   afbeelding?: string;
-  bron: 'facebook' | 'cms';
-  facebookUrl?: string;
+  /**
+   * Waar het bericht vandaan komt.
+   *   website  van kwiek78.nl, de huidige site van de club
+   *   facebook uit de Graph API, als de club daar ooit toegang voor geeft
+   *   cms      met de hand geschreven, niet overgenomen
+   */
+  bron: 'website' | 'facebook' | 'cms';
+  /** Het originele bericht, waar het ook vandaan komt. */
+  bronUrl?: string;
 };
 
 /**

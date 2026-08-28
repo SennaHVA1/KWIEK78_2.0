@@ -129,12 +129,13 @@ foto's.
 
 `/public/images/nieuws/` verhouding **16:9**, minimaal 1200 px breed.
 
-Nu hergebruiken de dummyberichten bestaande foto's. Zodra de koppeling met de
-Facebook Graph API er is, komt de afbeelding rechtstreeks uit het veld
-`full_picture` van de Facebookpost en is deze map niet meer nodig.
+Deze map wordt gevuld door `npm run nieuws`. Dat script haalt de berichten van
+kwiek78.nl en zet de bijbehorende foto verkleind naar 1200 px hier neer, met de
+slug van het bericht als bestandsnaam. Er hoeft dus niets te worden
+aangeleverd, en bestaande bestanden worden overgeslagen.
 
-Voor redactionele artikelen die niet van Facebook komen (`bron: "cms"`) zet je
-het beeld hier neer en verwijs je ernaar in `src/data/nieuws.json`.
+Voor een artikel dat met de hand is geschreven (`bron: "cms"`) zet je het beeld
+hier zelf neer en verwijs je ernaar in `src/data/nieuws.json`.
 
 ---
 

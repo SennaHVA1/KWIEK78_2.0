@@ -26,6 +26,8 @@ HTML, CSS en een paar kilobyte JavaScript, en kan op elke statische host.
 ### Hulpscripts
 
 ```bash
+npm run nieuws                               # haalt de nieuwsberichten van kwiek78.nl
+npm run thumbnails                           # haalt de thumbnails van Kwiek Inside
 npm run fotos                                # verkleint /_bronfotos naar /public/images
 node scripts/clublogos-genereren.mjs         # tijdelijke wapens van tegenstanders
 node scripts/sponsorlogos-genereren.mjs      # tijdelijke sponsorlogo's
@@ -33,8 +35,8 @@ node scripts/standen-genereren.mjs           # poulestanden, met controle op con
 node scripts/dummydata-genereren.mjs         # verjaardagen, minutenspel, dienstenrooster
 ```
 
-Ze zijn alle vier alleen voor de demo. Zodra de echte bronnen zijn aangesloten
-kunnen ze weg.
+De onderste vier zijn alleen voor de demo en kunnen weg zodra de echte bronnen
+zijn aangesloten. De bovenste twee blijven bruikbaar: die halen echte data op.
 
 ---
 
@@ -160,7 +162,7 @@ minutenspel zijn voorbeeldmateriaal.
 | `teams.json` | 6 teams met selectie, staf en trainingstijden | Sportlink |
 | `standen.json` | 5 poulestanden | Sportlink |
 | `verjaardagen.json` | 134 leden, alleen dag en maand | Sportlink |
-| `nieuws.json` | 10 berichten in Facebook-vorm | Facebook Graph API |
+| `nieuws.json` | 12 echte berichten, in Graph-API-vorm | kwiek78.nl, `npm run nieuws` |
 | `agenda.json` | 12 activiteiten | eigen beheer |
 | `diensten.json` | 135 vrijwilligersdiensten | eigen beheer |
 | `sponsoren.json` | 8 sponsoren, echte namen | eigen beheer |
@@ -255,11 +257,37 @@ waar zomaar iemand uit weg is roept vragen op.
 
 ---
 
-## Nieuws uit Facebook
+## Nieuws
 
-`src/lib/nieuws.ts` leest nu uit `src/data/nieuws.json`. Dat bestand heeft
-bewust dezelfde vorm als wat de Facebook Graph API teruggeeft, zodat de
-omzetting in de adapter straks ongewijzigd blijft:
+De berichten op de site zijn **echt**: twaalf stuks, opgehaald van kwiek78.nl
+met `npm run nieuws`. Inclusief de foto's, die verkleind naar
+`/public/images/nieuws` worden gezet.
+
+### Waarom niet van Facebook
+
+Dat was het oorspronkelijke plan, maar Facebook laat zich niet meer publiek
+uitlezen. Nagemeten, niet aangenomen:
+
+| Weg | Uitkomst |
+|---|---|
+| Graph API zonder token | `OAuthException` code 104, token verplicht |
+| De pagina zelf ophalen | 302 naar een inlogscherm, daarna 400 |
+| `feeds/page.php?format=rss20` | 404, deze feeds bestaan niet meer |
+| `/{id}/posts/rss` | 200, maar geeft HTML terug, geen RSS |
+
+De enige echte weg naar Facebook is een Page Access Token, en daarvoor moet de
+club ons een rol geven op hun pagina. Dat hoeft nu niet meer, want **dezelfde
+berichten staan ook op kwiek78.nl** en die zijn gewoon op te halen.
+
+Dat is bovendien de betere bron. Daar staat een echte kop boven het bericht,
+op Facebook niet. Er is geen token dat verloopt of wordt ingetrokken. En de
+club hoeft niets te regelen.
+
+### Als de club later toch Facebook wil
+
+`src/data/nieuws.json` heeft bewust dezelfde vorm als wat de Facebook Graph
+API teruggeeft, dus dan hoeft alleen de aanlevering te wisselen en blijft de
+adapter ongewijzigd:
 
 ```
 GET https://graph.facebook.com/v21.0/{page-id}/posts
@@ -293,20 +321,29 @@ KNVB-clubcode van Kwiek is **BBKY84H**.
 
 Reken op een doorlooptijd van een paar werkdagen.
 
-### 2. Facebook-adminrechten — actie: club
+### 2. Nieuws automatisch bijwerken — actie: Brand-On
 
-Om nieuws automatisch van Facebook te halen is een Page Access Token nodig.
-Daarvoor moet **Brand-On admin worden gemaakt op de Facebookpagina van
-v.v. Kwiek '78**. Dat kan alleen de huidige paginabeheerder doen, via Meta
-Business Suite.
+Dit punt was eerst "Facebook-adminrechten". Dat is niet meer nodig: het nieuws
+komt van kwiek78.nl. Zie het hoofdstuk **Nieuws** hierboven.
 
-Dit is geen technische keuze en niets waar wij omheen kunnen: zonder die stap
-kan de koppeling niet worden gebouwd. De pagina blijft eigendom van de club en
-de rechten kunnen op elk moment weer worden ingetrokken.
+Wat nog moet gebeuren is het periodiek opnieuw ophalen. De site is statisch,
+dus een nieuw bericht komt er pas in bij een nieuwe build. Twee regels werk:
 
-Alternatief als de club dit liever niet doet: nieuwsberichten met de hand in
-een klein CMS zetten. Dat werkt, maar dan komt er wel dubbel werk bij de
-vrijwilliger die nu alleen op Facebook post.
+1. In Cloudflare Pages een **Deploy Hook** aanmaken. Dat geeft een url die met
+   een POST een build start.
+2. Die url een keer per dag laten aanroepen, bijvoorbeeld met een gratis
+   GitHub Action op een schema.
+
+Dan staat een bericht dat de club plaatst binnen een dag op de nieuwe site,
+zonder dat iemand iets hoeft te doen.
+
+Belangrijk voor later: `npm run nieuws` schrijft het resultaat naar
+`src/data/nieuws.json` en dat bestand staat in git. Gaat kwiek78.nl een keer
+plat, dan bouwt de site gewoon door met de laatste versie die er lag.
+
+Zolang de club de oude site nog gebruikt, is dat de bron. Stopt die ooit, dan
+zijn er twee wegen: alsnog de Facebook-koppeling (dan is die rol op de pagina
+wel nodig) of een klein eigen beheerscherm.
 
 ### 3. Beeldmateriaal — actie: club
 

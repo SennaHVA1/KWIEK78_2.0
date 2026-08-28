@@ -3,26 +3,35 @@
  *  NIEUWS-ADAPTER
  * ============================================================================
  *
- * De wens van de club: berichten die op de Facebookpagina verschijnen komen
- * automatisch als artikel op de site.
+ * De wens van de club: berichten die de club plaatst komen automatisch als
+ * artikel op de site.
  *
- * NU:    deze module leest uit /src/data/nieuws.json. Dat bestand heeft
- *        bewust dezelfde vorm als wat de Facebook Graph API teruggeeft, zodat
- *        de omzetting hieronder straks ongewijzigd blijft.
+ * NU: /src/data/nieuws.json wordt gevuld door `npm run nieuws`, dat de
+ * berichten van kwiek78.nl haalt. Zie scripts/nieuws-ophalen.mjs.
  *
- * STRAKS: GET https://graph.facebook.com/v21.0/{page-id}/posts
- *             ?fields=id,message,created_time,full_picture,permalink_url
- *             &access_token={page-access-token}
+ * WAAROM NIET VAN FACEBOOK, ZOALS EERST BEDACHT
+ * Facebook laat zich niet meer publiek uitlezen. Nagemeten: de Graph API geeft
+ * zonder token een OAuthException (code 104), de pagina stuurt een bezoeker
+ * zonder login door naar een inlogscherm en de oude RSS-feeds bestaan niet
+ * meer. De enige echte weg is een Page Access Token, en daarvoor moet de club
+ * ons eerst een rol geven op hun Facebookpagina.
  *
- * OPENSTAAND PUNT, EN DIT IS GEEN TECHNISCHE KEUZE:
- * Om een Page Access Token te kunnen aanmaken moet de club Brand-On admin
- * maken op de Facebookpagina van v.v. Kwiek '78. Dat kan alleen de huidige
- * paginabeheerder doen, via Meta Business Suite. Zonder die stap kan deze
- * koppeling niet worden gebouwd. Zie README, kopje "Openstaande punten".
+ * Dat hoeft nu niet meer, want dezelfde berichten staan ook op kwiek78.nl en
+ * die zijn wel op te halen. Dat is bovendien de betere bron: daar staat een
+ * echte kop boven het bericht, op Facebook niet, en er is geen token dat kan
+ * verlopen of dat kan worden ingetrokken.
  *
- * BELANGRIJK OVER DE VORM VAN EEN FACEBOOKBERICHT:
- * Een Facebookpost heeft geen kop. Er is alleen een veld `message` met de
- * volledige tekst. Deze adapter doet daarom het volgende:
+ * ALS DE CLUB TOCH FACEBOOK WIL:
+ *   GET https://graph.facebook.com/v21.0/{page-id}/posts
+ *       ?fields=id,message,created_time,full_picture,permalink_url
+ *       &access_token={page-access-token}
+ * Het formaat in nieuws.json is precies dat van de Graph API, dus dan hoeft
+ * alleen de aanlevering te wisselen; alles hieronder blijft staan.
+ *
+ * BELANGRIJK OVER DE VORM VAN EEN BERICHT:
+ * Een Facebookpost heeft geen kop, alleen een veld `message` met de volledige
+ * tekst. Om beide bronnen door dezelfde molen te halen zet het importscript de
+ * kop als eerste regel van `message`. Deze adapter doet daarom het volgende:
  *
  *   - de eerste niet-lege regel wordt de titel van het artikel
  *   - alles daaronder wordt de body
@@ -32,17 +41,17 @@
  * Gevolg voor de club: de eerste regel van een Facebookbericht is meteen de
  * kop op de website. Dat is het waard om even te melden aan degene die post.
  *
- * Redactionele artikelen die niet van Facebook komen krijgen `bron: "cms"` en
- * gaan door precies dezelfde omzetting heen, zodat er maar een weg is.
+ * Artikelen die met de hand zijn geschreven krijgen `bron: "cms"` en gaan door
+ * precies dezelfde omzetting heen, zodat er maar een weg is.
  */
 
 import ruwNieuws from '../data/nieuws.json';
 import type { Artikel } from './types';
 
-/** De vorm waarin de Facebook Graph API een bericht teruggeeft. */
+/** De vorm van een ruw bericht, gelijk aan wat de Facebook Graph API geeft. */
 type RuwBericht = {
   id: string;
-  bron: 'facebook' | 'cms';
+  bron: 'website' | 'facebook' | 'cms';
   message: string;
   created_time: string;
   full_picture?: string;
@@ -92,7 +101,7 @@ function naarArtikel(bericht: RuwBericht): Artikel {
     body,
     afbeelding: bericht.full_picture,
     bron: bericht.bron,
-    facebookUrl: bericht.permalink_url ?? undefined,
+    bronUrl: bericht.permalink_url ?? undefined,
   };
 }
 

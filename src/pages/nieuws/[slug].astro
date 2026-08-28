@@ -38,10 +38,12 @@ const meer = getNieuws().filter((a) => a.slug !== artikel.slug).slice(0, 3);
           <div>
             <p class="artikel-meta data">
               <time datetime={machineDatum(artikel.datum)}>{volledigeDatum(artikel.datum)}</time>
-              {artikel.bron === 'facebook' && (
+              {artikel.bron !== 'cms' && (
                 <>
                   <span class="artikel-punt" aria-hidden="true"></span>
-                  <span class="artikel-bron">Overgenomen van Facebook</span>
+                  <span class="artikel-bron">
+                    {artikel.bron === 'facebook' ? 'Overgenomen van Facebook' : 'Overgenomen van kwiek78.nl'}
+                  </span>
                 </>
               )}
             </p>
@@ -73,10 +75,10 @@ const meer = getNieuws().filter((a) => a.slug !== artikel.slug).slice(0, 3);
 
             <div class="lopende-tekst" set:html={body} />
 
-            {artikel.facebookUrl && (
+            {artikel.bronUrl && (
               <p class="artikel-origineel">
-                <a class="knop knop--rand" href={artikel.facebookUrl} target="_blank" rel="noopener noreferrer">
-                  Origineel op Facebook
+                <a class="knop knop--rand" href={artikel.bronUrl} target="_blank" rel="noopener noreferrer">
+                  {artikel.bron === 'facebook' ? 'Origineel op Facebook' : 'Origineel op kwiek78.nl'}
                 </a>
               </p>
             )}

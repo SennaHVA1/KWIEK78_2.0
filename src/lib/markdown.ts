@@ -34,9 +34,11 @@ function inline(tekst: string): string {
   uit = uit.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
     '<a href="$2" rel="noopener noreferrer" target="_blank">$1</a>');
 
-  // Kale URL's, maar niet die al in een href staan.
-  uit = uit.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g,
-    '$1<a href="$2" rel="noopener noreferrer" target="_blank">$2</a>');
+  // Kale URL's, maar niet die al in een href staan. Leestekens aan het eind
+  // horen bij de zin, niet bij de link: "kijk op rabobank.nl/clubsupport."
+  // moet niet naar een adres met een punt erachter wijzen.
+  uit = uit.replace(/(^|[\s(])(https?:\/\/[^\s<)]*[^\s<).,;:!?])([.,;:!?]*)/g,
+    '$1<a href="$2" rel="noopener noreferrer" target="_blank">$2</a>$3');
 
   uit = uit.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   uit = uit.replace(/(^|[^*])\*([^*\n]+)\*($|[^*])/g, '$1<em>$2</em>$3');

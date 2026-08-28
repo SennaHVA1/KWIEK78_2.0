@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "fotos": "node scripts/fotos-verkleinen.mjs",
-    "thumbnails": "node scripts/kwiek-inside-thumbnails.mjs"
+    "thumbnails": "node scripts/kwiek-inside-thumbnails.mjs",
+    "nieuws": "node scripts/nieuws-ophalen.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",

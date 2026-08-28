@@ -20,9 +20,8 @@ const pad = Astro.url.pathname;
         alt-tekst zodat hij voor schermlezers en zoekmachines wel meetelt. */}
     <a class="merknaam" href="/">
       <span class="merknaam-wapen">
-        <img src="/images/logos/kwiek-78.png" alt="v.v. Kwiek '78, naar de homepage" width="68" height="40" />
+        <img src="/images/logos/kwiek-78.png" alt="v.v. Kwiek '78, naar de homepage" width="104" height="61" />
       </span>
-      <span class="merknaam-plaats">Avenhorn</span>
     </a>
 
     <nav class="hoofdmenu" aria-label="Hoofdmenu">
@@ -153,10 +152,10 @@ const pad = Astro.url.pathname;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    min-height: 64px;
+    min-height: 72px;
   }
   @media (min-width: 1280px) {
-    .kop-binnen { min-height: 76px; }
+    .kop-binnen { min-height: 82px; }
   }
 
   .merknaam {
@@ -167,21 +166,19 @@ const pad = Astro.url.pathname;
     color: var(--color-wit);
     flex: none;
   }
+  /* Het logo is een banner met de clubnaam erin, dus het moet groot genoeg
+     staan om die naam te kunnen lezen. De hoogte van de balk is daarop
+     afgestemd en niet andersom. */
   .merknaam-wapen {
     display: block;
     background: var(--color-wit);
     border-radius: var(--radius-klein);
-    padding: 0.3rem 0.45rem;
+    padding: 0.3rem 0.5rem;
     line-height: 0;
   }
-  .merknaam-wapen img { width: 68px; height: auto; }
-  .merknaam-plaats {
-    font-family: var(--font-smal);
-    font-size: var(--text-mini);
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-blauw);
+  .merknaam-wapen img { width: 88px; height: auto; }
+  @media (min-width: 1280px) {
+    .merknaam-wapen img { width: 104px; }
   }
 
   /* ------------------------------------------------------------------ */
@@ -309,7 +306,7 @@ const pad = Astro.url.pathname;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 64px;
+    min-height: 72px;
     border-bottom: 1px solid var(--kleur-lijn-donker);
     flex: none;
     position: sticky;

@@ -173,9 +173,15 @@ const snelknoppen = [
     aspect-ratio: auto !important;
     border-radius: 0 !important;
     object-fit: cover;
+    /* De hero is een brede band uit een staande teamfoto. Met de standaard
+       uitsnede in het midden begint het beeld pas onder de achterste rij en
+       zie je alleen de koppen van de voorste. Deze waarde legt de band hoger,
+       zodat beide rijen gezichten in beeld staan. */
+    object-position: center 20%;
   }
-  /* Genoeg verduistering voor leesbare tekst, maar de foto blijft in kleur.
-     Grijstinten maakten de hele site somber en dat is niet wat een
+  /* De verduistering zit vooral onderin, waar de tekst staat. Bovenin blijft
+     het beeld grotendeels open, want daar staan de gezichten. De foto blijft
+     in kleur: grijstinten maakten de hele site somber en dat is niet wat een
      voetbalclub is. */
   .hero-beeld::after {
     content: "";
@@ -183,10 +189,19 @@ const snelknoppen = [
     inset: 0;
     background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--color-zwart) 55%, transparent) 0%,
-      color-mix(in srgb, var(--color-zwart) 35%, transparent) 40%,
-      var(--color-zwart) 100%
+      color-mix(in srgb, var(--color-zwart) 16%, transparent) 0%,
+      color-mix(in srgb, var(--color-zwart) 12%, transparent) 42%,
+      color-mix(in srgb, var(--color-zwart) 52%, transparent) 66%,
+      color-mix(in srgb, var(--color-zwart) 88%, transparent) 85%,
+      color-mix(in srgb, var(--color-zwart) 97%, transparent) 100%
     );
+  }
+
+  /* De titel loopt met zijn bovenkant net over het lichtere deel van het
+     verloop, en daar zitten witte shirts. Een zachte schaduw houdt de tekst
+     leesbaar zonder dat de foto verder verduisterd hoeft te worden. */
+  .hero-binnen > * {
+    text-shadow: 0 2px 16px color-mix(in srgb, var(--color-zwart) 75%, transparent);
   }
 
   .hero-binnen { padding-bottom: clamp(1.5rem, 4vw, 2.5rem); }

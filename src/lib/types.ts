@@ -252,3 +252,29 @@ export type Video = {
   /** Lengte als mm:ss, puur voor weergave. */
   duur: string;
 };
+
+/**
+ * Contributie, zoals die in het informatiebulletin staat.
+ *
+ * De bedragen zijn hele euro's per seizoen. Het kledingplan staat er los van:
+ * dat is een vast bedrag bovenop de contributie, voor elk spelend lid.
+ */
+export type Contributietarief = {
+  /** Leeftijdscategorie, bijvoorbeeld "O10 en O11". */
+  categorie: string;
+  bedrag: number;
+};
+
+export type Contributiereeks = {
+  soort: 'veld' | 'zaal';
+  label: string;
+  tarieven: Contributietarief[];
+};
+
+export type Contributie = {
+  /** Bijvoorbeeld "2026/2027". */
+  seizoen: string;
+  /** Bijdrage kledingplan per spelend lid, per seizoen. */
+  kledingplan: number;
+  reeksen: Contributiereeks[];
+};

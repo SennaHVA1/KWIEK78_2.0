@@ -29,11 +29,12 @@ import ruweSponsoren from '../data/sponsoren.json';
 import ruwBestuur from '../data/bestuur.json';
 import ruweEreleden from '../data/ereleden.json';
 import ruweBulletins from '../data/bulletins.json';
+import ruweContributie from '../data/contributie.json';
 import ruwMinutenspel from '../data/minutenspel.json';
 import ruweVideos from '../data/videos.json';
 import type {
   AgendaItem, Dienst, DienstSoort, Sponsor, SponsorNiveau,
-  Bestuurslid, Erelid, Bulletin, MinutenspelClaim, Video,
+  Bestuurslid, Erelid, Bulletin, MinutenspelClaim, Video, Contributie,
 } from './types';
 
 const agenda = ruweAgenda as AgendaItem[];
@@ -42,6 +43,7 @@ const sponsoren = ruweSponsoren as Sponsor[];
 const bestuur = ruwBestuur as Bestuurslid[];
 const ereleden = ruweEreleden as Erelid[];
 const bulletins = ruweBulletins as Bulletin[];
+const contributie = ruweContributie as Contributie;
 const minutenspel = ruwMinutenspel as MinutenspelClaim[];
 const videos = ruweVideos as Video[];
 
@@ -71,10 +73,10 @@ export const CLUBGEGEVENS = {
   plaats: 'Avenhorn',
   provincie: 'Noord-Holland',
   straat: 'Het Veer 92',
-  postcode: '1633 HE',
-  sportpark: "Sportpark Kwiek '78",
+  postcode: '1633 DH',
+  sportpark: 'Sportpark Het Veer',
   knvbClubcode: 'BBKY84H',
-  telefoon: '0229 54 17 82',
+  telefoon: '0229 54 14 70',
   email: 'info@kwiek78.nl',
   facebook: 'https://www.facebook.com/vvkwiek78',
   /* 471 berichten, 608 volgers. Hun eigen site linkt hier niet naar en noemt in
@@ -230,6 +232,15 @@ export function getEreleden(): Erelid[] {
 
 export function getBulletins(): Bulletin[] {
   return [...bulletins].sort((a, b) => b.datum.localeCompare(a.datum));
+}
+
+/**
+ * De contributie zoals die in het informatiebulletin staat: een basisbedrag
+ * per leeftijdscategorie voor veld en zaal, plus de bijdrage voor het
+ * kledingplan. Bedragen wijzigen per seizoen, de opbouw niet.
+ */
+export function getContributie(): Contributie {
+  return contributie;
 }
 
 /** Het documentblok "Richtlijnen gebruik kunstgras" staat apart op de pagina. */

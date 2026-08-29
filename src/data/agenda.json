@@ -29,7 +29,7 @@
     "datum": "2026-09-12T09:00:00+02:00",
     "titel": "Start Grote Clubactie",
     "omschrijving": "Uitgifte van de verkoopboekjes aan de jeugdteams, direct na de wedstrijden.",
-    "locatie": "Sportpark Kwiek '78",
+    "locatie": "Sportpark Het Veer",
     "categorie": "jeugd"
   },
   {
@@ -54,7 +54,7 @@
     "eindDatum": "2026-10-24T14:00:00+02:00",
     "titel": "Onderhoudsdag sportpark",
     "omschrijving": "Snoeien, hekwerk bijwerken en de dug-outs schoonmaken. Handschoenen en koffie zijn er.",
-    "locatie": "Sportpark Kwiek '78",
+    "locatie": "Sportpark Het Veer",
     "categorie": "onderhoud"
   },
   {
@@ -87,7 +87,7 @@
     "eindDatum": "2027-01-10T00:00:00+01:00",
     "titel": "Winterstop",
     "omschrijving": "Geen competitie. De velden blijven dicht, de kantine is alleen open op zondagmiddag.",
-    "locatie": "Sportpark Kwiek '78",
+    "locatie": "Sportpark Het Veer",
     "categorie": "club"
   },
   {
@@ -95,7 +95,7 @@
     "datum": "2027-01-03T15:00:00+01:00",
     "titel": "Nieuwjaarsreceptie",
     "omschrijving": "Met de traditionele wedstrijd oud-Kwiek tegen de selectie om twee uur.",
-    "locatie": "Sportpark Kwiek '78",
+    "locatie": "Sportpark Het Veer",
     "categorie": "club"
   }
 ]

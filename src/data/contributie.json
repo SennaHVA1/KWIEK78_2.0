@@ -1,0 +1,30 @@
+{
+  "seizoen": "2026/2027",
+  "kledingplan": 20,
+  "reeksen": [
+    {
+      "soort": "veld",
+      "label": "Veld",
+      "tarieven": [
+        { "categorie": "Mini's", "bedrag": 55 },
+        { "categorie": "O8 en O9", "bedrag": 85 },
+        { "categorie": "O10 en O11", "bedrag": 100 },
+        { "categorie": "O12 en O13", "bedrag": 105 },
+        { "categorie": "O14 en O15", "bedrag": 115 },
+        { "categorie": "O16 en O17", "bedrag": 130 },
+        { "categorie": "O19", "bedrag": 145 },
+        { "categorie": "Senioren", "bedrag": 165 }
+      ]
+    },
+    {
+      "soort": "zaal",
+      "label": "Zaal",
+      "tarieven": [
+        { "categorie": "O15", "bedrag": 80 },
+        { "categorie": "O17", "bedrag": 90 },
+        { "categorie": "O19", "bedrag": 100 },
+        { "categorie": "Senioren", "bedrag": 110 }
+      ]
+    }
+  ]
+}

@@ -5,30 +5,28 @@
  * Op de oude site was dit een pagina met een knop naar een PDF. Het bulletin
  * staat nu gewoon op de pagina: de kantineregels, de contributiebedragen en
  * de opzegtermijn zijn precies het soort dingen die je op een telefoon langs
- * het veld wilt kunnen opzoeken, en dat lukt niet in een download.
+ * het veld wilt kunnen opzoeken, en dat lukt niet in een download. Er staan
+ * daarom ook geen documenten meer op deze pagina: alles wat erin stond, staat
+ * er nu zelf.
  *
  * De tekst is die van de club. Alleen de aanspreekvorm is meegegaan met de
  * rest van de site (je in plaats van u); aan de afspraken zelf, de bedragen
  * en de termijnen is niets veranderd.
  *
- * De richtlijnen voor het kunstgras stonden op de oude site op een eigen
- * pagina met een enkele PDF erop. Die staan hieronder als sectie: de
- * belangrijkste regels leesbaar op de pagina zelf, met het document ernaast.
+ * De vorm is een raster met haarlijnen in plaats van losse kaartjes. Elk vak
+ * heeft evenveel ruimte en de lijnen lopen door van boven naar onder, zodat
+ * de pagina leest als een blad met vakken en niet als een verzameling
+ * zwevende blokjes. Vier vakken staan twee bij twee, zes vakken drie bij
+ * twee: altijd volle rijen, nooit een enkel vak dat achterblijft.
  */
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import Accordeon from '../../components/Accordeon.astro';
-import {
-  getBulletins, getKunstgrasrichtlijnen, getContributie,
-  CLUBGEGEVENS, routeLink,
-} from '../../lib/club';
-import { datumZonderDag } from '../../lib/datum';
+import { getContributie, CLUBGEGEVENS, routeLink } from '../../lib/club';
 
-const documenten = getBulletins();
-const kunstgras = getKunstgrasrichtlijnen();
 const contributie = getContributie();
 
-/** De snelkoppelingen in de zwarte kop. Bewust kort: zes, niet negen. */
+/** De snelkoppelingen in de zwarte kop. */
 const inhoud = [
   { href: '#accommodatie', label: 'Accommodatie' },
   { href: '#huisregels', label: 'Huisregels' },
@@ -36,9 +34,11 @@ const inhoud = [
   { href: '#contributie', label: 'Contributie' },
   { href: '#lidmaatschap', label: 'Lidmaatschap' },
   { href: '#meedoen', label: 'Meedoen' },
+  { href: '#kunstgras', label: 'Kunstgras' },
 ];
 
-/* Afspraken op het complex. */
+/* Afspraken op het complex. De vololgorde is op lengte gezet: het langste
+   vak naast het langste, zodat beide rijen even hoog uitkomen. */
 const huisregels = [
   {
     titel: 'Kantine',
@@ -47,6 +47,16 @@ const huisregels = [
       'Op zaterdag schenken we geen alcohol.',
       'Op andere dagen schenken we geen alcohol aan bezoekers onder de 18 jaar. Bij twijfel vraagt de kantinedienst om een legitimatiebewijs.',
       'Op zondag stopt de verkoop uiterlijk om 18:00 uur. Om 18:30 uur gaat de kantine dicht.',
+    ],
+  },
+  {
+    titel: 'Kleding',
+    punten: [
+      "Het tenue is een wit shirt met een zwarte broek en zwarte sokken. Voor alle teams zijn tenues beschikbaar.",
+      "Sinds seizoen 2010/2011 loopt het kledingplan: leden betalen jaarlijks een bijdrage voor de aanschaf. De tenues blijven eigendom van Kwiek '78.",
+      'Sponsors kunnen tegen een vaste vergoeding een reclame-uiting op de shirts laten aanbrengen. We zijn blij met al onze sponsors en bevelen ze van harte bij je aan.',
+      'Een tenue blijft vier jaar bij hetzelfde team. De O13-1 houdt dus het tenue van de O13-1: het gaat niet mee met spelers naar een ander team, ook niet als een familielid sponsor van dat team is.',
+      'De tenues worden bij toerbeurt gewassen; de begeleider stelt daarvoor een wasschema op. Scheenbeschermers, voetbalschoenen en trainingskleding neem je zelf mee.',
     ],
   },
   {
@@ -63,17 +73,6 @@ const huisregels = [
       'Op de trainingsuren van de jeugd en op zaterdag is het hele terrein rookvrij. Roken kan dan alleen buiten het hek.',
     ],
   },
-  {
-    titel: 'Kleding',
-    punten: [
-      "Het tenue van Kwiek '78 is een wit shirt met een zwarte broek en zwarte sokken. Voor alle teams zijn tenues beschikbaar.",
-      "Sinds seizoen 2010/2011 loopt het kledingplan: leden betalen jaarlijks een bijdrage voor de aanschaf van de tenues. De tenues blijven eigendom van Kwiek '78.",
-      'Sponsors kunnen tegen een vaste vergoeding een reclame-uiting op de shirts laten aanbrengen. We zijn blij met al onze sponsors en bevelen ze van harte bij je aan.',
-      'Een tenue blijft vier jaar bij hetzelfde team en wordt daarna vervangen. De O13-1 houdt dus het tenue van de O13-1: het gaat niet mee met spelers naar een ander team, ook niet als een familielid sponsor van dat team is (uitzonderingen daargelaten).',
-      'De tenues worden bij toerbeurt gewassen door de spelers en speelsters. De begeleider stelt daarvoor een wasschema op.',
-      'Scheenbeschermers, voetbalschoenen en trainingskleding neem je zelf mee.',
-    ],
-  },
 ];
 
 /* Afspraken rond trainingen en wedstrijden. */
@@ -84,16 +83,8 @@ const voetbalregels = [
       'Het actuele trainingsschema staat op de website.',
       'De velden zitten vol, dus de trainers beginnen op tijd. Sta tien minuten voor aanvang omgekleed naast het veld.',
       'Het trainingsveld betreed je pas als de groep voor je klaar is en de trainer daar toestemming voor geeft.',
-      'Na de training ruimt iedereen samen de materialen op. Pas als alles terug is, gaat de groep naar huis.',
+      'Na afloop ruimt iedereen samen de materialen op. Pas als alles terug is, gaat de groep naar huis.',
       'Kun je niet trainen? Meld dat minimaal een half uur voor aanvang telefonisch bij je trainer.',
-    ],
-  },
-  {
-    titel: 'Wedstrijden',
-    punten: [
-      'Bij thuiswedstrijden ben je minimaal een half uur voor aanvang aanwezig, tenzij de begeleider iets anders afspreekt.',
-      'Bij uitwedstrijden van de jeugd rijden de ouders. Op de website staat wie er aan de beurt is.',
-      'Kun je niet rijden? Zorg zelf voor vervanging en meld dat op tijd bij de begeleider van het team.',
     ],
   },
   {
@@ -106,6 +97,14 @@ const voetbalregels = [
     ],
   },
   {
+    titel: 'Wedstrijden',
+    punten: [
+      'Bij thuiswedstrijden ben je minimaal een half uur voor aanvang aanwezig, tenzij de begeleider iets anders afspreekt.',
+      'Bij uitwedstrijden van de jeugd rijden de ouders. Op de website staat wie er aan de beurt is.',
+      'Kun je niet rijden? Zorg zelf voor vervanging en meld dat op tijd bij de begeleider van het team.',
+    ],
+  },
+  {
     titel: 'Digitale spelerspas',
     punten: [
       'Vanaf O12 is een digitale spelerspas bij de wedstrijd verplicht. Dat is een eis van de KNVB.',
@@ -115,22 +114,34 @@ const voetbalregels = [
   },
 ];
 
-/* Waar je terechtkunt en hoe je meedoet. */
+/* Het lidmaatschap in het kort, naast de lopende tekst. */
+const lidmaatschapFeiten = [
+  { term: 'Looptijd', uitleg: 'Minimaal een heel seizoen' },
+  { term: 'Aanmelden', uitleg: 'Met het formulier op deze site' },
+  { term: 'Opzeggen', uitleg: 'Schriftelijk, voor 1 juni' },
+  { term: 'Bij wie', uitleg: 'De ledenadministratie' },
+];
+
+/* Waar je terechtkunt en hoe je meedoet. Zes vakken, drie bij twee. */
 const meedoen = [
   {
     titel: 'Vrijwilligersdiensten',
-    tekst: 'Naast de leden die vrijwillig van alles regelen, is er een periodiek verplichte ondersteuning in de kantine: bardiensten, keukendiensten en schoonmaakdiensten op maandagochtend of maandagavond. Het rooster wordt jaarlijks opgesteld door de kantinecommissie en geldt voor alle senioren, O18- en MO20-junioren en de ouders van de overige jeugdleden. Kom je niet opdagen, dan brengen we 50 euro boete in rekening.',
+    tekst: "Naast de leden die vrijwillig van alles regelen, is er een periodiek verplichte ondersteuning in de kantine: bardiensten, keukendiensten en schoonmaakdiensten op maandagochtend of maandagavond. Het rooster wordt jaarlijks opgesteld door de kantinecommissie en geldt voor alle senioren, O18- en MO20-junioren en de ouders van de overige jeugdleden. Kom je niet opdagen, dan brengen we 50 euro boete in rekening.",
     link: { href: '/vrijwillige-diensten', label: 'Het dienstenrooster' },
-  },
-  {
-    titel: 'Bestuur',
-    tekst: 'Iedere donderdagavond vanaf 20:00 uur is er een bestuurslid aanwezig op het complex. Heb je vragen of opmerkingen, dan kun je die op dat moment kwijt.',
-    link: { href: '/club/bestuur', label: 'Bestuur en commissies' },
   },
   {
     titel: "Club van '78",
     tekst: "De Club van '78 is een onafhankelijke club binnen de vereniging, opgericht om Kwiek '78 jaarlijks te steunen met een bijdrage aan doelen die de leden zelf kiezen. De leden zijn vrienden van de vereniging en organiseren samen leuke evenementen.",
     link: { href: '/sponsoring#club-van-78', label: "Aanmelden bij de Club van '78" },
+  },
+  {
+    titel: 'Loterij en entree',
+    tekst: 'Op de zondagen dat het eerste elftal thuis speelt, vragen we entree. Daarvoor krijg je lootjes voor de loterij, die in de rust wordt getrokken. De opbrengst betaalt de activiteiten van de jeugdelftallen, zoals de jeugdslotdag. De O15-junioren verkopen de lootjes, met ondersteuning van iemand van het bestuur.',
+  },
+  {
+    titel: 'Bestuur',
+    tekst: 'Iedere donderdagavond vanaf 20:00 uur is er een bestuurslid aanwezig op het complex. Heb je vragen of opmerkingen, dan kun je die op dat moment kwijt.',
+    link: { href: '/club/bestuur', label: 'Bestuur en commissies' },
   },
   {
     titel: 'Sponsoring',
@@ -139,12 +150,8 @@ const meedoen = [
   },
   {
     titel: 'Nieuws op de site',
-    tekst: 'Op deze site staat alle informatie over de vereniging, ook over afgelastingen. Het wedstrijdprogramma op de site is altijd het meest actuele programma, dus kijk daar regelmatig even. Heb je nieuws of wil je een artikel laten plaatsen?',
+    tekst: 'Op deze site staat alle informatie over de vereniging, ook over afgelastingen. Het wedstrijdprogramma is er altijd het meest actueel. Heb je nieuws of wil je een artikel laten plaatsen?',
     link: { href: 'mailto:post@kwiek78.nl', label: 'post@kwiek78.nl' },
-  },
-  {
-    titel: 'Loterij en entree',
-    tekst: 'Op de zondagen dat het eerste elftal thuis speelt, vragen we entree. Daarvoor krijg je lootjes voor de loterij, die in de rust wordt getrokken. De opbrengst betaalt de activiteiten van de jeugdelftallen, zoals de jeugdslotdag. De O15-junioren verkopen de lootjes, met ondersteuning van iemand van het bestuur. Wie er verkoopt staat op de website.',
   },
 ];
 
@@ -170,6 +177,9 @@ const kunstgrasregels = [
     antwoord: 'Het team dat als laatste op het veld staat. Doelen terug op de plek, pionnen en hesjes mee naar het materiaalhok, en de laatste kijkt of er niets is blijven liggen.',
   },
 ];
+
+/** Nummer van een vak, altijd twee cijfers: 01, 02, 03. */
+const nummer = (i: number) => String(i + 1).padStart(2, '0');
 
 const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
 ---
@@ -254,11 +264,12 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
       <div class="kolom">
         <p class="kolom-kicker">Op het complex</p>
         <h2 class="kop-sectie blokkop">Huisregels</h2>
-        <div class="blokken">
-          {huisregels.map((blok) => (
-            <article class="blok blok--wit">
-              <h3 class="blok-titel">{blok.titel}</h3>
-              <ul class="blok-punten">
+        <div class="raster raster--twee raster--papier">
+          {huisregels.map((blok, i) => (
+            <article class="vak">
+              <p class="vak-nummer data" aria-hidden="true">{nummer(i)}</p>
+              <h3 class="vak-titel">{blok.titel}</h3>
+              <ul class="vak-punten">
                 {blok.punten.map((punt) => <li>{punt}</li>)}
               </ul>
             </article>
@@ -276,11 +287,12 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
       <div class="kolom">
         <p class="kolom-kicker">Op het veld</p>
         <h2 class="kop-sectie blokkop">Trainen en spelen</h2>
-        <div class="blokken">
-          {voetbalregels.map((blok) => (
-            <article class="blok">
-              <h3 class="blok-titel">{blok.titel}</h3>
-              <ul class="blok-punten">
+        <div class="raster raster--twee raster--wit">
+          {voetbalregels.map((blok, i) => (
+            <article class="vak">
+              <p class="vak-nummer data" aria-hidden="true">{nummer(i)}</p>
+              <h3 class="vak-titel">{blok.titel}</h3>
+              <ul class="vak-punten">
                 {blok.punten.map((punt) => <li>{punt}</li>)}
               </ul>
             </article>
@@ -300,42 +312,42 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
       <div class="kolom">
         <p class="kolom-kicker">Seizoen {contributie.seizoen}</p>
         <div class="contributie">
-          <div class="contributie-kop">
-            <h2 class="kop-sectie">Contributie</h2>
-            <p class="contributie-kleding">
-              <span class="data">&euro; {contributie.kledingplan},-</span>
-              <span>kledingplan per spelend lid, bovenop het basisbedrag</span>
-            </p>
-          </div>
+          <h2 class="kop-sectie">Contributie</h2>
 
-          <div class="tarieven">
+          {/* De zaalreeks telt vier categorieen en de veldreeks acht. Het
+              kledingplan en de uitleg over de incasso staan daarom onder de
+              zaaltabel: dan eindigen beide kolommen op dezelfde hoogte. */}
+          <div class="raster raster--twee raster--donker">
             {contributie.reeksen.map((reeks) => (
-              <table class="tarief">
-                <caption class="tarief-kop">{reeks.label}</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Categorie</th>
-                    <th scope="col" class="tarief-bedrag">Per seizoen</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {reeks.tarieven.map((tarief) => (
-                    <tr>
-                      <th scope="row">{tarief.categorie}</th>
-                      <td class="tarief-bedrag data">&euro; {tarief.bedrag},-</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ))}
-          </div>
+              <div class="vak">
+                <table class="tarief">
+                  <caption class="tarief-kop">{reeks.label}</caption>
+                  <tbody>
+                    {reeks.tarieven.map((tarief) => (
+                      <tr>
+                        <th scope="row">{tarief.categorie}</th>
+                        <td class="tarief-bedrag data">&euro;&nbsp;{tarief.bedrag},-</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-          <div class="lopende-tekst contributie-uitleg">
-            <p>
-              De contributie wordt geincasseerd via onze contributiepartner NIKKI. Je krijgt van
-              ze een mail met het betaalverzoek en betaalt daarna in een keer, of in delen. Bij
-              in delen betalen komen er administratiekosten bij, die naar NIKKI gaan.
-            </p>
+                {reeks.soort === 'zaal' && (
+                  <div class="naschrift">
+                    <p class="kleding">
+                      <span class="kleding-bedrag data">&euro;&nbsp;{contributie.kledingplan},-</span>
+                      <span class="kleding-uitleg">Kledingplan per spelend lid, bovenop het basisbedrag</span>
+                    </p>
+                    <p class="contributie-uitleg">
+                      De contributie wordt geincasseerd via onze contributiepartner NIKKI. Je
+                      krijgt van ze een mail met het betaalverzoek en betaalt daarna in een keer,
+                      of in delen. Bij in delen betalen komen er administratiekosten bij, die naar
+                      NIKKI gaan.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -351,24 +363,35 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
     <div class="omhulsel">
       <div class="kolom">
         <p class="kolom-kicker">Aanmelden en opzeggen</p>
-        <div>
-          <h2 class="kop-sectie welkom-kop">Lidmaatschap</h2>
-          <div class="lopende-tekst">
-            <p>
-              Het lidmaatschap loopt minimaal een seizoen. Lid worden kan met het formulier op
-              deze site: je vult het in en de ledenadministratie neemt contact met je op.
-            </p>
-            <p>
-              Opzeggen kan uitsluitend schriftelijk bij de ledenadministratie, en moet
-              <strong>voor 1 juni</strong> van het lopende seizoen gebeuren. Zeg je later op, dan
-              wordt de contributie voor het volgende seizoen nog in rekening gebracht. Je gegevens
-              wijzigen kan met hetzelfde formulier.
-            </p>
+        <div class="lidmaatschap">
+          <div>
+            <h2 class="kop-sectie welkom-kop">Lidmaatschap</h2>
+            <div class="lopende-tekst">
+              <p>
+                Het lidmaatschap loopt minimaal een seizoen. Lid worden kan met het formulier op
+                deze site: je vult het in en de ledenadministratie neemt contact met je op.
+              </p>
+              <p>
+                Opzeggen kan uitsluitend schriftelijk bij de ledenadministratie, en moet
+                <strong>voor 1 juni</strong> van het lopende seizoen gebeuren. Zeg je later op, dan
+                wordt de contributie voor het volgende seizoen nog in rekening gebracht. Je
+                gegevens wijzigen kan met hetzelfde formulier.
+              </p>
+            </div>
+            <div class="lidmaatschap-knoppen">
+              <a class="knop knop--primair" href="/club/lid-worden">Lid worden</a>
+              <a class="knop knop--rand" href="/club/lid-worden">Lidmaatschap wijzigen</a>
+            </div>
           </div>
-          <div class="lidmaatschap-knoppen">
-            <a class="knop knop--primair" href="/club/lid-worden">Lid worden</a>
-            <a class="knop knop--rand" href="/club/lid-worden">Lidmaatschap wijzigen</a>
-          </div>
+
+          <dl class="feiten">
+            {lidmaatschapFeiten.map((feit) => (
+              <div class="feit">
+                <dt>{feit.term}</dt>
+                <dd>{feit.uitleg}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </div>
@@ -382,51 +405,17 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
       <div class="kolom">
         <p class="kolom-kicker">De club draait op mensen</p>
         <h2 class="kop-sectie blokkop">Meedoen en contact</h2>
-        <div class="blokken">
-          {meedoen.map((blok) => (
-            <article class="blok blok--wit">
-              <h3 class="blok-titel">{blok.titel}</h3>
-              <p class="blok-tekst">{blok.tekst}</p>
+        <div class="raster raster--drie raster--papier">
+          {meedoen.map((blok, i) => (
+            <article class="vak">
+              <p class="vak-nummer data" aria-hidden="true">{nummer(i)}</p>
+              <h3 class="vak-titel">{blok.titel}</h3>
+              <p class="vak-tekst">{blok.tekst}</p>
               {blok.link && (
-                <a class="blok-link link-onder" href={blok.link.href}>{blok.link.label}</a>
+                <a class="vak-link link-onder" href={blok.link.href}>{blok.link.label}</a>
               )}
             </article>
           ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================== -->
-  <!-- Documenten                                                         -->
-  <!-- ================================================================== -->
-  <section class="vlak-wit sectie" id="documenten">
-    <div class="omhulsel">
-      <div class="kolom">
-        <p class="kolom-kicker">Downloads</p>
-        <div>
-          <h2 class="kop-sectie blokkop">Documenten</h2>
-          <ul class="documenten">
-            {documenten.map((document) => (
-              <li class="document">
-                <a class="document-link" href={document.bestand} download>
-                  <span class="document-soort data" aria-hidden="true">PDF</span>
-                  <span class="document-tekst">
-                    <span class="document-titel">{document.titel}</span>
-                    <span class="document-omschrijving zacht">{document.omschrijving}</span>
-                  </span>
-                  <span class="document-meta data">
-                    {datumZonderDag(document.datum)}
-                    <span class="document-scheiding" aria-hidden="true"></span>
-                    {document.grootte}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <p class="documenten-noot zacht">
-            De bestanden zijn in deze demo nog niet aanwezig. De club levert ze aan bij oplevering.
-          </p>
         </div>
       </div>
     </div>
@@ -449,11 +438,6 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
               Dat lukt alleen als iedereen zich aan een paar afspraken houdt.
               Trainers en leiders worden geacht deze regels te kennen.
             </p>
-            {kunstgras && (
-              <a class="knop knop--primair" href={kunstgras.bestand} download>
-                Volledige richtlijnen ({kunstgras.grootte})
-              </a>
-            )}
           </div>
 
           <div class="kunstgras-regels">
@@ -499,6 +483,95 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
   .inhoud-link:hover { border-color: var(--color-wit); background: var(--kleur-inkt-op); }
   @media (prefers-reduced-motion: reduce) { .inhoud-link { transition: none; } }
 
+  /* ------------------------------------------------------------------ */
+  /* Het raster                                                         */
+  /* ------------------------------------------------------------------ */
+  /* Een omlijnd vlak dat door haarlijnen in gelijke vakken is verdeeld.
+     De lijnen zijn de rasterafstand zelf: de vakken staan een pixel uit
+     elkaar en de rand eronder schijnt erdoorheen. Daardoor lopen ze altijd
+     precies door en zijn alle vakken even breed en even hoog.           */
+  .raster {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: 1fr;
+    border: 1px solid;
+    border-radius: var(--radius-vlak);
+    overflow: hidden;
+  }
+  .raster--papier { background: var(--kleur-lijn-licht); border-color: var(--kleur-lijn-licht); }
+  .raster--wit    { background: var(--kleur-lijn-licht); border-color: var(--kleur-lijn-licht); }
+  .raster--donker { background: var(--kleur-lijn-donker); border-color: var(--kleur-lijn-donker); }
+
+  @media (min-width: 720px) {
+    .raster--twee { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .raster--drie { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1040px) {
+    .raster--drie { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .vak {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.35rem, 1rem + 1vw, 2rem);
+  }
+  .raster--papier .vak { background: var(--kleur-papier-op); }
+  .raster--wit .vak    { background: var(--color-wit); }
+  .raster--donker .vak { background: var(--kleur-inkt); }
+
+  .vak-nummer {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--color-blauwdiep);
+    margin-bottom: 0.3rem;
+  }
+  .raster--donker .vak-nummer { color: var(--color-blauw); }
+
+  .vak-titel {
+    font-family: var(--font-smal);
+    font-size: clamp(1.3rem, 1.15rem + 0.4vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1.1;
+    padding-bottom: 0.7rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid currentColor;
+  }
+
+  .vak-punten { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+  .vak-punten li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: var(--text-klein);
+    line-height: 1.55;
+    color: var(--color-grijsdonker);
+  }
+  .vak-punten li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.55rem;
+    height: 2px;
+    background: var(--color-blauwdiep);
+  }
+
+  .vak-tekst {
+    font-size: var(--text-klein);
+    line-height: 1.6;
+    color: var(--color-grijsdonker);
+  }
+  /* Onderaan het vak, zodat de links van een rij op een lijn staan. */
+  .vak-link {
+    margin-top: auto;
+    padding-top: 1.1rem;
+    font-size: var(--text-klein);
+    font-weight: 600;
+    align-self: start;
+    word-break: break-word;
+  }
+
   /* Welkom en adres --------------------------------------------------- */
   .welkom { display: grid; gap: 2.25rem; align-items: start; }
   @media (min-width: 900px) {
@@ -510,7 +583,8 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
     display: grid;
     justify-items: start;
     gap: 0.35rem;
-    padding: 1.4rem 1.5rem;
+    padding: 1.5rem 1.6rem;
+    border: 1px solid var(--kleur-lijn-licht);
     border-radius: var(--radius-vlak);
     background: var(--kleur-papier-op);
   }
@@ -524,97 +598,44 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
   }
   .adres-naam {
     font-family: var(--font-smal);
-    font-size: 1.4rem;
+    font-size: 1.45rem;
     font-weight: 700;
     line-height: 1.15;
   }
   .adres-regels { font-style: normal; line-height: 1.5; }
   .adres-telefoon { font-size: var(--text-klein); }
-  .adres-knop { margin-top: 0.85rem; }
-
-  /* Blokken met afspraken --------------------------------------------- */
-  .blokken {
-    display: grid;
-    gap: 1px;
-    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
-    align-items: start;
-  }
-  .blok {
-    padding: 1.35rem 1.5rem;
-    border-radius: var(--radius-vlak);
-    background: var(--kleur-papier-op);
-  }
-  .blok--wit { background: var(--color-wit); }
-
-  .blok-titel {
-    font-family: var(--font-smal);
-    font-size: 1.35rem;
-    font-weight: 700;
-    line-height: 1.15;
-    padding-bottom: 0.8rem;
-    margin-bottom: 0.85rem;
-    border-bottom: 2px solid var(--color-zwart);
-  }
-
-  .blok-punten { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.65rem; }
-  .blok-punten li {
-    position: relative;
-    padding-left: 1.15rem;
-    font-size: var(--text-klein);
-    line-height: 1.55;
-    color: var(--color-grijsdonker);
-  }
-  .blok-punten li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0.62em;
-    width: 0.5rem;
-    height: 2px;
-    background: var(--color-blauwdiep);
-  }
-
-  .blok-tekst {
-    font-size: var(--text-klein);
-    line-height: 1.6;
-    color: var(--color-grijsdonker);
-  }
-  .blok-link {
-    display: inline-block;
-    margin-top: 0.85rem;
-    font-size: var(--text-klein);
-    font-weight: 600;
-    word-break: break-word;
-  }
+  .adres-knop { margin-top: 0.9rem; }
 
   /* Contributie ------------------------------------------------------- */
-  .contributie { display: grid; gap: 2rem; }
-  .contributie-kop {
+  .contributie { display: grid; gap: 1.75rem; }
+
+  /* Onderaan het vak, zodat beide kolommen op dezelfde regel eindigen. */
+  .naschrift {
+    margin-top: auto;
+    padding-top: 1.75rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .kleding {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
-    gap: 0.75rem 2rem;
+    gap: 0.7rem;
     flex-wrap: wrap;
+    padding-top: 1.1rem;
+    border-top: 2px solid var(--color-blauw);
   }
-  .contributie-kleding {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    font-size: var(--text-klein);
-    color: var(--color-grijs);
-    max-width: 36ch;
-  }
-  .contributie-kleding .data {
+  .kleding-bedrag {
     font-family: var(--font-smal);
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    line-height: 1;
     color: var(--color-blauw);
   }
-
-  .tarieven { display: grid; gap: 2.25rem; }
-  @media (min-width: 760px) {
-    .tarieven { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; align-items: start; }
+  .kleding-uitleg {
+    font-size: var(--text-klein);
+    line-height: 1.45;
+    color: var(--color-wit);
+    max-width: 26ch;
   }
 
   .tarief { width: 100%; border-collapse: collapse; }
@@ -623,87 +644,62 @@ const telefoonSchoon = CLUBGEGEVENS.telefoon.replace(/\s/g, '');
     font-family: var(--font-smal);
     font-size: var(--text-mini);
     font-weight: 700;
-    letter-spacing: 0.13em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--color-blauw);
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--color-wit);
   }
-  .tarief th[scope="col"] {
+  .tarief th[scope="row"] {
+    font-weight: 500;
+    text-align: left;
+    padding: 0.62rem 0;
+    font-size: var(--text-klein);
+    border-bottom: 1px solid var(--kleur-lijn-donker);
+  }
+  .tarief td {
+    padding: 0.62rem 0;
+    font-size: var(--text-klein);
+    border-bottom: 1px solid var(--kleur-lijn-donker);
+  }
+  .tarief tr:last-child th, .tarief tr:last-child td { border-bottom: 0; }
+  .tarief-bedrag { text-align: right; white-space: nowrap; font-weight: 600; }
+
+  .contributie-uitleg {
+    font-size: var(--text-klein);
+    line-height: 1.6;
+    color: var(--color-grijs);
+  }
+
+  /* Lidmaatschap ------------------------------------------------------ */
+  .lidmaatschap { display: grid; gap: 2.25rem; align-items: start; }
+  @media (min-width: 900px) {
+    .lidmaatschap { grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: 3.5rem; }
+  }
+  .lidmaatschap-knoppen { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.4rem; }
+
+  .feiten {
+    display: grid;
+    margin: 0;
+    border-top: 2px solid var(--color-zwart);
+  }
+  .feit {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--kleur-lijn-licht);
+  }
+  .feit dt {
     font-family: var(--font-smal);
     font-size: var(--text-mini);
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    text-align: left;
-    color: var(--color-grijs);
-    padding: 0.4rem 0;
-    border-bottom: 2px solid var(--color-wit);
+    color: var(--color-blauwdiep);
   }
-  .tarief th[scope="row"] {
-    font-weight: 600;
-    text-align: left;
-    padding: 0.6rem 0;
-    font-size: var(--text-klein);
-    border-bottom: 1px solid var(--kleur-lijn-donker);
-  }
-  .tarief td {
-    padding: 0.6rem 0;
-    font-size: var(--text-klein);
-    border-bottom: 1px solid var(--kleur-lijn-donker);
-  }
-  .tarief-bedrag { text-align: right; white-space: nowrap; }
-
-  .contributie-uitleg p { color: var(--color-grijs); }
-
-  /* Lidmaatschap ------------------------------------------------------ */
-  .lidmaatschap-knoppen { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.4rem; }
-
-  /* Documenten -------------------------------------------------------- */
-  .documenten { list-style: none; margin: 0; padding: 0; }
-  .document { border-top: 1px solid var(--kleur-lijn-licht); }
-  .document:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
-
-  .document-link {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.35rem 1rem;
-    padding-block: 1rem;
-    text-decoration: none;
-    color: inherit !important;
-    align-items: start;
-    transition: background-color 0.15s var(--ease-klap);
-  }
-  .document-link:hover { background: var(--kleur-papier-op); }
-  @media (prefers-reduced-motion: reduce) { .document-link { transition: none; } }
-
-  .document-soort {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    padding: 0.35rem 0;
-    border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
-    font-size: var(--text-mini);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-  }
-
-  .document-tekst { display: grid; gap: 0.2rem; }
-  .document-titel { font-weight: 700; letter-spacing: -0.01em; }
-  .document-omschrijving { font-size: var(--text-klein); max-width: 60ch; }
-
-  .document-meta {
-    grid-column: 2;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: var(--text-mini);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-grijsdonker);
-  }
-  .document-scheiding { width: 0.45rem; height: 1px; background: currentColor; flex: none; }
-
-  .documenten-noot { font-size: var(--text-mini); margin-top: 1rem; max-width: 60ch; }
+  .feit dd { margin: 0; font-size: var(--text-klein); line-height: 1.45; }
 
   /* Kunstgras --------------------------------------------------------- */
   .kunstgras { display: grid; gap: 2.25rem; }

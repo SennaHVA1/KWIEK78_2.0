@@ -5,7 +5,7 @@
  *
  * Data die de club zelf beheert en die dus niet uit Sportlink of Facebook
  * komt: agenda, vrijwillige diensten, sponsoren, bestuur en commissies,
- * ereleden, documenten, minutenspel en Kwiek Inside.
+ * ereleden, contributie, minutenspel en Kwiek Inside.
  *
  * Waarom een derde module en niet alles in sportlink.ts: de drie modules
  * staan een-op-een voor de drie bronnen die er straks zijn.
@@ -28,13 +28,12 @@ import ruweDiensten from '../data/diensten.json';
 import ruweSponsoren from '../data/sponsoren.json';
 import ruwBestuur from '../data/bestuur.json';
 import ruweEreleden from '../data/ereleden.json';
-import ruweBulletins from '../data/bulletins.json';
 import ruweContributie from '../data/contributie.json';
 import ruwMinutenspel from '../data/minutenspel.json';
 import ruweVideos from '../data/videos.json';
 import type {
   AgendaItem, Dienst, DienstSoort, Sponsor, SponsorNiveau,
-  Bestuurslid, Erelid, Bulletin, MinutenspelClaim, Video, Contributie,
+  Bestuurslid, Erelid, MinutenspelClaim, Video, Contributie,
 } from './types';
 
 const agenda = ruweAgenda as AgendaItem[];
@@ -42,7 +41,6 @@ const diensten = ruweDiensten as Dienst[];
 const sponsoren = ruweSponsoren as Sponsor[];
 const bestuur = ruwBestuur as Bestuurslid[];
 const ereleden = ruweEreleden as Erelid[];
-const bulletins = ruweBulletins as Bulletin[];
 const contributie = ruweContributie as Contributie;
 const minutenspel = ruwMinutenspel as MinutenspelClaim[];
 const videos = ruweVideos as Video[];
@@ -218,7 +216,7 @@ export function getContactpersoon(functie: string): Bestuurslid | undefined {
 }
 
 /* ==========================================================================
-   Ereleden, documenten, minutenspel, video
+   Ereleden, contributie, minutenspel, video
    ========================================================================== */
 
 /**
@@ -230,10 +228,6 @@ export function getEreleden(): Erelid[] {
   return ereleden;
 }
 
-export function getBulletins(): Bulletin[] {
-  return [...bulletins].sort((a, b) => b.datum.localeCompare(a.datum));
-}
-
 /**
  * De contributie zoals die in het informatiebulletin staat: een basisbedrag
  * per leeftijdscategorie voor veld en zaal, plus de bijdrage voor het
@@ -241,11 +235,6 @@ export function getBulletins(): Bulletin[] {
  */
 export function getContributie(): Contributie {
   return contributie;
-}
-
-/** Het documentblok "Richtlijnen gebruik kunstgras" staat apart op de pagina. */
-export function getKunstgrasrichtlijnen(): Bulletin | undefined {
-  return bulletins.find((b) => b.id === 'richtlijnen-kunstgras');
 }
 
 /**

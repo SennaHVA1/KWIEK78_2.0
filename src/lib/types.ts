@@ -228,16 +228,6 @@ export type Erelid = {
   overleden?: boolean;
 };
 
-export type Bulletin = {
-  id: string;
-  titel: string;
-  datum: string;
-  omschrijving: string;
-  bestand: string;
-  /** Grootte als tekst, puur voor weergave. */
-  grootte: string;
-};
-
 export type Video = {
   id: string;
   /**

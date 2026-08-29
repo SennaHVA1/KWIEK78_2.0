@@ -66,7 +66,7 @@ export const MENU: Menu_groep[] = [
       { label: 'Agenda', href: '/club/agenda' },
       { label: 'Verjaardagskalender', href: '/club/verjaardagen' },
       { label: 'Minutenspel', href: '/club/minutenspel' },
-      { label: 'Informatiebulletin', href: '/club/informatiebulletin', omschrijving: 'Huisregels, contributie en documenten' },
+      { label: 'Informatiebulletin', href: '/club/informatiebulletin', omschrijving: 'Huisregels, contributie en lidmaatschap' },
       { label: 'Ereleden', href: '/club/ereleden' },
     ],
   },

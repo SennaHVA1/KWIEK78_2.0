@@ -75,25 +75,33 @@ const dagDeel = (iso: string) => {
     align-items: start;
   }
 
+  /* Vaste maat in plaats van een hoogte die uit de inhoud volgt. Dit blokje
+     bepaalt de rijhoogte van de agenda, en het vierkant in Verjaardagen doet
+     dat voor de lijst ernaast. Staan die twee niet op dezelfde maat, dan lopen
+     de twee kolommen van de tweeluik op de homepage uit de pas. */
   .agenda-datum {
     grid-area: datum;
     display: grid;
-    place-items: center;
+    place-content: center;
+    justify-items: center;
     width: 3.1rem;
-    padding: 0.35rem 0;
+    min-height: 3.1rem;
     border-radius: var(--radius-klein);
     background: var(--kleur-papier-diep);
     line-height: 1.1;
   }
   :global(.vlak-zwart) .agenda-datum, :global(.vlak-inkt) .agenda-datum { background: var(--kleur-inkt-op); }
   .agenda-dag { font-family: var(--font-display); font-size: 1.35rem; }
+  /* Licht is de standaard en donker de uitzondering. Andersom ging het mis:
+     de uitzondering stond op `.vlak-wit` en de homepage is `.vlak-papier`, dus
+     daar bleef de lichte grijstint staan op een bijna witte ondergrond. */
   .agenda-maand {
     font-size: var(--text-mini);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-grijs);
+    color: var(--color-grijsdonker);
   }
-  :global(.vlak-wit) .agenda-maand { color: var(--color-grijsdonker); }
+  :global(.vlak-zwart) .agenda-maand, :global(.vlak-inkt) .agenda-maand { color: var(--color-grijs); }
 
   .agenda-inhoud { grid-area: inhoud; display: grid; gap: 0.25rem; }
   .agenda-titel { font-family: var(--font-smal); font-size: 1.25rem; font-weight: 700; }
@@ -103,20 +111,17 @@ const dagDeel = (iso: string) => {
     gap: 0.5rem;
     font-size: var(--text-mini);
     letter-spacing: 0.06em;
-    color: var(--color-grijs);
+    color: var(--color-grijsdonker);
   }
-  :global(.vlak-wit) .agenda-meta { color: var(--color-grijsdonker); }
+  :global(.vlak-zwart) .agenda-meta, :global(.vlak-inkt) .agenda-meta { color: var(--color-grijs); }
   .agenda-scheiding { width: 0.45rem; height: 1px; background: currentColor; flex: none; }
   .agenda-omschrijving { font-size: var(--text-klein); max-width: 60ch; margin-top: 0.2rem; }
 
   .agenda-merk { grid-area: merk; justify-self: start; }
 
-  .agenda-leeg {
-    padding: 1.5rem 0;
-    border-top: 1px solid var(--kleur-lijn-donker);
-    font-size: var(--text-klein);
-  }
-  :global(.vlak-wit) .agenda-leeg { border-top-color: var(--kleur-lijn-licht); }
+  /* Gelijk aan .verjaardagen-leeg. Geen streep erboven: de lijsten hebben er
+     ook geen boven hun eerste rij. */
+  .agenda-leeg { padding: 1.5rem 0; font-size: var(--text-klein); }
 
   @media (min-width: 640px) {
     .agenda-rij {

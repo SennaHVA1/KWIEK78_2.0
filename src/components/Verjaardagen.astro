@@ -27,9 +27,9 @@ const zichtbaar = leden
 {zichtbaar.length === 0 ? (
   <p class="verjaardagen-leeg zacht">{leegTekst}</p>
 ) : (
-  <ul class="verjaardagen">
+  <ul class="verjaardagen rij-groep">
     {zichtbaar.map(({ lid, naam }) => (
-      <li class="verjaardag">
+      <li class="rij verjaardag">
         <span class="verjaardag-datum data">
           <span class="verjaardag-dag">{lid.dag}</span>
           {toonMaand && <span class="verjaardag-maand">{MAANDNAMEN[lid.maand - 1].slice(0, 3)}</span>}
@@ -43,58 +43,51 @@ const zichtbaar = leden
 
 <style>
   /* Deze lijst staat op de homepage naast de agenda, en beide beginnen met een
-     datum in een blokje. Ze horen bij elkaar maar mogen niet hetzelfde zijn,
-     anders lees je de twee kolommen als een lijst. Het verschil zit in de
-     vulling: de agenda heeft een dichte grijze tegel, de verjaardag een open
-     vierkant met een lijn in de accentkleur. Feestelijker, en je ziet meteen
-     welke kolom je voor je hebt.
+     datum in een blokje. Ze horen bij elkaar en moeten dus dezelfde vorm
+     hebben: gelijke rijhoogte, gelijke binnenruimte, en een scheidingslijn op
+     dezelfde plek. Daarom draait deze lijst op `.rij-groep` en `.rij` uit
+     global.css, precies zoals AgendaLijst. Zet hier geen eigen padding of
+     randen meer neer; dan lopen de twee kolommen weer uit elkaar.
+
+     Het verschil tussen de twee zit in de datum en nergens anders: de agenda
+     heeft een dichte grijze tegel, de verjaardag een open vierkant met een lijn
+     in de accentkleur. Feestelijker, en je ziet meteen welke kolom je voor je
+     hebt.
 
      Let ook op de ondergrond. Deze component stond ingesteld op donker, met
      lichte varianten alleen onder `.vlak-wit`. Op de homepage staat hij in een
-     `.vlak-papier` en dat is geen `.vlak-wit`: de scheidingslijnen waren daar
-     wit op bijna-wit en de datum haalde 3,2:1. Licht is nu de standaard en
-     donker de uitzondering, want zo staat hij ook op de pagina. */
+     `.vlak-papier` en dat is geen `.vlak-wit`: de datum haalde daar 3,2:1.
+     Licht is nu de standaard en donker de uitzondering, want zo staat hij ook
+     op de pagina. */
   .verjaardagen { list-style: none; margin: 0; padding: 0; }
 
-  .verjaardag {
-    display: grid;
-    grid-template-columns: 3rem minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.85rem;
-    padding-block: 0.55rem;
-    border-top: 1px solid var(--kleur-lijn-licht);
-  }
-  :global(.vlak-zwart) .verjaardag, :global(.vlak-inkt) .verjaardag {
-    border-top-color: var(--kleur-lijn-donker);
-  }
-  .verjaardag:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
-  :global(.vlak-zwart) .verjaardag:last-child, :global(.vlak-inkt) .verjaardag:last-child {
-    border-bottom-color: var(--kleur-lijn-donker);
-  }
+  .verjaardag { grid-template-columns: 3.1rem minmax(0, 1fr) auto; }
 
+  /* Zelfde maat als .agenda-datum. Die twee blokjes bepalen de rijhoogte van
+     hun lijst, dus als ze niet even groot zijn lopen de twee kolommen naast
+     elkaar uit de pas. */
   .verjaardag-datum {
     display: grid;
     place-content: center;
     justify-items: center;
-    width: 3rem;
-    aspect-ratio: 1;
+    width: 3.1rem;
+    min-height: 3.1rem;
     border: 1.5px solid color-mix(in srgb, var(--color-blauwdiep) 45%, transparent);
     border-radius: var(--radius-klein);
     color: var(--color-blauwdiep);
-    line-height: 1;
+    line-height: 1.1;
   }
   :global(.vlak-zwart) .verjaardag-datum, :global(.vlak-inkt) .verjaardag-datum {
     border-color: color-mix(in srgb, var(--color-blauw) 55%, transparent);
     color: var(--color-blauw);
   }
-  .verjaardag-dag { font-family: var(--font-display); font-size: 1.4rem; }
+  .verjaardag-dag { font-family: var(--font-display); font-size: 1.35rem; }
   .verjaardag-maand {
     font-family: var(--font-smal);
     font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin-top: 0.2rem;
   }
 
   .verjaardag-naam {
@@ -114,12 +107,6 @@ const zichtbaar = leden
   }
   :global(.vlak-zwart) .verjaardag-team, :global(.vlak-inkt) .verjaardag-team { color: var(--color-grijs); }
 
-  .verjaardagen-leeg {
-    font-size: var(--text-klein);
-    padding-block: 1rem;
-    border-top: 1px solid var(--kleur-lijn-licht);
-  }
-  :global(.vlak-zwart) .verjaardagen-leeg, :global(.vlak-inkt) .verjaardagen-leeg {
-    border-top-color: var(--kleur-lijn-donker);
-  }
+  /* Gelijk aan .agenda-leeg. */
+  .verjaardagen-leeg { padding: 1.5rem 0; font-size: var(--text-klein); }
 </style>

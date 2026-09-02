@@ -288,25 +288,33 @@ const snelknoppen = [
   /* ------------------------------------------------------------------ */
   /* Snelknoppen                                                        */
   /* ------------------------------------------------------------------ */
-  .snel { padding-bottom: clamp(1.5rem, 3vw, 2rem); }
+  .snel { padding-bottom: clamp(1rem, 3vw, 2rem); }
   /* Let op: deze lijst zit in een aparte .omhulsel en is er niet zelf een.
      Scoped stijlen van Astro staan buiten de cascade-layers en winnen dus van
      .omhulsel in @layer components. Zet je hier 'margin: 0' op hetzelfde
      element, dan sneuvelt de centrering van de container. */
+  /* Op een telefoon stonden dit drie volle blokken onder elkaar, samen ruim
+     tweehonderd pixels, en daardoor begon de afteller pas ver onder de vouw.
+     Het zijn hier nu drie smalle knopjes naast elkaar: dezelfde drie taken,
+     even goed aan te tikken, maar een regel in plaats van een scherm. Vanaf
+     620px is er ruimte zat en komen de kaarten met hun uitleg terug. */
   .snel-lijst {
     display: grid;
-    gap: 0.6rem;
-    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     list-style: none;
   }
-  @media (min-width: 620px) { .snel-lijst { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
   .snelknop {
     display: grid;
     gap: 0.05rem;
-    padding: 0.9rem 1.1rem;
+    /* 44px hoog blijft het minimum om met een duim te raken. */
+    align-content: center;
+    min-height: 44px;
+    padding: 0.5rem 0.4rem;
     border-radius: var(--radius-vlak);
     background: var(--kleur-inkt);
+    text-align: center;
     text-decoration: none;
     color: var(--color-wit);
     transition: background-color 0.18s var(--ease-klap);
@@ -314,9 +322,22 @@ const snelknoppen = [
   .snelknop:hover { background: var(--color-blauwdiep); }
   @media (prefers-reduced-motion: reduce) { .snelknop { transition: none; } }
 
-  .snelknop-label { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.1; }
-  .snelknop-uitleg { font-size: var(--text-klein); color: var(--color-grijs); }
+  .snelknop-label { font-family: var(--font-display); font-size: 1.0625rem; line-height: 1.15; }
+  /* De uitleg is op een telefoon de eerste die weg mag: de labels zeggen zelf
+     al waar je uitkomt. */
+  .snelknop-uitleg { display: none; font-size: var(--text-klein); color: var(--color-grijs); }
   .snelknop:hover .snelknop-uitleg { color: color-mix(in srgb, var(--color-wit) 85%, transparent); }
+
+  @media (min-width: 620px) {
+    .snel-lijst { gap: 0.6rem; }
+    .snelknop {
+      min-height: 0;
+      padding: 0.9rem 1.1rem;
+      text-align: left;
+    }
+    .snelknop-label { font-size: 1.5rem; line-height: 1.1; }
+    .snelknop-uitleg { display: block; }
+  }
 
   /* ------------------------------------------------------------------ */
   /* Secties                                                            */

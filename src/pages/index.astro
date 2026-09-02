@@ -53,11 +53,11 @@ const snelknoppen = [
     </div>
 
     <div class="omhulsel hero-binnen">
-      {/* Kicker en titel staan samen in een blok dat precies zo breed is als
-          het woordmerk. Op een breed scherm wisselen ze van plek en schuift de
-          kicker naar de rechterrand van dat blok: hij komt dan onder de '78 uit
-          te staan in plaats van erboven. Op een telefoon is daar geen ruimte
-          voor en blijft hij gewoon boven de titel. */}
+      {/* Kicker en titel staan samen in een blok. Op een breed scherm wisselen
+          ze van plek en gaan ze naast elkaar staan: de kicker komt rechts van
+          de grote '78 te staan, op dezelfde schriftlijn, als een ondertitel bij
+          een woordmerk. Op een telefoon is daar geen ruimte voor en blijft hij
+          gewoon boven de titel. */}
       <div class="hero-naam">
         <p class="hero-boven">Avenhorn, sinds 1978</p>
         <h1 class="hero-titel">Kwiek '78</h1>
@@ -225,9 +225,7 @@ const snelknoppen = [
 
   .hero-binnen { padding-bottom: clamp(1.5rem, 4vw, 2.5rem); }
 
-  /* Het blok is zo breed als de titel en niet breder. Alleen daardoor kan de
-     kicker zich op desktop rechts uitlijnen op de '78 in plaats van op de
-     kantlijn van de pagina. */
+  /* Op een telefoon een stapel: kicker boven, titel eronder. */
   .hero-naam { display: grid; justify-items: start; width: fit-content; }
 
   /* Wit, geen blauw. Op de hoogte van deze regel staat de verduistering op
@@ -247,14 +245,23 @@ const snelknoppen = [
     margin-bottom: 0.5rem;
   }
   @media (min-width: 1024px) {
+    /* Naast elkaar in plaats van onder elkaar. Uitlijnen op de schriftlijn en
+       niet op het midden of de onderkant: de titel staat in Anton op een
+       regelhoogte van 0,85, dus zijn vak is korter dan de letters zelf en elke
+       andere uitlijning laat de kicker zweven. Op de schriftlijn staat hij
+       netjes op dezelfde voet als de 8. */
+    .hero-naam {
+      display: flex;
+      align-items: baseline;
+      gap: clamp(0.85rem, 1.2vw, 1.4rem);
+    }
     .hero-boven {
       font-size: 0.875rem;
-      /* Van boven de titel naar rechtsonder eronder. De volgorde in de bron
-         blijft kicker-dan-titel, want zo hoort een schermlezer het ook. */
+      /* De volgorde in de bron blijft kicker-dan-titel, want zo hoort een
+         schermlezer het ook. Alleen in beeld staan ze omgekeerd. */
       order: 2;
-      justify-self: end;
       margin-bottom: 0;
-      margin-top: 0.45rem;
+      white-space: nowrap;
     }
     .hero-titel { order: 1; }
   }

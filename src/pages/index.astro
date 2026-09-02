@@ -147,8 +147,16 @@ const snelknoppen = [
   <!-- Hoofdsponsoren                                                      -->
   <!-- ================================================================== -->
   <section class="vlak-wit sponsors" aria-labelledby="sponsor-kop">
+    {/* Dezelfde kop als de drie secties hierboven: kicker, titel in de
+        displayletter, knop rechts. Dat was hier niet zo - een kleine kop in
+        Barlow zonder kicker, met wel dezelfde knop ernaast - en juist die
+        halve gelijkenis maakte het blok raar. De regel loopt nu door van de
+        kicker in de titel: "Mede mogelijk gemaakt door / Onze sponsoren". */}
     <div class="omhulsel sponsors-kop">
-      <h2 class="kop-s" id="sponsor-kop">Mede mogelijk gemaakt door</h2>
+      <div>
+        <p class="kolom-kicker">Mede mogelijk gemaakt door</p>
+        <h2 class="kop-sectie" id="sponsor-kop">Onze sponsoren</h2>
+      </div>
       <a class="knop knop--rand" href="/sponsoring">Sponsor worden</a>
     </div>
     <SponsorCarousel sponsoren={sponsoren} />
@@ -349,9 +357,11 @@ const snelknoppen = [
     --sponsors-ruimte: clamp(1.75rem, 3vw, 2.5rem);
     padding-block: clamp(2.5rem, 4vw, 3.5rem) var(--sponsors-ruimte);
   }
+  /* Gelijk aan .sectiekop hierboven, op de ruimte eronder na: die moet even
+     groot zijn als de ruimte onder de carousel. */
   .sponsors-kop {
     display: flex;
-    align-items: center;
+    align-items: end;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;

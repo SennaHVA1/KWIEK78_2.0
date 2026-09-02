@@ -3,9 +3,10 @@
  * De hoofdsponsoren, doorlopend.
  *
  * Zelf geschreven, geen carouselbibliotheek: het is een spoor dat schuift met
- * een CSS-animatie en een tweede, verborgen kopie zodat de lus naadloos is.
+ * een CSS-animatie en een paar verborgen kopieen zodat de lus naadloos is.
  *
- * Pauzeert bij hover en bij toetsenbordfocus. Bij prefers-reduced-motion
+ * Pauzeert bij hover op een muisapparaat en bij toetsenbordfocus, maar nooit
+ * op een aanraakscherm: daar blijft hover plakken. Bij prefers-reduced-motion
  * staat de animatie helemaal uit en wordt het een gewone, horizontaal
  * scrollbare rij. Elke logo is een link naar de site van de sponsor, met
  * rel="noopener noreferrer".
@@ -76,7 +77,17 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
     width: max-content;
     animation: schuiven 46s linear infinite;
   }
-  .carousel:hover .carousel-spoor,
+  /* Pauzeren bij hover, maar alleen op een apparaat dat echt kan hoveren.
+     Op een telefoon blijft :hover na een tik aan het element plakken tot je
+     ergens anders tikt, en dan stond het spoor stil zonder dat iemand daarom
+     had gevraagd. Met een muis is pauzeren juist nuttig: dan lees je een
+     logo dat langsschuift.
+
+     Bij toetsenbordfocus pauzeert hij wel altijd, anders schuift het logo
+     onder de focusring vandaan terwijl je erop staat. */
+  @media (hover: hover) and (pointer: fine) {
+    .carousel:hover .carousel-spoor { animation-play-state: paused; }
+  }
   .carousel:focus-within .carousel-spoor { animation-play-state: paused; }
 
   /* Een kwart van vier reeksen is precies een reeks. Houd dit gelijk aan

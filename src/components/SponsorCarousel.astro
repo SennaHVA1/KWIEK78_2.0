@@ -8,8 +8,30 @@
  * Pauzeert bij hover op een muisapparaat en bij toetsenbordfocus, maar nooit
  * op een aanraakscherm: daar blijft hover plakken. Bij prefers-reduced-motion
  * staat de animatie helemaal uit en wordt het een gewone, horizontaal
- * scrollbare rij. Elke logo is een link naar de site van de sponsor, met
+ * scrollbare rij. Elk logo is een link naar de site van de sponsor, met
  * rel="noopener noreferrer".
+ *
+ * OVER DE PRESTATIES OP EEN TELEFOON
+ * Dit blok liep stroef en verdween er af en toe helemaal. Vier oorzaken, alle
+ * vier hieronder opgelost:
+ *
+ *   1. Het spoor is een enkele geschakelde laag. Vier reeksen van acht logo's
+ *      is ruim vijfduizend pixels breed; maal drie voor het scherm van een
+ *      telefoon is dat een textuur van tientallen megabytes. Komt die boven het
+ *      budget, dan gooit iOS de laag weg en is de carousel weg. Onder 1024px
+ *      staan er nu twee reeksen in plaats van vier - genoeg voor een naadloze
+ *      lus zolang het scherm smaller is dan een reeks - en dat halveert de laag.
+ *   2. Het masker. Een mask-image over een bewegend kind dwingt elk beeldje een
+ *      tweede buffer van diezelfde omvang af. Het zijn nu twee gewone verlopen
+ *      in de kleur van het vlak eromheen: hetzelfde beeld, geen masker.
+ *   3. De logo's stonden op loading="lazy". Wat rechts buiten beeld hing werd
+ *      dus nooit geladen, die plekken bleven nul pixels breed en daarmee klopte
+ *      de naad niet meer. Ze zijn nu alle acht eager - samen vijfendertig
+ *      kilobyte, en de kopieen komen uit dezelfde cache - en elke plek heeft
+ *      een vaste minimumbreedte, zodat het spoor even breed is voor en na het
+ *      laden.
+ *   4. De animatie liep door terwijl je boven op de pagina het nieuws las. Een
+ *      waarnemer zet hem stil zodra het blok uit beeld is.
  */
 import { fotoBestaat } from '../lib/fotos';
 import type { Sponsor } from '../lib/types';
@@ -27,6 +49,9 @@ const { sponsoren } = Astro.props;
    dan een reeks - en dat is een reeks van acht logo's op een groot scherm - dan
    loopt het spoor daar zichtbaar leeg. Met vier reeksen blijft er tot ruim
    vierduizend pixels altijd voorraad staan.
+
+   Op een smal scherm is die voorraad niet nodig en juist schadelijk: zie punt 1
+   hierboven. Reeks 3 en 4 staan onder 1024px in de CSS op display:none.
 
    Alleen de eerste reeks telt mee: de rest is decor, staat op aria-hidden en is
    niet met de tab-toets te bereiken. */
@@ -48,7 +73,7 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
               tabindex={reeks.kopie ? -1 : undefined}
             >
               {fotoBestaat(sponsor.logo) ? (
-                <img src={sponsor.logo} alt={sponsor.naam} loading="lazy" decoding="async" />
+                <img src={sponsor.logo} alt={sponsor.naam} loading="eager" decoding="async" fetchpriority="low" />
               ) : (
                 <span class="carousel-woordmerk">{sponsor.naam}</span>
               )}
@@ -64,18 +89,41 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
   .carousel {
     /* Een gat, overal hetzelfde: tussen twee logo's en op de naad. */
     --gat: clamp(2rem, 5vw, 4.5rem);
+    /* De kleur van het vlak waar de carousel in staat. Zet hem op de sectie als
+       het blok ooit ergens anders komt te hangen dan op wit. */
+    --carousel-vlak: var(--color-wit);
+    position: relative;
     overflow: hidden;
     border-block: 1px solid var(--kleur-lijn-licht);
     padding-block: 1.5rem;
-    /* De randen laten vervagen, zodat het spoor niet lijkt af te breken. */
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
   }
+
+  /* De randen laten vervagen, zodat het spoor niet lijkt af te breken. Dit was
+     een mask-image over het hele blok. Dat ziet er hetzelfde uit, maar het kost
+     een tweede laag ter grootte van het spoor en juist dat sloopte het op een
+     telefoon. Twee verlopen in de kleur van de ondergrond doen hier hetzelfde
+     werk: boven op het spoor in plaats van eraan. */
+  .carousel::before,
+  .carousel::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(1.5rem, 6vw, 4rem);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .carousel::before { left: 0;  background: linear-gradient(90deg, var(--carousel-vlak), transparent); }
+  .carousel::after  { right: 0; background: linear-gradient(270deg, var(--carousel-vlak), transparent); }
 
   .carousel-spoor {
     display: flex;
     width: max-content;
-    animation: schuiven 46s linear infinite;
+    animation: schuiven-half 46s linear infinite;
+    /* De translate3d in de keyframes hieronder zet het spoor op een eigen laag.
+       Bewust geen will-change erbij: dat houdt de laag ook stil in het geheugen
+       en juist het geheugen is hier het probleem. */
+    backface-visibility: hidden;
   }
   /* Pauzeren bij hover, maar alleen op een apparaat dat echt kan hoveren.
      Op een telefoon blijft :hover na een tik aan het element plakken tot je
@@ -89,23 +137,41 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
     .carousel:hover .carousel-spoor { animation-play-state: paused; }
   }
   .carousel:focus-within .carousel-spoor { animation-play-state: paused; }
-
-  /* Een kwart van vier reeksen is precies een reeks. Houd dit gelijk aan
-     AANTAL_REEKSEN hierboven. */
-  @keyframes schuiven {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-25%); }
-  }
+  /* Uit beeld hoeft er niets te bewegen. Zie het script onderaan. */
+  .carousel[data-uit-beeld] .carousel-spoor { animation-play-state: paused; }
 
   /* De naad. Alle reeksen zijn even breed en staan precies een reeksbreedte
-     uit elkaar, dus na een kwartslag staat logo 1 van de volgende reeks op de
-     plek waar logo 1 van de vorige begon en is de sprong onzichtbaar.
+     uit elkaar, dus zodra het spoor een reeksbreedte is opgeschoven staat logo
+     1 van de volgende reeks op de plek waar logo 1 van de vorige begon en is de
+     sprong onzichtbaar.
 
      Dat werkte niet zolang elke reeks links en rechts een padding had. De
      afstand tussen twee logo's binnen een reeks was dan het gat, en op de naad
      tweemaal die padding plus het gat. Daar viel een gapend gat en precies
      daar sprong de animatie terug. Nu draagt elke reeks zijn eigen eindgat als
-     marge, zodat de afstand overal dezelfde is en de sprong klopt. */
+     marge, zodat de afstand overal dezelfde is en de sprong klopt.
+
+     Een reeksbreedte is een deel van het spoor: met twee reeksen de helft, met
+     vier een kwart. Vandaar twee keyframes in plaats van een. */
+  @keyframes schuiven-half {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  @keyframes schuiven-kwart {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-25%, 0, 0); }
+  }
+
+  /* Reeks 3 en 4 zijn er alleen voor brede schermen: pas als het scherm breder
+     is dan een reeks (acht logo's, ruim dertienhonderd pixels) loopt het spoor
+     met twee reeksen zichtbaar leeg op het moment van de sprong. Tot die
+     breedte staan ze niet in de stroom en is de laag half zo groot. */
+  .carousel-reeks:nth-child(n + 3) { display: none; }
+  @media (min-width: 1024px) {
+    .carousel-reeks:nth-child(n + 3) { display: flex; }
+    .carousel-spoor { animation-name: schuiven-kwart; }
+  }
+
   .carousel-reeks {
     display: flex;
     align-items: center;
@@ -119,6 +185,10 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
     display: grid;
     place-items: center;
     height: 3.5rem;
+    /* Een vaste minimumbreedte per plek. Een logo dat nog moet laden is nul
+       pixels breed; zonder dit wordt het spoor tijdens het laden breder en
+       verspringt de naad. */
+    min-width: 7.5rem;
     padding-inline: 0.5rem;
     opacity: 0.72;
     transition: opacity 0.2s var(--ease-klap);
@@ -139,16 +209,44 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
   @media (prefers-reduced-motion: reduce) {
     .carousel {
       overflow-x: auto;
-      -webkit-mask-image: none;
-      mask-image: none;
       scroll-snap-type: x proximity;
     }
+    .carousel::before, .carousel::after { display: none; }
     .carousel-spoor { animation: none; }
-    /* De tweede reeks heeft zonder animatie geen functie meer, en zonder lus
-       hoeft er ook geen eindgat te staan. */
+    /* De kopieen hebben zonder animatie geen functie meer, en zonder lus hoeft
+       er ook geen eindgat te staan. */
     .carousel-reeks[aria-hidden="true"] { display: none; }
     .carousel-reeks { margin-right: 0; padding-inline: var(--spacing-kantlijn); }
     .carousel-reeks li { scroll-snap-align: start; }
     .carousel-logo { transition: none; }
   }
 </style>
+
+<script>
+  /**
+   * Zet het spoor stil zolang het blok niet in beeld staat. De carousel staat
+   * onderaan de homepage; zonder dit draait de animatie de hele tijd dat iemand
+   * bovenaan het nieuws leest, en dat kost op een telefoon merkbaar soepelheid.
+   */
+  const carousels = document.querySelectorAll<HTMLElement>('[data-carousel]');
+
+  if (carousels.length > 0 && 'IntersectionObserver' in window) {
+    const waarnemer = new IntersectionObserver(
+      (items) => {
+        for (const item of items) {
+          const el = item.target as HTMLElement;
+          if (item.isIntersecting) el.removeAttribute('data-uit-beeld');
+          else el.setAttribute('data-uit-beeld', '');
+        }
+      },
+      // Iets voor het blok in beeld komt draait hij alweer, zodat je nooit een
+      // stilstaande carousel in beeld ziet schuiven.
+      { rootMargin: '200px 0px' },
+    );
+
+    carousels.forEach((el) => {
+      el.setAttribute('data-uit-beeld', '');
+      waarnemer.observe(el);
+    });
+  }
+</script>

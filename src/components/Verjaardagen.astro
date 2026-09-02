@@ -30,8 +30,9 @@ const zichtbaar = leden
   <ul class="verjaardagen">
     {zichtbaar.map(({ lid, naam }) => (
       <li class="verjaardag">
-        <span class="verjaardag-dag data">
-          {lid.dag}{toonMaand && <span class="verjaardag-maand"> {MAANDNAMEN[lid.maand - 1].slice(0, 3)}</span>}
+        <span class="verjaardag-datum data">
+          <span class="verjaardag-dag">{lid.dag}</span>
+          {toonMaand && <span class="verjaardag-maand">{MAANDNAMEN[lid.maand - 1].slice(0, 3)}</span>}
         </span>
         <span class="verjaardag-naam">{naam}</span>
         {lid.team && <span class="verjaardag-team data">{lid.team}</span>}
@@ -41,35 +42,65 @@ const zichtbaar = leden
 )}
 
 <style>
+  /* Deze lijst staat op de homepage naast de agenda, en beide beginnen met een
+     datum in een blokje. Ze horen bij elkaar maar mogen niet hetzelfde zijn,
+     anders lees je de twee kolommen als een lijst. Het verschil zit in de
+     vulling: de agenda heeft een dichte grijze tegel, de verjaardag een open
+     vierkant met een lijn in de accentkleur. Feestelijker, en je ziet meteen
+     welke kolom je voor je hebt.
+
+     Let ook op de ondergrond. Deze component stond ingesteld op donker, met
+     lichte varianten alleen onder `.vlak-wit`. Op de homepage staat hij in een
+     `.vlak-papier` en dat is geen `.vlak-wit`: de scheidingslijnen waren daar
+     wit op bijna-wit en de datum haalde 3,2:1. Licht is nu de standaard en
+     donker de uitzondering, want zo staat hij ook op de pagina. */
   .verjaardagen { list-style: none; margin: 0; padding: 0; }
 
   .verjaardag {
     display: grid;
-    grid-template-columns: 4.1rem minmax(0, 1fr) auto;
-    align-items: baseline;
-    gap: 0.75rem;
-    padding-block: 0.6rem;
-    border-top: 1px solid var(--kleur-lijn-donker);
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding-block: 0.55rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
   }
-  :global(.vlak-wit) .verjaardag { border-top-color: var(--kleur-lijn-licht); }
-  .verjaardag:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
-  :global(.vlak-wit) .verjaardag:last-child { border-bottom-color: var(--kleur-lijn-licht); }
+  :global(.vlak-zwart) .verjaardag, :global(.vlak-inkt) .verjaardag {
+    border-top-color: var(--kleur-lijn-donker);
+  }
+  .verjaardag:last-child { border-bottom: 1px solid var(--kleur-lijn-licht); }
+  :global(.vlak-zwart) .verjaardag:last-child, :global(.vlak-inkt) .verjaardag:last-child {
+    border-bottom-color: var(--kleur-lijn-donker);
+  }
 
-  /* De datum is waar je op scant in deze lijst, dus die staat een maat groter
-     dan de naam ernaast en niet een maat kleiner. */
-  .verjaardag-dag {
-    font-size: var(--text-basis);
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--color-blauw);
-    white-space: nowrap;
+  .verjaardag-datum {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    width: 3rem;
+    aspect-ratio: 1;
+    border: 1.5px solid color-mix(in srgb, var(--color-blauwdiep) 45%, transparent);
+    border-radius: var(--radius-klein);
+    color: var(--color-blauwdiep);
+    line-height: 1;
   }
-  :global(.vlak-wit) .verjaardag-dag { color: var(--color-blauwdiep); }
-  .verjaardag-maand { font-size: var(--text-klein); font-weight: 600; }
+  :global(.vlak-zwart) .verjaardag-datum, :global(.vlak-inkt) .verjaardag-datum {
+    border-color: color-mix(in srgb, var(--color-blauw) 55%, transparent);
+    color: var(--color-blauw);
+  }
+  .verjaardag-dag { font-family: var(--font-display); font-size: 1.4rem; }
+  .verjaardag-maand {
+    font-family: var(--font-smal);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
 
   .verjaardag-naam {
-    font-size: var(--text-klein);
+    font-size: 1rem;
     font-weight: 600;
+    line-height: 1.35;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -78,15 +109,17 @@ const zichtbaar = leden
     font-size: var(--text-mini);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-grijs);
+    color: var(--color-grijsdonker);
     white-space: nowrap;
   }
-  :global(.vlak-wit) .verjaardag-team { color: var(--color-grijsdonker); }
+  :global(.vlak-zwart) .verjaardag-team, :global(.vlak-inkt) .verjaardag-team { color: var(--color-grijs); }
 
   .verjaardagen-leeg {
     font-size: var(--text-klein);
     padding-block: 1rem;
-    border-top: 1px solid var(--kleur-lijn-donker);
+    border-top: 1px solid var(--kleur-lijn-licht);
   }
-  :global(.vlak-wit) .verjaardagen-leeg { border-top-color: var(--kleur-lijn-licht); }
+  :global(.vlak-zwart) .verjaardagen-leeg, :global(.vlak-inkt) .verjaardagen-leeg {
+    border-top-color: var(--kleur-lijn-donker);
+  }
 </style>

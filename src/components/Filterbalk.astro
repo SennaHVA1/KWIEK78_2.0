@@ -297,8 +297,21 @@ const zoekId = `zoek-${rijSelector.replace(/\W/g, '')}`;
   }
 
   /* Knoppen ------------------------------------------------------------ */
+  /* De rustkleur van een pil hangt af van waar hij staat: op papier, op zwart,
+     of binnen de uitklapper die zelf al op papier ligt. Die drie zetten alleen
+     de variabele en niet `background` zelf, en dat is hier belangrijk.
+
+     Astro plakt aan elk samengesteld deel van een selector een attribuut, dus
+     `.filtergroep--klap .filterknop` telt zwaarder dan `.filterknop.is-gekozen`.
+     Zette die eerste regel rechtstreeks een achtergrond, dan won de plek van de
+     toestand: de gekozen pil in de uitklapper hield zijn witte achtergrond en
+     kreeg wel de witte tekst van de gekozen toestand. Wit op wit, een lege pil.
+     Via een variabele kan dat niet meer gebeuren: `background` staat maar op
+     een plek en de toestand is daar altijd de baas. */
   .filterknop {
-    background: var(--kleur-papier-diep);
+    --pil: var(--kleur-papier-diep);
+    --pil-op: color-mix(in srgb, var(--color-blauwdiep) 18%, transparent);
+    background: var(--pil);
     border: 0;
     border-radius: 999px;
     color: inherit;
@@ -309,15 +322,23 @@ const zoekId = `zoek-${rijSelector.replace(/\W/g, '')}`;
     padding: 0.4rem 0.9rem;
     transition: background-color 0.15s var(--ease-klap), color 0.15s var(--ease-klap);
   }
-  :global(.vlak-zwart) .filterknop, :global(.vlak-inkt) .filterknop { background: var(--kleur-inkt-op); }
-  /* In de uitklapper staat de knop op papier, dus daar is wit het verschil. */
-  .filtergroep--klap .filterknop { background: var(--color-wit); }
+  :global(.vlak-zwart) .filterknop, :global(.vlak-inkt) .filterknop {
+    --pil: var(--kleur-inkt-op);
+    --pil-op: color-mix(in srgb, var(--color-blauw) 26%, transparent);
+  }
+  /* In de uitklapper ligt de knop op papier, dus daar is wit het verschil. */
+  .filtergroep--klap .filterknop { --pil: var(--color-wit); }
   :global(.vlak-zwart) .filtergroep--klap .filterknop,
-  :global(.vlak-inkt) .filtergroep--klap .filterknop { background: var(--kleur-inkt-op); }
-  .filterknop:hover { background: color-mix(in srgb, var(--color-blauwdiep) 18%, transparent); }
+  :global(.vlak-inkt) .filtergroep--klap .filterknop { --pil: var(--kleur-inkt-op); }
+
+  .filterknop:hover { background: var(--pil-op); }
   .filterknop.is-gekozen {
     background: var(--color-blauwdiep);
     color: var(--color-wit);
+  }
+  :global(.vlak-zwart) .filterknop.is-gekozen, :global(.vlak-inkt) .filterknop.is-gekozen {
+    background: var(--color-blauw);
+    color: var(--color-zwart);
   }
   @media (prefers-reduced-motion: reduce) { .filterknop { transition: none; } }
 

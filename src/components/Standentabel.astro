@@ -100,8 +100,13 @@ const saldo = (voor: number, tegen: number) => {
   .kol-doelpunten { color: var(--color-grijs); }
   :global(.vlak-wit) .kol-doelpunten { color: var(--color-grijsdonker); }
 
-  /* De eigen ploeg is de regel waarvoor je de tabel opent. */
-  .is-eigen td, .is-eigen th {
+  /* De eigen ploeg is de regel waarvoor je de tabel opent.
+
+     De `.tabel` ervoor is geen sier. Zonder dat deel telt deze selector lichter
+     dan `.tabel th[scope="row"]` hierboven - Astro plakt aan elk samengesteld
+     deel een attribuut - en dan hield de teamnaam in de Kwiekregel gewicht 600
+     terwijl de cijfers ernaast wel op 700 stonden. */
+  .tabel .is-eigen td, .tabel .is-eigen th {
     background: color-mix(in srgb, var(--color-blauwdiep) 13%, transparent);
     font-weight: 700;
   }

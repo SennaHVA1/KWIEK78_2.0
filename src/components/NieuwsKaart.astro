@@ -6,6 +6,13 @@
  * de tekst met wat lucht eromheen. De rand houdt de berichten bij elkaar in
  * een raster waarin de kaarten verschillend hoog zijn; zonder rand liepen de
  * koppen en samenvattingen visueel in elkaar over.
+ *
+ * De kaart is meer dan een lijntje: linksboven zit een kort zwart streepje dat
+ * bij het aanwijzen over de hele breedte uitloopt en blauw wordt. Dat streepje
+ * is dezelfde zware zwarte regel die op deze site boven een tabel en onder een
+ * commissiekop staat; hier is het het merkteken van de kaart. Vier kaarten
+ * naast elkaar lijnen daardoor langs een zichtbare bovenrand uit in plaats van
+ * te zweven in een raster.
  */
 import Foto from './Foto.astro';
 import { datumZonderDag, machineDatum } from '../lib/datum';
@@ -58,26 +65,63 @@ const Kop = `h${kopNiveau}` as 'h2' | 'h3';
 <style>
   /* De kaart -------------------------------------------------------------- */
   .nieuwskaart {
+    position: relative;
     height: 100%;
-    border: 1px solid var(--kleur-lijn-licht);
+    /* Twee kleuren in de rand: de bovenkant iets donkerder dan de rest, zodat
+       de kaart bovenaan afsluit en niet als los vierkantje in de lucht hangt. */
+    --rand: var(--kleur-lijn-licht);
+    --rand-op: color-mix(in srgb, var(--color-zwart) 28%, transparent);
+    --streep: var(--color-zwart);
+    --streep-op: var(--color-blauwdiep);
+    border: 1px solid var(--rand);
     border-radius: var(--radius-vlak);
     background: var(--color-wit);
     overflow: hidden;
-    transition: border-color 0.18s var(--ease-klap), box-shadow 0.18s var(--ease-klap);
+    transition:
+      border-color 0.18s var(--ease-klap),
+      box-shadow 0.2s var(--ease-klap),
+      transform 0.2s var(--ease-klap);
   }
   :global(.vlak-zwart) .nieuwskaart, :global(.vlak-inkt) .nieuwskaart {
-    border-color: var(--kleur-lijn-donker);
+    --rand: var(--kleur-lijn-donker);
+    --rand-op: color-mix(in srgb, var(--color-wit) 34%, transparent);
+    --streep: var(--color-wit);
+    --streep-op: var(--color-blauw);
     background: var(--kleur-inkt);
   }
+
+  /* Het streepje. Ligt over de foto heen, dus het heeft een eigen laag nodig. */
+  .nieuwskaart::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    height: 3px;
+    width: 4.5rem;
+    max-width: 45%;
+    background: var(--streep);
+    transition: width 0.3s var(--ease-klap), background-color 0.18s var(--ease-klap);
+  }
+
   .nieuwskaart:hover {
-    border-color: color-mix(in srgb, var(--color-zwart) 30%, transparent);
-    box-shadow: 0 8px 22px color-mix(in srgb, var(--color-zwart) 8%, transparent);
+    border-color: var(--rand-op);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--color-zwart) 9%, transparent);
   }
   :global(.vlak-zwart) .nieuwskaart:hover, :global(.vlak-inkt) .nieuwskaart:hover {
-    border-color: color-mix(in srgb, var(--color-wit) 32%, transparent);
     box-shadow: none;
   }
-  @media (prefers-reduced-motion: reduce) { .nieuwskaart { transition: none; } }
+  .nieuwskaart:hover::before, .nieuwskaart:focus-within::before {
+    width: 100%;
+    max-width: 100%;
+    background: var(--streep-op);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nieuwskaart, .nieuwskaart::before { transition: none; }
+    .nieuwskaart:hover { transform: none; }
+  }
 
   .nieuwskaart-link {
     display: grid;

@@ -94,7 +94,7 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
 <style>
   .scorebord-binnen { padding-block: clamp(2.25rem, 5vw, 3.75rem); }
 
-  .scorebord-wedstrijd { display: grid; gap: 2rem; align-items: center; }
+  .scorebord-wedstrijd { display: grid; gap: 1.5rem; align-items: center; }
   .scorebord-wedstrijd[hidden] { display: none; }
 
   .scorebord-links { display: grid; gap: 1rem; }
@@ -136,11 +136,21 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
   .scorebord-knoppen { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
   .scorebord-leeg { padding-block: 1.5rem; }
 
+  /* Tot 1000px staat de afteller bovenaan: direct onder de kicker en boven de
+     clubnamen. Dat is waar zaterdagochtend naar gekeken wordt, en zo staat hij
+     zonder scrollen in beeld in plaats van onder de duelnamen, de datumregel,
+     de locatie en drie knoppen.
+     In de bron blijft de wedstrijd zelf eerst staan, dus een schermlezer hoort
+     nog altijd eerst wie er speelt en dan pas hoe lang het nog duurt. Dat mag
+     hier van de volgorde afwijken omdat er in de teller niets zit waar je met
+     tab naartoe kunt: het zijn cijfers, geen links. */
   .scorebord-teller {
+    order: -1;
+    justify-self: stretch;
     display: grid;
     gap: 0.6rem;
     justify-items: start;
-    padding: 1.5rem;
+    padding: 1rem 1.1rem 1.1rem;
     border-radius: var(--radius-vlak);
     background: var(--kleur-inkt);
   }
@@ -157,6 +167,12 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
     .scorebord-wedstrijd {
       grid-template-columns: minmax(0, 1.25fr) auto;
       gap: 3rem;
+    }
+    /* Naast de tekst is er ruimte zat en staat hij weer gewoon rechts. */
+    .scorebord-teller {
+      order: 0;
+      justify-self: start;
+      padding: 1.5rem;
     }
   }
 </style>

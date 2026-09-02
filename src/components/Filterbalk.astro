@@ -1,55 +1,216 @@
 ---
 /**
- * Filterknoppen boven een wedstrijdlijst.
+ * Zoeken en filteren boven een lijst.
  *
- * Zelf geschreven, geen dependency: de knoppen zetten een data-attribuut en
- * een script verbergt de rijen die niet passen. Speeldagen waarvan alle
- * rijen verdwijnen worden ook verborgen, anders houd je een lege kop over.
+ * Zelf geschreven, geen dependency: de knoppen zetten een keuze en een script
+ * verbergt de rijen die niet passen. Omhullende blokken waarvan alle rijen
+ * verdwijnen - een speeldag, bijvoorbeeld - gaan mee, anders houd je een lege
+ * kop over.
  *
- * Zonder JavaScript staan alle wedstrijden er gewoon: de filters zijn een
- * verbetering, geen voorwaarde.
+ * Twee dingen houden deze balk generiek, waardoor hij zowel boven het
+ * programma als boven de standen kan hangen:
+ *
+ *   rijSelector    wat er gefilterd wordt. Elk element met dat kenmerk draagt
+ *                  zijn eigen `data-<sleutel>` waarden en een `data-zoek` met
+ *                  de tekst waarop gezocht mag worden.
+ *   blokSelector   wat er verborgen wordt zodra het geen zichtbare rijen meer
+ *                  bevat. Mag leeg zijn als er geen groepering is.
+ *
+ * Een filtergroep met veel opties (teams, en dat worden er uit Sportlink al
+ * gauw twintig) zet je op `inklapbaar`. Hij staat dan dicht met de huidige
+ * keuze in de samenvatting en klapt open als je hem nodig hebt. De opties
+ * mogen daarbinnen in kopjes staan: senioren, vrouwen, jeugd.
+ *
+ * Zonder JavaScript staat alles er gewoon: zoeken en filteren zijn een
+ * verbetering, geen voorwaarde. Het zoekveld staat daarom in de bron verborgen
+ * en wordt door het script zichtbaar gemaakt.
  */
+interface Optie {
+  waarde: string;
+  label: string;
+}
+
+interface Subgroep {
+  /** Kopje boven deze rij knoppen. Leeg betekent geen kopje. */
+  label: string;
+  opties: Optie[];
+}
+
 interface Groep {
   /** Naam van het data-attribuut op de rij, bijvoorbeeld "team". */
   sleutel: string;
   label: string;
-  opties: { waarde: string; label: string }[];
+  opties?: Optie[];
+  /** Opties in kopjes. Gaat voor op `opties`. */
+  subgroepen?: Subgroep[];
+  /** In een uitklapper zetten. Voor groepen met veel opties. */
+  inklapbaar?: boolean;
+  /** Tekst van de samenvatting zolang er niets gekozen is. */
+  alleLabel?: string;
 }
 
 interface Props {
   groepen: Groep[];
+  /** Zoekveld boven de filters. */
+  zoeken?: { label: string; plaatshouder: string };
+  /** Meervoud van wat er in de lijst staat, voor de telling. */
+  eenheid?: string;
+  /** Wat er gefilterd wordt. */
+  rijSelector?: string;
+  /** Wat er verborgen wordt zodra het leeg raakt. Leeg laten mag. */
+  blokSelector?: string;
 }
 
-const { groepen } = Astro.props;
+const {
+  groepen,
+  zoeken,
+  eenheid = 'wedstrijden',
+  rijSelector = '[data-filterbaar]',
+  blokSelector = '[data-filterblok]',
+} = Astro.props;
+
+/** Groepen zonder kopjes doen alsof ze een naamloze subgroep hebben. */
+const subgroepenVan = (groep: Groep): Subgroep[] =>
+  groep.subgroepen ?? [{ label: '', opties: groep.opties ?? [] }];
+
+const alleLabelVan = (groep: Groep) => groep.alleLabel ?? `Alle ${groep.label.toLowerCase()}`;
+
+/** Eigen id voor het zoekveld, zodat twee balken op een pagina niet botsen. */
+const zoekId = `zoek-${rijSelector.replace(/\W/g, '')}`;
 ---
 
-<div class="filterbalk" data-filterbalk>
-  {groepen.map((groep) => (
-    <fieldset class="filtergroep">
-      <legend class="filtergroep-kop">{groep.label}</legend>
-      <div class="filtergroep-knoppen">
-        <button type="button" class="filterknop is-gekozen" data-filter={groep.sleutel} data-waarde="">
-          Alle
-        </button>
-        {groep.opties.map((optie) => (
-          <button type="button" class="filterknop" data-filter={groep.sleutel} data-waarde={optie.waarde}>
-            {optie.label}
-          </button>
-        ))}
+<div
+  class="filterbalk"
+  data-filterbalk
+  data-rij-selector={rijSelector}
+  data-blok-selector={blokSelector}
+  data-eenheid={eenheid}
+>
+  {zoeken && (
+    <div class="zoek" data-zoekveld hidden>
+      <label class="zoek-label" for={zoekId}>{zoeken.label}</label>
+      <div class="zoek-veld">
+        <svg class="zoek-teken" width="15" height="15" viewBox="0 0 15 15" aria-hidden="true">
+          <circle cx="6.5" cy="6.5" r="4.75" fill="none" stroke="currentColor" stroke-width="1.6" />
+          <path d="M10 10l3.6 3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input
+          type="search"
+          id={zoekId}
+          placeholder={zoeken.plaatshouder}
+          autocomplete="off"
+          data-zoek-invoer
+        />
       </div>
-    </fieldset>
-  ))}
+    </div>
+  )}
 
-  <p class="filter-uitkomst data" data-filter-uitkomst aria-live="polite"></p>
+  {groepen.map((groep) => {
+    const subgroepen = subgroepenVan(groep);
+    const knoppen = subgroepen.map((sub, i) => (
+      <div class="filtergroep-rij">
+        {sub.label && <p class="filtergroep-subkop">{sub.label}</p>}
+        <div class="filtergroep-knoppen">
+          {/* De knop "Alle" hoort maar een keer in de groep te staan, en dan
+              bovenaan bij de eerste subgroep. */}
+          {i === 0 && (
+            <button
+              type="button"
+              class="filterknop is-gekozen"
+              data-filter={groep.sleutel}
+              data-waarde=""
+              data-label={alleLabelVan(groep)}
+              aria-pressed="true"
+            >
+              Alle
+            </button>
+          )}
+          {sub.opties.map((optie) => (
+            <button
+              type="button"
+              class="filterknop"
+              data-filter={groep.sleutel}
+              data-waarde={optie.waarde}
+              data-label={optie.label}
+              aria-pressed="false"
+            >
+              {optie.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    ));
+
+    return groep.inklapbaar ? (
+      <details class="filtergroep filtergroep--klap">
+        <summary class="filtergroep-samenvatting">
+          <span class="filtergroep-kop">{groep.label}</span>
+          <span class="filtergroep-keuze" data-keuze={groep.sleutel}>{alleLabelVan(groep)}</span>
+          <span class="filtergroep-teken" aria-hidden="true"></span>
+        </summary>
+        <div class="filtergroep-inhoud" role="group" aria-label={groep.label}>{knoppen}</div>
+      </details>
+    ) : (
+      <fieldset class="filtergroep">
+        <legend class="filtergroep-kop">{groep.label}</legend>
+        {knoppen}
+      </fieldset>
+    );
+  })}
+
+  <p class="filter-voet">
+    <span class="filter-uitkomst data" data-filter-uitkomst aria-live="polite"></span>
+    <button type="button" class="filter-wis" data-filter-wis hidden>Wis filters</button>
+  </p>
 </div>
 
 <style>
   .filterbalk {
     display: grid;
-    gap: 1.1rem;
+    gap: 0.9rem;
     padding-bottom: 1.75rem;
   }
 
+  /* Zoekveld ----------------------------------------------------------- */
+  .zoek { display: grid; gap: 0.4rem; max-width: 26rem; }
+  .zoek[hidden] { display: none; }
+  .zoek-label {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-blauwdiep);
+  }
+  :global(.vlak-zwart) .zoek-label, :global(.vlak-inkt) .zoek-label { color: var(--color-blauw); }
+
+  .zoek-veld {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.55rem;
+    padding-left: 0.8rem;
+    background: var(--color-wit);
+    border: 1.5px solid color-mix(in srgb, var(--color-zwart) 24%, transparent);
+    border-radius: var(--radius-klein);
+  }
+  .zoek-veld:focus-within { border-color: var(--color-blauwdiep); }
+  .zoek-teken { color: var(--color-grijsdonker); }
+  .zoek-veld input {
+    background: none;
+    border: 0;
+    color: var(--color-zwart);
+    font-family: var(--font-sans);
+    font-size: var(--text-basis);
+    line-height: 1.4;
+    min-height: 2.9rem;
+    padding: 0 0.85rem 0 0;
+    width: 100%;
+  }
+  .zoek-veld input:focus { outline: none; }
+  .zoek-veld input::placeholder { color: var(--color-grijsdonker); }
+
+  /* Filtergroep -------------------------------------------------------- */
   .filtergroep { border: 0; padding: 0; margin: 0; display: grid; gap: 0.55rem; }
   .filtergroep-kop {
     font-family: var(--font-smal);
@@ -60,10 +221,82 @@ const { groepen } = Astro.props;
     color: var(--color-blauwdiep);
     padding: 0;
   }
-  :global(.vlak-zwart) .filtergroep-kop { color: var(--color-blauw); }
+  :global(.vlak-zwart) .filtergroep-kop, :global(.vlak-inkt) .filtergroep-kop { color: var(--color-blauw); }
 
+  .filtergroep-rij { display: grid; gap: 0.3rem; }
+  .filtergroep-subkop {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-grijsdonker);
+  }
+  :global(.vlak-zwart) .filtergroep-subkop, :global(.vlak-inkt) .filtergroep-subkop { color: var(--color-grijs); }
   .filtergroep-knoppen { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 
+  /* Uitklapbare variant ------------------------------------------------ */
+  .filtergroep--klap {
+    display: block;
+    border: 1px solid color-mix(in srgb, var(--color-zwart) 15%, transparent);
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-op);
+  }
+  :global(.vlak-zwart) .filtergroep--klap, :global(.vlak-inkt) .filtergroep--klap {
+    border-color: var(--kleur-lijn-donker);
+    background: var(--kleur-inkt);
+  }
+
+  .filtergroep-samenvatting {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    cursor: pointer;
+    padding: 0.75rem 0.95rem;
+    list-style: none;
+  }
+  .filtergroep-samenvatting::-webkit-details-marker { display: none; }
+  .filtergroep-keuze {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    font-weight: 600;
+  }
+
+  /* Hetzelfde teken als in de accordeon: een plus die een min wordt. */
+  .filtergroep-teken {
+    position: relative;
+    width: 13px;
+    height: 13px;
+    flex: none;
+    margin-left: auto;
+    align-self: center;
+  }
+  .filtergroep-teken::before,
+  .filtergroep-teken::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 2px;
+    background: var(--color-blauwdiep);
+    transition: transform 0.22s var(--ease-klap);
+  }
+  :global(.vlak-zwart) .filtergroep-teken::before,
+  :global(.vlak-zwart) .filtergroep-teken::after,
+  :global(.vlak-inkt) .filtergroep-teken::before,
+  :global(.vlak-inkt) .filtergroep-teken::after { background: var(--color-blauw); }
+  .filtergroep-teken::after { transform: rotate(90deg); }
+  [open] .filtergroep-teken::after { transform: rotate(0deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .filtergroep-teken::before, .filtergroep-teken::after { transition: none; }
+  }
+
+  .filtergroep-inhoud {
+    display: grid;
+    gap: 0.7rem;
+    padding: 0.15rem 0.95rem 0.95rem;
+  }
+
+  /* Knoppen ------------------------------------------------------------ */
   .filterknop {
     background: var(--kleur-papier-diep);
     border: 0;
@@ -77,6 +310,10 @@ const { groepen } = Astro.props;
     transition: background-color 0.15s var(--ease-klap), color 0.15s var(--ease-klap);
   }
   :global(.vlak-zwart) .filterknop, :global(.vlak-inkt) .filterknop { background: var(--kleur-inkt-op); }
+  /* In de uitklapper staat de knop op papier, dus daar is wit het verschil. */
+  .filtergroep--klap .filterknop { background: var(--color-wit); }
+  :global(.vlak-zwart) .filtergroep--klap .filterknop,
+  :global(.vlak-inkt) .filtergroep--klap .filterknop { background: var(--kleur-inkt-op); }
   .filterknop:hover { background: color-mix(in srgb, var(--color-blauwdiep) 18%, transparent); }
   .filterknop.is-gekozen {
     background: var(--color-blauwdiep);
@@ -84,59 +321,151 @@ const { groepen } = Astro.props;
   }
   @media (prefers-reduced-motion: reduce) { .filterknop { transition: none; } }
 
+  /* Voet --------------------------------------------------------------- */
+  .filter-voet {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    min-height: 1.9rem;
+  }
   .filter-uitkomst {
     font-size: var(--text-klein);
     color: var(--color-grijsdonker);
-    min-height: 1.2em;
   }
-  :global(.vlak-zwart) .filter-uitkomst { color: var(--color-grijs); }
+  :global(.vlak-zwart) .filter-uitkomst, :global(.vlak-inkt) .filter-uitkomst { color: var(--color-grijs); }
+
+  .filter-wis {
+    background: none;
+    border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
+    border-radius: var(--radius-klein);
+    color: inherit;
+    cursor: pointer;
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.7rem;
+  }
+  .filter-wis:hover { border-color: var(--color-zwart); }
+  :global(.vlak-zwart) .filter-wis, :global(.vlak-inkt) .filter-wis { border-color: var(--kleur-lijn-donker); }
+  :global(.vlak-zwart) .filter-wis:hover, :global(.vlak-inkt) .filter-wis:hover { border-color: var(--color-wit); }
+  .filter-wis[hidden] { display: none; }
 </style>
 
 <script>
-  const balk = document.querySelector<HTMLElement>('[data-filterbalk]');
+  /**
+   * Zoeken en filteren.
+   *
+   * Elke balk werkt op zijn eigen selectors, zodat er meer dan een op een
+   * pagina kan staan zonder dat ze elkaars rijen verbergen.
+   */
 
-  if (balk) {
+  /** Kleine letters, zonder accenten: "Beemster" en "beemster" horen te matchen. */
+  function normaliseer(tekst: string): string {
+    return tekst
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  for (const balk of document.querySelectorAll<HTMLElement>('[data-filterbalk]')) {
+    const rijSelector = balk.dataset.rijSelector || '[data-filterbaar]';
+    const blokSelector = balk.dataset.blokSelector || '';
+    const eenheid = balk.dataset.eenheid || 'resultaten';
+
+    const rijen = [...document.querySelectorAll<HTMLElement>(rijSelector)].map((element) => ({
+      element,
+      zoektekst: normaliseer(element.dataset.zoek ?? element.textContent ?? ''),
+    }));
+    const blokken = blokSelector ? [...document.querySelectorAll<HTMLElement>(blokSelector)] : [];
+
     const uitkomst = balk.querySelector<HTMLElement>('[data-filter-uitkomst]');
-    const rijen = [...document.querySelectorAll<HTMLElement>('[data-wedstrijdrij]')];
-    const groepen = [...document.querySelectorAll<HTMLElement>('[data-dag-groep]')];
+    const wisKnop = balk.querySelector<HTMLButtonElement>('[data-filter-wis]');
+    const zoekveld = balk.querySelector<HTMLElement>('[data-zoekveld]');
+    const zoekInvoer = balk.querySelector<HTMLInputElement>('[data-zoek-invoer]');
+
+    // Zonder JavaScript heeft een zoekveld geen functie, dus het staat in de
+    // bron verborgen. Nu er wel JavaScript is, mag het tevoorschijn komen.
+    if (zoekveld) zoekveld.hidden = false;
+
     const keuze: Record<string, string> = {};
+    let zoekwoorden: string[] = [];
 
     function pasToe() {
       let zichtbaar = 0;
 
       for (const rij of rijen) {
-        const past = Object.entries(keuze).every(
-          ([sleutel, waarde]) => !waarde || rij.dataset[sleutel] === waarde,
+        const filterPast = Object.entries(keuze).every(
+          ([sleutel, waarde]) => !waarde || rij.element.dataset[sleutel] === waarde,
         );
-        rij.hidden = !past;
+        const zoekPast = zoekwoorden.every((woord) => rij.zoektekst.includes(woord));
+        const past = filterPast && zoekPast;
+        rij.element.hidden = !past;
         if (past) zichtbaar++;
       }
 
-      // Speeldagen zonder zichtbare rijen verbergen we ook.
-      for (const groep of groepen) {
-        const heeftRijen = [...groep.querySelectorAll<HTMLElement>('[data-wedstrijdrij]')]
-          .some((rij) => !rij.hidden);
-        groep.hidden = !heeftRijen;
+      // Groepen zonder zichtbare rijen verbergen we ook, anders blijft er een
+      // speeldagkop staan zonder wedstrijden eronder.
+      for (const blok of blokken) {
+        blok.hidden = ![...blok.querySelectorAll<HTMLElement>(rijSelector)].some((rij) => !rij.hidden);
       }
 
+      const actief = Object.values(keuze).some(Boolean) || zoekwoorden.length > 0;
+
       if (uitkomst) {
-        const gefilterd = Object.values(keuze).some(Boolean);
-        if (!gefilterd) uitkomst.textContent = `${rijen.length} wedstrijden`;
-        else if (zichtbaar === 0) uitkomst.textContent = 'Geen wedstrijden die aan dit filter voldoen.';
-        else uitkomst.textContent = `${zichtbaar} van ${rijen.length} wedstrijden`;
+        if (!actief) uitkomst.textContent = `${rijen.length} ${eenheid}`;
+        else if (zichtbaar === 0) uitkomst.textContent = `Geen ${eenheid} gevonden.`;
+        else uitkomst.textContent = `${zichtbaar} van ${rijen.length} ${eenheid}`;
       }
+      if (wisKnop) wisKnop.hidden = !actief;
+    }
+
+    /** Zet een groep op een waarde en werk de knoppen en de samenvatting bij. */
+    function kies(sleutel: string, waarde: string) {
+      keuze[sleutel] = waarde;
+
+      let label = '';
+      for (const knop of balk.querySelectorAll<HTMLButtonElement>(`[data-filter="${sleutel}"]`)) {
+        const gekozen = (knop.dataset.waarde ?? '') === waarde;
+        knop.classList.toggle('is-gekozen', gekozen);
+        knop.setAttribute('aria-pressed', String(gekozen));
+        if (gekozen) label = knop.dataset.label ?? knop.textContent ?? '';
+      }
+
+      // De dichtgeklapte groep laat zien waar hij op staat.
+      const samenvatting = balk.querySelector<HTMLElement>(`[data-keuze="${sleutel}"]`);
+      if (samenvatting) samenvatting.textContent = label;
     }
 
     for (const knop of balk.querySelectorAll<HTMLButtonElement>('[data-filter]')) {
       knop.addEventListener('click', () => {
-        const sleutel = knop.dataset.filter!;
-        keuze[sleutel] = knop.dataset.waarde ?? '';
-        for (const zus of balk.querySelectorAll<HTMLButtonElement>(`[data-filter="${sleutel}"]`)) {
-          zus.classList.toggle('is-gekozen', zus === knop);
-        }
+        kies(knop.dataset.filter!, knop.dataset.waarde ?? '');
         pasToe();
       });
     }
+
+    if (zoekInvoer) {
+      zoekInvoer.addEventListener('input', () => {
+        zoekwoorden = normaliseer(zoekInvoer.value).split(' ').filter(Boolean);
+        pasToe();
+      });
+      // Er staat geen formulier omheen, maar Enter hoort hier sowieso niets te doen.
+      zoekInvoer.addEventListener('keydown', (gebeurtenis) => {
+        if (gebeurtenis.key === 'Enter') gebeurtenis.preventDefault();
+      });
+    }
+
+    wisKnop?.addEventListener('click', () => {
+      for (const sleutel of Object.keys(keuze)) kies(sleutel, '');
+      zoekwoorden = [];
+      if (zoekInvoer) zoekInvoer.value = '';
+      pasToe();
+      zoekInvoer?.focus();
+    });
 
     pasToe();
   }

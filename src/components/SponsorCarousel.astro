@@ -19,12 +19,18 @@ interface Props {
 
 const { sponsoren } = Astro.props;
 
-/* Het spoor twee keer afdrukken. De tweede reeks is puur decor: die staat op
-   aria-hidden en is niet met de tab-toets te bereiken. */
-const spoor = [
-  { sponsoren, kopie: false },
-  { sponsoren, kopie: true },
-];
+/* Het spoor vier keer afdrukken.
+   Waarom vier en niet twee: de animatie schuift precies een reeks op en springt
+   dan terug. Met twee reeksen is het spoor twee reeksen breed, en op het moment
+   van de sprong staat er dus nog maar een reeks in beeld. Is het scherm breder
+   dan een reeks - en dat is een reeks van acht logo's op een groot scherm - dan
+   loopt het spoor daar zichtbaar leeg. Met vier reeksen blijft er tot ruim
+   vierduizend pixels altijd voorraad staan.
+
+   Alleen de eerste reeks telt mee: de rest is decor, staat op aria-hidden en is
+   niet met de tab-toets te bereiken. */
+const AANTAL_REEKSEN = 4;
+const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kopie: i > 0 }));
 ---
 
 <div class="carousel" data-carousel>
@@ -55,6 +61,8 @@ const spoor = [
 
 <style>
   .carousel {
+    /* Een gat, overal hetzelfde: tussen twee logo's en op de naad. */
+    --gat: clamp(2rem, 5vw, 4.5rem);
     overflow: hidden;
     border-block: 1px solid var(--kleur-lijn-licht);
     padding-block: 1.5rem;
@@ -71,18 +79,29 @@ const spoor = [
   .carousel:hover .carousel-spoor,
   .carousel:focus-within .carousel-spoor { animation-play-state: paused; }
 
+  /* Een kwart van vier reeksen is precies een reeks. Houd dit gelijk aan
+     AANTAL_REEKSEN hierboven. */
   @keyframes schuiven {
     from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    to   { transform: translateX(-25%); }
   }
 
+  /* De naad. Alle reeksen zijn even breed en staan precies een reeksbreedte
+     uit elkaar, dus na een kwartslag staat logo 1 van de volgende reeks op de
+     plek waar logo 1 van de vorige begon en is de sprong onzichtbaar.
+
+     Dat werkte niet zolang elke reeks links en rechts een padding had. De
+     afstand tussen twee logo's binnen een reeks was dan het gat, en op de naad
+     tweemaal die padding plus het gat. Daar viel een gapend gat en precies
+     daar sprong de animatie terug. Nu draagt elke reeks zijn eigen eindgat als
+     marge, zodat de afstand overal dezelfde is en de sprong klopt. */
   .carousel-reeks {
     display: flex;
     align-items: center;
-    gap: clamp(2rem, 5vw, 4.5rem);
+    gap: var(--gat);
+    margin: 0 var(--gat) 0 0;
     list-style: none;
-    margin: 0;
-    padding: 0 clamp(1rem, 2.5vw, 2.25rem);
+    padding: 0;
   }
 
   .carousel-logo {
@@ -114,8 +133,10 @@ const spoor = [
       scroll-snap-type: x proximity;
     }
     .carousel-spoor { animation: none; }
-    /* De tweede reeks heeft zonder animatie geen functie meer. */
+    /* De tweede reeks heeft zonder animatie geen functie meer, en zonder lus
+       hoeft er ook geen eindgat te staan. */
     .carousel-reeks[aria-hidden="true"] { display: none; }
+    .carousel-reeks { margin-right: 0; padding-inline: var(--spacing-kantlijn); }
     .carousel-reeks li { scroll-snap-align: start; }
     .carousel-logo { transition: none; }
   }

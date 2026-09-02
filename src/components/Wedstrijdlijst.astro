@@ -45,7 +45,7 @@ const splits = (label: string) => {
     {dagen.map((dag) => {
       const deel = splits(dag.label);
       return (
-        <section class="wedstrijddag" data-dag-groep>
+        <section class="wedstrijddag" data-filterblok>
           <Kop class="dagkop">
             <span class="dagkop-dag">{deel.dag}</span>
             <span class="dagkop-datum">{deel.datum}</span>

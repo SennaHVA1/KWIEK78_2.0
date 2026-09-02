@@ -1,13 +1,50 @@
 ---
 /**
  * De poulestanden van alle teams die op de site staan.
+ *
+ * Er staat een blok per team, en dat worden er uit Sportlink al gauw twintig.
+ * Daarom dezelfde balk als boven het programma: een zoekveld en een
+ * uitklapbaar teamfilter met kopjes. Zoeken gaat ook over de andere clubs in
+ * de poule, zodat je op "Beemster" meteen ziet in welke poules die club staat.
  */
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
+import Filterbalk from '../../components/Filterbalk.astro';
 import Standentabel from '../../components/Standentabel.astro';
-import { getAllePoulestanden } from '../../lib/sportlink';
+import { getAllePoulestanden, getTeamgroep, vergelijkTeamnaam, TEAMGROEPEN } from '../../lib/sportlink';
 
 const standen = getAllePoulestanden();
+
+/* Waarop een blok te vinden is: het eigen team, de poule en alle clubs die in
+   die poule staan. */
+const zoektekst = ({ team, stand }: (typeof standen)[number]) =>
+  [team.naam, team.pouleNaam, team.speeldag, ...(stand?.regels.map((regel) => regel.team) ?? [])].join(' ');
+
+/* Teams per groep, in de vaste volgorde en binnen de groep op teamnummer.
+   De blokken op de pagina houden de volgorde van de club aan; het filter
+   staat er los van en mag netjes oplopen. Lege groepen vallen weg. */
+const teamsPerGroep = TEAMGROEPEN
+  .map((groep) => ({
+    groep,
+    teams: standen
+      .map(({ team }) => team)
+      .filter((team) => getTeamgroep(team.naam) === groep)
+      .sort((a, b) => vergelijkTeamnaam(a.naam, b.naam)),
+  }))
+  .filter((rij) => rij.teams.length > 0);
+
+const filters = [
+  {
+    sleutel: 'team',
+    label: 'Team',
+    inklapbaar: true,
+    alleLabel: 'Alle teams',
+    subgroepen: teamsPerGroep.map(({ groep, teams }) => ({
+      label: teamsPerGroep.length > 1 ? groep : '',
+      opties: teams.map((team) => ({ waarde: team.id, label: team.naam.replace("Kwiek '78 ", '') })),
+    })),
+  },
+];
 ---
 
 <Basis
@@ -21,30 +58,52 @@ const standen = getAllePoulestanden();
   />
 
   <section class="vlak-wit sectie">
-    <div class="omhulsel standen">
-      {standen.map(({ team, stand }) => (
-        <section class="kolom standblok">
-          <p class="kolom-kicker">{team.speeldag}</p>
-          <div>
-            <div class="standblok-kop">
-              <h2 class="kop-s">
-                <a class="link-onder" href={`/teams/${team.id}`}>{team.naam}</a>
-              </h2>
-              <span class="merk merk--zacht">{team.pouleNaam}</span>
+    <div class="omhulsel">
+      {/* In dezelfde kolom als de tabellen, zodat de balk netjes boven de
+          blokken uitlijnt in plaats van ernaast te beginnen. */}
+      <div class="kolom filterkolom">
+        <p class="kolom-kicker">Zoeken en filteren</p>
+        <Filterbalk
+          groepen={filters}
+          zoeken={{ label: 'Zoeken', plaatshouder: 'Zoek op team of op een club uit de poule' }}
+          eenheid="standen"
+          rijSelector="[data-standblok]"
+          blokSelector=""
+        />
+      </div>
+
+      <div class="standen">
+        {standen.map((regel) => (
+          <section
+            class="kolom standblok"
+            data-standblok
+            data-team={regel.team.id}
+            data-zoek={zoektekst(regel)}
+          >
+            <p class="kolom-kicker">{regel.team.speeldag}</p>
+            <div>
+              <div class="standblok-kop">
+                <h2 class="kop-s">
+                  <a class="link-onder" href={`/teams/${regel.team.id}`}>{regel.team.naam}</a>
+                </h2>
+                <span class="merk merk--zacht">{regel.team.pouleNaam}</span>
+              </div>
+              <Standentabel
+                stand={regel.stand}
+                geenStandTekst={`Voor ${regel.team.pouleNaam} houdt de KNVB geen stand bij. Bij de pupillen tot en met onder 11 gaat het om spelplezier, niet om punten. De uitslagen staan wel op de teampagina.`}
+              />
             </div>
-            <Standentabel
-              stand={stand}
-              geenStandTekst={`Voor ${team.pouleNaam} houdt de KNVB geen stand bij. Bij de pupillen tot en met onder 11 gaat het om spelplezier, niet om punten. De uitslagen staan wel op de teampagina.`}
-            />
-          </div>
-        </section>
-      ))}
+          </section>
+        ))}
+      </div>
     </div>
   </section>
 </Basis>
 
 <style>
+  .filterkolom { margin-bottom: 0.5rem; }
   .standen { display: grid; gap: 3.25rem; }
+  .standblok[hidden] { display: none; }
   .standblok-kop {
     display: flex;
     align-items: center;

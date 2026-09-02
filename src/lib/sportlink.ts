@@ -185,7 +185,83 @@ export function getWedstrijdTeams(): string[] {
     if (w.thuisteam.startsWith(CLUB)) namen.add(w.thuisteam);
     if (w.uitteam.startsWith(CLUB)) namen.add(w.uitteam);
   }
-  return [...namen].sort();
+  return [...namen].sort(vergelijkTeamnaam);
+}
+
+/* --------------------------------------------------------------------------
+   Teams indelen voor de filters
+   --------------------------------------------------------------------------
+   Een club van deze omvang heeft al gauw twintig teams, en een rij van twintig
+   knoppen achter elkaar is geen filter meer maar een muur. De indeling
+   hieronder groepeert ze zoals de club er zelf over praat.
+
+   De indeling komt uit de teamcode achter de clubnaam en niet uit teams.json,
+   want in het wedstrijdprogramma staan alleen namen. Dat is ook precies wat
+   Sportlink teruggeeft, dus deze regels blijven kloppen als de echte bron
+   wordt aangesloten en er ineens veel meer teams in staan.
+
+     1, 2, 3       senioren
+     VR1, VR2      vrouwen (senioren)
+     JO17-1, MO9-1 jeugd, jongens en meisjes
+     35+, 7x7      overig
+   -------------------------------------------------------------------------- */
+
+export type Teamgroep = 'Senioren' | 'Vrouwen' | 'Jeugd' | 'Overig';
+
+/** De volgorde waarin de groepen in een filter staan. */
+export const TEAMGROEPEN: Teamgroep[] = ['Senioren', 'Vrouwen', 'Jeugd', 'Overig'];
+
+/** De teamcode zonder clubnaam: "Kwiek '78 JO17-1" wordt "JO17-1". */
+function teamcode(naam: string): string {
+  return naam.startsWith(CLUB) ? naam.slice(CLUB.length).trim() : naam.trim();
+}
+
+/** In welke groep hoort dit team thuis? */
+export function getTeamgroep(naam: string): Teamgroep {
+  const code = teamcode(naam).toUpperCase();
+  if (/^VR\s*\d/.test(code)) return 'Vrouwen';
+  if (/^(JO|MO|JM)\s*\d/.test(code)) return 'Jeugd';
+  if (/^\d+$/.test(code)) return 'Senioren';
+  return 'Overig';
+}
+
+/**
+ * Teams op de volgorde waarin een mens ze verwacht: eerst de groep, dan het
+ * getal in de code. Zonder dat laatste komt team 10 tussen 1 en 2 te staan en
+ * staat JO17 voor JO9.
+ */
+export function vergelijkTeamnaam(a: string, b: string): number {
+  const groepA = TEAMGROEPEN.indexOf(getTeamgroep(a));
+  const groepB = TEAMGROEPEN.indexOf(getTeamgroep(b));
+  if (groepA !== groepB) return groepA - groepB;
+
+  const codeA = teamcode(a);
+  const codeB = teamcode(b);
+  const getallen = (code: string) => (code.match(/\d+/g) ?? []).map(Number);
+  const letters = (code: string) => code.replace(/[\d\s-]/g, '').toUpperCase();
+
+  // Binnen de jeugd eerst op categorie (JO voor MO), dan op leeftijd.
+  if (letters(codeA) !== letters(codeB)) return letters(codeA).localeCompare(letters(codeB));
+
+  const cijfersA = getallen(codeA);
+  const cijfersB = getallen(codeB);
+  for (let i = 0; i < Math.max(cijfersA.length, cijfersB.length); i++) {
+    const verschil = (cijfersA[i] ?? 0) - (cijfersB[i] ?? 0);
+    if (verschil !== 0) return verschil;
+  }
+  return codeA.localeCompare(codeB);
+}
+
+/**
+ * De teams uit het programma, ingedeeld in groepen. Lege groepen vallen weg,
+ * en is er maar een groep, dan geeft deze functie hem toch terug: de
+ * filterbalk beslist zelf of hij de kopjes dan nog laat zien.
+ */
+export function getWedstrijdTeamsPerGroep(): { groep: Teamgroep; teams: string[] }[] {
+  const namen = getWedstrijdTeams();
+  return TEAMGROEPEN
+    .map((groep) => ({ groep, teams: namen.filter((naam) => getTeamgroep(naam) === groep) }))
+    .filter((rij) => rij.teams.length > 0);
 }
 
 /** Alle competitiesoorten die in de data voorkomen, voor de filters. */

@@ -12,7 +12,7 @@
  * Waar je speelt staat als gewone tekst en niet als blokje.
  */
 import Clubwapen from './Clubwapen.astro';
-import { tijd, korteDatum } from '../lib/datum';
+import { tijd, korteDatum, langeDatum } from '../lib/datum';
 import { CLUB } from '../lib/sportlink';
 import type { Wedstrijd } from '../lib/types';
 
@@ -44,6 +44,20 @@ const ploegen = [
   { naam: wedstrijd.uitteam, logo: wedstrijd.uitLogo, doelpunten: uitslag?.uit },
 ];
 
+/* Waarop je deze rij kunt vinden met het zoekveld boven de lijst. Beide
+   clubnamen, de accommodatie en de datum: zoek je op "beemster" dan wil je de
+   wedstrijd tegen Beemster zien, ook als je zelf uit speelt. */
+const zoektekst = [
+  wedstrijd.thuisteam,
+  wedstrijd.uitteam,
+  wedstrijd.accommodatie,
+  wedstrijd.veld ?? '',
+  wedstrijd.competitie,
+  korteDatum(wedstrijd.datum),
+  langeDatum(wedstrijd.datum),
+  isThuis ? 'thuis' : 'uit',
+].join(' ');
+
 const omschrijving = [
   wedstrijd.afgelast ? 'Afgelast: ' : '',
   `${wedstrijd.thuisteam} tegen ${wedstrijd.uitteam}`,
@@ -57,7 +71,8 @@ const omschrijving = [
   class:list={['rij', 'wedstrijdrij', wedstrijd.afgelast && 'is-afgelast']}
   href={`/wedstrijd/${wedstrijd.wedstrijdcode}`}
   aria-label={omschrijving}
-  data-wedstrijdrij
+  data-filterbaar
+  data-zoek={zoektekst}
   data-team={eigenTeam}
   data-locatie={isThuis ? 'thuis' : 'uit'}
   data-soort={wedstrijd.competitie}

@@ -53,8 +53,15 @@ const snelknoppen = [
     </div>
 
     <div class="omhulsel hero-binnen">
-      <p class="hero-boven">Avenhorn, sinds 1978</p>
-      <h1 class="hero-titel">Kwiek '78</h1>
+      {/* Kicker en titel staan samen in een blok dat precies zo breed is als
+          het woordmerk. Op een breed scherm wisselen ze van plek en schuift de
+          kicker naar de rechterrand van dat blok: hij komt dan onder de '78 uit
+          te staan in plaats van erboven. Op een telefoon is daar geen ruimte
+          voor en blijft hij gewoon boven de titel. */}
+      <div class="hero-naam">
+        <p class="hero-boven">Avenhorn, sinds 1978</p>
+        <h1 class="hero-titel">Kwiek '78</h1>
+      </div>
       <p class="hero-onder">
         Zwart-wit, elke zondag in de vijfde klasse. Ruim driehonderd leden en een kantine die open blijft.
       </p>
@@ -218,6 +225,11 @@ const snelknoppen = [
 
   .hero-binnen { padding-bottom: clamp(1.5rem, 4vw, 2.5rem); }
 
+  /* Het blok is zo breed als de titel en niet breder. Alleen daardoor kan de
+     kicker zich op desktop rechts uitlijnen op de '78 in plaats van op de
+     kantlijn van de pagina. */
+  .hero-naam { display: grid; justify-items: start; width: fit-content; }
+
   /* Wit, geen blauw. Op de hoogte van deze regel staat de verduistering op
      31% en is 23% van de foto daarachter lichter dan 180: dat zijn de witte
      shirts van de voorste rij. Blauw haalt daar 1,5:1 en wit 2,1:1, dus geen
@@ -235,7 +247,16 @@ const snelknoppen = [
     margin-bottom: 0.5rem;
   }
   @media (min-width: 1024px) {
-    .hero-boven { font-size: 0.875rem; }
+    .hero-boven {
+      font-size: 0.875rem;
+      /* Van boven de titel naar rechtsonder eronder. De volgorde in de bron
+         blijft kicker-dan-titel, want zo hoort een schermlezer het ook. */
+      order: 2;
+      justify-self: end;
+      margin-bottom: 0;
+      margin-top: 0.45rem;
+    }
+    .hero-titel { order: 1; }
   }
   .hero-titel {
     font-size: var(--text-kop-xl);
@@ -299,16 +320,12 @@ const snelknoppen = [
     gap: 2rem;
     grid-template-columns: 1fr;
   }
-  /* Op een telefoon geen vier losse kaarten onder elkaar maar een lijst met
-     haarlijnen ertussen. Het nieuws blijft compleet, het duwt alleen niet meer
-     alles eronder van het scherm af. */
+  /* Op een telefoon geen vier hoge kaarten onder elkaar maar vier lage
+     blokjes met een klein vierkant beeld. Het nieuws blijft compleet, het duwt
+     alleen niet meer alles eronder van het scherm af. De omkadering zit in de
+     kaart zelf, dus hier alleen nog de tussenruimte. */
   @media (max-width: 639px) {
-    .nieuwsraster { gap: 0; }
-    .nieuwsraster > * + * {
-      margin-top: 0.9rem;
-      padding-top: 0.9rem;
-      border-top: 1px solid var(--kleur-lijn-licht);
-    }
+    .nieuwsraster { gap: 0.7rem; }
   }
   @media (min-width: 640px) { .nieuwsraster { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 1100px) { .nieuwsraster { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -318,13 +335,19 @@ const snelknoppen = [
     .tweeluik { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 3.5rem; }
   }
 
-  .sponsors { padding-block: clamp(2.5rem, 4vw, 3.5rem); }
+  /* De carousel staat tussen twee haarlijnen. De ruimte boven de bovenste en
+     onder de onderste is dezelfde waarde, anders hangt het spoor scheef in
+     zijn eigen band. Dat was het geval: 1,25rem erboven tegen 3,5rem eronder. */
+  .sponsors {
+    --sponsors-ruimte: clamp(1.75rem, 3vw, 2.5rem);
+    padding-block: clamp(2.5rem, 4vw, 3.5rem) var(--sponsors-ruimte);
+  }
   .sponsors-kop {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    padding-bottom: 1.25rem;
+    padding-bottom: var(--sponsors-ruimte);
   }
 </style>

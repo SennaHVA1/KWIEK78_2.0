@@ -111,6 +111,14 @@ const nummers = Array.from({ length: totaalPaginas }, (_, i) => i + 1);
     margin: 0;
     padding: 0;
   }
+  /* Let op de vorm van deze selectors. Ze staan allemaal als "`.paginering
+     a...`" geschreven en niet als losse klasse, want Astro plakt aan elk
+     samengesteld deel een attribuutselector. "`.paginering a`" haalde daardoor
+     een hogere specificiteit dan "`.paginering-nummer.is-hier`" en overschreef
+     de witte kleur van de huidige pagina met zwart: een zwart blokje zonder
+     zichtbaar cijfer erin. Met "`a.is-hier`" wint de bijzondere regel weer van
+     de algemene. !important is niet nodig; scoped stijlen van Astro staan
+     buiten de cascade-layers en winnen daarmee al van `.vlak-wit a`. */
   .paginering a {
     display: inline-flex;
     align-items: center;
@@ -121,18 +129,18 @@ const nummers = Array.from({ length: totaalPaginas }, (_, i) => i + 1);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--color-zwart) !important;
+    color: var(--color-zwart);
     border: 1px solid color-mix(in srgb, var(--color-zwart) 25%, transparent);
     padding: 0.5rem 0.8rem;
     min-width: 2.4rem;
   }
   .paginering a:hover { border-color: var(--color-zwart); }
-  .paginering-nummer.is-hier {
+  .paginering a.is-hier {
     background: var(--color-zwart);
-    color: var(--color-wit) !important;
+    color: var(--color-wit);
     border-color: var(--color-zwart);
   }
-  .paginering-stap.is-uit {
+  .paginering a.is-uit {
     opacity: 0.35;
     pointer-events: none;
   }

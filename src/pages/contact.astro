@@ -334,14 +334,24 @@ const kaartUrl =
   }
   .rol:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
   .rol-kop { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
-  .rol-titel { font-size: var(--text-basis); font-weight: 700; letter-spacing: -0.01em; }
+  /* Expliciet Barlow en niet de displayletter die een h3 van zichzelf erft.
+     Anton bestaat alleen in gewicht 400; met font-weight 700 erop maakte de
+     browser er zelf een vette van, en zo'n nagemaakte vette letter dicht op
+     zwart is precies wat hier te dik en te moeilijk leesbaar was. */
+  .rol-titel {
+    font-family: var(--font-sans);
+    font-size: var(--text-basis);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
   .rol-persoon {
     font-size: var(--text-mini);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-grijs);
   }
-  .rol-waarvoor { font-size: var(--text-klein); max-width: 64ch; }
+  .rol-waarvoor { font-size: var(--text-klein); line-height: 1.6; max-width: 64ch; }
   .rol-mail { font-size: var(--text-klein); }
   .rol-mail a { color: var(--color-blauw); }
   .rol-noot { font-size: var(--text-klein); margin-top: 1.25rem; }

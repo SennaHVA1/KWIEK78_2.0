@@ -6,16 +6,22 @@ import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import Filterbalk from '../../components/Filterbalk.astro';
 import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
-import { getUitslagen, getWedstrijdTeams } from '../../lib/sportlink';
+import { getUitslagen, getWedstrijdTeamsPerGroep } from '../../lib/sportlink';
 
 const wedstrijden = getUitslagen();
-const teams = getWedstrijdTeams();
+const teamsPerGroep = getWedstrijdTeamsPerGroep();
 
+/* Zelfde opzet als bij het programma: teams in een uitklapper met kopjes. */
 const filters = [
   {
     sleutel: 'team',
     label: 'Team',
-    opties: teams.map((naam) => ({ waarde: naam, label: naam.replace("Kwiek '78 ", '') })),
+    inklapbaar: true,
+    alleLabel: 'Alle teams',
+    subgroepen: teamsPerGroep.map(({ groep, teams }) => ({
+      label: teamsPerGroep.length > 1 ? groep : '',
+      opties: teams.map((naam) => ({ waarde: naam, label: naam.replace("Kwiek '78 ", '') })),
+    })),
   },
   {
     sleutel: 'locatie',
@@ -43,8 +49,12 @@ const filters = [
       {/* In dezelfde kolom als de wedstrijdrijen, zodat de filters netjes
           boven de lijst uitlijnen in plaats van ernaast te beginnen. */}
       <div class="kolom">
-        <p class="kolom-kicker">Filteren</p>
-        <Filterbalk groepen={filters} />
+        <p class="kolom-kicker">Zoeken en filteren</p>
+        <Filterbalk
+          groepen={filters}
+          zoeken={{ label: 'Zoeken', plaatshouder: 'Zoek op tegenstander, team of veld' }}
+          eenheid="wedstrijden"
+        />
       </div>
       <Wedstrijdlijst
         wedstrijden={wedstrijden}

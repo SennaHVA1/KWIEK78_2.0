@@ -2,8 +2,10 @@
 /**
  * Een nieuwsbericht in een lijst.
  *
- * Geen kaart met afgeronde hoeken en schaduw: een blok met een haarlijn
- * erboven, de datum in de kantlijn en de foto strak in het raster.
+ * Een omkaderd blok: haarlijn eromheen, de foto strak tegen de bovenrand en
+ * de tekst met wat lucht eromheen. De rand houdt de berichten bij elkaar in
+ * een raster waarin de kaarten verschillend hoog zijn; zonder rand liepen de
+ * koppen en samenvattingen visueel in elkaar over.
  */
 import Foto from './Foto.astro';
 import { datumZonderDag, machineDatum } from '../lib/datum';
@@ -54,26 +56,60 @@ const Kop = `h${kopNiveau}` as 'h2' | 'h3';
 </article>
 
 <style>
+  /* De kaart -------------------------------------------------------------- */
+  .nieuwskaart {
+    height: 100%;
+    border: 1px solid var(--kleur-lijn-licht);
+    border-radius: var(--radius-vlak);
+    background: var(--color-wit);
+    overflow: hidden;
+    transition: border-color 0.18s var(--ease-klap), box-shadow 0.18s var(--ease-klap);
+  }
+  :global(.vlak-zwart) .nieuwskaart, :global(.vlak-inkt) .nieuwskaart {
+    border-color: var(--kleur-lijn-donker);
+    background: var(--kleur-inkt);
+  }
+  .nieuwskaart:hover {
+    border-color: color-mix(in srgb, var(--color-zwart) 30%, transparent);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--color-zwart) 8%, transparent);
+  }
+  :global(.vlak-zwart) .nieuwskaart:hover, :global(.vlak-inkt) .nieuwskaart:hover {
+    border-color: color-mix(in srgb, var(--color-wit) 32%, transparent);
+    box-shadow: none;
+  }
+  @media (prefers-reduced-motion: reduce) { .nieuwskaart { transition: none; } }
+
   .nieuwskaart-link {
     display: grid;
-    gap: 0.85rem;
+    gap: 0;
     text-decoration: none;
     color: inherit;
     height: 100%;
     align-content: start;
   }
 
-  .nieuwskaart-beeld { overflow: hidden; border-radius: var(--radius-vlak); }
+  /* Beeld ---------------------------------------------------------------- */
+  /* De foto loopt tot tegen de rand van de kaart, dus geen eigen ronding.
+     Foto.astro zet die als inline stijl, vandaar het !important. */
+  .nieuwskaart-beeld { overflow: hidden; }
   .nieuwskaart-beeld :global(img) {
+    border-radius: 0 !important;
     transition: transform 0.5s var(--ease-klap);
   }
+  .nieuwskaart-beeld :global(.foto-plek) { border-radius: 0; }
   .nieuwskaart-link:hover .nieuwskaart-beeld :global(img) { transform: scale(1.03); }
   @media (prefers-reduced-motion: reduce) {
     .nieuwskaart-beeld :global(img) { transition: none; }
     .nieuwskaart-link:hover .nieuwskaart-beeld :global(img) { transform: none; }
   }
 
-  .nieuwskaart-tekst { display: grid; gap: 0.5rem; align-content: start; }
+  /* Tekst ----------------------------------------------------------------- */
+  .nieuwskaart-tekst {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 1rem 1.15rem 1.2rem;
+  }
 
   .nieuwskaart-meta {
     display: flex;
@@ -107,11 +143,22 @@ const Kop = `h${kopNiveau}` as 'h2' | 'h3';
   :global(.vlak-wit) .nieuwskaart-lees { color: var(--color-blauwdiep); }
   .nieuwskaart-link:hover .nieuwskaart-lees { text-decoration: underline; text-underline-offset: 0.25em; }
 
+  /* Grote variant: beeld links, tegen de rand aan, over de hele hoogte. ---- */
   @media (min-width: 720px) {
     .nieuwskaart--groot .nieuwskaart-link {
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-      gap: 2rem;
-      align-items: start;
+      align-items: stretch;
+    }
+    .nieuwskaart--groot .nieuwskaart-beeld :global(img),
+    .nieuwskaart--groot .nieuwskaart-beeld :global(.foto-plek) {
+      height: 100%;
+      min-height: 19rem;
+      aspect-ratio: auto !important;
+      object-fit: cover;
+    }
+    .nieuwskaart--groot .nieuwskaart-tekst {
+      align-content: center;
+      padding: 2rem 2.25rem;
     }
   }
 
@@ -120,16 +167,18 @@ const Kop = `h${kopNiveau}` as 'h2' | 'h3';
      dan in de hoogte van een enkele kaart van hiervoor. */
   @media (max-width: 639px) {
     .nieuwskaart--compact .nieuwskaart-link {
-      grid-template-columns: 84px minmax(0, 1fr);
-      gap: 0.9rem;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 0.85rem;
       align-items: center;
+      padding: 0.6rem;
     }
     .nieuwskaart--compact .nieuwskaart-beeld { border-radius: var(--radius-klein); }
+    .nieuwskaart--compact .nieuwskaart-beeld :global(img) { border-radius: var(--radius-klein) !important; }
     .nieuwskaart--compact .nieuwskaart-beeld :global(img),
     .nieuwskaart--compact .nieuwskaart-beeld :global(.foto-plek) {
       aspect-ratio: 1 / 1 !important;
     }
-    .nieuwskaart--compact .nieuwskaart-tekst { gap: 0.2rem; }
+    .nieuwskaart--compact .nieuwskaart-tekst { gap: 0.2rem; padding: 0; }
     .nieuwskaart--compact .nieuwskaart-tekst :is(h2, h3) {
       font-size: 1.0625rem;
       line-height: 1.25;

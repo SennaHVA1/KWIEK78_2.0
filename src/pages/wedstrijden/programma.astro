@@ -7,17 +7,25 @@ import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import Filterbalk from '../../components/Filterbalk.astro';
 import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
-import { getProgramma, getWedstrijdTeams } from '../../lib/sportlink';
+import { getProgramma, getWedstrijdTeamsPerGroep } from '../../lib/sportlink';
 
 const wedstrijden = getProgramma();
-const teams = getWedstrijdTeams();
+const teamsPerGroep = getWedstrijdTeamsPerGroep();
 const afgelast = wedstrijden.filter((w) => w.afgelast).length;
 
+/* De teams zitten in een uitklapper met kopjes erin. Een platte rij van alle
+   teams achter elkaar werd bij zes teams al lang en wordt bij de twintig teams
+   uit Sportlink onleesbaar. Staat er maar een groep, dan is het kopje ruis. */
 const filters = [
   {
     sleutel: 'team',
     label: 'Team',
-    opties: teams.map((naam) => ({ waarde: naam, label: naam.replace("Kwiek '78 ", '') })),
+    inklapbaar: true,
+    alleLabel: 'Alle teams',
+    subgroepen: teamsPerGroep.map(({ groep, teams }) => ({
+      label: teamsPerGroep.length > 1 ? groep : '',
+      opties: teams.map((naam) => ({ waarde: naam, label: naam.replace("Kwiek '78 ", '') })),
+    })),
   },
   {
     sleutel: 'locatie',
@@ -47,7 +55,7 @@ const filters = [
   <Paginakop
     kicker="Wedstrijden"
     titel="Programma"
-    intro="Alle wedstrijden die nog gespeeld moeten worden. Filter op het team van je kind en je hebt in een oogopslag de zaterdag of zondag."
+    intro="Alle wedstrijden die nog gespeeld moeten worden. Zoek op een tegenstander of filter op het team van je kind, en je hebt in een oogopslag de zaterdag of zondag."
   />
 
   <section class="vlak-wit sectie">
@@ -55,7 +63,7 @@ const filters = [
       {/* In dezelfde kolom als de wedstrijdrijen, zodat de filters netjes
           boven de lijst uitlijnen in plaats van ernaast te beginnen. */}
       <div class="kolom filterkolom">
-        <p class="kolom-kicker">Filteren</p>
+        <p class="kolom-kicker">Zoeken en filteren</p>
         <div>
           {afgelast > 0 && (
             <p class="melding">
@@ -66,7 +74,11 @@ const filters = [
               Afgelaste wedstrijden zijn doorgestreept en blauw gearceerd.
             </p>
           )}
-          <Filterbalk groepen={filters} />
+          <Filterbalk
+            groepen={filters}
+            zoeken={{ label: 'Zoeken', plaatshouder: 'Zoek op tegenstander, team of veld' }}
+            eenheid="wedstrijden"
+          />
         </div>
       </div>
 

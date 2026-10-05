@@ -98,7 +98,7 @@ punten.
 
 | Bestand | Verhouding | Status | Waarvoor |
 |---|---|---|---|
-| `sfeer-veld.webp` | 4:3 of breder, min. 2000 px | **aanwezig** | achtergrond van de hero op de homepage |
+| `hero-heren-1.webp` | 3:2 liggend, min. 2400 px | **aanwezig** | achtergrond van de hero op de homepage |
 | `veteranen.webp` | vrij | **aanwezig** | nieuwsberichten |
 | `kwiek-35plus.webp` | vrij | **aanwezig** | nieuwsberichten |
 | `kaart-sportpark.webp` | 4:3, min. 1200 px | nog nodig | statische kaart op de contactpagina |

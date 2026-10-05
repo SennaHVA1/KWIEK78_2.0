@@ -21,7 +21,7 @@ const DOEL = 'public/images';
 const FOTOS = [
   ['Heren 1.jpg', 'teams/kwiek-78-1', 1800],
   ['Heren 2.jpg', 'teams/kwiek-78-2', 1800],
-  ['Heren 3.jpg', 'club/sfeer-veld', 2000],
+  ['Heren 1 hero.png', 'club/hero-heren-1', 2400],
   ['Vrouwen 1.jpg', 'teams/kwiek-78-vr1', 1800],
   ['veteranen VE 1.jpg', 'club/veteranen', 1600],
   ['Kwiek 35+2-1.jpg', 'club/kwiek-35plus', 1600],

@@ -8,9 +8,7 @@
     "pouleNaam": "Vijfde klasse 04 zondag",
     "speeldag": "zondag",
     "isJeugd": false,
-    "teamfoto": "/images/teams/kwiek-78-1.webp",
     "fotobijschrift": "De selectie van het eerste, seizoen 2026/2027.",
-    "omschrijving": "Het vlaggenschip speelt op zondag in de vijfde klasse. Een ploeg die grotendeels uit eigen jeugd bestaat en die op Het Veer zelden zonder publiek speelt.",
     "staf": [
       { "naam": "Marcel Duin", "functie": "Hoofdtrainer" },
       { "naam": "Paul Overtoom", "functie": "Assistent-trainer" },
@@ -51,9 +49,7 @@
     "pouleNaam": "Reserve zesde klasse 02 zondag",
     "speeldag": "zondag",
     "isJeugd": false,
-    "teamfoto": "/images/teams/kwiek-78-2.webp",
-    "fotobijschrift": "Het tweede voor de wedstrijd tegen Kwadijk.",
-    "omschrijving": "Het tweede is de brede basis onder de selectie: doorstroom van de JO19 en spelers die het eerste zijn ontgroeid maar de zondag nog niet.",
+    "fotobijschrift": "De selectie van het tweede, seizoen 2026/2027.",
     "staf": [
       { "naam": "Hans Wagenaar", "functie": "Trainer en leider" },
       { "naam": "Gerard Kok", "functie": "Assistent" },
@@ -89,7 +85,6 @@
     "pouleNaam": "Onder 17 vierde klasse 01",
     "speeldag": "zaterdag",
     "isJeugd": true,
-    "omschrijving": "De oudste jeugdlichting van de club. Trainen twee keer per week op het kunstgras en leveren elk jaar spelers aan het tweede.",
     "staf": [
       { "naam": "Ronald Kuip", "functie": "Trainer" },
       { "naam": "Michel Bood", "functie": "Assistent-trainer" },
@@ -127,7 +122,6 @@
     "pouleNaam": "Onder 12 zesde klasse 03",
     "speeldag": "zaterdag",
     "isJeugd": true,
-    "omschrijving": "Elf spelers die vorig seizoen kampioen werden in de zevende klasse en dit jaar een klasse hoger uitkomen.",
     "staf": [
       { "naam": "Erwin Sneekes", "functie": "Trainer" },
       { "naam": "Marloes Vriend", "functie": "Leider" },
@@ -162,9 +156,7 @@
     "pouleNaam": "Vierde klasse 01 vrouwen zaterdag",
     "speeldag": "zaterdag",
     "isJeugd": false,
-    "teamfoto": "/images/teams/kwiek-78-vr1.webp",
-    "fotobijschrift": "VR1 bij de opening van het seizoen 2026/2027.",
-    "omschrijving": "Sinds 2019 heeft Kwiek weer een vrouwenelftal op zaterdag. De ploeg groeide in drie seizoenen van net genoeg spelers naar een volle selectie.",
+    "fotobijschrift": "De selectie van VR1, seizoen 2026/2027.",
     "staf": [
       { "naam": "Jeroen Pronk", "functie": "Trainer en coach" },
       { "naam": "Nadine Kuip", "functie": "Assistent-trainer" },
@@ -201,7 +193,6 @@
     "pouleNaam": "Meiden onder 9 groep 02",
     "speeldag": "zaterdag",
     "isJeugd": true,
-    "omschrijving": "Het jongste meidenteam van de club. Zes tegen zes op een half veld, zaterdagochtend om negen uur, en daarna limonade in de Koggenhal.",
     "staf": [
       { "naam": "Wouter Klaver", "functie": "Trainer" },
       { "naam": "Sandra Bood", "functie": "Leider" }

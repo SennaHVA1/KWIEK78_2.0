@@ -11,18 +11,25 @@
  * Sharp zit al in de Astro-installatie, dit is dus geen extra dependency.
  */
 import sharp from 'sharp';
-import { mkdir, stat, copyFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
+import { mkdir, stat, copyFile, readdir } from 'node:fs/promises';
+import { join, dirname, parse } from 'node:path';
 
 const BRON = '_bronfotos';
 const DOEL = 'public/images';
 
+/* Teamfoto's: alles in /_bronfotos/teams gaat mee, zonder lijst bij te
+   houden. De bestandsnaam is het team-id uit src/data/teams.json, dus
+   _bronfotos/teams/kwiek-78-jo17-1.jpg wordt teams/kwiek-78-jo17-1.webp en
+   staat daarmee vanzelf op de pagina van dat team. */
+const TEAMBRON = join(BRON, 'teams');
+const teamfotos = (await readdir(TEAMBRON).catch(() => []))
+  .filter((bestand) => /\.(jpe?g|png|webp)$/i.test(bestand))
+  .map((bestand) => [join('teams', bestand), `teams/${parse(bestand).name}`, 1800]);
+
 /** Bronbestand -> doelpad (zonder extensie) + maximale breedte in pixels. */
 const FOTOS = [
-  ['Heren 1.jpg', 'teams/kwiek-78-1', 1800],
-  ['Heren 2.jpg', 'teams/kwiek-78-2', 1800],
+  ...teamfotos,
   ['Heren 1 hero.png', 'club/hero-heren-1', 2400],
-  ['Vrouwen 1.jpg', 'teams/kwiek-78-vr1', 1800],
   ['veteranen VE 1.jpg', 'club/veteranen', 1600],
   ['Kwiek 35+2-1.jpg', 'club/kwiek-35plus', 1600],
   ['hoofdsponsor1.jpg', 'sponsoren/kramer-keukens', 640],

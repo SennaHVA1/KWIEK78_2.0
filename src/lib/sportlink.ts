@@ -360,6 +360,8 @@ export function toonNaamVerjaardag(lid: Verjaardag): string | null {
 function pasPrivacyToeOpTeam(team: Team): Team {
   return {
     ...team,
+    /* De teamfoto heet altijd naar het team-id; zie IMAGES.md. */
+    teamfoto: team.teamfoto ?? `/images/teams/${team.id}.webp`,
     spelers: team.spelers.filter((s) => s.privacyniveau !== 2),
   };
 }

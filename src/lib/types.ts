@@ -91,9 +91,14 @@ export type Team = {
   speeldag: 'zaterdag' | 'zondag';
   /** Bepaalt of de AVG-filtering voor jeugdleden wordt toegepast. */
   isJeugd: boolean;
+  /**
+   * Standaard /images/teams/<id>.webp. Alleen invullen als een team een foto
+   * met een andere naam of van buiten de site gebruikt.
+   */
   teamfoto?: string;
   fotobijschrift?: string;
-  omschrijving: string;
+  /** Korte introtekst onder de teamnaam. Alleen invullen met tekst van de club. */
+  omschrijving?: string;
   staf: Staflid[];
   trainingen: Training[];
   spelers: Speler[];

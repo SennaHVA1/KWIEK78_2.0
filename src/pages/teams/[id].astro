@@ -15,6 +15,7 @@ import Basis from '../../layouts/Basis.astro';
 import Foto from '../../components/Foto.astro';
 import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
 import Standentabel from '../../components/Standentabel.astro';
+import { fotoBestaat } from '../../lib/fotos';
 import {
   getTeams, getTeam, getWedstrijdenVoorTeam, getPoulestand, toonNaam, aantalAfgeschermd,
 } from '../../lib/sportlink';
@@ -65,7 +66,7 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
         <div class="teamkop-tekst">
           <p class="label">{team.pouleNaam}</p>
           <h1 class="kop-l">{team.naam}</h1>
-          <p class="teamkop-intro">{team.omschrijving}</p>
+          {team.omschrijving && <p class="teamkop-intro">{team.omschrijving}</p>}
           <ul class="teamkop-feiten data">
             <li><span>Speeldag</span> {team.speeldag}</li>
             <li><span>Selectie</span> {team.spelers.length} spelers</li>
@@ -74,13 +75,24 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
         </div>
 
         <div class="teamkop-beeld">
-          <Foto
-            src={team.teamfoto}
-            alt={`Teamfoto van ${team.naam}`}
-            ratio="16 / 10"
-            prioriteit
-            plaatshouder={`teams/${team.id}.webp`}
-          />
+          {fotoBestaat(team.teamfoto) ? (
+            <button
+              type="button"
+              class="vergroot"
+              data-vergroot={team.teamfoto}
+              data-alt={`Teamfoto van ${team.naam}`}
+              aria-label={`Teamfoto van ${team.naam} groter bekijken`}
+            >
+              <Foto src={team.teamfoto} alt="" ratio="16 / 10" prioriteit />
+            </button>
+          ) : (
+            <Foto
+              src={team.teamfoto}
+              alt={`Teamfoto van ${team.naam}`}
+              ratio="16 / 10"
+              plaatshouder={`teams/${team.id}.webp`}
+            />
+          )}
           {team.fotobijschrift && <p class="teamkop-bijschrift zacht">{team.fotobijschrift}</p>}
         </div>
       </div>
@@ -208,7 +220,41 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
       </div>
     </div>
   </section>
+
+  <dialog class="fotovenster" data-fotovenster aria-label="Foto">
+    <img src="" alt="" data-fotovenster-beeld />
+    <button type="button" class="fotovenster-sluit" data-fotovenster-sluit aria-label="Sluiten">
+      <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
+        <path d="M3 3l10 10M13 3 3 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+    </button>
+  </dialog>
 </Basis>
+
+<script>
+  /**
+   * Foto groter bekijken. Een klik op de foto opent hem in z'n geheel, zonder
+   * de uitsnede van de pagina. Een klik waar dan ook, Escape of het kruisje
+   * sluit hem weer; <dialog> regelt de focus en de Escape-toets zelf.
+   */
+  const venster = document.querySelector<HTMLDialogElement>('[data-fotovenster]');
+  const beeld = venster?.querySelector<HTMLImageElement>('[data-fotovenster-beeld]');
+
+  if (venster && beeld) {
+    for (const knop of document.querySelectorAll<HTMLButtonElement>('[data-vergroot]')) {
+      knop.addEventListener('click', () => {
+        beeld.src = knop.dataset.vergroot ?? '';
+        beeld.alt = knop.dataset.alt ?? '';
+        venster.showModal();
+      });
+    }
+
+    venster.addEventListener('click', () => venster.close());
+    venster.addEventListener('close', () => {
+      beeld.removeAttribute('src');
+    });
+  }
+</script>
 
 <style>
   /* Kop -------------------------------------------------------------- */
@@ -245,6 +291,61 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
   .teamkop-beeld { display: grid; gap: 0.6rem; }
   .teamkop-beeld :global(img) { }
   .teamkop-bijschrift { font-size: var(--text-mini); }
+
+  /* Vergroten -------------------------------------------------------- */
+  .vergroot {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    border-radius: var(--radius-vlak);
+    cursor: zoom-in;
+  }
+  .vergroot :global(img) { transition: filter 0.2s; }
+  .vergroot:hover :global(img) { filter: brightness(1.08); }
+
+  .fotovenster {
+    max-width: none;
+    max-height: none;
+    width: 100vw;
+    height: 100dvh;
+    margin: 0;
+    padding: clamp(1rem, 4vw, 3rem);
+    border: 0;
+    background: transparent;
+    cursor: zoom-out;
+  }
+  .fotovenster[open] { display: grid; place-items: center; }
+  .fotovenster::backdrop { background: rgb(0 0 0 / 0.88); }
+  .fotovenster img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--radius-vlak);
+  }
+  .fotovenster-sluit {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.5);
+    color: var(--color-wit);
+    cursor: pointer;
+  }
+  .fotovenster-sluit:hover { background: var(--color-wit); color: var(--color-zwart); }
+  @media (prefers-reduced-motion: no-preference) {
+    .fotovenster[open] { animation: fotovenster-in 0.2s ease-out; }
+    @keyframes fotovenster-in { from { opacity: 0; transform: scale(0.98); } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vergroot :global(img) { transition: none; }
+  }
 
   /* Blokken ---------------------------------------------------------- */
   .blokkop { padding-bottom: 1.1rem; }

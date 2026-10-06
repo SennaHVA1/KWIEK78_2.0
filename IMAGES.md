@@ -83,7 +83,26 @@ bestand werkt op de zwarte panelen en op de witte roosterpagina's):
 | `kwiek-78-jo12-1.webp` | nog nodig |
 | `kwiek-78-mo9-1.webp` | nog nodig |
 
-De bestandsnaam is altijd het team-id uit `src/data/teams.json`.
+De bestandsnaam is altijd het team-id uit `src/data/teams.json`. De site zoekt
+de foto zelf op die naam; in `teams.json` hoeft er niets voor te worden
+ingevuld.
+
+**Nieuwe teamfoto toevoegen**
+
+1. Zet het origineel in `_bronfotos/teams/` en noem het naar het team-id,
+   bijvoorbeeld `_bronfotos/teams/kwiek-78-jo17-1.jpg`.
+2. Draai `npm run fotos`. Alles in `_bronfotos/teams/` wordt verkleind naar
+   `public/images/teams/<team-id>.webp`; er is geen lijst die je moet bijwerken.
+
+Een nieuwe foto voor een team dat er al een heeft vervangt de oude gewoon.
+
+**Welke foto.** De club levert per team een paar varianten aan. Gebruik de
+variant met **LOGO** in de naam: de teamfoto met het clublogo en de teamnaam
+erin. Dat is de foto die de club op de site wil (mail van de club, oktober
+2026). De andere varianten worden niet gebruikt.
+
+De teamfoto is op de teampagina aan te klikken en opent dan groot en
+onbijgesneden.
 
 **Let op bij jeugdteams.** Voor een teamfoto met herkenbare minderjarigen is
 toestemming van de ouders nodig. Bij aanmelding wordt dat gevraagd, maar voor

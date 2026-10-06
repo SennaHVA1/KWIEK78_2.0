@@ -2,12 +2,11 @@
 /**
  * HET SCOREBORD
  *
- * De eerstvolgende wedstrijd, over de volle breedte, met beide clubwapens en
- * de afteller. Dit blok staat op de tweede plek van de homepage omdat het de
- * vraag beantwoordt waarvoor de meeste mensen hier komen: wanneer en waar.
- *
- * Bewust weinig velden. Eerder stonden hier vier losse gegevens in een
- * rasterlijst en dat las als een formulier; nu staat er een zin.
+ * De eerstvolgende wedstrijd, opgezet als een tv-scorebord: thuis links, uit
+ * rechts, elk met een groot clubwapen, en in het midden de aftraptijd. Onder
+ * het duel de afteller en een regel met waar en verder. Dit blok staat
+ * direct onder de hero omdat het de vraag beantwoordt waarvoor de meeste
+ * mensen hier komen: wanneer en waar.
  *
  * Waarom er meerdere wedstrijden worden meegegeven: de site wordt statisch
  * gebouwd. Wordt hij een paar weken niet opnieuw gebouwd, dan zou de aftrap
@@ -17,7 +16,7 @@
 import Klapbord from './Klapbord.astro';
 import Clubwapen from './Clubwapen.astro';
 import { langeDatum, tijd, machineDatum } from '../lib/datum';
-import { routeLink } from '../lib/club';
+import { routeLink, getBalsponsor } from '../lib/club';
 import type { Wedstrijd } from '../lib/types';
 
 interface Props {
@@ -37,7 +36,13 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
 
 <section class="scorebord vlak-zwart" aria-labelledby="eerstvolgende-kop" data-scorebord>
   <div class="omhulsel scorebord-binnen">
-    <p class="kolom-kicker" id="eerstvolgende-kop">Eerstvolgende wedstrijd</p>
+    <div class="scorebord-kop">
+      <p class="kolom-kicker" id="eerstvolgende-kop">Eerstvolgende wedstrijd</p>
+      <a class="scorebord-alles" href="/wedstrijden/programma">
+        Heel het programma
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </a>
+    </div>
 
     {wedstrijden.length === 0 && (
       <p class="scorebord-leeg zacht">
@@ -45,33 +50,53 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
       </p>
     )}
 
-    {wedstrijden.map((wedstrijd, index) => (
-      <article class="scorebord-wedstrijd" data-wedstrijd data-aftrap={wedstrijd.datum} hidden={index > 0}>
-        <div class="scorebord-links">
-          <h2 class="scorebord-duel">
-            <span class="scorebord-club">
-              <Clubwapen src={wedstrijd.thuisLogo} club={wedstrijd.thuisteam} formaat={52} />
-              <span>{wedstrijd.thuisteam}</span>
-            </span>
-            <span class="scorebord-tegen">tegen</span>
-            <span class="scorebord-club">
-              <Clubwapen src={wedstrijd.uitLogo} club={wedstrijd.uitteam} formaat={52} />
-              <span>{wedstrijd.uitteam}</span>
-            </span>
-          </h2>
+    {wedstrijden.map((wedstrijd, index) => {
+      const balsponsor = getBalsponsor(wedstrijd.wedstrijdcode);
+      return (
+      <article class="duel" data-wedstrijd data-aftrap={wedstrijd.datum} hidden={index > 0}>
+        <h2 class="alleen-schermlezer">{wedstrijd.thuisteam} tegen {wedstrijd.uitteam}</h2>
 
-          <p class="scorebord-wanneer">
-            <span class="merk merk--afgelast">{soortLabel[wedstrijd.competitie]}</span>
-            <time datetime={machineDatum(wedstrijd.datum)}>
-              {langeDatum(wedstrijd.datum)} om {tijd(wedstrijd.datum)}
-            </time>
-          </p>
-          <p class="scorebord-waar zacht">
+        <p class="duel-soort"><span class="merk merk--afgelast">{soortLabel[wedstrijd.competitie]}</span></p>
+
+        <div class="duel-bord">
+          <div class="duel-club" aria-hidden="true">
+            <Clubwapen src={wedstrijd.thuisLogo} club={wedstrijd.thuisteam} formaat={96} />
+            <span class="duel-naam">{wedstrijd.thuisteam}</span>
+            <span class="duel-rol">Thuis</span>
+          </div>
+
+          <div class="duel-midden">
+            <time class="duel-tijd" datetime={machineDatum(wedstrijd.datum)}>{tijd(wedstrijd.datum)}</time>
+            <span class="duel-dag">{langeDatum(wedstrijd.datum)}</span>
+          </div>
+
+          <div class="duel-club" aria-hidden="true">
+            <Clubwapen src={wedstrijd.uitLogo} club={wedstrijd.uitteam} formaat={96} />
+            <span class="duel-naam">{wedstrijd.uitteam}</span>
+            <span class="duel-rol">Uit</span>
+          </div>
+        </div>
+
+        <div class="duel-teller">
+          <p class="duel-tellerkop">Aftrap over</p>
+          <Klapbord doel={wedstrijd.datum} compact />
+        </div>
+
+        {balsponsor && (
+          <a class="duel-bal" href={balsponsor.url} target="_blank" rel="noopener noreferrer">
+            <span class="duel-bal-label">Wedstrijdbal aangeboden door</span>
+            <span class="duel-bal-logo">
+              <img src={balsponsor.logo} alt={balsponsor.naam} loading="lazy" decoding="async" />
+            </span>
+          </a>
+        )}
+
+        <div class="duel-voet">
+          <p class="duel-waar">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
             {wedstrijd.accommodatie}{wedstrijd.veld ? `, ${wedstrijd.veld}` : ''}
           </p>
-
-          <div class="scorebord-knoppen">
-            <a class="knop knop--primair" href="/wedstrijden/programma">Heel het programma</a>
+          <div class="duel-knoppen">
             <a class="knop knop--rand" href={`/wedstrijd/${wedstrijd.wedstrijdcode}`}>Wedstrijddetails</a>
             <a
               class="knop knop--rand"
@@ -81,99 +106,191 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
             >Route</a>
           </div>
         </div>
-
-        <div class="scorebord-teller">
-          <p class="scorebord-tellerkop">Aftrap over</p>
-          <Klapbord doel={wedstrijd.datum} />
-        </div>
       </article>
-    ))}
+      );
+    })}
   </div>
 </section>
 
 <style>
-  .scorebord-binnen { padding-block: clamp(2.25rem, 5vw, 3.75rem); }
+  .scorebord-binnen { padding-block: clamp(2rem, 5vw, 3.5rem); }
 
-  .scorebord-wedstrijd { display: grid; gap: 1.5rem; align-items: center; }
-  .scorebord-wedstrijd[hidden] { display: none; }
-
-  .scorebord-links { display: grid; gap: 1rem; }
-
-  .scorebord-duel {
-    display: grid;
-    gap: 0.5rem;
-    font-size: clamp(1.6rem, 1rem + 3.2vw, 3.25rem);
-    line-height: 1;
-  }
-  .scorebord-club {
+  .scorebord-kop {
     display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    min-width: 0;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
   }
-  .scorebord-club > span { min-width: 0; overflow-wrap: anywhere; }
-  .scorebord-tegen {
+  .scorebord-alles {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     font-family: var(--font-smal);
-    font-size: var(--text-mini);
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--color-grijs);
-    padding-left: calc(52px + 0.85rem);
+    color: var(--color-wit);
+    text-decoration: none;
   }
+  .scorebord-alles svg { width: 1rem; height: 1rem; transition: transform 0.18s var(--ease-klap); }
+  .scorebord-alles:hover { color: var(--color-blauw); }
+  .scorebord-alles:hover svg { transform: translateX(3px); }
 
-  .scorebord-wanneer {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    flex-wrap: wrap;
-    font-family: var(--font-smal);
-    font-size: 1.35rem;
-    font-weight: 600;
-  }
-  .scorebord-waar { font-size: var(--text-klein); margin-top: -0.6rem; }
-
-  .scorebord-knoppen { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
   .scorebord-leeg { padding-block: 1.5rem; }
 
-  /* Tot 1000px staat de afteller bovenaan: direct onder de kicker en boven de
-     clubnamen. Dat is waar zaterdagochtend naar gekeken wordt, en zo staat hij
-     zonder scrollen in beeld in plaats van onder de duelnamen, de datumregel,
-     de locatie en drie knoppen.
-     In de bron blijft de wedstrijd zelf eerst staan, dus een schermlezer hoort
-     nog altijd eerst wie er speelt en dan pas hoe lang het nog duurt. Dat mag
-     hier van de volgorde afwijken omdat er in de teller niets zit waar je met
-     tab naartoe kunt: het zijn cijfers, geen links. */
-  .scorebord-teller {
-    order: -1;
-    justify-self: stretch;
+  /* De kaart. Alles gecentreerd, zoals een scorebord in een stadion. */
+  .duel {
     display: grid;
-    gap: 0.6rem;
-    justify-items: start;
-    padding: 1rem 1.1rem 1.1rem;
+    justify-items: center;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    padding: clamp(1.25rem, 4vw, 2.75rem) clamp(0.75rem, 3vw, 2.5rem);
     border-radius: var(--radius-vlak);
     background: var(--kleur-inkt);
+    border-top: 3px solid var(--color-blauw);
   }
-  .scorebord-tellerkop {
+  .duel[hidden] { display: none; }
+
+  /* Thuis | tijd | uit. De buitenkolommen zijn even breed, zodat de tijd
+     altijd precies in het midden staat, ook bij een lange clubnaam. */
+  .duel-bord {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(0.5rem, 3vw, 3rem);
+    width: 100%;
+  }
+  .duel-club {
+    display: grid;
+    justify-items: center;
+    gap: 0.6rem;
+    text-align: center;
+    min-width: 0;
+  }
+  /* Het wapen krijgt een vaste maat mee; hier schaalt het met het scherm. */
+  .duel-club :global(.wapen) {
+    width: clamp(3.5rem, 10vw, 6rem) !important;
+    height: clamp(3.5rem, 10vw, 6rem) !important;
+  }
+  .duel-naam {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 0.6rem + 2.2vw, 2.25rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .duel-rol {
     font-family: var(--font-smal);
     font-size: var(--text-mini);
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-blauw);
+    color: var(--color-grijs);
   }
 
+  .duel-midden {
+    display: grid;
+    justify-items: center;
+    gap: 0.4rem;
+    /* Op de hoogte van het midden van de wapens. */
+    padding-top: clamp(0.6rem, 2.5vw, 1.5rem);
+  }
+  .duel-tijd {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1rem + 5.5vw, 5rem);
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+  }
+  .duel-dag {
+    font-family: var(--font-smal);
+    font-size: clamp(0.8125rem, 0.7rem + 0.4vw, 1.05rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-blauw);
+    text-align: center;
+  }
+
+  .duel-teller {
+    display: grid;
+    justify-items: center;
+    gap: 0.6rem;
+    padding-top: clamp(1rem, 3vw, 1.5rem);
+    border-top: 1px solid var(--kleur-lijn-donker);
+    width: 100%;
+  }
+  .duel-teller :global(.klapbord) { justify-items: center; }
+  /* Op een breed scherm is er ruimte zat: de cijfers mogen dan groter dan de
+     compacte variant die op een telefoon nodig is. */
   @media (min-width: 1000px) {
-    .scorebord-wedstrijd {
-      grid-template-columns: minmax(0, 1.25fr) auto;
-      gap: 3rem;
-    }
-    /* Naast de tekst is er ruimte zat en staat hij weer gewoon rechts. */
-    .scorebord-teller {
-      order: 0;
-      justify-self: start;
-      padding: 1.5rem;
-    }
+    .duel .duel-teller :global(.klapbord-rij) { gap: 1.5rem; }
+    .duel .duel-teller :global(.klap) { width: 4rem; padding: 0.8rem 0; }
+    .duel .duel-teller :global(.klap-waarde) { font-size: 3.25rem; }
+    .duel .duel-teller :global(.klapbord-label) { font-size: var(--text-klein); }
+  }
+  .duel-tellerkop {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+  }
+
+  /* Wedstrijdbalsponsor: een regel tekst en het logo op een witte tegel,
+     want de logo's zijn gemaakt voor een lichte achtergrond. */
+  .duel-bal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem 1rem;
+    text-decoration: none;
+    color: var(--color-grijs);
+  }
+  .duel-bal-label {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .duel-bal-logo {
+    display: grid;
+    place-items: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: var(--radius-klein);
+    background: var(--color-wit);
+    transition: transform 0.18s var(--ease-klap);
+  }
+  .duel-bal-logo img { display: block; height: 2rem; width: auto; }
+  .duel-bal:hover .duel-bal-logo { transform: translateY(-2px); }
+  .duel-bal:hover .duel-bal-label { color: var(--color-wit); }
+  @media (prefers-reduced-motion: reduce) {
+    .duel-bal-logo { transition: none; }
+    .duel-bal:hover .duel-bal-logo { transform: none; }
+  }
+
+  .duel-voet {
+    display: grid;
+    justify-items: center;
+    gap: 0.9rem;
+    text-align: center;
+  }
+  .duel-waar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--text-klein);
+    color: var(--color-grijs);
+  }
+  .duel-waar svg { width: 1rem; height: 1rem; flex: none; }
+  .duel-knoppen { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scorebord-alles svg { transition: none; }
+    .scorebord-alles:hover svg { transform: none; }
   }
 </style>
 

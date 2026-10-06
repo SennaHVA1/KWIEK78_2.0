@@ -29,6 +29,15 @@ import { getContactpersoon } from '../../lib/club';
 
 const categorieen = getTeamsPerCategorie();
 const ledenadministratie = getContactpersoon('Ledenadministratie');
+
+/* De momenten waarop er kantinediensten zijn: bar en keuken op de
+   wedstrijddagen, schoonmaak op maandag. */
+const kantinedagen = [
+  { waarde: 'zaterdag', naam: 'Zaterdag', uitleg: 'Bar of keuken' },
+  { waarde: 'zondag', naam: 'Zondag', uitleg: 'Bar of keuken' },
+  { waarde: 'maandagochtend', naam: 'Maandagochtend', uitleg: 'Schoonmaak' },
+  { waarde: 'maandagavond', naam: 'Maandagavond', uitleg: 'Schoonmaak' },
+];
 ---
 
 <Basis
@@ -236,6 +245,27 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
                 </select>
                 <p class="veld-hulp">De technische commissie bepaalt uiteindelijk de indeling.</p>
               </div>
+
+              {/* Geen Sportlink-veld: dit gaat met de aanmelding mee naar de
+                  kantinecommissie, die er het dienstenrooster mee maakt. */}
+              <fieldset class="veld kantinedagen" data-groep-verplicht>
+                <legend>Kantinedienst</legend>
+                <p class="veld-hulp">
+                  Elk lid draait een paar keer per seizoen een dienst in de kantine. Op welke dagen zou
+                  dat jou het beste uitkomen? Kies er minimaal een. Bij jeugdleden doet een ouder of
+                  verzorger de dienst.
+                </p>
+                <div class="dagkeuze">
+                  {kantinedagen.map((dag) => (
+                    <label class="dag">
+                      <input type="checkbox" name="kantinedienstdagen" value={dag.waarde} />
+                      <span class="dag-naam">{dag.naam}</span>
+                      <span class="dag-uitleg">{dag.uitleg}</span>
+                    </label>
+                  ))}
+                </div>
+                <p class="veld-fout" data-fout hidden>Kies minimaal een dag waarop je een kantinedienst kunt draaien.</p>
+              </fieldset>
 
               <div class="veld">
                 <label for="opmerkingen">Opmerkingen</label>
@@ -458,6 +488,58 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
     accent-color: var(--color-blauwdiep);
   }
 
+  /* Kantinedienst: vier aanklikbare tegels, twee naast elkaar. */
+  .kantinedagen { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .kantinedagen legend {
+    font-family: var(--font-smal);
+    font-size: var(--text-kop-s);
+    font-weight: 700;
+    color: var(--color-zwart);
+    padding: 0;
+    margin-bottom: 0.25rem;
+  }
+  .dagkeuze {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+  }
+  .kantinedagen > .dagkeuze > :global(label.dag) {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: inherit;
+  }
+  .dag {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 0.65rem;
+    align-items: center;
+    padding: 0.75rem 0.9rem;
+    border: 2px solid var(--kleur-lijn-licht);
+    border-radius: var(--radius-vlak);
+    cursor: pointer;
+    transition: border-color 0.15s var(--ease-klap), background-color 0.15s var(--ease-klap);
+  }
+  .dag:hover { border-color: color-mix(in srgb, var(--color-blauwdiep) 50%, transparent); }
+  .dag:has(input:checked) { border-color: var(--color-blauwdiep); background: var(--kleur-papier-op); }
+  .dag:has(input:focus-visible) { outline: 3px solid var(--color-blauwdiep); outline-offset: 2px; }
+  .dag input {
+    grid-row: span 2;
+    /* .veld input is bedoeld voor tekstvelden; voor een vinkje terugzetten. */
+    width: 1.15rem;
+    height: 1.15rem;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    accent-color: var(--color-blauwdiep);
+  }
+  .dag-naam { font-weight: 600; color: var(--color-zwart); }
+  .dag-uitleg { font-size: var(--text-mini); color: var(--color-grijsdonker); }
+  @media (prefers-reduced-motion: reduce) { .dag { transition: none; } }
+
   .formulier-melding {
     font-size: var(--text-klein);
     border-radius: var(--radius-vlak);
@@ -518,8 +600,27 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
       fout.hidden = veld.checkValidity();
     };
 
+    /* Een groep vinkjes waarvan er minimaal een aan moet. HTML kan dat niet
+       zelf, dus de vinkjes krijgen samen een eigen validatiemelding. */
+    const groepen = [...formulier.querySelectorAll<HTMLElement>('[data-groep-verplicht]')];
+    const controleerGroepen = () => {
+      for (const groep of groepen) {
+        const vinkjes = [...groep.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+        const melding = vinkjes.some((v) => v.checked) ? '' : 'Kies minimaal een optie.';
+        vinkjes.forEach((v) => v.setCustomValidity(melding));
+      }
+    };
+    controleerGroepen();
+    formulier.addEventListener('change', (gebeurtenis) => {
+      controleerGroepen();
+      const doel = gebeurtenis.target;
+      // Een fout bij de dagkeuze verdwijnt zodra er een dag is aangevinkt.
+      if (doel instanceof HTMLInputElement && doel.closest('[data-groep-verplicht]')) toonFout(doel);
+    });
+
     formulier.addEventListener('submit', (gebeurtenis) => {
       gebeurtenis.preventDefault();
+      controleerGroepen();
 
       const velden = [...formulier.querySelectorAll<HTMLInputElement>('input, select, textarea')];
       velden.forEach(toonFout);

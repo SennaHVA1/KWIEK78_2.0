@@ -224,7 +224,7 @@ export type MinutenspelClaim = {
 export type Erelid = {
   naam: string;
   soort: 'erelid' | 'lid-van-verdienste';
-  /** Overleden ereleden staan op de lijst met een kruisje erachter. */
+  /** Overleden ereleden staan apart onder "In herinnering". */
   overleden?: boolean;
 };
 

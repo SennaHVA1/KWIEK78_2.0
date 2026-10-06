@@ -31,6 +31,7 @@ import ruweEreleden from '../data/ereleden.json';
 import ruweContributie from '../data/contributie.json';
 import ruwMinutenspel from '../data/minutenspel.json';
 import ruweVideos from '../data/videos.json';
+import ruweBalsponsoren from '../data/balsponsoren.json';
 import type {
   AgendaItem, Dienst, DienstSoort, Sponsor, SponsorNiveau,
   Bestuurslid, Erelid, MinutenspelClaim, Video, Contributie,
@@ -39,6 +40,7 @@ import type {
 const agenda = ruweAgenda as AgendaItem[];
 const diensten = ruweDiensten as Dienst[];
 const sponsoren = ruweSponsoren as Sponsor[];
+const balsponsoren = ruweBalsponsoren as { standaard?: string; perWedstrijd: Record<string, string> };
 const bestuur = ruwBestuur as Bestuurslid[];
 const ereleden = ruweEreleden as Erelid[];
 const contributie = ruweContributie as Contributie;
@@ -184,6 +186,19 @@ export function getSponsorNiveaus(): { niveau: SponsorNiveau; label: string; spo
 /** De sponsoren die meedraaien in de carousel op de homepage. */
 export function getCarouselSponsoren(): Sponsor[] {
   return sponsoren.filter((s) => s.inCarousel);
+}
+
+/**
+ * De wedstrijdbalsponsor van een wedstrijd van het eerste elftal.
+ *
+ * In balsponsoren.json staat een standaardsponsor en per wedstrijdcode een
+ * eventuele uitzondering, beide als id uit sponsoren.json. Heeft een
+ * wedstrijd een eigen balsponsor, zet dan in "perWedstrijd" de wedstrijdcode
+ * met het sponsor-id, bijvoorbeeld { "2604118": "dralco" }.
+ */
+export function getBalsponsor(wedstrijdcode: string): Sponsor | undefined {
+  const id = balsponsoren.perWedstrijd[wedstrijdcode] ?? balsponsoren.standaard;
+  return id ? sponsoren.find((s) => s.id === id) : undefined;
 }
 
 /* ==========================================================================

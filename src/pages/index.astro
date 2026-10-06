@@ -41,6 +41,9 @@ const snelknoppen = [
   <!-- ================================================================== -->
   <!-- Hero                                                               -->
   <!-- ================================================================== -->
+  {/* De foto heeft de hoofdrol. Erover staan alleen de clubnaam, een knop om
+      lid te worden en onderin een balk met de drie taken waarvoor mensen de
+      site openen. Geen introtekst: wie hier komt weet welke club het is. */}
   <section class="hero vlak-zwart">
     <div class="hero-beeld" aria-hidden="true">
       <Foto
@@ -53,25 +56,24 @@ const snelknoppen = [
     </div>
 
     <div class="omhulsel hero-binnen">
-      {/* Kicker en titel staan samen in een blok. Op een breed scherm wisselen
-          ze van plek en gaan ze naast elkaar staan: de kicker komt rechts van
-          de grote '78 te staan, op dezelfde schriftlijn, als een ondertitel bij
-          een woordmerk. Op een telefoon is daar geen ruimte voor en blijft hij
-          gewoon boven de titel. */}
       <div class="hero-naam">
-        <p class="hero-boven">Avenhorn, sinds 1978</p>
+        <p class="hero-boven">Avenhorn <span aria-hidden="true">&middot;</span> sinds 1978</p>
         <h1 class="hero-titel">Kwiek '78</h1>
       </div>
-      <p class="hero-onder">
-        Zwart-wit, elke zondag in de vijfde klasse. Ruim driehonderd leden en een kantine die open blijft.
-      </p>
-    </div>
-  </section>
 
-  <!-- Snelknoppen: de drie taken waarvoor mensen deze site openen. -->
-  <nav class="snel vlak-zwart" aria-label="Snel naar">
-    <div class="omhulsel">
-      <ul class="snel-lijst">
+      <a class="hero-lid" href="/club/lid-worden">
+        <span class="hero-lid-sticker">Gratis proeftraining</span>
+        <span class="hero-lid-label">Word lid</span>
+        <span class="hero-lid-pijl" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </span>
+      </a>
+    </div>
+
+    <nav class="snel" aria-label="Snel naar">
+      <ul class="omhulsel snel-lijst">
         {snelknoppen.map((knop) => (
           <li>
             <a class="snelknop" href={knop.href}>
@@ -81,8 +83,8 @@ const snelknoppen = [
           </li>
         ))}
       </ul>
-    </div>
-  </nav>
+    </nav>
+  </section>
 
   <!-- ================================================================== -->
   <!-- Eerstvolgende wedstrijd                                             -->
@@ -167,17 +169,18 @@ const snelknoppen = [
   /* ------------------------------------------------------------------ */
   /* Hero                                                               */
   /* ------------------------------------------------------------------ */
+  /* Op een telefoon lager dan het scherm, zodat de aftelklok eronder in
+     beeld piept en duidelijk is dat er meer komt. Op een breed scherm bijna
+     schermvullend. */
   .hero {
     position: relative;
     display: grid;
+    grid-template-rows: 1fr auto;
     isolation: isolate;
-    min-height: 44vh;
-    min-height: 44dvh;
-    align-content: end;
-    padding-top: clamp(2rem, 6vw, 5rem);
+    min-height: 72svh;
   }
   @media (min-width: 1024px) {
-    .hero { min-height: 60vh; min-height: 60dvh; padding-top: 6rem; }
+    .hero { min-height: min(calc(100svh - 5rem), 56rem); }
   }
 
   .hero-beeld { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
@@ -189,154 +192,196 @@ const snelknoppen = [
     border-radius: 0 !important;
     object-fit: cover;
     /* Liggende teamfoto van Heren 1: het elftal staat in een rij tussen
-       ongeveer 30% (koppen) en 68% (schoenen) van de hoogte, met daaronder
-       kunstgras. Iets boven het midden houdt de koppen in beeld en laat het
-       gras onderin vallen, precies waar de tekst over het verloop staat. */
-    object-position: center 42%;
+       ongeveer 30% (koppen) en 68% (schoenen) van de hoogte. Iets boven het
+       midden houdt de koppen in beeld; op een smal scherm valt de uitsnede op
+       het midden van de rij, rond de keeper. */
+    object-position: center 40%;
   }
-  /* De verduistering zit vooral onderin, waar de tekst staat. Bovenin blijft
-     het beeld grotendeels open, want daar staan de gezichten. De foto blijft
-     in kleur: grijstinten maakten de hele site somber en dat is niet wat een
-     voetbalclub is. */
+  /* Alleen onderin verduisterd, waar naam, knop en balk staan. De rest van de
+     foto blijft open en in kleur. */
   .hero-beeld::after {
     content: "";
     position: absolute;
     inset: 0;
-    background:
-      /* Een ovale schaduw die in de hoek linksonder begint, precies waar de
-         tekst staat, en naar rechtsboven uitdooft. De hele band donkerder
-         maken kon niet: de voorste rij spelers staat tussen 38% en 64% van de
-         hero en die moet juist zichtbaar blijven. Zo blijft de rechterkant van
-         de foto open en staat de tekst toch op een vaste donkere ondergrond. */
-      radial-gradient(
-        150% 120% at 0% 100%,
-        color-mix(in srgb, var(--color-zwart) 78%, transparent) 0%,
-        color-mix(in srgb, var(--color-zwart) 55%, transparent) 45%,
-        transparent 78%
-      ),
-      linear-gradient(
+    background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--color-zwart) 16%, transparent) 0%,
-      color-mix(in srgb, var(--color-zwart) 12%, transparent) 42%,
-      color-mix(in srgb, var(--color-zwart) 52%, transparent) 66%,
-      color-mix(in srgb, var(--color-zwart) 88%, transparent) 85%,
-      color-mix(in srgb, var(--color-zwart) 97%, transparent) 100%
+      color-mix(in srgb, var(--color-zwart) 35%, transparent) 0%,
+      transparent 18%,
+      transparent 45%,
+      color-mix(in srgb, var(--color-zwart) 55%, transparent) 68%,
+      color-mix(in srgb, var(--color-zwart) 92%, transparent) 100%
     );
   }
-
-  /* De titel loopt met zijn bovenkant net over het lichtere deel van het
-     verloop, en daar zitten witte shirts. Een zachte schaduw houdt de tekst
-     leesbaar zonder dat de foto verder verduisterd hoeft te worden. */
-  .hero-binnen > * {
-    text-shadow: 0 2px 16px color-mix(in srgb, var(--color-zwart) 75%, transparent);
+  /* Op een telefoon staan naam en uitleg onder elkaar en lopen ze tot halverwege
+     de foto door, over de spelers heen. Daar begint de verduistering eerder. */
+  @media (max-width: 759px) {
+    .hero-beeld::after {
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-zwart) 30%, transparent) 0%,
+        transparent 16%,
+        transparent 30%,
+        color-mix(in srgb, var(--color-zwart) 70%, transparent) 52%,
+        color-mix(in srgb, var(--color-zwart) 94%, transparent) 100%
+      );
+    }
   }
 
-  .hero-binnen { padding-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+  /* Naam links, knop rechts, op dezelfde onderlijn. Op een telefoon onder
+     elkaar. */
+  .hero-binnen {
+    display: grid;
+    align-content: end;
+    justify-items: start;
+    gap: 1.25rem;
+    padding-top: 6rem;
+    padding-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  @media (min-width: 760px) {
+    .hero-binnen {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 2rem;
+    }
+  }
 
-  /* Op een telefoon een stapel: kicker boven, titel eronder. */
-  .hero-naam { display: grid; justify-items: start; width: fit-content; }
-
-  /* Wit, geen blauw. Op de hoogte van deze regel staat de verduistering op
-     31% en is 23% van de foto daarachter lichter dan 180: dat zijn de witte
-     shirts van de voorste rij. Blauw haalt daar 1,5:1 en wit 2,1:1, dus geen
-     van beide is leesbaar zonder dat de ondergrond zelf donkerder wordt. Dat
-     doet de scrim hieronder. Wit haalt daarmee ruim 8:1; blauw zou zelfs dan
-     onder de 3,5:1 blijven, dus die kleur is hier gewoon verkeerd. Het accent
-     blijft waar het hoort: aftelklok, uitslagen, actieve links. */
+  .hero-naam { text-shadow: 0 2px 24px color-mix(in srgb, var(--color-zwart) 60%, transparent); }
   .hero-boven {
+    font-family: var(--font-smal);
+    font-size: clamp(0.8125rem, 0.7rem + 0.4vw, 1rem);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-wit);
+    margin-bottom: 0.6rem;
+  }
+  .hero-boven span { color: var(--color-blauw); }
+  .hero-titel {
+    font-size: clamp(4rem, 1rem + 13vw, 11rem);
+    line-height: 0.82;
+    text-transform: uppercase;
+  }
+
+  /* Lid worden. Een groot blauw blok in de displayletter, het enige blauwe
+     vlak in de hero; zwarte tekst haalt op dit blauw 5,3:1. Bovenop een wit
+     label dat er schuin op geplakt is, als een sticker: de proeftraining is
+     het argument, de knop de actie. */
+  .hero-lid {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.9rem;
+    padding: 0.85rem 0.85rem 0.85rem 1.6rem;
+    border-radius: var(--radius-vlak);
+    background: var(--color-blauw);
+    color: var(--color-zwart);
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 14px 34px -10px color-mix(in srgb, var(--color-zwart) 80%, transparent);
+    transition: background-color 0.18s var(--ease-klap), transform 0.18s var(--ease-klap);
+  }
+  .hero-lid:hover { background: var(--color-wit); transform: translateY(-2px); }
+  .hero-lid:active { transform: translateY(0); }
+
+  .hero-lid-label {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.6rem);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+
+  .hero-lid-pijl {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: clamp(2.9rem, 2.4rem + 1.4vw, 3.5rem);
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background: var(--color-zwart);
+    color: var(--color-wit);
+    transition: transform 0.18s var(--ease-klap);
+  }
+  .hero-lid-pijl svg { width: 45%; height: 45%; }
+  .hero-lid:hover .hero-lid-pijl { transform: translateX(4px); }
+
+  .hero-lid-sticker {
+    position: absolute;
+    top: 0;
+    left: 1.1rem;
+    translate: 0 -62%;
+    rotate: -4deg;
+    padding: 0.35rem 0.6rem 0.3rem;
+    border-radius: 4px;
+    background: var(--color-wit);
+    color: var(--color-zwart);
     font-family: var(--font-smal);
     font-size: 0.8125rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
+    line-height: 1;
     text-transform: uppercase;
-    color: var(--color-wit);
-    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--color-zwart) 70%, transparent);
   }
-  @media (min-width: 1024px) {
-    /* Naast elkaar in plaats van onder elkaar. Uitlijnen op de schriftlijn en
-       niet op het midden of de onderkant: de titel staat in Anton op een
-       regelhoogte van 0,85, dus zijn vak is korter dan de letters zelf en elke
-       andere uitlijning laat de kicker zweven. Op de schriftlijn staat hij
-       netjes op dezelfde voet als de 8. */
-    .hero-naam {
-      display: flex;
-      align-items: baseline;
-      gap: clamp(0.85rem, 1.2vw, 1.4rem);
-    }
-    .hero-boven {
-      font-size: 0.875rem;
-      /* De volgorde in de bron blijft kicker-dan-titel, want zo hoort een
-         schermlezer het ook. Alleen in beeld staan ze omgekeerd. */
-      order: 2;
-      margin-bottom: 0;
-      white-space: nowrap;
-    }
-    .hero-titel { order: 1; }
-  }
-  .hero-titel {
-    font-size: var(--text-kop-xl);
-    line-height: 0.85;
-  }
-  .hero-onder {
-    margin-top: 0.9rem;
-    max-width: 42ch;
-    font-size: var(--text-groot);
-    line-height: 1.45;
-    color: color-mix(in srgb, var(--color-wit) 88%, transparent);
+  /* Bij hover wordt de knop zelf wit; de sticker wisselt dan naar zwart. */
+  .hero-lid:hover .hero-lid-sticker { background: var(--color-zwart); color: var(--color-wit); }
+
+  @media (min-width: 760px) {
+    /* Op de onderkant van de letters, niet van het regelvak. */
+    .hero-lid { margin-bottom: 0.35rem; }
   }
 
   /* ------------------------------------------------------------------ */
   /* Snelknoppen                                                        */
   /* ------------------------------------------------------------------ */
-  .snel { padding-bottom: clamp(1rem, 3vw, 2rem); }
-  /* Let op: deze lijst zit in een aparte .omhulsel en is er niet zelf een.
-     Scoped stijlen van Astro staan buiten de cascade-layers en winnen dus van
-     .omhulsel in @layer components. Zet je hier 'margin: 0' op hetzelfde
-     element, dan sneuvelt de centrering van de container. */
-  /* Op een telefoon stonden dit drie volle blokken onder elkaar, samen ruim
-     tweehonderd pixels, en daardoor begon de afteller pas ver onder de vouw.
-     Het zijn hier nu drie smalle knopjes naast elkaar: dezelfde drie taken,
-     even goed aan te tikken, maar een regel in plaats van een scherm. Vanaf
-     620px is er ruimte zat en komen de kaarten met hun uitleg terug. */
+  /* Een balk onderin de hero, gescheiden door een haarlijn. Drie gelijke
+     vakken; op een telefoon alleen de labels, vanaf 620px ook de uitleg.
+     Let op: .snel-lijst is zelf ook .omhulsel. Scoped stijlen van Astro
+     winnen van @layer components, dus hier geen margin of padding-inline
+     zetten, anders sneuvelt de centrering. */
+  .snel {
+    border-top: 1px solid var(--kleur-lijn-donker);
+    background: color-mix(in srgb, var(--color-zwart) 55%, transparent);
+    backdrop-filter: blur(8px);
+  }
   .snel-lijst {
     display: grid;
-    gap: 0.4rem;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     list-style: none;
   }
+  .snel-lijst li + li { border-left: 1px solid var(--kleur-lijn-donker); }
 
   .snelknop {
     display: grid;
-    gap: 0.05rem;
-    /* 44px hoog blijft het minimum om met een duim te raken. */
+    gap: 0.15rem;
     align-content: center;
-    min-height: 44px;
-    padding: 0.5rem 0.4rem;
-    border-radius: var(--radius-vlak);
-    background: var(--kleur-inkt);
+    /* Ruim boven de 44px die je met een duim moet kunnen raken. */
+    min-height: 3.5rem;
+    padding: 0.6rem 0.5rem;
     text-align: center;
     text-decoration: none;
     color: var(--color-wit);
     transition: background-color 0.18s var(--ease-klap);
   }
-  .snelknop:hover { background: var(--color-blauwdiep); }
-  @media (prefers-reduced-motion: reduce) { .snelknop { transition: none; } }
-
-  .snelknop-label { font-family: var(--font-display); font-size: 1.0625rem; line-height: 1.15; }
-  /* De uitleg is op een telefoon de eerste die weg mag: de labels zeggen zelf
-     al waar je uitkomt. */
+  .snelknop:hover { background: color-mix(in srgb, var(--color-wit) 8%, transparent); }
+  .snelknop-label {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
   .snelknop-uitleg { display: none; font-size: var(--text-klein); color: var(--color-grijs); }
-  .snelknop:hover .snelknop-uitleg { color: color-mix(in srgb, var(--color-wit) 85%, transparent); }
 
   @media (min-width: 620px) {
-    .snel-lijst { gap: 0.6rem; }
-    .snelknop {
-      min-height: 0;
-      padding: 0.9rem 1.1rem;
-      text-align: left;
-    }
-    .snelknop-label { font-size: 1.5rem; line-height: 1.1; }
+    .snelknop { padding: 1.1rem 1.5rem; }
+    .snelknop-label { font-size: 1.35rem; }
     .snelknop-uitleg { display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-lid, .hero-lid-pijl, .snelknop { transition: none; }
+    .hero-lid:hover, .hero-lid:hover .hero-lid-pijl { transform: none; }
   }
 
   /* ------------------------------------------------------------------ */

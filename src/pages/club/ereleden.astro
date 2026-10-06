@@ -41,21 +41,14 @@ const verdienste = alle.filter((l) => l.soort === 'lid-van-verdienste');
           Ereleden van Kwiek '78 die zijn overleden. Zij blijven op de lijst staan.
         </p>
         <ul class="namen namen--stil">
-          {overleden.map((lid) => (
-            <li>{lid.naam} <span class="kruis" aria-label="overleden">&#8224;</span></li>
-          ))}
+          {overleden.map((lid) => <li>{lid.naam}</li>)}
         </ul>
       </section>
 
       <section>
         <h2 class="kop-sectie eer-kop">Leden van verdienste</h2>
         <ul class="namen">
-          {verdienste.map((lid) => (
-            <li>
-              {lid.naam}
-              {lid.overleden && <span class="kruis" aria-label="overleden"> &#8224;</span>}
-            </li>
-          ))}
+          {verdienste.map((lid) => <li>{lid.naam}</li>)}
         </ul>
       </section>
     </div>
@@ -92,5 +85,4 @@ const verdienste = alle.filter((l) => l.soort === 'lid-van-verdienste');
     line-height: 1.25;
   }
   .namen--stil li { color: var(--color-grijsdonker); font-weight: 600; }
-  .kruis { color: var(--color-blauwdiep); }
 </style>

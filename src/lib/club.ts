@@ -85,9 +85,6 @@ export const CLUBGEGEVENS = {
   x: 'https://x.com/kwiek78',
   youtube: 'https://www.youtube.com/@VoetbalverenigingKwiek78',
   clubwinkel: 'https://kwiek78.clubwereld.nl/',
-  /** Coordinaten van het sportpark, voor de kaart en de routelink. */
-  breedtegraad: 52.5665,
-  lengtegraad: 4.9542,
 } as const;
 
 /** Volledig adres op een regel. */

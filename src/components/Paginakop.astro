@@ -3,17 +3,34 @@
  * De kop van een binnenpagina. Zwarte band, kicker in het accent, titel in de
  * displayletter. Kort houden: de titel moet in een oogopslag zeggen waar je
  * bent, de intro is een enkele zin en geen inleiding.
+ *
+ * Met `foto` staat er rechts een sfeerfoto die naar links in het zwart
+ * overloopt. De kop wordt daar niet hoger van: op pagina's als het programma
+ * moet de inhoud net zo snel in beeld staan als zonder foto. Op een telefoon
+ * ligt de foto gedimd achter de tekst.
  */
+import { fotoBestaat } from '../lib/fotos';
+
 interface Props {
   kicker: string;
   titel: string;
   intro?: string;
+  /** Pad onder /public, bijvoorbeeld /images/club/duel.webp. */
+  foto?: string;
+  /** CSS object-position, om het onderwerp in de uitsnede te houden. */
+  fotoPositie?: string;
 }
 
-const { kicker, titel, intro } = Astro.props;
+const { kicker, titel, intro, foto, fotoPositie = 'center' } = Astro.props;
+const metFoto = fotoBestaat(foto);
 ---
 
-<section class="paginakop vlak-zwart">
+<section class:list={['paginakop', 'vlak-zwart', { 'paginakop--foto': metFoto }]}>
+  {metFoto && (
+    <div class="paginakop-beeld" aria-hidden="true">
+      <img src={foto} alt="" decoding="async" fetchpriority="low" style={`object-position: ${fotoPositie};`} />
+    </div>
+  )}
   <div class="omhulsel paginakop-binnen">
     <p class="kolom-kicker">{kicker}</p>
     <h1 class="kop-l">{titel}</h1>
@@ -31,5 +48,52 @@ const { kicker, titel, intro } = Astro.props;
     font-size: var(--text-groot);
     color: var(--color-grijs);
     line-height: 1.5;
+  }
+
+  /* Met foto ------------------------------------------------------------ */
+  .paginakop--foto { position: relative; isolation: isolate; overflow: hidden; }
+  .paginakop--foto .paginakop-binnen { position: relative; }
+
+  .paginakop-beeld { position: absolute; inset: 0; z-index: -1; }
+  .paginakop-beeld img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Telefoon: foto over de hele breedte, gedimd, zodat de tekst leesbaar
+     blijft. */
+  .paginakop-beeld::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-zwart) 92%, transparent) 0%,
+      color-mix(in srgb, var(--color-zwart) 72%, transparent) 100%
+    );
+  }
+
+  /* Breed scherm: de foto beslaat de rechterhelft en loopt naar links in het
+     zwart over. De tekst staat op effen zwart. */
+  @media (min-width: 900px) {
+    .paginakop-beeld { left: 38%; }
+    .paginakop-beeld::after {
+      background: linear-gradient(
+        90deg,
+        var(--color-zwart) 0%,
+        color-mix(in srgb, var(--color-zwart) 55%, transparent) 30%,
+        color-mix(in srgb, var(--color-zwart) 10%, transparent) 65%,
+        transparent 100%
+      );
+    }
+    .paginakop--foto .paginakop-intro { max-width: 46ch; }
+    /* Een kop met een regel intro wordt anders een smalle streep foto. */
+    .paginakop--foto .paginakop-binnen {
+      min-height: 18rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
   }
 </style>

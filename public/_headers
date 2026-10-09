@@ -16,8 +16,8 @@
 /documenten/*
   Cache-Control: public, max-age=86400
 
-# Bewust geen Content-Security-Policy: de kaart en de video's laden een iframe
-# van OpenStreetMap en YouTube zodra de bezoeker daarop klikt. Een CSP hoort
+# Bewust geen Content-Security-Policy: de video's laden een iframe van YouTube
+# zodra de bezoeker daarop klikt. Een CSP hoort
 # daar rekening mee te houden en die stel je pas op als het eigen domein en de
 # definitieve embeds vaststaan.
 /*

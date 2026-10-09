@@ -30,8 +30,8 @@ meer overheen; dat maakte het geheel somber, en een voetbalclub is dat niet.
 
 | | |
 |---|---|
-| Aanwezig | 19 bestanden |
-| Nog nodig | 8 bestanden |
+| Aanwezig | 33 bestanden |
+| Nog nodig | 7 bestanden |
 
 ---
 
@@ -96,6 +96,12 @@ ingevuld.
 
 Een nieuwe foto voor een team dat er al een heeft vervangt de oude gewoon.
 
+**Actiefoto's.** Noem ze `<team-id>-actie-1`, `-actie-2` enzovoort en zet ze in
+dezelfde map. Ze komen dan vanzelf in een strook boven de selectie op de
+teampagina, op volgorde van het nummer, en zijn aan te klikken. Nu aanwezig:
+`kwiek-78-1-actie-1` en `-2` (doelpunt en thuiswedstrijd) en
+`kwiek-78-vr1-actie-1` en `-2`.
+
 **Welke foto.** De club levert per team een paar varianten aan. Gebruik de
 variant met **LOGO** in de naam: de teamfoto met het clublogo en de teamnaam
 erin. Dat is de foto die de club op de site wil (mail van de club, oktober
@@ -120,11 +126,37 @@ punten.
 | `hero-heren-1.webp` | 3:2 liggend, min. 2400 px | **aanwezig** | achtergrond van de hero op de homepage |
 | `veteranen.webp` | vrij | **aanwezig** | nieuwsberichten |
 | `kwiek-35plus.webp` | vrij | **aanwezig** | nieuwsberichten |
-| `kaart-sportpark.webp` | 4:3, min. 1200 px | nog nodig | statische kaart op de contactpagina |
+| `kaart-sportpark.webp` | 4:3, min. 1200 px | **aanwezig** | luchtfoto van het sportpark naast het adres op de contactpagina |
 
-De kaart is een uitsnede van de omgeving van Het Veer 92 met het sportpark in
-beeld. Die wordt alleen getoond tot iemand op "Kaart laden" klikt; daarna komt
-OpenStreetMap in beeld.
+Op de contactpagina staat deze luchtfoto in plaats van een ingesloten kaart.
+Voor de route is er de knop naar Google Maps, die op het adres zoekt.
+
+Sfeerfoto's die de club in oktober 2026 aanleverde. Bronnen staan in
+`_bronfotos/club/` onder dezelfde naam; `npm run fotos` zet alles uit die map
+hier neer.
+
+| Bestand | Wat er op staat | Waar |
+|---|---|---|
+| `kantine-vol.webp` | volle kantine | kop van Vrijwillige diensten, mozaiek op de homepage |
+| `kantine-darts.webp` | dartborden met clublogo | mozaiek op de homepage |
+| `aan-de-bal.webp` | speler in zwart tenue aan de bal | mozaiek op de homepage |
+| `thuiswedstrijd.webp` | thuiswedstrijd met publiek voor het clubhuis | kop van Sponsoring |
+| `high-five.webp` | spelers geven elkaar een high five | kop van Standen |
+| `duel.webp` | duel om de bal | kop van Onze teams |
+| `clubhuis-training.webp` | luchtfoto clubhuis tijdens een training | kop van Contact en Privacyverklaring |
+| `kaart-sportpark.webp` | luchtfoto van het hele sportpark | naast het adres op Contact, kop van AVG en van alle pagina's onder Club (/club/...) |
+| `hoofdsponsor-bal.webp` | wedstrijdbal op het bordje van de hoofdsponsor | blok Wedstrijdbalsponsoring op Sponsoring |
+| `bord-kramer-keukens.webp` | spelers voor het bord van Kramer Keukens | kop van Kwiek Inside, blok Bordsponsoring |
+| `hero-heren-1.webp` | Heren 1 op een rij | hero van de homepage, kop van Clubnieuws |
+| `kwiek-35plus.webp` | teamfoto 35+ | nieuwsberichten |
+| `../teams/kwiek-78-1-actie-1.webp` | Heren 1 viert een doelpunt | kop van Uitslagen, teampagina Heren 1 |
+| `../teams/kwiek-78-vr1-actie-1.webp` | VR1 aan de bal | kop van Programma, teampagina VR1, mozaiek op de homepage |
+| `../teams/kwiek-78-vr1-actie-2.webp` | speelsters van VR1 | teampagina VR1 |
+
+Een kop met foto zet je aan met `foto` (en zo nodig `fotoPositie`) op
+`<Paginakop>`. De foto staat rechts en loopt naar links in het zwart over; de kop
+wordt er niet hoger van. Kies een foto waarvan het onderwerp in het midden of
+rechts staat.
 
 De hero op de homepage staat of valt met de sfeerfoto. Een volle zijlijn of een
 wedstrijdmoment werkt beter dan een leeg veld.

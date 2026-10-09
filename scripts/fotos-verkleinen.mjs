@@ -17,18 +17,27 @@ import { join, dirname, parse } from 'node:path';
 const BRON = '_bronfotos';
 const DOEL = 'public/images';
 
-/* Teamfoto's: alles in /_bronfotos/teams gaat mee, zonder lijst bij te
-   houden. De bestandsnaam is het team-id uit src/data/teams.json, dus
+/** Alle foto's in een submap van /_bronfotos, met dezelfde naam naar dezelfde
+    submap van /public/images. Geen lijst om bij te houden. */
+async function map(submap, breedte) {
+  return (await readdir(join(BRON, submap)).catch(() => []))
+    .filter((bestand) => /\.(jpe?g|png|webp)$/i.test(bestand))
+    .map((bestand) => [join(submap, bestand), `${submap}/${parse(bestand).name}`, breedte]);
+}
+
+/* Teamfoto's. De bestandsnaam is het team-id uit src/data/teams.json, dus
    _bronfotos/teams/kwiek-78-jo17-1.jpg wordt teams/kwiek-78-jo17-1.webp en
-   staat daarmee vanzelf op de pagina van dat team. */
-const TEAMBRON = join(BRON, 'teams');
-const teamfotos = (await readdir(TEAMBRON).catch(() => []))
-  .filter((bestand) => /\.(jpe?g|png|webp)$/i.test(bestand))
-  .map((bestand) => [join('teams', bestand), `teams/${parse(bestand).name}`, 1800]);
+   staat daarmee vanzelf op de pagina van dat team. Actiefoto's heten
+   <team-id>-actie-1, -actie-2 enzovoort en komen in de strook "In actie". */
+const teamfotos = await map('teams', 1800);
+
+/* Sfeer- en clubfoto's. Waar welke foto staat, staat in IMAGES.md. */
+const clubfotos = await map('club', 1800);
 
 /** Bronbestand -> doelpad (zonder extensie) + maximale breedte in pixels. */
 const FOTOS = [
   ...teamfotos,
+  ...clubfotos,
   ['Heren 1 hero.png', 'club/hero-heren-1', 2400],
   ['veteranen VE 1.jpg', 'club/veteranen', 1600],
   ['Kwiek 35+2-1.jpg', 'club/kwiek-35plus', 1600],

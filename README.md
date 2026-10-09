@@ -85,9 +85,8 @@ zodat de canonical daarnaar wijst en niet meer naar `pages.dev`.
 | `public/_headers` | cachekopregels voor lettertypes, CSS en beeld, plus een paar beveiligingskopregels |
 | `dist/404.html` | wordt door Cloudflare automatisch als 404-pagina gebruikt |
 
-Er staat bewust **geen Content-Security-Policy** in `_headers`. De kaart en de
-video's laden een iframe van OpenStreetMap en YouTube zodra de bezoeker daarop
-klikt; een CSP moet daar rekening mee houden en die stel je op zodra het eigen
+Er staat bewust **geen Content-Security-Policy** in `_headers`. De video's laden
+een iframe van YouTube zodra de bezoeker daarop klikt; een CSP moet daar rekening mee houden en die stel je op zodra het eigen
 domein en de definitieve embeds vaststaan.
 
 ### De demoschakelaar
@@ -353,7 +352,6 @@ formaten. Kort samengevat ontbreekt nog:
 - teamfoto's van JO17-1, JO12-1 en MO9-1
 - echte logo's van vijf sponsoren en van de tegenstanders
 - de vijf PDF-documenten voor het informatiebulletin
-- een kaartuitsnede voor de contactpagina
 
 Voor teamfoto's met herkenbare minderjarigen is toestemming van de ouders
 nodig. Bij nieuwe aanmeldingen wordt dat gevraagd via het aanmeldformulier;

@@ -20,6 +20,8 @@ interface Props {
   prioriteit?: boolean;
   /** Tekst in de plaatshouder. Standaard de verwachte bestandsnaam. */
   plaatshouder?: string;
+  /** CSS object-position, om het onderwerp in de uitsnede te houden. */
+  positie?: string;
 }
 
 const {
@@ -30,6 +32,7 @@ const {
   laden = 'lazy',
   prioriteit = false,
   plaatshouder,
+  positie = 'center',
 } = Astro.props;
 
 const aanwezig = fotoBestaat(src);
@@ -44,7 +47,7 @@ const bestandsnaam = src ? src.split('/').pop() : 'foto volgt';
     loading={prioriteit ? 'eager' : laden}
     decoding={prioriteit ? 'sync' : 'async'}
     fetchpriority={prioriteit ? 'high' : undefined}
-    style={`aspect-ratio: ${ratio}; width: 100%; object-fit: cover; border-radius: var(--radius-vlak);`}
+    style={`aspect-ratio: ${ratio}; width: 100%; object-fit: cover; object-position: ${positie}; border-radius: var(--radius-vlak);`}
   />
 ) : (
   <div class={`foto-plek ${klasse}`} style={`aspect-ratio: ${ratio};`} role="img" aria-label={alt}>

@@ -15,7 +15,7 @@ import Basis from '../../layouts/Basis.astro';
 import Foto from '../../components/Foto.astro';
 import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
 import Standentabel from '../../components/Standentabel.astro';
-import { fotoBestaat } from '../../lib/fotos';
+import { fotoBestaat, actiefotos } from '../../lib/fotos';
 import {
   getTeams, getTeam, getWedstrijdenVoorTeam, getPoulestand, toonNaam, aantalAfgeschermd,
 } from '../../lib/sportlink';
@@ -32,6 +32,7 @@ const programma = wedstrijden.filter((w) => w.uitslag === undefined);
 const uitslagen = wedstrijden.filter((w) => w.uitslag !== undefined).reverse();
 const stand = getPoulestand(team.id);
 const afgeschermd = aantalAfgeschermd(team.id);
+const fotos = actiefotos(team.id);
 
 /* Selectie op positie groeperen. Spelers zonder positie komen achteraan; bij
    de jongste jeugd wordt er geen vaste positie bijgehouden. */
@@ -153,6 +154,24 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
     <div class="omhulsel">
       <div class="kolom">
         <p class="kolom-kicker">De ploeg</p>
+
+        {fotos.length > 0 && (
+          <ul class:list={['actie', { 'actie--een': fotos.length === 1 }]} aria-label={`${team.naam} in actie`}>
+            {fotos.map((foto, i) => (
+              <li>
+                <button
+                  type="button"
+                  class="vergroot"
+                  data-vergroot={foto}
+                  data-alt={`${team.naam} in actie, foto ${i + 1}`}
+                  aria-label={`Actiefoto ${i + 1} van ${team.naam} groter bekijken`}
+                >
+                  <Foto src={foto} alt="" ratio="3 / 2" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div class="ploeg">
           <div class="ploeg-selectie">
@@ -345,6 +364,19 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
   }
   @media (prefers-reduced-motion: reduce) {
     .vergroot :global(img) { transition: none; }
+  }
+
+  /* In actie --------------------------------------------------------- */
+  .actie {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin: 0.75rem 0 2.75rem;
+    padding: 0;
+  }
+  @media (min-width: 640px) {
+    .actie { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .actie--een { grid-template-columns: minmax(0, 1fr); max-width: 50rem; }
   }
 
   /* Blokken ---------------------------------------------------------- */

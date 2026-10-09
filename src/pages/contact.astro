@@ -5,8 +5,9 @@
  * Met een lijst "wie benader je waarvoor", want de meeste vragen aan een
  * clubbestuur horen bij iemand anders dan de voorzitter.
  *
- * De kaart wordt pas geladen na een klik, net als de video's. Dat scheelt een
- * verzoek naar een externe partij voor iedereen die alleen het adres komt halen.
+ * Naast het adres staat een luchtfoto van het complex in plaats van een
+ * ingesloten kaart: geen verzoek naar een externe partij, en voor de route is
+ * er de knop naar Google Maps, die op het adres zoekt.
  *
  * HET CONTACTFORMULIER IS IN DEZE DEMO NIET ACTIEF. Na oplevering gaat de
  * inzending via een eenvoudige formulierdienst naar info@kwiek78.nl; daar is
@@ -59,13 +60,6 @@ const wieWaarvoor = [
     waarvoor: 'Alles wat nergens anders past, en zaken die het bestuur aangaan.',
   },
 ].map((regel) => ({ ...regel, persoon: getContactpersoon(regel.functie) }));
-
-/* Kaartuitsnede rond het sportpark. */
-const kaartUrl =
-  'https://www.openstreetmap.org/export/embed.html?bbox=' +
-  `${CLUBGEGEVENS.lengtegraad - 0.008}%2C${CLUBGEGEVENS.breedtegraad - 0.004}%2C` +
-  `${CLUBGEGEVENS.lengtegraad + 0.008}%2C${CLUBGEGEVENS.breedtegraad + 0.004}` +
-  `&layer=mapnik&marker=${CLUBGEGEVENS.breedtegraad}%2C${CLUBGEGEVENS.lengtegraad}`;
 ---
 
 <Basis
@@ -73,13 +67,15 @@ const kaartUrl =
   omschrijving={`Contactgegevens van v.v. Kwiek '78, ${ADRES}. Wie je waarvoor benadert, route en contactformulier.`}
 >
   <Paginakop
+    foto="/images/club/clubhuis-training.webp"
+    fotoPositie="center 55%"
     kicker="Contact"
     titel="Contact"
     intro={`${CLUBGEGEVENS.sportpark}, ${ADRES}. Hieronder staat wie je waarvoor het beste kunt benaderen.`}
   />
 
   <!-- ================================================================== -->
-  <!-- Adres, kaart en route                                              -->
+  <!-- Adres, luchtfoto en route                                          -->
   <!-- ================================================================== -->
   <section class="vlak-wit sectie">
     <div class="omhulsel">
@@ -125,20 +121,15 @@ const kaartUrl =
             </a>
           </div>
 
-          <div class="kaart" data-kaart data-kaartbron={kaartUrl}>
-            <button type="button" class="kaart-knop" data-kaart-start>
-              <Foto
-                src="/images/club/kaart-sportpark.webp"
-                alt={`Kaart met de ligging van ${CLUBGEGEVENS.sportpark}`}
-                ratio="4 / 3"
-                plaatshouder="club/kaart-sportpark.webp"
-              />
-              <span class="kaart-overlay">
-                <span class="kaart-label data">Kaart laden</span>
-                <span class="kaart-uitleg">Er wordt pas contact gemaakt met OpenStreetMap nadat je hierop klikt.</span>
-              </span>
-            </button>
-          </div>
+          <figure class="complex">
+            <Foto
+              src="/images/club/kaart-sportpark.webp"
+              alt={`Luchtfoto van ${CLUBGEGEVENS.sportpark} en de polder eromheen`}
+              ratio="4 / 3"
+              plaatshouder="club/kaart-sportpark.webp"
+            />
+            <figcaption class="complex-bijschrift zacht">{CLUBGEGEVENS.sportpark} van bovenaf</figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -282,40 +273,9 @@ const kaartUrl =
 
   .locatie-route { margin-top: 0.5rem; }
 
-  /* Kaart -------------------------------------------------------------- */
-  .kaart { position: relative; border: 1px solid var(--kleur-lijn-licht); }
-  .kaart-knop {
-    display: block;
-    width: 100%;
-    background: none;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-    position: relative;
-    color: inherit;
-  }
-  .kaart :global(img) { }
-
-  .kaart-overlay {
-    position: absolute;
-    inset: auto 0 0 0;
-    display: grid;
-    gap: 0.3rem;
-    padding: 1rem;
-    background: color-mix(in srgb, var(--color-zwart) 88%, transparent);
-    color: var(--color-wit);
-    text-align: left;
-  }
-  .kaart-label {
-    font-size: var(--text-mini);
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-blauw);
-  }
-  .kaart-uitleg { font-size: var(--text-mini); line-height: 1.5; color: var(--color-grijs); }
-
-  .kaart :global(iframe) { display: block; width: 100%; aspect-ratio: 4 / 3; border: 0; }
+  /* Luchtfoto van het complex ------------------------------------------ */
+  .complex { display: grid; gap: 0.6rem; margin: 0; }
+  .complex-bijschrift { font-size: var(--text-mini); }
 
   /* Wie waarvoor ------------------------------------------------------- */
   .blokkop { padding-bottom: 1.25rem; }
@@ -418,21 +378,6 @@ const kaartUrl =
 </style>
 
 <script>
-  /* ------------------------------------------------------------------ */
-  /* Kaart pas laden na een klik                                        */
-  /* ------------------------------------------------------------------ */
-  const kaart = document.querySelector<HTMLElement>('[data-kaart]');
-  kaart?.querySelector<HTMLButtonElement>('[data-kaart-start]')?.addEventListener('click', () => {
-    const bron = kaart.dataset.kaartbron;
-    if (!bron) return;
-    const frame = document.createElement('iframe');
-    frame.src = bron;
-    frame.title = "Kaart met de ligging van Sportpark Het Veer in Avenhorn";
-    frame.loading = 'lazy';
-    frame.referrerPolicy = 'no-referrer';
-    kaart.replaceChildren(frame);
-  });
-
   /* ------------------------------------------------------------------ */
   /* Validatie van het contactformulier                                 */
   /* ------------------------------------------------------------------ */

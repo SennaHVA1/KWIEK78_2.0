@@ -32,6 +32,14 @@ const snelknoppen = [
   { label: 'Uitslagen', uitleg: 'Hoe is het afgelopen', href: '/wedstrijden/uitslagen' },
   { label: 'Diensten', uitleg: 'Wanneer ben ik aan de beurt', href: '/vrijwillige-diensten' },
 ];
+
+/* Het mozaiek onder de agenda. `vak` bepaalt de plek in het raster. */
+const sfeer = [
+  { vak: 'groot', src: '/images/club/kantine-vol.webp', alt: 'Een volle kantine van Kwiek \'78 met supporters aan tafel en aan de bar' },
+  { vak: 'breed', src: '/images/club/kantine-darts.webp', alt: 'Twee dartborden met het logo van Kwiek \'78 in de kantine' },
+  { vak: 'klein', src: '/images/club/aan-de-bal.webp', alt: 'Een speler van Kwiek \'78 in het zwarte tenue aan de bal op het kunstgras', positie: '22% 50%' },
+  { vak: 'klein', src: '/images/teams/kwiek-78-vr1-actie-1.webp', alt: 'Een speelster van VR1 aan de bal tussen twee tegenstanders' },
+];
 ---
 
 <Basis
@@ -144,6 +152,36 @@ const snelknoppen = [
       </div>
     </div>
   </section>
+
+  <!-- ================================================================== -->
+  <!-- Op Het Veer                                                         -->
+  <!-- ================================================================== -->
+  {/* Sfeerbeeld van de club: een volle kantine, een duel, het dartbord en
+      VR1. Geen tekst erbij behalve de kop en de knop; de foto's vertellen
+      genoeg. */}
+  <div class="baan" aria-hidden="true"></div>
+
+  <section class="vlak-zwart sectie" aria-labelledby="veer-kop">
+    <div class="omhulsel">
+      <div class="sectiekop">
+        <div>
+          <p class="kolom-kicker">Sportpark Het Veer</p>
+          <h2 class="kop-sectie" id="veer-kop">Dit is Kwiek</h2>
+        </div>
+        <a class="knop knop--primair" href="/club/lid-worden">Word lid</a>
+      </div>
+
+      <ul class="mozaiek">
+        {sfeer.map((foto) => (
+          <li class={`mozaiek-${foto.vak}`}>
+            <Foto src={foto.src} alt={foto.alt} ratio="3 / 2" positie={foto.positie} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
 
   <!-- ================================================================== -->
   <!-- Hoofdsponsoren                                                      -->
@@ -414,6 +452,43 @@ const snelknoppen = [
   .tweeluik { display: grid; gap: 3rem; }
   @media (min-width: 900px) {
     .tweeluik { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 3.5rem; }
+  }
+
+  /* Mozaiek: op een telefoon de grote foto bovenaan en de rest eronder, op
+     een breed scherm de kantine als groot vlak links en drie kleinere
+     rechts. */
+  .mozaiek {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mozaiek-groot, .mozaiek-breed { grid-column: 1 / -1; }
+  .mozaiek li { overflow: hidden; border-radius: var(--radius-vlak); }
+  .mozaiek :global(img) {
+    transition: transform 0.6s var(--ease-klap);
+  }
+  .mozaiek li:hover :global(img) { transform: scale(1.03); }
+
+  @media (min-width: 900px) {
+    .mozaiek {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      aspect-ratio: 2.2 / 1;
+    }
+    .mozaiek-groot { grid-column: 1 / 3; grid-row: 1 / 3; }
+    .mozaiek-breed { grid-column: 3 / 5; grid-row: 1; }
+    .mozaiek :global(img) {
+      height: 100%;
+      aspect-ratio: auto !important;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mozaiek :global(img) { transition: none; }
+    .mozaiek li:hover :global(img) { transform: none; }
   }
 
   /* De carousel staat tussen twee haarlijnen. De ruimte boven de bovenste en

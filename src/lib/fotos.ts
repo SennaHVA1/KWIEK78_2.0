@@ -9,8 +9,24 @@
  *
  * Zie IMAGES.md voor de lijst met verwachte bestandsnamen.
  */
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+
+/**
+ * De actiefoto's van een team: /public/images/teams/<team-id>-actie-1.webp,
+ * -actie-2 enzovoort, op volgorde van het nummer. Er hoeft niets in
+ * teams.json voor te worden ingevuld; zie IMAGES.md.
+ */
+export function actiefotos(teamId: string): string[] {
+  const map = join(process.cwd(), 'public', 'images', 'teams');
+  const patroon = new RegExp(`^${teamId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-actie-(\\d+)\\.webp$`);
+  if (!existsSync(map)) return [];
+  return readdirSync(map)
+    .map((bestand) => ({ bestand, nummer: Number(patroon.exec(bestand)?.[1]) }))
+    .filter(({ nummer }) => nummer > 0)
+    .sort((a, b) => a.nummer - b.nummer)
+    .map(({ bestand }) => `/images/teams/${bestand}`);
+}
 
 const cache = new Map<string, boolean>();
 

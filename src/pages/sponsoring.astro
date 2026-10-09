@@ -18,6 +18,7 @@
  */
 import Basis from '../layouts/Basis.astro';
 import Paginakop from '../components/Paginakop.astro';
+import Foto from '../components/Foto.astro';
 import { fotoBestaat } from '../lib/fotos';
 import { getSponsorNiveaus, getContactpersoon, CLUBGEGEVENS } from '../lib/club';
 
@@ -43,6 +44,8 @@ const gerealiseerd = [
   omschrijving="Sponsor worden van v.v. Kwiek '78: bedrijfssponsoring, de Club van '78 en de All Stars."
 >
   <Paginakop
+    foto="/images/club/thuiswedstrijd.webp"
+    fotoPositie="center 40%"
     kicker="Steun de club"
     titel="Sponsoring"
     intro="Er zijn drie manieren om mee te doen. Een voor bedrijven, en twee voor iedereen die Kwiek een warm hart toedraagt."
@@ -57,7 +60,7 @@ const gerealiseerd = [
         <li class="keuze">
           <p class="keuze-wie">Voor bedrijven</p>
           <h2 class="keuze-titel">Bedrijfssponsoring</h2>
-          <p class="keuze-tekst">Een logo op het shirt of een bord langs het veld.</p>
+          <p class="keuze-tekst">Een logo op het shirt, een bord langs het veld of de wedstrijdbal.</p>
           <a class="knop knop--rand" href="#bedrijven">Bekijk</a>
         </li>
         <li class="keuze keuze--uitgelicht">
@@ -110,17 +113,48 @@ const gerealiseerd = [
       ))}
 
       <div class="bord">
-        <div>
+        <Foto
+          src="/images/club/bord-kramer-keukens.webp"
+          alt="Spelers van Kwiek '78 lopen terug voor het grote reclamebord van Kramer Keukens langs het veld"
+          ratio="3 / 2"
+          klasse="bord-foto"
+        />
+        <div class="bord-inhoud">
           <h3 class="niveau-kop">Bordsponsoring</h3>
           <p class="bord-tekst">
             Een bord van twee bij een halve meter langs veld 1 of veld 2. Wij regelen productie
             en plaatsing, jij levert het ontwerp of laat het door ons maken. Neem contact op voor
             de mogelijkheden en de tarieven.
           </p>
+          <a class="knop knop--zwart" href="/contact">
+            Vraag de mogelijkheden op
+          </a>
         </div>
-        <a class="knop knop--zwart" href="/contact">
-          Vraag de mogelijkheden op
-        </a>
+      </div>
+
+      <div class="bord bord--andersom" id="wedstrijdbal">
+        <Foto
+          src="/images/club/hoofdsponsor-bal.webp"
+          alt="De wedstrijdbal op een houten standaard met het bordje van hoofdsponsor Kramer Keukens"
+          ratio="3 / 2"
+          positie="center 45%"
+          klasse="bord-foto"
+        />
+        <div class="bord-inhoud">
+          <h3 class="niveau-kop">Wedstrijdbalsponsoring</h3>
+          <p class="bord-tekst">
+            Bij elke thuiswedstrijd van het eerste ligt de wedstrijdbal klaar op de standaard
+            langs het veld, aangeboden door een sponsor. Dat kan ook voor een losse
+            thuiswedstrijd. Je naam en logo staan dan op de homepage bij de eerstvolgende
+            wedstrijd, met de tekst "Wedstrijdbal aangeboden door".
+          </p>
+          <a
+            class="knop knop--zwart"
+            href={`mailto:${sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}?subject=${encodeURIComponent('Wedstrijdbal aanbieden')}`}
+          >
+            Wedstrijdbal aanbieden
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -493,8 +527,18 @@ const gerealiseerd = [
     padding-top: 2rem;
     border-top: 1px solid var(--kleur-lijn-licht);
   }
-  @media (min-width: 800px) { .bord { grid-template-columns: minmax(0, 1fr) auto; gap: 2.5rem; } }
-  .bord-tekst { max-width: 58ch; color: var(--color-grijsdonker); margin-top: 0.5rem; }
+  @media (min-width: 800px) { .bord { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2.5rem; } }
+  /* Het tweede blok gespiegeld: foto rechts, tekst links. Op een telefoon
+     staat de foto in beide blokken bovenaan. */
+  @media (min-width: 800px) {
+    .bord--andersom { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+    .bord--andersom :global(.bord-foto) { order: 2; }
+  }
+  /* Bij een link naar #wedstrijdbal niet onder de vaste menubalk vallen. */
+  #wedstrijdbal { scroll-margin-top: 6.5rem; }
+  .bord-inhoud { display: grid; justify-items: start; }
+  .bord-tekst { max-width: 58ch; color: var(--color-grijsdonker); }
+  .bord-inhoud .knop { margin-top: 1.5rem; }
 
   /* Club van 78 ---------------------------------------------------------- */
   .club78-kop { margin-bottom: 0.35rem; }

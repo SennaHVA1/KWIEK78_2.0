@@ -51,6 +51,8 @@ const groepen: { label: string; spelers: typeof team.spelers }[] = posities
   .filter((groep) => groep.spelers.length > 0);
 
 const zonderPositie = team.spelers.filter((s) => !s.positie);
+/* Sportlink levert geen rugnummers. Dan ook geen lege kolom ervoor. */
+const heeftRugnummers = team.spelers.some((s) => s.rugnummer !== undefined);
 if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderPositie });
 ---
 
@@ -70,8 +72,10 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
           {team.omschrijving && <p class="teamkop-intro">{team.omschrijving}</p>}
           <ul class="teamkop-feiten data">
             <li><span>Speeldag</span> {team.speeldag}</li>
-            <li><span>Selectie</span> {team.spelers.length} spelers</li>
-            <li><span>Staf</span> {team.staf.length} personen</li>
+            <li><span>Selectie</span> {team.spelers.length + afgeschermd} {team.spelers.length + afgeschermd === 1 ? 'speler' : 'spelers'}</li>
+            {team.staf.length > 0 && (
+              <li><span>Staf</span> {team.staf.length} {team.staf.length === 1 ? 'persoon' : 'personen'}</li>
+            )}
           </ul>
         </div>
 
@@ -192,8 +196,8 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
                   {groep.spelers.map((speler) => {
                     const naam = toonNaam(speler, team.isJeugd);
                     return naam ? (
-                      <li class="speler">
-                        <span class="speler-nummer data">{speler.rugnummer ?? ''}</span>
+                      <li class:list={['speler', { 'speler--zonder-nummer': !heeftRugnummers }]}>
+                        {heeftRugnummers && <span class="speler-nummer data">{speler.rugnummer ?? ''}</span>}
                         <span class="speler-naam">{naam}</span>
                       </li>
                     ) : null;
@@ -213,25 +217,33 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
 
           <div class="ploeg-staf">
             <h2 class="kop-sectie blokkop">Staf</h2>
-            <ul class="staflijst">
-              {team.staf.map((lid) => (
-                <li>
-                  <span class="staf-functie data">{lid.functie}</span>
-                  <span class="staf-naam">{lid.naam}</span>
-                </li>
-              ))}
-            </ul>
+            {team.staf.length > 0 ? (
+              <ul class="staflijst">
+                {team.staf.map((lid) => (
+                  <li>
+                    <span class="staf-functie data">{lid.functie}</span>
+                    <span class="staf-naam">{lid.naam}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="ploeg-leeg zacht">De staf van dit team staat nog niet in Sportlink.</p>
+            )}
 
             <h2 class="kop-sectie blokkop blokkop--tweede">Trainingstijden</h2>
-            <ul class="traininglijst">
-              {team.trainingen.map((training) => (
-                <li>
-                  <span class="training-dag">{training.dag}</span>
-                  <span class="training-tijd data">{training.van} - {training.tot}</span>
-                  <span class="training-veld zacht">{training.veld}</span>
-                </li>
-              ))}
-            </ul>
+            {team.trainingen.length > 0 ? (
+              <ul class="traininglijst">
+                {team.trainingen.map((training) => (
+                  <li>
+                    <span class="training-dag">{training.dag}</span>
+                    <span class="training-tijd data">{training.van} - {training.tot}</span>
+                    <span class="training-veld zacht">{training.veld}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="ploeg-leeg zacht">De trainingstijden zijn op te vragen bij de trainer of via het contactformulier.</p>
+            )}
 
             <a class="knop knop--rand" href="/contact">Vragen over dit team</a>
           </div>
@@ -425,7 +437,9 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
     border-top: 1px solid var(--kleur-lijn-donker);
     font-size: var(--text-klein);
   }
+  .speler--zonder-nummer { grid-template-columns: minmax(0, 1fr); }
   .speler:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
+  .ploeg-leeg { font-size: var(--text-klein); max-width: 40ch; line-height: 1.6; }
   .speler-nummer { color: var(--color-grijs); text-align: right; }
   .speler-naam { font-weight: 600; }
 

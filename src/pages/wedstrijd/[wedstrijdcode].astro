@@ -11,7 +11,7 @@ import Clubwapen from '../../components/Clubwapen.astro';
 import Klapbord from '../../components/Klapbord.astro';
 import Wedstrijdrij from '../../components/Wedstrijdrij.astro';
 import {
-  getAlleWedstrijden, getWedstrijd, isThuiswedstrijd, getTeams,
+  getAlleWedstrijden, getWedstrijd, isThuiswedstrijd, getTeams, isVanTeam,
 } from '../../lib/sportlink';
 import { routeLink, CLUBGEGEVENS } from '../../lib/club';
 import { volledigeDatum, tijd, machineDatum, dagSleutel } from '../../lib/datum';
@@ -38,8 +38,7 @@ const soortLabel: Record<typeof wedstrijd.competitie, string> = {
 };
 
 /* Het eigen team opzoeken zodat we naar de teampagina kunnen linken. */
-const eigenTeamNaam = thuis ? wedstrijd.thuisteam : wedstrijd.uitteam;
-const eigenTeam = getTeams().find((t) => t.naam === eigenTeamNaam);
+const eigenTeam = getTeams().find((t) => isVanTeam(wedstrijd, t));
 
 /* De andere wedstrijden op dezelfde dag: handig als er meer kinderen spelen. */
 const zelfdeDag = getAlleWedstrijden().filter(

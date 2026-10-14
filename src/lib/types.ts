@@ -20,7 +20,7 @@ export type Competitie = 'competitie' | 'beker' | 'oefen' | 'zaal';
  * tot het `uitslag`-object hieronder.
  */
 export type Wedstrijd = {
-  /** Unieke wedstrijdcode van de KNVB, bijvoorbeeld "BBKY84H-001". */
+  /** Unieke wedstrijdcode van de KNVB, bijvoorbeeld "20872240". */
   wedstrijdcode: string;
   /** ISO 8601 met tijdzone-offset. Sportlink levert datum en aanvangstijd los aan. */
   datum: string;
@@ -34,6 +34,9 @@ export type Wedstrijd = {
   competitie: Competitie;
   uitslag?: { thuis: number; uit: number };
   afgelast?: boolean;
+  /** Sportlink-teamcodes van beide teams. Ontbreken in de demodata. */
+  thuisteamId?: string;
+  uitteamId?: string;
 };
 
 /** Categorie waarin een team op de site valt. Bepaalt het menu onder "Teams". */
@@ -84,6 +87,8 @@ export type Team = {
   /** Exacte teamnaam zoals Sportlink hem gebruikt. Hierop koppelen we wedstrijden. */
   naam: string;
   korteNaam: string;
+  /** Sportlink-teamcode. Is die er, dan koppelen we wedstrijden daarop. */
+  teamcode?: string;
   categorie: TeamCategorie;
   /** Poule-identificatie, gebruikt voor getPoulestand(). */
   pouleId: string;

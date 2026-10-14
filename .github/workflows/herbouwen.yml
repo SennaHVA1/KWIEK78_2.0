@@ -1,0 +1,30 @@
+# Laat Cloudflare Pages de site opnieuw bouwen, zodat programma, uitslagen,
+# standen en afgelastingen uit Sportlink bijblijven. De build haalt zelf de
+# data op; deze workflow geeft alleen het startsein.
+#
+# Nodig: een Deploy Hook in Cloudflare (Pages > project > Settings > Builds >
+# Deploy hooks) en die url als repository secret CF_DEPLOY_HOOK.
+#
+# Tijden zijn in UTC. In de zomer is dat Nederlandse tijd min twee uur, in de
+# winter min een.
+name: Site herbouwen
+
+on:
+  schedule:
+    - cron: '0 4 * * *'          # elke ochtend
+    - cron: '0 6-17 * * 6,0'     # zaterdag en zondag elk uur, voor uitslagen en afgelastingen
+  workflow_dispatch:              # met de hand, via het tabblad Actions
+
+jobs:
+  herbouwen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Hook aanroepen
+        env:
+          HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "Secret CF_DEPLOY_HOOK ontbreekt."
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST "$HOOK"

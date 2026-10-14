@@ -19,7 +19,8 @@ npm run preview    # /dist lokaal bekijken
 npm run check      # TypeScript- en Astro-controle
 ```
 
-Node 20 of hoger. Verder is er niets nodig: geen database, geen API-sleutel,
+Node 22. Voor echte wedstrijddata is alleen `SPORTLINK_CLIENT_ID` nodig, in
+`.env` (zie `.env.example`); zonder draait de site op demodata. Geen database,
 geen buildserver met bijzondere instellingen. De uitvoer in `/dist` is platte
 HTML, CSS en een paar kilobyte JavaScript, en kan op elke statische host.
 
@@ -157,7 +158,7 @@ minutenspel zijn voorbeeldmateriaal.
 
 | Bestand | Inhoud | Toekomstige bron |
 |---|---|---|
-| `wedstrijden.json` | 53 wedstrijden, waarvan 3 afgelast | Sportlink |
+| `wedstrijden.json` | 53 wedstrijden, waarvan 3 afgelast | Sportlink, nu aangesloten |
 | `teams.json` | 6 teams met selectie, staf en trainingstijden | Sportlink |
 | `standen.json` | 5 poulestanden | Sportlink |
 | `verjaardagen.json` | 134 leden, alleen dag en maand | Sportlink |
@@ -185,59 +186,98 @@ Sportlink-artikel hij hoort.
 
 ---
 
-## De Sportlink-adapter later omzetten
+## De Sportlink-koppeling
 
-Nu leest `src/lib/sportlink.ts` uit de JSON-bestanden. Straks doen dezelfde
-functies een fetch naar:
+De site haalt wedstrijden, teams, standen en verjaardagen live uit Sportlink.
+
+### Hoe het werkt
 
 ```
-https://data.sportlink.com/<artikel>?client_id=<CLIENT_ID>
+npm run build
+  1. scripts/sportlink-ophalen.mjs   haalt alles op bij data.sportlink.com
+                                     en schrijft src/data/sportlink/*.json
+                                     plus de clubwapens naar public/images/clubs/sportlink
+  2. astro build                     src/lib/sportlink.ts leest die bestanden
 ```
 
-De veldnamen in `src/lib/types.ts` liggen bewust zo dicht mogelijk tegen de
-Sportlink-uitvoer aan. Er verandert daarom **alleen de body van de functies in
-`sportlink.ts`**, en geen enkele pagina.
+Het client_id staat in de omgevingsvariabele `SPORTLINK_CLIENT_ID`:
 
-Zo ziet dat eruit:
+- **lokaal** in `.env` (staat in `.gitignore`, zie `.env.example`)
+- **op Cloudflare** onder **Settings → Variables and Secrets**, voor Production
+  en Preview
 
-```ts
-const BASIS = 'https://data.sportlink.com';
-const CLIENT_ID = import.meta.env.SPORTLINK_CLIENT_ID;
+Is die variabele niet gezet, dan slaat het script zich over en valt
+`sportlink.ts` terug op de demodata in `src/data/*.json`. De melding
+"Demo-omgeving" in de voettekst verschijnt alleen dan.
 
-export async function getProgramma(): Promise<Wedstrijd[]> {
-  const antwoord = await fetch(`${BASIS}/wedstrijdprogramma?client_id=${CLIENT_ID}`);
-  const ruw = await antwoord.json();
-  return ruw.map(naarWedstrijd);   // veldnamen omzetten
-}
-```
+Antwoordt Sportlink niet tijdens een build op Cloudflare, dan faalt die build
+met opzet. Cloudflare laat dan de vorige versie staan, in plaats van dat er
+ineens demodata live gaat.
 
-De functies worden dan `async` en de aanroepen in de pagina's krijgen een
-`await`. Verder blijft alles gelijk.
+Lokaal ophalen zonder te bouwen: `npm run sportlink`.
 
-Omdat de site statisch wordt gebouwd, draaien die calls tijdens
-`npm run build` en niet in de browser van de bezoeker. Het `client_id` belandt
-dus nooit in de uitgeleverde HTML. Wel betekent het dat de site opnieuw gebouwd
-moet worden als er iets verandert. Voor een clubsite is een nachtelijke build
-plus een handmatige knop bij een afgelasting ruim voldoende; bij de meeste
-statische hosts is dat een webhook.
+**De opgehaalde data staat niet in git.** De repository is openbaar en de
+selecties bevatten namen van leden, ook van kinderen. Daarom staan
+`src/data/sportlink/` en `public/images/clubs/sportlink/` in `.gitignore` en
+worden achternamen van jeugdspelers al in het script ingekort tot een letter.
 
-### Welke artikelen zijn nodig
+### Bijblijven
+
+De site is statisch, dus nieuwe uitslagen of een afgelasting staan er pas na
+een nieuwe build. Daarvoor is `.github/workflows/herbouwen.yml`: elke ochtend
+een build, en op zaterdag en zondag elk uur. Eenmalig instellen:
+
+1. Cloudflare: **Pages → project → Settings → Builds → Deploy hooks**, hook
+   aanmaken op branch `main`.
+2. GitHub: **Settings → Secrets and variables → Actions**, secret
+   `CF_DEPLOY_HOOK` met die url.
+
+Een afgelasting op zaterdagochtend kan ook direct: **Actions → Site herbouwen →
+Run workflow**. Dat zijn ongeveer 130 builds per maand, ruim binnen de 500 van
+het gratis Cloudflare-plan.
+
+### Welke artikelen worden gebruikt
 
 | Functie | Sportlink-artikel |
 |---|---|
-| `getProgramma()`, `getEerstvolgendeWedstrijd()` | `wedstrijdprogramma` |
-| `getUitslagen()` | `uitslagen` |
+| `getProgramma()`, `getEerstvolgendeWedstrijd()` | `programma`, `afgelastingen` |
+| `getUitslagen()` | `uitslagen` (vanaf 1 juli van het seizoen) |
 | `getPoulestand(teamId)` | `poulestand` |
-| `getTeams()`, `getTeam(id)` | `clubteams`, `teamindeling` |
+| `getTeams()`, `getTeam(id)` | `teams`, `team-indeling` |
 | `getVerjaardagen()` | `verjaardagen` |
-| aanmeldformulier | `aanmeldenaspirantlid-form` |
+| aanmeldformulier | `aanmeldenaspirantlid-form` (nog niet aangesloten) |
+
+### Wat Sportlink anders aanlevert dan de demo
+
+- **Clubnaam.** Sportlink schrijft "Kwiek 78"; het script maakt er overal
+  "Kwiek '78" van. De clubcode is **BBFW592**.
+- **Jeugdteams** heten tegenwoordig O17-1 in plaats van JO17-1.
+- **Teams.** Alle veldteams uit een bondscompetitie komen op de site, nu
+  zeventien. In het menu staan alleen de seniorenteams los; de jeugd (ook de
+  meidenteams) staat op `/teams`. Futsal- en lokale teams niet; hun wedstrijden staan wel in het
+  programma. Wedstrijden worden op teamcode aan een team gekoppeld, want het
+  futsalteam en het veldteam heten allebei "Kwiek '78 1".
+- **Selecties** hebben geen rugnummers of posities; de teampagina laat die
+  kolom dan weg. **Trainingstijden**, fotobijschriften en een introtekst levert
+  Sportlink niet: die houdt de club bij in `src/data/teaminfo.json`, per
+  team-id. Staat er voor een team niets, dan verwijst de pagina naar de
+  trainer.
+- **Clubwapens** zijn bij Sportlink links die na een paar uur verlopen. Het
+  script slaat ze daarom op en de site serveert ze zelf.
+- **Verjaardagen.** Sportlink geeft alleen de jarigen van de komende paar
+  weken, met de naam als een geheel en zonder team. `/club/verjaardagen` is
+  daarom geen maandkalender meer maar een lijst "binnenkort jarig". Staat een
+  jarige in een jeugdselectie, dan neemt het script de verkorte naam en het
+  team over uit de teamindeling, zodat de AVG-regel voor de jeugd ook hier
+  geldt.
 
 ### AVG bij de koppeling
 
-Dit is het punt waarop het bestuur gaat letten, dus het is nu al goed gedaan.
+Dit is het punt waarop het bestuur gaat letten.
 
-Sportlink houdt per lid een veld `privacyniveau` bij, dat het lid of de ouder
-zelf instelt in de KNVB-app:
+Een lid of ouder stelt in de KNVB-app zelf in hoe zichtbaar hij is. Sportlink
+geeft een afgeschermd lid terug als "Afgeschermd"; het script zet die om naar
+niveau 2. De site rekent met drie niveaus:
 
 - **0** volledig zichtbaar
 - **1** beperkt zichtbaar → voornaam plus eerste letter achternaam
@@ -311,14 +351,11 @@ gaan door precies dezelfde omzetting heen, zodat er maar een weg is.
 
 Dit zijn de dingen die nog niet geregeld kunnen worden door Brand-On alleen.
 
-### 1. Sportlink client_id — actie: club
+### 1. Sportlink — geregeld
 
-De club moet bij Sportlink een `client_id` aanvragen voor het domein waarop de
-site komt te draaien. Zonder dat ID werkt geen enkele call en blijft de site op
-dummydata staan. Aanvragen loopt via de clubbeheerder van Sportlink; de
-KNVB-clubcode van Kwiek is **BBKY84H**.
-
-Reken op een doorlooptijd van een paar werkdagen.
+Het client_id is binnen en de koppeling werkt, zie **De Sportlink-koppeling**.
+Nog te doen door Brand-On: `SPORTLINK_CLIENT_ID` in Cloudflare zetten en de
+Deploy Hook plus het GitHub-secret aanmaken.
 
 ### 2. Nieuws automatisch bijwerken — actie: Brand-On
 

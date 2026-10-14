@@ -30,11 +30,24 @@ export type Menu_groep = {
   extern?: boolean;
 };
 
-const teamItems: Menu_item[] = getTeams().map((team) => ({
-  label: team.naam,
-  href: `/teams/${team.id}`,
-  omschrijving: team.pouleNaam,
-}));
+/* Met alle jeugdteams erbij wordt dit submenu een lijst van zeventien regels.
+   Daarom staan alleen de seniorenteams er los in en gaat de jeugd via het
+   overzicht, waar elk team met zijn volgende wedstrijd staat. */
+const seniorenteams = getTeams().filter((team) => !team.isJeugd);
+const aantalJeugdteams = getTeams().length - seniorenteams.length;
+
+const teamItems: Menu_item[] = [
+  ...seniorenteams.map((team) => ({
+    label: team.naam,
+    href: `/teams/${team.id}`,
+    omschrijving: team.pouleNaam,
+  })),
+  {
+    label: 'Alle teams',
+    href: '/teams',
+    omschrijving: aantalJeugdteams > 0 ? `Ook de ${aantalJeugdteams} jeugdteams` : undefined,
+  },
+];
 
 export const MENU: Menu_groep[] = [
   {
@@ -64,7 +77,7 @@ export const MENU: Menu_groep[] = [
       { label: 'Bestuur en commissies', href: '/club/bestuur' },
       { label: 'Lid worden', href: '/club/lid-worden', omschrijving: 'Aanmelden en wijzigen' },
       { label: 'Agenda', href: '/club/agenda' },
-      { label: 'Verjaardagskalender', href: '/club/verjaardagen' },
+      { label: 'Verjaardagen', href: '/club/verjaardagen', omschrijving: 'Wie er binnenkort jarig is' },
       { label: 'Minutenspel', href: '/club/minutenspel' },
       { label: 'Informatiebulletin', href: '/club/informatiebulletin', omschrijving: 'Huisregels, contributie en lidmaatschap' },
       { label: 'Ereleden', href: '/club/ereleden' },

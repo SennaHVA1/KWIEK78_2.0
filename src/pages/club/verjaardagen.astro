@@ -1,80 +1,49 @@
 ---
 /**
- * De verjaardagskalender, per maand.
+ * Wie er binnenkort jarig is.
+ *
+ * Dit was een kalender per maand, maar Sportlink levert alleen de jarigen van
+ * de komende paar weken aan. Twaalf maanden waarvan er elf leeg zijn is geen
+ * kalender, dus nu staat er een doorlopende lijst vanaf vandaag. De site wordt
+ * elke ochtend opnieuw gebouwd, dus de lijst schuift vanzelf mee.
  *
  * Alleen naam en dag. Het geboortejaar wordt bewust niet uit Sportlink
  * overgenomen: dat is een herleidbaar persoonsgegeven en voor een felicitatie
  * heb je het niet nodig.
- *
- * De maandnavigatie werkt zonder JavaScript via ankers; het script maakt er
- * daarna een echte wisseling van zodat er maar een maand tegelijk staat.
  */
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import Verjaardagen from '../../components/Verjaardagen.astro';
-import { getVerjaardagenPerMaand, getVerjaardagen } from '../../lib/sportlink';
-import { MAANDNAMEN } from '../../lib/datum';
+import { getKomendeVerjaardagen } from '../../lib/sportlink';
 
-const huidigeMaand = new Date().getMonth() + 1;
-const maanden = MAANDNAMEN.map((naam, i) => ({
-  nummer: i + 1,
-  naam,
-  kort: naam.slice(0, 3),
-  leden: getVerjaardagenPerMaand(i + 1),
-}));
-const totaal = getVerjaardagen().length;
+const DAGEN = 31;
+const jarigen = getKomendeVerjaardagen(DAGEN);
 ---
 
 <Basis
-  titel="Verjaardagskalender"
-  omschrijving="De verjaardagen van de leden van v.v. Kwiek '78, per maand."
+  titel="Verjaardagen"
+  omschrijving="Welke leden van v.v. Kwiek '78 binnenkort jarig zijn."
 >
   <Paginakop
     foto="/images/club/kaart-sportpark.webp"
     fotoPositie="center 50%"
     kicker="Club"
-    titel="Verjaardagskalender"
-    intro="Wie is er wanneer jarig. Alleen naam en dag, geen geboortejaar."
+    titel="Binnenkort jarig"
+    intro="Wie er de komende weken jarig is. Alleen naam en dag, geen geboortejaar."
   />
 
   <section class="vlak-wit sectie">
     <div class="omhulsel">
       <div class="kolom">
-        <p class="kolom-kicker">{totaal} leden</p>
+        <p class="kolom-kicker">
+          {jarigen.length === 1 ? 'Een jarige' : `${jarigen.length} jarigen`}
+        </p>
 
         <div>
-          <nav class="maanden" aria-label="Kies een maand" data-maandnav>
-            {maanden.map((maand) => (
-              <a
-                href={`#maand-${maand.nummer}`}
-                class:list={['maandknop', maand.nummer === huidigeMaand && 'is-gekozen']}
-                data-maand={maand.nummer}
-                aria-current={maand.nummer === huidigeMaand ? 'true' : undefined}
-              >
-                <span class="maandknop-naam">{maand.naam}</span>
-                <span class="maandknop-kort" aria-hidden="true">{maand.kort}</span>
-                <span class="maandknop-aantal data">{maand.leden.length}</span>
-              </a>
-            ))}
-          </nav>
-
-          <div class="maandvakken">
-            {maanden.map((maand) => (
-              <section
-                class="maandvak"
-                id={`maand-${maand.nummer}`}
-                data-maandvak={maand.nummer}
-                hidden={maand.nummer !== huidigeMaand}
-              >
-                <h2 class="kop-sectie maandvak-kop">{maand.naam}</h2>
-                <Verjaardagen
-                  leden={maand.leden}
-                  toonMaand={false}
-                  leegTekst={`In ${maand.naam} is er niemand jarig.`}
-                />
-              </section>
-            ))}
-          </div>
+          <Verjaardagen
+            leden={jarigen}
+            leegTekst="De komende weken is er niemand jarig."
+          />
 
           <p class="privacy-noot zacht">
             Leden die in Sportlink hebben aangegeven niet zichtbaar te willen zijn, staan hier niet.
@@ -87,44 +56,6 @@ const totaal = getVerjaardagen().length;
 </Basis>
 
 <style>
-  .maanden {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    padding-bottom: 2rem;
-  }
-  .maandknop {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    border: 0;
-    border-radius: 999px;
-    background: var(--kleur-papier-diep);
-    padding: 0.45rem 0.95rem;
-    text-decoration: none;
-    color: var(--color-zwart) !important;
-    font-family: var(--font-smal);
-    font-size: 1rem;
-    font-weight: 600;
-    transition: background-color 0.15s var(--ease-klap), border-color 0.15s var(--ease-klap);
-  }
-  .maandknop:hover { background: color-mix(in srgb, var(--color-blauwdiep) 18%, transparent); }
-  .maandknop.is-gekozen {
-    background: var(--color-blauwdiep);
-    color: var(--color-wit) !important;
-  }
-  @media (prefers-reduced-motion: reduce) { .maandknop { transition: none; } }
-
-  .maandknop-aantal { opacity: 0.6; font-weight: 400; }
-  .maandknop-kort { display: none; }
-  @media (max-width: 720px) {
-    .maandknop-naam { display: none; }
-    .maandknop-kort { display: inline; }
-  }
-
-  .maandvak[hidden] { display: none; }
-  .maandvak-kop { padding-bottom: 1rem; }
-
   .privacy-noot {
     margin-top: 2rem;
     padding-top: 1.25rem;
@@ -134,43 +65,3 @@ const totaal = getVerjaardagen().length;
     max-width: 62ch;
   }
 </style>
-
-<script>
-  /**
-   * Maandwisseling.
-   *
-   * Zonder JavaScript zijn het gewone ankerlinks naar de maandsecties; die
-   * werken ook, alleen staat dan de hele kalender open. Met JavaScript wordt
-   * er een maand tegelijk getoond en verandert de URL-hash mee, zodat een
-   * link naar een specifieke maand blijft werken.
-   */
-  const navigatie = document.querySelector<HTMLElement>('[data-maandnav]');
-
-  if (navigatie) {
-    const knoppen = [...navigatie.querySelectorAll<HTMLAnchorElement>('[data-maand]')];
-    const vakken = [...document.querySelectorAll<HTMLElement>('[data-maandvak]')];
-
-    const toon = (maand: string) => {
-      for (const vak of vakken) vak.hidden = vak.dataset.maandvak !== maand;
-      for (const knop of knoppen) {
-        const gekozen = knop.dataset.maand === maand;
-        knop.classList.toggle('is-gekozen', gekozen);
-        if (gekozen) knop.setAttribute('aria-current', 'true');
-        else knop.removeAttribute('aria-current');
-      }
-    };
-
-    for (const knop of knoppen) {
-      knop.addEventListener('click', (gebeurtenis) => {
-        gebeurtenis.preventDefault();
-        const maand = knop.dataset.maand!;
-        toon(maand);
-        history.replaceState(null, '', `#maand-${maand}`);
-      });
-    }
-
-    // Kwam iemand binnen via een link naar een bepaalde maand, toon die dan.
-    const uitHash = location.hash.match(/^#maand-(\d{1,2})$/);
-    if (uitHash) toon(uitHash[1]);
-  }
-</script>

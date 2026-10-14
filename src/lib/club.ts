@@ -75,7 +75,7 @@ export const CLUBGEGEVENS = {
   straat: 'Het Veer 92',
   postcode: '1633 DH',
   sportpark: 'Sportpark Het Veer',
-  knvbClubcode: 'BBKY84H',
+  knvbClubcode: 'BBFW592',
   telefoon: '0229 54 14 70',
   email: 'info@kwiek78.nl',
   facebook: 'https://www.facebook.com/vvkwiek78',

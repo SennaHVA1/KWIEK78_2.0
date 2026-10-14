@@ -9,3 +9,11 @@ preview.log
 # public/images staan er wel in, dus de site bouwt overal.
 # Zie IMAGES.md voor de werkwijze met npm run fotos.
 _bronfotos/
+
+# Het Sportlink client_id staat hierin.
+.env
+
+# Wordt bij elke build opnieuw uit Sportlink gehaald. Bevat namen van leden,
+# ook van kinderen, en hoort daarom niet in deze openbare repository.
+src/data/sportlink/
+public/images/clubs/sportlink/

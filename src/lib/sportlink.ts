@@ -6,40 +6,28 @@
  * Dit is de enige plek waar wedstrijd-, team-, stand- en ledendata vandaan
  * komt. Geen enkele pagina importeert rechtstreeks een JSON-bestand.
  *
- * NU:    de functies hieronder lezen uit /src/data/*.json.
- * STRAKS: dezelfde functies doen een fetch naar
+ * Er zijn twee bronnen, en de pagina's merken daar niets van:
  *
- *           https://data.sportlink.com/<artikel>?client_id=<CLIENT_ID>
+ *   SPORTLINK  /src/data/sportlink/*.json, geschreven door
+ *              scripts/sportlink-ophalen.mjs. Dat script draait vlak voor
+ *              elke `npm run build` en haalt alles op bij
+ *              https://data.sportlink.com met SPORTLINK_CLIENT_ID.
+ *   DEMO       /src/data/*.json. Alleen als er (nog) geen Sportlink-data is,
+ *              bijvoorbeeld omdat het client_id niet is ingesteld.
  *
- *         Boven elke functie staat welk Sportlink-artikel erbij hoort.
- *         De veldnamen in /src/lib/types.ts liggen bewust dicht tegen de
- *         Sportlink-uitvoer aan, zodat alleen de body van deze functies
- *         hoeft te veranderen en geen enkele pagina.
+ * Het ophalen gebeurt bij de build en niet in de browser van de bezoeker,
+ * dus het client_id komt nooit in de uitgeleverde HTML terecht. Wel moet de
+ * site opnieuw gebouwd worden om bij te blijven; zie README.
  *
- * OPENSTAAND PUNT: de club moet bij Sportlink een client_id aanvragen voor
- * het domein waarop de site draait. Zonder dat ID werkt geen enkele call.
- * Zie README, kopje "Openstaande punten".
- *
- * Voorbeeld van hoe een functie er straks uitziet:
- *
- *   const BASIS = 'https://data.sportlink.com';
- *   const CLIENT_ID = import.meta.env.SPORTLINK_CLIENT_ID;
- *
- *   export async function getProgramma(): Promise<Wedstrijd[]> {
- *     const antwoord = await fetch(`${BASIS}/wedstrijdprogramma?client_id=${CLIENT_ID}`);
- *     const ruw = await antwoord.json();
- *     return ruw.map(naarWedstrijd);   // veldnamen omzetten, zie onder
- *   }
- *
- * Omdat de site statisch gebouwd wordt draaien die calls tijdens `npm run
- * build`, niet in de browser van de bezoeker. Het client_id komt dus nooit
- * in de uitgeleverde HTML terecht.
+ * Het script zet de Sportlink-velden om naar de typen in types.ts. Boven elke
+ * functie hieronder staat uit welk Sportlink-artikel de data komt.
  */
 
 import ruweWedstrijden from '../data/wedstrijden.json';
 import ruweTeams from '../data/teams.json';
 import ruweStanden from '../data/standen.json';
 import ruweVerjaardagen from '../data/verjaardagen.json';
+import ruweTeaminfo from '../data/teaminfo.json';
 import type {
   Wedstrijd,
   Team,
@@ -53,13 +41,25 @@ import type {
 /** Naam van de vereniging zoals Sportlink hem gebruikt in teamnamen. */
 export const CLUB = "Kwiek '78";
 
-/** KNVB-clubcode van v.v. Kwiek '78. Nodig bij de Sportlink-aanvraag. */
-export const CLUBCODE = 'BBKY84H';
+/** KNVB-clubcode van v.v. Kwiek '78, zoals Sportlink hem teruggeeft. */
+export const CLUBCODE = 'BBFW592';
 
-const wedstrijden = ruweWedstrijden as Wedstrijd[];
-const teams = ruweTeams as Team[];
-const standen = ruweStanden as Poulestand[];
-const verjaardagen = ruweVerjaardagen as Verjaardag[];
+/* Bestaat de map src/data/sportlink niet, dan geeft deze glob een leeg object
+   en valt elke bron terug op de demodata. */
+const uitSportlink = import.meta.glob<{ default: unknown }>('../data/sportlink/*.json', { eager: true });
+function bron<T>(naam: string, demo: T): T {
+  const live = uitSportlink[`../data/sportlink/${naam}.json`];
+  return live ? (live.default as T) : demo;
+}
+
+/** Draait de site op echte Sportlink-data, of nog op de demodata? */
+export const IS_SPORTLINK = Object.keys(uitSportlink).length > 0;
+
+const wedstrijden = bron('wedstrijden', ruweWedstrijden as Wedstrijd[]);
+const teams = bron('teams', ruweTeams as Team[]);
+const standen = bron('standen', ruweStanden as Poulestand[]);
+const verjaardagen = bron('verjaardagen', ruweVerjaardagen as Verjaardag[]);
+const teaminfo = ruweTeaminfo as Record<string, Partial<Pick<Team, 'fotobijschrift' | 'omschrijving' | 'trainingen'>>>;
 
 /* ==========================================================================
    Hulpfuncties
@@ -72,11 +72,14 @@ const opDatum = (a: Wedstrijd, b: Wedstrijd) =>
 const isGespeeld = (w: Wedstrijd) => w.uitslag !== undefined;
 
 /**
- * Hoort deze wedstrijd bij dit team? Sportlink levert geen team-id mee in het
- * wedstrijdprogramma, alleen de teamnaam. We koppelen daarom op naam, precies
- * zoals je dat tegen de echte API ook zou doen.
+ * Hoort deze wedstrijd bij dit team? Bij Sportlink-data op teamcode: het
+ * futsalteam en het veldteam heten allebei "Kwiek '78 1", dus op naam gaat
+ * dat mis. De demodata heeft geen teamcodes en koppelt op naam.
  */
 export function isVanTeam(wedstrijd: Wedstrijd, team: Team): boolean {
+  if (team.teamcode && wedstrijd.thuisteamId) {
+    return wedstrijd.thuisteamId === team.teamcode || wedstrijd.uitteamId === team.teamcode;
+  }
   return wedstrijd.thuisteam === team.naam || wedstrijd.uitteam === team.naam;
 }
 
@@ -202,7 +205,7 @@ export function getWedstrijdTeams(): string[] {
 
      1, 2, 3       senioren
      VR1, VR2      vrouwen (senioren)
-     JO17-1, MO9-1 jeugd, jongens en meisjes
+     O17-1, MO9-1  jeugd, jongens en meisjes (ook het oude JO17-1)
      35+, 7x7      overig
    -------------------------------------------------------------------------- */
 
@@ -220,7 +223,7 @@ function teamcode(naam: string): string {
 export function getTeamgroep(naam: string): Teamgroep {
   const code = teamcode(naam).toUpperCase();
   if (/^VR\s*\d/.test(code)) return 'Vrouwen';
-  if (/^(JO|MO|JM)\s*\d/.test(code)) return 'Jeugd';
+  if (/^(JO|MO|JM|O)\s*\d/.test(code)) return 'Jeugd';
   if (/^\d+$/.test(code)) return 'Senioren';
   return 'Overig';
 }
@@ -274,11 +277,11 @@ export function getCompetitieSoorten(): Competitie[] {
    ========================================================================== */
 
 /**
- * De teams die op de site staan. Voor de demo zijn dat er zes; in productie
- * komt deze lijst uit Sportlink en filteren we op de teams die de club op de
- * site wil tonen.
+ * De teams die op de site staan: alle veldteams uit een bondscompetitie.
+ * Futsal en lokale teams laat het ophaalscript weg; hun wedstrijden staan
+ * wel in het programma.
  *
- * Sportlink-artikel: `clubteams`
+ * Sportlink-artikelen: `teams` en `team-indeling`
  */
 export function getTeams(): Team[] {
   return teams.map(pasPrivacyToeOpTeam);
@@ -297,16 +300,18 @@ export function getTeam(id: string): Team | undefined {
 /** Teams gegroepeerd per categorie, voor het menu en de teamoverzichtspagina. */
 export function getTeamsPerCategorie(): { categorie: TeamCategorie; label: string; teams: Team[] }[] {
   const labels: Record<TeamCategorie, string> = {
-    selectie: 'Selectie',
+    selectie: 'Senioren',
     jeugd: 'Jeugd',
     dames: 'Dames',
   };
-  const volgorde: TeamCategorie[] = ['selectie', 'jeugd', 'dames'];
-  return volgorde.map((categorie) => ({
-    categorie,
-    label: labels[categorie],
-    teams: getTeams().filter((t) => t.categorie === categorie),
-  }));
+  const volgorde: TeamCategorie[] = ['selectie', 'dames', 'jeugd'];
+  return volgorde
+    .map((categorie) => ({
+      categorie,
+      label: labels[categorie],
+      teams: getTeams().filter((t) => t.categorie === categorie),
+    }))
+    .filter((groep) => groep.teams.length > 0);
 }
 
 /* ==========================================================================
@@ -358,10 +363,16 @@ export function toonNaamVerjaardag(lid: Verjaardag): string | null {
  * HTML belandt.
  */
 function pasPrivacyToeOpTeam(team: Team): Team {
+  /* Wat Sportlink niet kent, zoals trainingstijden, houdt de club bij in
+     src/data/teaminfo.json. Een ingevuld veld daar gaat voor. */
+  const info = teaminfo[team.id];
   return {
     ...team,
     /* De teamfoto heet altijd naar het team-id; zie IMAGES.md. */
     teamfoto: team.teamfoto ?? `/images/teams/${team.id}.webp`,
+    fotobijschrift: info?.fotobijschrift || team.fotobijschrift,
+    omschrijving: info?.omschrijving || team.omschrijving,
+    trainingen: info?.trainingen?.length ? info.trainingen : team.trainingen,
     spelers: team.spelers.filter((s) => s.privacyniveau !== 2),
   };
 }
@@ -422,8 +433,19 @@ export function getVerjaardagen(): Verjaardag[] {
  * Sportlink-artikel: `verjaardagen`
  */
 export function getVerjaardagenDezeWeek(vanaf: Date = new Date()): Verjaardag[] {
+  return getKomendeVerjaardagen(7, vanaf);
+}
+
+/**
+ * De jarigen in de komende `aantal` dagen, in de volgorde waarin ze jarig
+ * zijn. Sportlink levert zelf alleen de komende paar weken aan, dus een
+ * kalender voor het hele jaar zit er niet in.
+ *
+ * Sportlink-artikel: `verjaardagen`
+ */
+export function getKomendeVerjaardagen(aantal: number, vanaf: Date = new Date()): Verjaardag[] {
   const dagen: string[] = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < aantal; i++) {
     const dag = new Date(vanaf.getFullYear(), vanaf.getMonth(), vanaf.getDate() + i);
     dagen.push(`${dag.getMonth() + 1}-${dag.getDate()}`);
   }
@@ -434,11 +456,4 @@ export function getVerjaardagenDezeWeek(vanaf: Date = new Date()): Verjaardag[] 
     .sort((a, b) =>
       volgorde.get(`${a.maand}-${a.dag}`)! - volgorde.get(`${b.maand}-${b.dag}`)! ||
       a.voornaam.localeCompare(b.voornaam));
-}
-
-/** De jarigen van een maand (1 tot 12), voor de verjaardagskalender. */
-export function getVerjaardagenPerMaand(maand: number): Verjaardag[] {
-  return getVerjaardagen()
-    .filter((lid) => lid.maand === maand)
-    .sort((a, b) => a.dag - b.dag || a.voornaam.localeCompare(b.voornaam));
 }

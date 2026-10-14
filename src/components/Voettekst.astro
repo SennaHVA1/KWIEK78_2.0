@@ -6,6 +6,7 @@
 import { CLUBGEGEVENS, routeLink } from '../lib/club';
 import { SNELLE_LINKS, JURIDISCH } from '../lib/menu';
 import { huidigJaar } from '../lib/datum';
+import { IS_SPORTLINK } from '../lib/sportlink';
 
 const socials = [
   { label: 'Facebook', href: CLUBGEGEVENS.facebook },
@@ -78,9 +79,11 @@ const socials = [
         &copy; {huidigJaar()} {CLUBGEGEVENS.naam}, opgericht {CLUBGEGEVENS.opgericht}.
         KNVB-clubcode {CLUBGEGEVENS.knvbClubcode}.
       </p>
-      <p class="data voet-demo">
-        Demo-omgeving. Wedstrijd- en ledendata zijn voorbeeldgegevens.
-      </p>
+      {!IS_SPORTLINK && (
+        <p class="data voet-demo">
+          Demo-omgeving. Wedstrijd- en ledendata zijn voorbeeldgegevens.
+        </p>
+      )}
     </div>
   </div>
 </footer>

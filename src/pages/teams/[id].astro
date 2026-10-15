@@ -117,6 +117,7 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
           <Wedstrijdlijst
             wedstrijden={programma}
             toonLocatie={true}
+            zichtbaar={3}
             kopNiveau={3}
             leegTekst={`Er staan op dit moment geen wedstrijden gepland voor ${team.naam}.`}
           />
@@ -130,6 +131,7 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
           <Wedstrijdlijst
             wedstrijden={uitslagen}
             toonLocatie={false}
+            zichtbaar={3}
             kopNiveau={3}
             leegTekst={`${team.naam} heeft dit seizoen nog niet gespeeld.`}
           />

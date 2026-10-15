@@ -11,8 +11,8 @@ name: Site herbouwen
 
 on:
   schedule:
-    - cron: '0 4 * * *'          # elke ochtend
-    - cron: '0 6-17 * * 6,0'     # zaterdag en zondag elk uur, voor uitslagen en afgelastingen
+    - cron: '17 4 * * *'         # elke ochtend
+    - cron: '17 6-17 * * 6,0'    # zaterdag en zondag elk uur, voor uitslagen en afgelastingen
   workflow_dispatch:              # met de hand, via het tabblad Actions
 
 jobs:

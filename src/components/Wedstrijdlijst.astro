@@ -6,7 +6,7 @@
  * de kantlijn. Een parkeerplaats vol ouders scant op de dag, niet op een
  * subtiel label.
  */
-import Wedstrijdrij from './Wedstrijdrij.astro';
+import Wedstrijddag from './Wedstrijddag.astro';
 import { groepeerPerDag } from '../lib/datum';
 import type { Wedstrijd } from '../lib/types';
 
@@ -19,6 +19,11 @@ interface Props {
    * goed; hangt hij onder een sectiekop, geef dan 3 mee.
    */
   kopNiveau?: 2 | 3;
+  /**
+   * Aantal speeldagen dat direct zichtbaar is. De rest zit achter een
+   * uitklapknop, zodat een heel seizoensprogramma de pagina niet oprekt.
+   */
+  zichtbaar?: number;
 }
 
 const {
@@ -26,77 +31,48 @@ const {
   toonLocatie = true,
   leegTekst = 'Er staan op dit moment geen wedstrijden gepland.',
   kopNiveau = 2,
+  zichtbaar,
 } = Astro.props;
 
-const Kop = `h${kopNiveau}` as 'h2' | 'h3';
 const dagen = groepeerPerDag(wedstrijden, (w) => w.datum);
-
-/** "zaterdag 29 augustus" wordt "Zaterdag" plus "29 augustus". */
-const splits = (label: string) => {
-  const [dag, ...rest] = label.split(' ');
-  return { dag: dag.charAt(0).toUpperCase() + dag.slice(1), datum: rest.join(' ') };
-};
+const grens = zichtbaar !== undefined ? Math.min(zichtbaar, dagen.length) : dagen.length;
+const direct = dagen.slice(0, grens);
+const verborgen = dagen.slice(grens);
+const aantalVerborgen = verborgen.reduce((som, dag) => som + dag.items.length, 0);
 ---
 
 {dagen.length === 0 ? (
   <p class="lege-lijst zacht">{leegTekst}</p>
 ) : (
   <div class="wedstrijdlijst">
-    {dagen.map((dag) => {
-      const deel = splits(dag.label);
-      return (
-        <section class="wedstrijddag" data-filterblok>
-          <Kop class="dagkop">
-            <span class="dagkop-dag">{deel.dag}</span>
-            <span class="dagkop-datum">{deel.datum}</span>
-            <span class="dagkop-aantal">{dag.items.length}</span>
-          </Kop>
-          <div class="rij-groep">
-            {dag.items.map((wedstrijd) => (
-              <Wedstrijdrij wedstrijd={wedstrijd} toonLocatie={toonLocatie} />
-            ))}
-          </div>
-        </section>
-      );
-    })}
+    {direct.map((dag) => (
+      <Wedstrijddag label={dag.label} wedstrijden={dag.items} toonLocatie={toonLocatie} kopNiveau={kopNiveau} />
+    ))}
+    {verborgen.length > 0 && (
+      <details class="meer">
+        <summary class="knop knop--rand">
+          <span class="meer-dicht">{`Toon nog ${aantalVerborgen} ${aantalVerborgen === 1 ? 'wedstrijd' : 'wedstrijden'}`}</span>
+          <span class="meer-open">Toon minder</span>
+        </summary>
+        <div class="wedstrijdlijst meer-inhoud">
+          {verborgen.map((dag) => (
+            <Wedstrijddag label={dag.label} wedstrijden={dag.items} toonLocatie={toonLocatie} kopNiveau={kopNiveau} />
+          ))}
+        </div>
+      </details>
+    )}
   </div>
 )}
 
 <style>
   .wedstrijdlijst { display: grid; gap: 2rem; }
 
-  .dagkop {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    line-height: 1.2;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-klein);
-    background: var(--kleur-papier-diep);
-    margin-bottom: 0.4rem;
-  }
-  :global(.vlak-zwart) .dagkop, :global(.vlak-inkt) .dagkop { background: var(--kleur-inkt-op); }
-
-  .dagkop-datum {
-    font-family: var(--font-sans);
-    font-size: var(--text-klein);
-    font-weight: 500;
-    color: var(--color-grijsdonker);
-  }
-  :global(.vlak-zwart) .dagkop-datum, :global(.vlak-inkt) .dagkop-datum { color: var(--color-grijs); }
-
-  .dagkop-aantal {
-    margin-left: auto;
-    font-family: var(--font-smal);
-    font-size: var(--text-mini);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--color-blauwdiep);
-  }
-  :global(.vlak-zwart) .dagkop-aantal, :global(.vlak-inkt) .dagkop-aantal { color: var(--color-blauw); }
+  .meer summary { width: fit-content; cursor: pointer; list-style: none; }
+  .meer summary::-webkit-details-marker { display: none; }
+  .meer-open { display: none; }
+  .meer[open] .meer-dicht { display: none; }
+  .meer[open] .meer-open { display: inline; }
+  .meer-inhoud { margin-top: 2rem; }
 
   .lege-lijst {
     padding: 1.5rem;

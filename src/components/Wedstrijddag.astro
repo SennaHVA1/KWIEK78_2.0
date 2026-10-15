@@ -1,0 +1,71 @@
+---
+/**
+ * Eén speeldag uit een Wedstrijdlijst: dagbalk met de wedstrijden eronder.
+ */
+import Wedstrijdrij from './Wedstrijdrij.astro';
+import type { Wedstrijd } from '../lib/types';
+
+interface Props {
+  label: string;
+  wedstrijden: Wedstrijd[];
+  toonLocatie: boolean;
+  kopNiveau: 2 | 3;
+}
+
+const { label, wedstrijden, toonLocatie, kopNiveau } = Astro.props;
+
+const Kop = `h${kopNiveau}` as 'h2' | 'h3';
+
+/* "zaterdag 29 augustus" wordt "Zaterdag" plus "29 augustus". */
+const [dag, ...rest] = label.split(' ');
+const dagNaam = dag.charAt(0).toUpperCase() + dag.slice(1);
+const datum = rest.join(' ');
+---
+
+<section class="wedstrijddag" data-filterblok>
+  <Kop class="dagkop">
+    <span class="dagkop-dag">{dagNaam}</span>
+    <span class="dagkop-datum">{datum}</span>
+    <span class="dagkop-aantal">{wedstrijden.length}</span>
+  </Kop>
+  <div class="rij-groep">
+    {wedstrijden.map((wedstrijd) => (
+      <Wedstrijdrij wedstrijd={wedstrijd} toonLocatie={toonLocatie} />
+    ))}
+  </div>
+</section>
+
+<style>
+  .dagkop {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.2;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-klein);
+    background: var(--kleur-papier-diep);
+    margin-bottom: 0.4rem;
+  }
+  :global(.vlak-zwart) .dagkop, :global(.vlak-inkt) .dagkop { background: var(--kleur-inkt-op); }
+
+  .dagkop-datum {
+    font-family: var(--font-sans);
+    font-size: var(--text-klein);
+    font-weight: 500;
+    color: var(--color-grijsdonker);
+  }
+  :global(.vlak-zwart) .dagkop-datum, :global(.vlak-inkt) .dagkop-datum { color: var(--color-grijs); }
+
+  .dagkop-aantal {
+    margin-left: auto;
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-blauwdiep);
+  }
+  :global(.vlak-zwart) .dagkop-aantal, :global(.vlak-inkt) .dagkop-aantal { color: var(--color-blauw); }
+</style>

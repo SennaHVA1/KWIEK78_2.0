@@ -83,7 +83,7 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
         </div>
 
         {balsponsor && (
-          <a class="duel-bal" href={balsponsor.url} target="_blank" rel="noopener noreferrer">
+          <a class="duel-bal" href={balsponsor.url} target={balsponsor.url ? '_blank' : undefined} rel={balsponsor.url ? 'noopener noreferrer' : undefined}>
             <span class="duel-bal-label">Wedstrijdbal aangeboden door</span>
             <span class="duel-bal-logo">
               <img src={balsponsor.logo} alt={balsponsor.naam} loading="lazy" decoding="async" />

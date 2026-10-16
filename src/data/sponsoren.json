@@ -3,18 +3,18 @@
     "id": "kramer-keukens",
     "naam": "Kramer Keukens",
     "niveau": "hoofdsponsor",
-    "url": "https://www.kramerkeukens.nl",
+    "url": "https://kramerkeukens.nl",
     "logo": "/images/sponsoren/kramer-keukens.webp",
     "omschrijving": "Hoofdsponsor van het eerste elftal.",
     "inCarousel": true
   },
   {
-    "id": "dralco",
-    "naam": "Dralco BV",
+    "id": "nolte-mezzanine",
+    "naam": "Nolte Mezzanine",
     "niveau": "hoofdsponsor",
-    "url": "https://www.dralco.nl",
-    "logo": "/images/sponsoren/dralco.webp",
-    "omschrijving": "Co-sponsor van de selectie.",
+    "url": "https://noltemezzanine.nl",
+    "logo": "/images/sponsoren/nolte-mezzanine.svg",
+    "omschrijving": "Hoofdsponsor van de club.",
     "inCarousel": true
   },
   {
@@ -27,43 +27,96 @@
     "inCarousel": true
   },
   {
-    "id": "kwakman-groep",
-    "naam": "Kwakman Groep",
-    "niveau": "partner",
-    "url": "https://www.kwakmangroep.nl",
-    "logo": "/images/sponsoren/kwakman-groep.svg",
-    "inCarousel": true
-  },
-  {
-    "id": "wessels-rolluikenfabriek",
-    "naam": "Wessels Rolluikenfabriek",
-    "niveau": "partner",
-    "url": "https://www.wesselsrolluiken.nl",
-    "logo": "/images/sponsoren/wessels-rolluikenfabriek.svg",
-    "inCarousel": true
-  },
-  {
-    "id": "vi-travel",
-    "naam": "VI Travel",
-    "niveau": "partner",
-    "url": "https://www.vitravel.nl",
-    "logo": "/images/sponsoren/vi-travel.svg",
-    "inCarousel": true
-  },
-  {
     "id": "duijn-teamsport",
     "naam": "Duijn Teamsport",
     "niveau": "partner",
-    "url": "https://www.duijnteamsport.nl",
-    "logo": "/images/sponsoren/duijn-teamsport.svg",
+    "logo": "/images/sponsoren/duijn-teamsport.webp",
     "inCarousel": true
   },
   {
-    "id": "sportcafe-de-koggenhal",
-    "naam": "Sportcafé de Koggenhal",
+    "id": "john-pronk-transport",
+    "naam": "John Pronk Transport",
     "niveau": "partner",
-    "url": "https://www.dekoggenhal.nl",
-    "logo": "/images/sponsoren/sportcafe-de-koggenhal.svg",
+    "url": "https://www.johnpronk.nl",
+    "logo": "/images/sponsoren/john-pronk-transport.webp",
+    "inCarousel": true
+  },
+  {
+    "id": "spare-rib-express",
+    "naam": "Spare Rib Express",
+    "niveau": "partner",
+    "url": "https://www.spareribexpress.com",
+    "logo": "/images/sponsoren/spare-rib-express.webp",
+    "vlak": "donker",
+    "inCarousel": true
+  },
+  {
+    "id": "stam-transport",
+    "naam": "Stam Transport Schermerhorn",
+    "niveau": "partner",
+    "url": "https://www.stamtransportschermerhorn.nl",
+    "logo": "/images/sponsoren/stam-transport.webp",
+    "inCarousel": true
+  },
+  {
+    "id": "pd-personeel",
+    "naam": "PD Personeel",
+    "niveau": "partner",
+    "url": "https://www.pdpersoneel.nl",
+    "logo": "/images/sponsoren/pd-personeel.webp",
+    "inCarousel": true
+  },
+  {
+    "id": "villa-groet",
+    "naam": "Villa Groet uit Avenhorn",
+    "niveau": "partner",
+    "logo": "/images/sponsoren/villa-groet.webp",
+    "inCarousel": true
+  },
+  {
+    "id": "bandenservice-van-den-enghel",
+    "naam": "Bandenservice Van den Enghel",
+    "niveau": "partner",
+    "url": "https://www.bandenservicevandenenghel.nl",
+    "logo": "/images/sponsoren/bandenservice-van-den-enghel.webp",
+    "vlak": "donker",
+    "inCarousel": true
+  },
+  {
+    "id": "cafe-julius",
+    "naam": "Café Julius",
+    "niveau": "partner",
+    "logo": "/images/sponsoren/cafe-julius.webp",
+    "inCarousel": true
+  },
+  {
+    "id": "goedkoopstedoek",
+    "naam": "GoedkoopsteDoek.nl",
+    "niveau": "partner",
+    "url": "https://www.goedkoopstedoek.nl",
+    "logo": "/images/sponsoren/goedkoopstedoek.webp",
+    "inCarousel": true
+  },
+  {
+    "id": "verkeersschool-nelen",
+    "naam": "Verkeersschool Nelen",
+    "niveau": "partner",
+    "logo": "/images/sponsoren/verkeersschool-nelen.webp",
+    "vlak": "donker",
+    "inCarousel": true
+  },
+  {
+    "id": "pronk-belkom",
+    "naam": "Pronk-Belkom",
+    "niveau": "partner",
+    "logo": "/images/sponsoren/pronk-belkom.webp",
+    "inCarousel": true
+  },
+  {
+    "id": "bas-van-der-veen",
+    "naam": "Bas van der Veen Agrarische Dienstverlening",
+    "niveau": "partner",
+    "logo": "/images/sponsoren/bas-van-der-veen.webp",
     "inCarousel": true
   }
 ]

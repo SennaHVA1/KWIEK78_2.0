@@ -186,11 +186,14 @@ export type Sponsor = {
   id: string;
   naam: string;
   niveau: SponsorNiveau;
-  url: string;
+  /** Leeg als de sponsor geen eigen site heeft; het logo is dan geen link. */
+  url?: string;
   logo: string;
+  /** 'donker' voor een logo dat voor een zwarte ondergrond gemaakt is. */
+  vlak?: 'donker';
   /** Korte omschrijving, gebruikt op de sponsoringpagina. */
   omschrijving?: string;
-  /** Alleen de hoofdsponsoren draaien mee in de carousel op de homepage. */
+  /** Draait mee in de carousel op de homepage. */
   inCarousel: boolean;
 };
 

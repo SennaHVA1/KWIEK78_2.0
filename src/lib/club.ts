@@ -191,7 +191,7 @@ export function getCarouselSponsoren(): Sponsor[] {
  * In balsponsoren.json staat een standaardsponsor en per wedstrijdcode een
  * eventuele uitzondering, beide als id uit sponsoren.json. Heeft een
  * wedstrijd een eigen balsponsor, zet dan in "perWedstrijd" de wedstrijdcode
- * met het sponsor-id, bijvoorbeeld { "2604118": "dralco" }.
+ * met het sponsor-id, bijvoorbeeld { "2604118": "spare-rib-express" }.
  */
 export function getBalsponsor(wedstrijdcode: string): Sponsor | undefined {
   const id = balsponsoren.perWedstrijd[wedstrijdcode] ?? balsponsoren.standaard;

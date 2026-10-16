@@ -1,37 +1,29 @@
 ---
 /**
- * De hoofdsponsoren, doorlopend.
+ * De sponsoren, doorlopend.
  *
- * Zelf geschreven, geen carouselbibliotheek: het is een spoor dat schuift met
- * een CSS-animatie en een paar verborgen kopieen zodat de lus naadloos is.
+ * Zelf geschreven, geen carouselbibliotheek: een spoor dat schuift met een
+ * CSS-animatie en een verborgen kopie, zodat de lus naadloos is.
+ *
+ * Elk logo staat op een eigen kaartje van dezelfde maat. De logo's komen van
+ * overal - brede woordmerken, vierkante stempels, jpg's met een witte rand -
+ * en los naast elkaar oogde dat als een rommelige rij. Op een vaste kaart
+ * met lucht eromheen worden ze een reeks. Logo's die voor een zwarte
+ * ondergrond gemaakt zijn (vlak: 'donker' in sponsoren.json) krijgen een
+ * zwart kaartje.
  *
  * Pauzeert bij hover op een muisapparaat en bij toetsenbordfocus, maar nooit
  * op een aanraakscherm: daar blijft hover plakken. Bij prefers-reduced-motion
- * staat de animatie helemaal uit en wordt het een gewone, horizontaal
- * scrollbare rij. Elk logo is een link naar de site van de sponsor, met
- * rel="noopener noreferrer".
+ * staat de animatie uit en wordt het een gewone, horizontaal scrollbare rij.
  *
  * OVER DE PRESTATIES OP EEN TELEFOON
- * Dit blok liep stroef en verdween er af en toe helemaal. Vier oorzaken, alle
- * vier hieronder opgelost:
- *
- *   1. Het spoor is een enkele geschakelde laag. Vier reeksen van acht logo's
- *      is ruim vijfduizend pixels breed; maal drie voor het scherm van een
- *      telefoon is dat een textuur van tientallen megabytes. Komt die boven het
- *      budget, dan gooit iOS de laag weg en is de carousel weg. Onder 1024px
- *      staan er nu twee reeksen in plaats van vier - genoeg voor een naadloze
- *      lus zolang het scherm smaller is dan een reeks - en dat halveert de laag.
- *   2. Het masker. Een mask-image over een bewegend kind dwingt elk beeldje een
- *      tweede buffer van diezelfde omvang af. Het zijn nu twee gewone verlopen
- *      in de kleur van het vlak eromheen: hetzelfde beeld, geen masker.
- *   3. De logo's stonden op loading="lazy". Wat rechts buiten beeld hing werd
- *      dus nooit geladen, die plekken bleven nul pixels breed en daarmee klopte
- *      de naad niet meer. Ze zijn nu alle acht eager - samen vijfendertig
- *      kilobyte, en de kopieen komen uit dezelfde cache - en elke plek heeft
- *      een vaste minimumbreedte, zodat het spoor even breed is voor en na het
- *      laden.
- *   4. De animatie liep door terwijl je boven op de pagina het nieuws las. Een
- *      waarnemer zet hem stil zodra het blok uit beeld is.
+ * Het spoor is een enkele geschakelde laag; hoe breder, hoe meer geheugen.
+ * Daarom precies twee reeksen: een reeks van vijftien kaartjes is ruim
+ * drieduizend pixels, breder dan elk scherm, dus twee is genoeg voor een
+ * naadloze lus. Geen mask-image (dat kost een tweede laag), maar twee
+ * verlopen in de kleur van het vlak. Alle logo's laden eager en elk kaartje
+ * heeft een vaste maat, zodat de naad klopt voor en na het laden. Uit beeld
+ * staat de animatie stil (zie het script onderaan).
  */
 import { fotoBestaat } from '../lib/fotos';
 import type { Sponsor } from '../lib/types';
@@ -42,21 +34,11 @@ interface Props {
 
 const { sponsoren } = Astro.props;
 
-/* Het spoor vier keer afdrukken.
-   Waarom vier en niet twee: de animatie schuift precies een reeks op en springt
-   dan terug. Met twee reeksen is het spoor twee reeksen breed, en op het moment
-   van de sprong staat er dus nog maar een reeks in beeld. Is het scherm breder
-   dan een reeks - en dat is een reeks van acht logo's op een groot scherm - dan
-   loopt het spoor daar zichtbaar leeg. Met vier reeksen blijft er tot ruim
-   vierduizend pixels altijd voorraad staan.
-
-   Op een smal scherm is die voorraad niet nodig en juist schadelijk: zie punt 1
-   hierboven. Reeks 3 en 4 staan onder 1024px in de CSS op display:none.
-
-   Alleen de eerste reeks telt mee: de rest is decor, staat op aria-hidden en is
-   niet met de tab-toets te bereiken. */
-const AANTAL_REEKSEN = 4;
-const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kopie: i > 0 }));
+/* De tweede reeks is decor: aria-hidden en niet met de tab-toets te bereiken. */
+const spoor = [
+  { sponsoren, kopie: false },
+  { sponsoren, kopie: true },
+];
 ---
 
 <div class="carousel" data-carousel>
@@ -66,11 +48,13 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
         {reeks.sponsoren.map((sponsor) => (
           <li>
             <a
-              class="carousel-logo"
+              class="carousel-kaart"
               href={sponsor.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              tabindex={reeks.kopie ? -1 : undefined}
+              target={sponsor.url ? '_blank' : undefined}
+              rel={sponsor.url ? 'noopener noreferrer' : undefined}
+              tabindex={reeks.kopie || !sponsor.url ? -1 : undefined}
+              data-vlak={sponsor.vlak}
+              title={sponsor.naam}
             >
               {fotoBestaat(sponsor.logo) ? (
                 <img src={sponsor.logo} alt={sponsor.naam} loading="eager" decoding="async" fetchpriority="low" />
@@ -87,29 +71,23 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
 
 <style>
   .carousel {
-    /* Een gat, overal hetzelfde: tussen twee logo's en op de naad. */
-    --gat: clamp(2rem, 5vw, 4.5rem);
-    /* De kleur van het vlak waar de carousel in staat. Zet hem op de sectie als
-       het blok ooit ergens anders komt te hangen dan op wit. */
+    /* Ruimte tussen twee kaartjes, en dus ook op de naad. */
+    --gat: clamp(0.75rem, 1.5vw, 1.25rem);
+    /* De kleur van het vlak waar de carousel in staat. */
     --carousel-vlak: var(--color-wit);
     position: relative;
     overflow: hidden;
-    border-block: 1px solid var(--kleur-lijn-licht);
-    padding-block: 1.5rem;
+    padding-block: 0.5rem;
   }
 
-  /* De randen laten vervagen, zodat het spoor niet lijkt af te breken. Dit was
-     een mask-image over het hele blok. Dat ziet er hetzelfde uit, maar het kost
-     een tweede laag ter grootte van het spoor en juist dat sloopte het op een
-     telefoon. Twee verlopen in de kleur van de ondergrond doen hier hetzelfde
-     werk: boven op het spoor in plaats van eraan. */
+  /* Vervagende randen, boven op het spoor in plaats van als masker. */
   .carousel::before,
   .carousel::after {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    width: clamp(1.5rem, 6vw, 4rem);
+    width: clamp(2rem, 8vw, 7rem);
     pointer-events: none;
     z-index: 1;
   }
@@ -119,57 +97,22 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
   .carousel-spoor {
     display: flex;
     width: max-content;
-    animation: schuiven-half 46s linear infinite;
-    /* De translate3d in de keyframes hieronder zet het spoor op een eigen laag.
-       Bewust geen will-change erbij: dat houdt de laag ook stil in het geheugen
-       en juist het geheugen is hier het probleem. */
+    animation: schuiven 80s linear infinite;
     backface-visibility: hidden;
   }
-  /* Pauzeren bij hover, maar alleen op een apparaat dat echt kan hoveren.
-     Op een telefoon blijft :hover na een tik aan het element plakken tot je
-     ergens anders tikt, en dan stond het spoor stil zonder dat iemand daarom
-     had gevraagd. Met een muis is pauzeren juist nuttig: dan lees je een
-     logo dat langsschuift.
-
-     Bij toetsenbordfocus pauzeert hij wel altijd, anders schuift het logo
-     onder de focusring vandaan terwijl je erop staat. */
   @media (hover: hover) and (pointer: fine) {
     .carousel:hover .carousel-spoor { animation-play-state: paused; }
   }
   .carousel:focus-within .carousel-spoor { animation-play-state: paused; }
-  /* Uit beeld hoeft er niets te bewegen. Zie het script onderaan. */
   .carousel[data-uit-beeld] .carousel-spoor { animation-play-state: paused; }
 
-  /* De naad. Alle reeksen zijn even breed en staan precies een reeksbreedte
-     uit elkaar, dus zodra het spoor een reeksbreedte is opgeschoven staat logo
-     1 van de volgende reeks op de plek waar logo 1 van de vorige begon en is de
-     sprong onzichtbaar.
-
-     Dat werkte niet zolang elke reeks links en rechts een padding had. De
-     afstand tussen twee logo's binnen een reeks was dan het gat, en op de naad
-     tweemaal die padding plus het gat. Daar viel een gapend gat en precies
-     daar sprong de animatie terug. Nu draagt elke reeks zijn eigen eindgat als
-     marge, zodat de afstand overal dezelfde is en de sprong klopt.
-
-     Een reeksbreedte is een deel van het spoor: met twee reeksen de helft, met
-     vier een kwart. Vandaar twee keyframes in plaats van een. */
-  @keyframes schuiven-half {
+  /* Twee even brede reeksen: na een halve spoorbreedte staat de kopie precies
+     waar het origineel begon en is de sprong onzichtbaar. Elke reeks draagt
+     zijn eindgat als marge, zodat de afstand op de naad gelijk is aan die
+     tussen twee kaartjes. */
+  @keyframes schuiven {
     from { transform: translate3d(0, 0, 0); }
     to   { transform: translate3d(-50%, 0, 0); }
-  }
-  @keyframes schuiven-kwart {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(-25%, 0, 0); }
-  }
-
-  /* Reeks 3 en 4 zijn er alleen voor brede schermen: pas als het scherm breder
-     is dan een reeks (acht logo's, ruim dertienhonderd pixels) loopt het spoor
-     met twee reeksen zichtbaar leeg op het moment van de sprong. Tot die
-     breedte staan ze niet in de stroom en is de laag half zo groot. */
-  .carousel-reeks:nth-child(n + 3) { display: none; }
-  @media (min-width: 1024px) {
-    .carousel-reeks:nth-child(n + 3) { display: flex; }
-    .carousel-spoor { animation-name: schuiven-kwart; }
   }
 
   .carousel-reeks {
@@ -181,29 +124,50 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
     padding: 0;
   }
 
-  .carousel-logo {
+  /* Zuiver wit, niet het gebroken wit van de pagina: een flink deel van de
+     logo's is een jpg met een witte achtergrond, en die moet wegvallen. */
+  .carousel-kaart {
+    --kaart-b: clamp(9.5rem, 14vw, 12rem);
     display: grid;
+    /* Een vaste cel, zodat het logo zich naar de kaart voegt en niet andersom. */
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
     place-items: center;
-    height: 3.5rem;
-    /* Een vaste minimumbreedte per plek. Een logo dat nog moet laden is nul
-       pixels breed; zonder dit wordt het spoor tijdens het laden breder en
-       verspringt de naad. */
-    min-width: 7.5rem;
-    padding-inline: 0.5rem;
-    opacity: 0.72;
-    transition: opacity 0.2s var(--ease-klap);
+    box-sizing: border-box;
+    width: var(--kaart-b);
+    height: calc(var(--kaart-b) * 9 / 16);
+    padding: clamp(0.9rem, 1.4vw, 1.25rem) clamp(1rem, 1.6vw, 1.5rem);
+    border: 1px solid var(--kleur-lijn-licht);
+    border-radius: var(--radius-vlak);
+    background: #fff;
+    transition:
+      transform 0.25s var(--ease-klap),
+      border-color 0.25s var(--ease-klap),
+      box-shadow 0.25s var(--ease-klap);
   }
-  .carousel-logo:hover, .carousel-logo:focus-visible {
-    opacity: 1;
+  .carousel-kaart[data-vlak="donker"] {
+    background: var(--color-zwart);
+    border-color: var(--color-zwart);
   }
-  .carousel-logo img { max-height: 3.5rem; width: auto; object-fit: contain; }
+  .carousel-kaart:hover,
+  .carousel-kaart:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--color-zwart);
+    box-shadow: 0 10px 24px -14px rgb(0 0 0 / 0.35);
+  }
+
+  .carousel-kaart img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
   .carousel-woordmerk {
-    font-family: var(--font-display);
+    font-family: var(--font-smal);
     font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: -0.015em;
-    white-space: nowrap;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--color-zwart);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -213,12 +177,11 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
     }
     .carousel::before, .carousel::after { display: none; }
     .carousel-spoor { animation: none; }
-    /* De kopieen hebben zonder animatie geen functie meer, en zonder lus hoeft
-       er ook geen eindgat te staan. */
     .carousel-reeks[aria-hidden="true"] { display: none; }
     .carousel-reeks { margin-right: 0; padding-inline: var(--spacing-kantlijn); }
     .carousel-reeks li { scroll-snap-align: start; }
-    .carousel-logo { transition: none; }
+    .carousel-kaart { transition: none; }
+    .carousel-kaart:hover { transform: none; }
   }
 </style>
 
@@ -239,8 +202,6 @@ const spoor = Array.from({ length: AANTAL_REEKSEN }, (_, i) => ({ sponsoren, kop
           else el.setAttribute('data-uit-beeld', '');
         }
       },
-      // Iets voor het blok in beeld komt draait hij alweer, zodat je nooit een
-      // stilstaande carousel in beeld ziet schuiven.
       { rootMargin: '200px 0px' },
     );
 

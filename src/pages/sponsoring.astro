@@ -98,7 +98,7 @@ const gerealiseerd = [
             <ul class="logoraster">
               {niveau.sponsoren.map((sponsor) => (
                 <li>
-                  <a class="logo" href={sponsor.url} target="_blank" rel="noopener noreferrer">
+                  <a class="logo" href={sponsor.url} target={sponsor.url ? '_blank' : undefined} rel={sponsor.url ? 'noopener noreferrer' : undefined} data-vlak={sponsor.vlak}>
                     {fotoBestaat(sponsor.logo) ? (
                       <img src={sponsor.logo} alt={sponsor.naam} loading="lazy" decoding="async" />
                     ) : (
@@ -504,6 +504,7 @@ const gerealiseerd = [
     background: var(--color-wit);
     transition: transform 0.2s var(--ease-klap);
   }
+  .logo[data-vlak="donker"] { background: var(--color-zwart); }
   .logo:hover { transform: translateY(-2px); }
   @media (prefers-reduced-motion: reduce) {
     .logo { transition: none; }

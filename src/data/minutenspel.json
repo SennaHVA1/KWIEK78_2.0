@@ -1,266 +1,362 @@
 [
   {
     "minuut": 1,
-    "naam": "Gerard Kok"
+    "naam": "Danny van de Burg"
   },
   {
     "minuut": 2,
-    "naam": "Truus Karsten"
+    "naam": "Sanne Dam"
   },
   {
     "minuut": 3,
-    "naam": "Bakkerij Klaver"
+    "naam": "Hans Tol"
   },
   {
     "minuut": 4,
-    "naam": "Fam. Pronk"
+    "naam": "Patrick van der Bijl"
   },
   {
     "minuut": 5,
-    "naam": "Fam. Duin"
+    "naam": "Janneke Braas"
+  },
+  {
+    "minuut": 6,
+    "naam": "Marco Groot"
+  },
+  {
+    "minuut": 7,
+    "naam": "Jeroen Bakker"
   },
   {
     "minuut": 8,
-    "naam": "Hoveniersbedrijf Beerepoot"
+    "naam": "Stefan Groot"
   },
   {
     "minuut": 9,
-    "naam": "Marja Ligthart"
+    "naam": "Melle Lakeman"
   },
   {
     "minuut": 10,
-    "naam": "Sandra Bood"
+    "naam": "Marius Pronk"
   },
   {
     "minuut": 11,
-    "naam": "Familie Sijm"
+    "naam": "Ferry Aker"
   },
   {
     "minuut": 12,
-    "naam": "Fam. Reijne"
+    "naam": "Myrthe de Wit"
   },
   {
     "minuut": 13,
-    "naam": "Michel Bood"
+    "naam": "Peter Bouma"
   },
   {
     "minuut": 14,
-    "naam": "Autoschade Karsten"
+    "naam": "Koen Pronk"
+  },
+  {
+    "minuut": 15,
+    "naam": "Donny de Vos"
   },
   {
     "minuut": 16,
-    "naam": "Fam. Vriend"
+    "naam": "Yara Egsdorf"
+  },
+  {
+    "minuut": 17,
+    "naam": "Bas van der Veen"
   },
   {
     "minuut": 18,
-    "naam": "Jaap Sijm"
+    "naam": "Marije Mondeel"
   },
   {
     "minuut": 19,
-    "naam": "Bouwbedrijf Appelman"
+    "naam": "Nino Sneek"
+  },
+  {
+    "minuut": 20,
+    "naam": "Bram Kremer"
   },
   {
     "minuut": 21,
-    "naam": "Transportbedrijf Groot"
+    "naam": "Jelle Bouma"
+  },
+  {
+    "minuut": 22,
+    "naam": "Henk van Veenen"
+  },
+  {
+    "minuut": 23,
+    "naam": "Soof Bakker"
   },
   {
     "minuut": 24,
-    "naam": "Fam. Neefjes"
+    "naam": "Sander van der Bosch"
+  },
+  {
+    "minuut": 25,
+    "naam": "Frank Bakker"
   },
   {
     "minuut": 26,
-    "naam": "Cor Bood"
+    "naam": "Sven Pronk"
   },
   {
     "minuut": 27,
-    "naam": "Anja Klaver"
+    "naam": "Renee de Wit"
   },
   {
     "minuut": 28,
-    "naam": "Elektro Neefjes"
+    "naam": "Edwin Burggraaf"
   },
   {
     "minuut": 29,
-    "naam": "Kapsalon Nooij"
+    "naam": "Tessa van der Veen"
+  },
+  {
+    "minuut": 30,
+    "naam": "Sammy Pronk"
   },
   {
     "minuut": 31,
-    "naam": "Fam. Koning"
+    "naam": "Gea Vink"
   },
   {
     "minuut": 32,
-    "naam": "Fam. Bruin"
+    "naam": "Jort de Jong"
   },
   {
     "minuut": 33,
-    "naam": "Fam. Rood"
+    "naam": "Danilee Aker"
+  },
+  {
+    "minuut": 34,
+    "naam": "Patrick Egsdorf"
   },
   {
     "minuut": 35,
-    "naam": "Fam. Vlaar"
+    "naam": "Maikel Kogel"
   },
   {
     "minuut": 36,
-    "naam": "Tuincentrum Koggenland"
+    "naam": "Jack Heax"
   },
   {
     "minuut": 37,
-    "naam": "Astrid Klaver"
+    "naam": "Tineke van Veenen"
   },
   {
     "minuut": 38,
-    "naam": "Fam. Karsten"
+    "naam": "Femke Bouma"
   },
   {
     "minuut": 39,
-    "naam": "Schildersbedrijf Blank"
+    "naam": "Remy de Hart"
   },
   {
     "minuut": 40,
-    "naam": "Fam. Molenaar"
+    "naam": "Jan de Hart"
+  },
+  {
+    "minuut": 41,
+    "naam": "Fred Borgstede"
   },
   {
     "minuut": 42,
-    "naam": "Fam. Groot"
+    "naam": "Doetie de Vries"
+  },
+  {
+    "minuut": 43,
+    "naam": "Ton Kremer"
   },
   {
     "minuut": 44,
-    "naam": "Cees Balk"
+    "naam": "Barry van der Oord"
   },
   {
     "minuut": 45,
-    "naam": "Fam. Zwart"
+    "naam": "Sjanneke Braas"
+  },
+  {
+    "minuut": 46,
+    "naam": "Milan Tammer"
   },
   {
     "minuut": 47,
-    "naam": "Nico Ruiter"
+    "naam": "Roland de Wit"
   },
   {
     "minuut": 48,
-    "naam": "Hans Wagenaar"
+    "naam": "Lizz Noordhuis"
   },
   {
     "minuut": 49,
-    "naam": "Robert Appelman"
+    "naam": "Kay Egsdorf"
+  },
+  {
+    "minuut": 50,
+    "naam": "Sjoerd Weel"
+  },
+  {
+    "minuut": 51,
+    "naam": "Nick Blaauwbroek"
+  },
+  {
+    "minuut": 52,
+    "naam": "Robert Tammer"
   },
   {
     "minuut": 53,
-    "naam": "Familie Overtoom"
+    "naam": "Kees Pronk"
   },
   {
     "minuut": 54,
-    "naam": "Kwakman Groep"
+    "naam": "Menno Aalders"
+  },
+  {
+    "minuut": 55,
+    "naam": "Fenna Pater"
   },
   {
     "minuut": 56,
-    "naam": "Fam. Blank"
+    "naam": "Arno Zijp"
   },
   {
     "minuut": 57,
-    "naam": "Fam. Kaandorp"
+    "naam": "Milene Borgstede"
   },
   {
     "minuut": 58,
-    "naam": "Fam. Bood"
+    "naam": "Jasper Bakker"
   },
   {
     "minuut": 59,
-    "naam": "Fam. Nooij"
+    "naam": "Erik Bunck"
   },
   {
     "minuut": 60,
-    "naam": "Fam. Kok"
+    "naam": "Nico Beunder"
   },
   {
     "minuut": 61,
-    "naam": "VI Travel"
+    "naam": "Iwan Takken"
   },
   {
     "minuut": 62,
-    "naam": "Ted Bijl"
+    "naam": "Elize Kremer"
   },
   {
     "minuut": 63,
-    "naam": "Fam. Ligthart"
+    "naam": "Tim Kramer"
+  },
+  {
+    "minuut": 64,
+    "naam": "Bart Weel"
   },
   {
     "minuut": 65,
-    "naam": "Piet Schuit"
+    "naam": "Linda Burggraaf"
   },
   {
     "minuut": 66,
-    "naam": "Installatiebedrijf Sijm"
+    "naam": "Ron Lakeman"
   },
   {
     "minuut": 67,
-    "naam": "Klaas Neefjes"
+    "naam": "Karin Lakeman"
   },
   {
     "minuut": 68,
-    "naam": "Fam. Sneekes"
+    "naam": "Cor Kuiper"
   },
   {
     "minuut": 69,
-    "naam": "Wilma Bakker"
+    "naam": "Yelmer Koning"
   },
   {
     "minuut": 70,
-    "naam": "Fam. Broersen"
+    "naam": "Barbara Bouma"
+  },
+  {
+    "minuut": 71,
+    "naam": "Edwin Koning"
   },
   {
     "minuut": 72,
-    "naam": "Rijschool Molenaar"
+    "naam": "Nienke Bouma"
   },
   {
     "minuut": 73,
-    "naam": "De Koggeslager"
+    "naam": "Hans Pronk"
   },
   {
     "minuut": 74,
-    "naam": "Fam. Beerepoot"
+    "naam": "Jip Bakker"
+  },
+  {
+    "minuut": 75,
+    "naam": "Lisa van der Vliet"
+  },
+  {
+    "minuut": 76,
+    "naam": "Stan Pater"
   },
   {
     "minuut": 77,
-    "naam": "Fam. Kuip"
+    "naam": "De mannen van der Oord"
   },
   {
     "minuut": 78,
-    "naam": "Fam. Schaper"
+    "naam": "Rens Leeuw"
   },
   {
     "minuut": 79,
-    "naam": "Fysio Avenhorn"
+    "naam": "Wouter Weel"
+  },
+  {
+    "minuut": 80,
+    "naam": "Matthijs Greenan"
   },
   {
     "minuut": 81,
-    "naam": "Loonbedrijf Vriend"
+    "naam": "Duncan Burggraaf"
+  },
+  {
+    "minuut": 82,
+    "naam": "Eric Nat"
   },
   {
     "minuut": 83,
-    "naam": "Ans Overtoom"
+    "naam": "Nina Lakeman"
   },
   {
     "minuut": 84,
-    "naam": "Fysio Avenhorn"
+    "naam": "Nick de Wit"
   },
   {
     "minuut": 85,
-    "naam": "Fam. Wagenaar"
+    "naam": "Paul Wemer"
   },
   {
     "minuut": 86,
-    "naam": "Fam. Bruin"
+    "naam": "Mees Pater"
   },
   {
     "minuut": 87,
-    "naam": "Robert Appelman"
+    "naam": "Rory de Vos"
   },
   {
     "minuut": 88,
-    "naam": "Fam. Kok"
+    "naam": "Janette Pronk"
+  },
+  {
+    "minuut": 89,
+    "naam": "Irene Zijp"
   },
   {
     "minuut": 90,
-    "naam": "Fam. Balk"
+    "naam": "Hans Braas"
   }
 ]

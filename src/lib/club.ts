@@ -135,10 +135,13 @@ export function getDiensten(soort: DienstSoort): Dienst[] {
     .sort((a, b) => a.datum.localeCompare(b.datum));
 }
 
-/** Het complete rooster, gegroepeerd per soort en in menuvolgorde. */
+/** Het complete rooster, gegroepeerd per soort en in menuvolgorde. Soorten
+    waarvoor de club (nog) geen rooster heeft aangeleverd vallen weg. */
 export function getDienstenrooster(): { soort: DienstSoort; label: string; diensten: Dienst[] }[] {
   const volgorde: DienstSoort[] = ['kantine-zaterdag', 'kantine-zondag', 'bestuursdienst', 'schoonmaak'];
-  return volgorde.map((soort) => ({ soort, label: DIENSTLABELS[soort], diensten: getDiensten(soort) }));
+  return volgorde
+    .map((soort) => ({ soort, label: DIENSTLABELS[soort], diensten: getDiensten(soort) }))
+    .filter((blok) => blok.diensten.length > 0);
 }
 
 /**

@@ -6,10 +6,13 @@ import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import Filterbalk from '../../components/Filterbalk.astro';
 import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
-import { getUitslagen, getWedstrijdTeamsPerGroep } from '../../lib/sportlink';
+import { getUitslagen, getWedstrijdTeamsPerGroep, isPupillenteam } from '../../lib/sportlink';
 
 const wedstrijden = getUitslagen();
-const teamsPerGroep = getWedstrijdTeamsPerGroep();
+/* De pupillen O8 tot en met O10 hebben geen uitslagen, dus ook geen filterknop. */
+const teamsPerGroep = getWedstrijdTeamsPerGroep()
+  .map(({ groep, teams }) => ({ groep, teams: teams.filter((naam) => !isPupillenteam(naam)) }))
+  .filter(({ teams }) => teams.length > 0);
 
 /* Zelfde opzet als bij het programma: teams in een uitklapper met kopjes. */
 const filters = [

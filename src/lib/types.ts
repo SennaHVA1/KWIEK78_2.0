@@ -226,6 +226,8 @@ export type Dienst = {
   soort: DienstSoort;
   /** Bijvoorbeeld "09:00 - 13:00". */
   tijd: string;
+  /** Het team dat de dienst levert, bij de kantinedienst op zondag. */
+  team?: string;
   namen: string[];
 };
 

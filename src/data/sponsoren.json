@@ -83,10 +83,12 @@
     "inCarousel": true
   },
   {
-    "id": "cafe-julius",
-    "naam": "Café Julius",
+    "id": "banjos-bar",
+    "naam": "Banjo’s Bar",
     "niveau": "partner",
-    "logo": "/images/sponsoren/cafe-julius.webp",
+    "url": "https://banjosbar.nl",
+    "logo": "/images/sponsoren/banjos-bar.svg",
+    "vlak": "donker",
     "inCarousel": true
   },
   {

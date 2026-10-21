@@ -41,9 +41,9 @@ const FOTOS = [
   ['Heren 1 hero.png', 'club/hero-heren-1', 2400],
   ['veteranen VE 1.jpg', 'club/veteranen', 1600],
   ['Kwiek 35+2-1.jpg', 'club/kwiek-35plus', 1600],
-  ['hoofdsponsor1.jpg', 'sponsoren/kramer-keukens', 640],
-  ['hoofdsponsor2.jpg', 'sponsoren/dralco', 640],
-  ['hoofdsponsorjeugd.jpg', 'sponsoren/braas-en-partners', 640],
+  /* Sponsorlogo's staan hier bewust niet meer in: die worden met de hand in
+     public/images/sponsoren gezet, en dit script overschreef ze met oude
+     versies uit _bronfotos. */
 ];
 
 const bestaat = async (p) => !!(await stat(p).catch(() => null));

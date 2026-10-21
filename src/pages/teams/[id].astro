@@ -18,7 +18,7 @@ import Wedstrijdlijst from '../../components/Wedstrijdlijst.astro';
 import Standentabel from '../../components/Standentabel.astro';
 import { fotoBestaat, actiefotos } from '../../lib/fotos';
 import {
-  getTeams, getTeam, getWedstrijdenVoorTeam, getPoulestand, toonNaam, aantalAfgeschermd,
+  getTeams, getTeam, getWedstrijdenVoorTeam, getPoulestand, toonNaam, aantalAfgeschermd, isPupillenteam,
 } from '../../lib/sportlink';
 
 export function getStaticPaths() {
@@ -32,6 +32,8 @@ const wedstrijden = getWedstrijdenVoorTeam(team.id);
 const programma = wedstrijden.filter((w) => w.uitslag === undefined);
 const uitslagen = wedstrijden.filter((w) => w.uitslag !== undefined).reverse();
 const stand = getPoulestand(team.id);
+/* O8 tot en met O10: geen uitslagen en geen stand, dus ook geen lege blokken. */
+const isPupil = isPupillenteam(team.naam);
 const afgeschermd = aantalAfgeschermd(team.id);
 const fotos = actiefotos(team.id);
 
@@ -59,7 +61,9 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
 
 <Basis
   titel={team.naam}
-  omschrijving={`${team.naam} van v.v. Kwiek '78: programma, uitslagen, stand, selectie, staf en trainingstijden.`}
+  omschrijving={isPupil
+    ? `${team.naam} van v.v. Kwiek '78: programma, selectie, staf en trainingstijden.`
+    : `${team.naam} van v.v. Kwiek '78: programma, uitslagen, stand, selectie, staf en trainingstijden.`}
 >
   <!-- ================================================================== -->
   <!-- Kop met teamfoto                                                   -->
@@ -125,30 +129,45 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
         </div>
       </div>
 
-      <div class="kolom scheiding">
-        <p class="kolom-kicker">Uitslagen</p>
-        <div>
-          <h2 class="kop-sectie blokkop">Gespeeld</h2>
-          <Wedstrijdlijst
-            wedstrijden={uitslagen}
-            toonLocatie={false}
-            zichtbaar={3}
-            kopNiveau={3}
-            leegTekst={`${team.naam} heeft dit seizoen nog niet gespeeld.`}
-          />
+      {isPupil ? (
+        <div class="kolom scheiding">
+          <p class="kolom-kicker">Uitslagen en stand</p>
+          <div>
+            <h2 class="kop-sectie blokkop">Spelen om plezier</h2>
+            <p class="zacht">
+              Bij de pupillen van O8 tot en met O10 houdt de KNVB geen uitslagen en standen bij. Daar
+              draait het om spelplezier en leren voetballen, niet om punten.
+            </p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+        <div class="kolom scheiding">
+          <p class="kolom-kicker">Uitslagen</p>
+          <div>
+            <h2 class="kop-sectie blokkop">Gespeeld</h2>
+            <Wedstrijdlijst
+              wedstrijden={uitslagen}
+              toonLocatie={false}
+              zichtbaar={3}
+              kopNiveau={3}
+              leegTekst={`${team.naam} heeft dit seizoen nog niet gespeeld.`}
+            />
+          </div>
+        </div>
 
-      <div class="kolom scheiding">
-        <p class="kolom-kicker">Stand</p>
-        <div>
-          <h2 class="kop-sectie blokkop">{team.pouleNaam}</h2>
-          <Standentabel
-            stand={stand}
-            geenStandTekst={`Voor ${team.pouleNaam} houdt de KNVB geen stand bij. Bij de pupillen tot en met onder 11 draait het om spelplezier en niet om punten. De uitslagen staan hierboven wel.`}
-          />
+        <div class="kolom scheiding">
+          <p class="kolom-kicker">Stand</p>
+          <div>
+            <h2 class="kop-sectie blokkop">{team.pouleNaam}</h2>
+            <Standentabel
+              stand={stand}
+              geenStandTekst={`Voor ${team.pouleNaam} houdt de KNVB geen stand bij. De uitslagen staan hierboven wel.`}
+            />
+          </div>
         </div>
-      </div>
+        </>
+      )}
     </div>
   </section>
 

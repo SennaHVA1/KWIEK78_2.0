@@ -55,7 +55,13 @@ function bron<T>(naam: string, demo: T): T {
 /** Draait de site op echte Sportlink-data, of nog op de demodata? */
 export const IS_SPORTLINK = Object.keys(uitSportlink).length > 0;
 
-const wedstrijden = bron('wedstrijden', ruweWedstrijden as Wedstrijd[]);
+/* Pupillen O8 tot en met O10 spelen zonder uitslagen en standen. Van hen
+   houden we alleen het programma over: een pupillenwedstrijd met een score,
+   of een van voor vandaag, valt weg. Zo komt er nooit een uitslag van de
+   jongste jeugd op de site, ook niet als Sportlink er toch een meestuurt. */
+const vandaag = new Date().toISOString().slice(0, 10);
+const wedstrijden = bron('wedstrijden', ruweWedstrijden as Wedstrijd[])
+  .filter((w) => !isPupillenwedstrijd(w) || (w.uitslag === undefined && w.datum.slice(0, 10) >= vandaag));
 const teams = bron('teams', ruweTeams as Team[]);
 const standen = bron('standen', ruweStanden as Poulestand[]);
 const verjaardagen = bron('verjaardagen', ruweVerjaardagen as Verjaardag[]);
@@ -81,6 +87,19 @@ export function isVanTeam(wedstrijd: Wedstrijd, team: Team): boolean {
     return wedstrijd.thuisteamId === team.teamcode || wedstrijd.uitteamId === team.teamcode;
   }
   return wedstrijd.thuisteam === team.naam || wedstrijd.uitteam === team.naam;
+}
+
+/**
+ * Speelt dit team bij de pupillen van O8 tot en met O10 (ook MO en JO)? Daar
+ * houdt de KNVB geen uitslagen en standen bij: het gaat om spelplezier.
+ */
+export function isPupillenteam(naam: string): boolean {
+  return /^(JO|MO|JM|O)\s*(7|8|9|10)\b/.test(teamcode(naam).toUpperCase());
+}
+
+/** Speelt een pupillenteam van Kwiek in deze wedstrijd? */
+export function isPupillenwedstrijd(wedstrijd: Wedstrijd): boolean {
+  return [wedstrijd.thuisteam, wedstrijd.uitteam].some((naam) => naam.startsWith(CLUB) && isPupillenteam(naam));
 }
 
 /** Speelt Kwiek deze wedstrijd thuis? */
@@ -392,8 +411,8 @@ export function aantalAfgeschermd(teamId: string): number {
 
 /**
  * De poulestand van een team. Geeft null terug wanneer de KNVB voor die
- * categorie geen stand publiceert; dat is het geval voor alle pupillen onder
- * JO12, dus ook voor onze MO9-1.
+ * categorie geen stand publiceert. Voor de pupillen O8 tot en met O10 geven
+ * we altijd null, ook als Sportlink toch iets meestuurt.
  *
  * Sportlink-artikel: `poulestand`
  * Relevante velden: positie, teamnaam, gespeeldewedstrijden, winst, gelijk,
@@ -401,13 +420,14 @@ export function aantalAfgeschermd(teamId: string): number {
  */
 export function getPoulestand(teamId: string): Poulestand | null {
   const team = getTeam(teamId);
-  if (!team) return null;
+  if (!team || isPupillenteam(team.naam)) return null;
   return standen.find((s) => s.pouleId === team.pouleId) ?? null;
 }
 
-/** Alle standen van de teams die op de site staan, in menuvolgorde. */
+/** Alle standen van de teams die op de site staan, in menuvolgorde. De
+    pupillen O8 tot en met O10 staan er niet tussen: die hebben geen stand. */
 export function getAllePoulestanden(): { team: Team; stand: Poulestand | null }[] {
-  return getTeams().map((team) => ({ team, stand: getPoulestand(team.id) }));
+  return getTeams().filter((team) => !isPupillenteam(team.naam)).map((team) => ({ team, stand: getPoulestand(team.id) }));
 }
 
 /* ==========================================================================

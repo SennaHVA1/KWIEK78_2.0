@@ -3,8 +3,8 @@
  * Vrijwillige diensten.
  *
  * Op de oude site was dit een pagina met een knop naar een PDF. Nu staat het
- * rooster gewoon op de pagina, in vier blokken: kantinedienst zaterdag,
- * kantinedienst zondag, bestuursdienst en schoonmaak.
+ * rooster gewoon op de pagina, een blok per soort dienst. Een soort zonder
+ * aangeleverd rooster (nu kantine zaterdag en bestuursdienst) valt weg.
  *
  * Onder 640 pixels valt de tabel uit elkaar in kaarten. Dat is bewust: een
  * tabel van vier kolommen die je horizontaal moet schuiven is op een telefoon
@@ -32,7 +32,7 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
 
 <Basis
   titel="Vrijwillige diensten"
-  omschrijving="Het dienstenrooster van v.v. Kwiek '78: kantinedienst zaterdag en zondag, bestuursdienst en schoonmaak."
+  omschrijving="Het dienstenrooster van v.v. Kwiek '78: kantinedienst op zondag en schoonmaak op maandag."
 >
   <Paginakop
     foto="/images/club/kantine-vol.webp"
@@ -86,7 +86,10 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
                           <span class="rooster-jaar data">{datumZonderDag(`${dienst.datum}T00:00`).split(' ').pop()}</span>
                         </td>
                         <td data-label="Tijd" class="data">{dienst.tijd}</td>
-                        <td data-label="Namen">{dienst.namen.join(', ')}</td>
+                        <td data-label="Namen">
+                          {dienst.team && <span class="rooster-team">{dienst.team}</span>}
+                          {dienst.namen.join(', ')}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -114,7 +117,7 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
           <div class="lopende-tekst">
             <p>
               Ruil onderling en geef daarna even door wie het overneemt. Zo blijft het rooster kloppen
-              en staat er zaterdagochtend altijd iemand achter de bar.
+              en staat er altijd iemand achter de bar.
             </p>
             <p>
               Kom je er niet uit, dan lost {coordinator ? coordinator.naam : 'de vrijwilligerscoordinator'} het op.
@@ -204,6 +207,7 @@ const totaal = rooster.reduce((som, blok) => som + blok.diensten.length, 0);
   .rooster tr[hidden] { display: none; }
   .rooster-datum { display: block; font-weight: 600; }
   .rooster-jaar { display: none; }
+  .rooster-team { display: block; font-weight: 600; }
 
   .rooster-leeg { font-size: var(--text-klein); padding-block: 1rem; }
   .rooster-leeg[hidden] { display: none; }

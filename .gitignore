@@ -10,6 +10,16 @@ preview.log
 # Zie IMAGES.md voor de werkwijze met npm run fotos.
 _bronfotos/
 
+# Wat de club aanlevert (roosters, zips, mails als pdf) gaat naar
+# _aangeleverd/ en blijft buiten git. Losse kantoorbestanden en archieven in
+# de projectmap ook, zodat ze nooit per ongeluk meegaan.
+_aangeleverd/
+*.xlsx
+*.xls
+*.docx
+*.pdf
+*.zip
+
 # Het Sportlink client_id staat hierin.
 .env
 

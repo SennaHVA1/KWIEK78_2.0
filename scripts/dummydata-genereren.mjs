@@ -1,6 +1,7 @@
 /**
  * Genereert de dummydata die te groot is om met de hand te onderhouden:
- * verjaardagen, het minutenspel en het vrijwilligersrooster.
+ * verjaardagen en het vrijwilligersrooster. Het minutenspel staat er niet meer
+ * in: minutenspel.json bevat sinds seizoen 2026-2027 de echte trekking.
  *
  * Draaien met: node scripts/dummydata-genereren.mjs
  *
@@ -83,46 +84,7 @@ await writeFile('src/data/verjaardagen.json', JSON.stringify(verjaardagen, null,
 console.log(`verjaardagen.json: ${verjaardagen.length} leden`);
 
 /* ------------------------------------------------------------------ */
-/* 2. Minutenspel                                                      */
-/* ------------------------------------------------------------------ */
-/* Negentig minuten, waarvan een deel verkocht. De vrije minuten blijven
-   leeg zodat de pagina kan laten zien wat nog te koop is. */
-
-const KOPERS = [
-  'Familie Overtoom', 'Familie Sijm', 'Bakkerij Klaver', 'Fam. Kaandorp',
-  'Cees Balk', 'Wilma Bakker', 'Kwakman Groep', 'Fam. Bood', 'Jaap Sijm',
-  'De Koggeslager', 'Fam. Nooij', 'Klaas Neefjes', 'Autoschade Karsten',
-  'Fam. Beerepoot', 'Truus Karsten', 'Rijschool Molenaar', 'Fam. Groot',
-  'Piet Schuit', 'Fysio Avenhorn', 'Fam. Vriend', 'Ted Bijl', 'Fam. Blank',
-  'Elektro Neefjes', 'Fam. Karsten', 'Marja Ligthart', 'Fam. Koning',
-  'Kapsalon Nooij', 'Fam. Molenaar', 'Cor Bood', 'Loonbedrijf Vriend',
-  'Fam. Schaper', 'Hans Wagenaar', 'Fam. Ligthart', 'Ans Overtoom',
-  'Tuincentrum Koggenland', 'Fam. Duin', 'Gerard Kok', 'Fam. Kuip',
-  'Schildersbedrijf Blank', 'Fam. Zwart', 'Nico Ruiter', 'Fam. Broersen',
-  'Bouwbedrijf Appelman', 'Fam. Reijne', 'Michel Bood', 'Fam. Bruin',
-  'Transportbedrijf Groot', 'Fam. Rood', 'Sandra Bood', 'Fam. Vlaar',
-  'Installatiebedrijf Sijm', 'Fam. Neefjes', 'Robert Appelman', 'Fam. Sneekes',
-  'Hoveniersbedrijf Beerepoot', 'Fam. Wagenaar', 'Astrid Klaver', 'Fam. Pronk',
-  'VI Travel', 'Fam. Kok', 'Anja Klaver', 'Fam. Balk',
-];
-
-const rndMin = maakRandom(631978);
-const minuten = [];
-const gebruikt = new Set();
-for (let minuut = 1; minuut <= 90; minuut++) {
-  // Ongeveer zeventig procent verkocht: dat is een realistische stand halverwege.
-  if (rndMin() > 0.7) continue;
-  let naam = kies(rndMin, KOPERS);
-  let poging = 0;
-  while (gebruikt.has(naam) && poging < 20) { naam = kies(rndMin, KOPERS); poging++; }
-  gebruikt.add(naam);
-  minuten.push({ minuut, naam });
-}
-await writeFile('src/data/minutenspel.json', JSON.stringify(minuten, null, 2) + '\n', 'utf8');
-console.log(`minutenspel.json: ${minuten.length} van 90 minuten verkocht`);
-
-/* ------------------------------------------------------------------ */
-/* 3. Vrijwillige diensten                                             */
+/* 2. Vrijwillige diensten                                             */
 /* ------------------------------------------------------------------ */
 /* Vier soorten diensten, per speelweekend ingevuld. Dit is eigen data van
    de club, geen Sportlink. In productie komt dit uit een gedeeld

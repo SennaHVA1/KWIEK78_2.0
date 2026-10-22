@@ -78,13 +78,19 @@ export const MENU: Menu_groep[] = [
       { label: 'Lid worden', href: '/club/lid-worden', omschrijving: 'Aanmelden en wijzigen' },
       { label: 'Agenda', href: '/club/agenda' },
       { label: 'Verjaardagen', href: '/club/verjaardagen', omschrijving: 'Wie er binnenkort jarig is' },
-      { label: 'Minutenspel', href: '/club/minutenspel' },
       { label: 'Informatiebulletin', href: '/club/informatiebulletin', omschrijving: 'Huisregels, contributie en lidmaatschap' },
       { label: 'Ereleden', href: '/club/ereleden' },
     ],
   },
   { label: 'Vrijwillige diensten', href: '/vrijwillige-diensten' },
-  { label: 'Sponsoring', href: '/sponsoring' },
+  {
+    label: 'Sponsoring',
+    href: '/sponsoring',
+    kinderen: [
+      { label: 'Sponsor worden', href: '/sponsoring', omschrijving: "Bedrijven, Club van '78 en All Stars" },
+      { label: 'Minutenspel', href: '/club/minutenspel', omschrijving: '25 euro voor een minuut' },
+    ],
+  },
   { label: 'Clubwinkel', href: CLUBGEGEVENS.clubwinkel, extern: true },
   { label: 'Contact', href: '/contact' },
 ];

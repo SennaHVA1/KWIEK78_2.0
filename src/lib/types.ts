@@ -40,7 +40,7 @@ export type Wedstrijd = {
 };
 
 /** Categorie waarin een team op de site valt. Bepaalt het menu onder "Teams". */
-export type TeamCategorie = 'selectie' | 'jeugd' | 'dames';
+export type TeamCategorie = 'selectie' | 'jeugd' | 'dames' | 'zaal';
 
 /**
  * Een speler.
@@ -93,7 +93,7 @@ export type Team = {
   /** Poule-identificatie, gebruikt voor getPoulestand(). */
   pouleId: string;
   pouleNaam: string;
-  speeldag: 'zaterdag' | 'zondag';
+  speeldag: 'vrijdag' | 'zaterdag' | 'zondag';
   /** Bepaalt of de AVG-filtering voor jeugdleden wordt toegepast. */
   isJeugd: boolean;
   /**

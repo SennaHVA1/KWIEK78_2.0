@@ -1,11 +1,14 @@
 ---
 /**
- * Het minutenspel: negentig minuten, per stuk te koop, de winnaar is de
- * minuut waarin het laatste doelpunt van het seizoen valt.
+ * Het minutenspel: negentig minuten in negentig dichte enveloppen, 25 euro
+ * per stuk. Valt het eerste Kwiek-doelpunt van een thuiswedstrijd van Heren-1
+ * of Vrouwen-1 in jouw minuut, dan win je de pot van 50 euro. Wordt er niet
+ * gescoord, dan schuift de pot door, tot maximaal 150 euro.
+ *
+ * De speluitleg is aangeleverd door de club (seizoen 2026-2027).
  *
  * Het raster is bewust een raster en geen tabel: negentig genummerde vakjes
- * naast elkaar lezen sneller dan negentig regels onder elkaar, en je ziet in
- * een oogopslag wat er nog vrij is.
+ * naast elkaar lezen sneller dan negentig regels onder elkaar.
  */
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
@@ -14,60 +17,116 @@ import { getMinutenspel, getMinutenspelStand, getContactpersoon } from '../../li
 const minuten = getMinutenspel();
 const stand = getMinutenspelStand();
 const penningmeester = getContactpersoon('Penningmeester');
+
+const kort = [
+  { getal: '€ 25', wat: 'per minuut, voor het hele seizoen' },
+  { getal: '€ 50', wat: 'voor het eerste Kwiek-doelpunt in jouw minuut' },
+  { getal: '€ 150', wat: 'de hoogste pot, na twee thuiswedstrijden zonder Kwiek-doelpunt' },
+];
 ---
 
 <Basis
   titel="Minutenspel"
-  omschrijving="Het minutenspel van v.v. Kwiek '78: koop een minuut en win de pot als het laatste doelpunt van het seizoen in jouw minuut valt."
+  omschrijving="Het minutenspel van v.v. Kwiek '78: voor 25 euro een minuut, en valt het eerste Kwiek-doelpunt van Heren-1 of Vrouwen-1 thuis in jouw minuut, dan win je 50 euro."
 >
   <Paginakop
     foto="/images/club/kaart-sportpark.webp"
     fotoPositie="center 50%"
-    kicker="Club"
+    kicker="Sponsoring"
     titel="Minutenspel"
-    intro="Al sinds 1994. Koop een minuut, en valt het laatste doelpunt van het seizoen daarin, dan is de pot voor jou."
+    intro="Voor 25 euro een minuut, het hele seizoen. Scoort Kwiek '78 thuis het eerste doelpunt in jouw minuut, dan win je 50 euro."
   />
 
   <section class="vlak-wit sectie">
     <div class="omhulsel">
       <div class="kolom">
-        <p class="kolom-kicker">Hoe het werkt</p>
+        <p class="kolom-kicker">Seizoen 2026-2027</p>
 
         <div class="uitleg">
           <div class="lopende-tekst">
+            <h3>Wat kost een minuut?</h3>
             <p>
-              Aan het begin van het seizoen zijn alle negentig minuten van een wedstrijd te koop.
-              Een minuut kost tien euro en je mag er zoveel kopen als je wilt.
+              Voor 25 euro ben je eigenaar van een minuut, voor alle competitiewedstrijden die
+              Heren-1 en Vrouwen-1 dit seizoen thuis spelen. Dat zijn er dertien per team, en je
+              speelt ze allemaal met dezelfde minuut.
             </p>
             <p>
-              Aan het eind van het seizoen kijken we naar de laatste thuiswedstrijd van het eerste
-              waarin gescoord is. De minuut waarin dat laatste doelpunt viel, is de winnende.
-              Blessuretijd telt mee bij de negentigste minuut.
+              Om iedereen een eerlijke kans te geven wordt je minuut uit een tomboladoos getrokken.
+              Er zijn negentig enveloppen, een voor elke minuut. De envelop is dicht, dus je weet
+              vooraf niet welke minuut je krijgt.
+            </p>
+
+            <h3>De trekking</h3>
+            <p>
+              De trekking voor dit seizoen is geweest, op donderdagavond 17 september in de
+              kantine. Voor wie er niet bij kon zijn, is de minuut getrokken in het bijzijn van de
+              voltallige PR-commissie en doorgegeven per mail. Alle negentig minuten zijn verkocht; hieronder zie je wie welke minuut heeft.
+            </p>
+
+            <h3>Wat win je?</h3>
+            <p>
+              Scoort Heren-1 of Vrouwen-1 in een thuiswedstrijd het eerste doelpunt in jouw minuut,
+              dan win je 50 euro. Het gaat alleen om het eerste doelpunt van Kwiek '78: wint Kwiek
+              met 5-1, dan telt alleen de eerste treffer. Verliest Kwiek met 3-1, dan wordt er
+              uitgekeerd voor dat ene Kwiek-doelpunt.
             </p>
             <p>
-              De opbrengst gaat volledig naar de jeugdafdeling. Vorig seizoen was dat 620 euro,
-              waarvan de helft naar de winnaar ging en de rest naar nieuwe trainingsballen.
+              Scoort Kwiek niet, dan wordt er die wedstrijd niets uitgekeerd en gaat de pot door
+              naar de volgende wedstrijd, net zo lang tot er wel gescoord wordt. Na twee
+              thuiswedstrijden zonder Kwiek-doelpunt is de pot in de derde wedstrijd 150 euro.
+              Hoger wordt hij niet.
+            </p>
+
+            <h3>Wie bepaalt de minuut?</h3>
+            <p>
+              De scheidsrechter bepaalt in welke minuut het eerste doelpunt van Kwiek is gevallen.
+              Wie de 45e of de 90e minuut heeft, krijgt de blessuretijd erbij. De lijsten hangen
+              in de kantine en staan hieronder op de website.
             </p>
             <p>
-              Meedoen? Achter de bar ligt de lijst, of stuur een bericht aan
-              {penningmeester ? (
-                <a href={`mailto:${penningmeester.email}`}>{penningmeester.naam}</a>
-              ) : 'de penningmeester'}.
+              Met het minutenspel steun je de club, maak je kans op een prijs en wordt elke
+              thuiswedstrijd van Heren-1 en Vrouwen-1 net even spannender.
             </p>
+            {stand.vrij > 0 ? (
+              <p>
+                Meedoen? Vraag ernaar in de kantine, of stuur een bericht aan
+                {penningmeester ? (
+                  <a href={`mailto:${penningmeester.email}`}>{penningmeester.naam}</a>
+                ) : 'de penningmeester'}.
+              </p>
+            ) : (
+              <p>
+                Volgend seizoen weer meedoen? Houd de website en de kantine in de gaten: voor de
+                nieuwe trekking gaan de enveloppen opnieuw in de verkoop.
+              </p>
+            )}
           </div>
 
-          <div class="teller">
-            <p class="teller-kop label">Stand van de verkoop</p>
-            <p class="teller-getal data">
-              <span class="teller-verkocht">{stand.verkocht}</span>
-              <span class="teller-van">van {stand.totaal}</span>
-            </p>
-            <div class="balk" role="img" aria-label={`${stand.verkocht} van ${stand.totaal} minuten verkocht`}>
-              <span class="balk-vulling" style={`width:${(stand.verkocht / stand.totaal) * 100}%`}></span>
+          <div class="zijkant">
+            <ul class="kort">
+              {kort.map((regel) => (
+                <li>
+                  <span class="kort-getal">{regel.getal}</span>
+                  <span class="kort-wat">{regel.wat}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div class="teller">
+              <p class="teller-kop label">Verkochte minuten</p>
+              <p class="teller-getal data">
+                <span class="teller-verkocht">{stand.verkocht}</span>
+                <span class="teller-van">van {stand.totaal}</span>
+              </p>
+              <div class="balk" role="img" aria-label={`${stand.verkocht} van ${stand.totaal} minuten verkocht`}>
+                <span class="balk-vulling" style={`width:${(stand.verkocht / stand.totaal) * 100}%`}></span>
+              </div>
+              <p class="teller-vrij zacht">
+                {stand.vrij > 0
+                  ? `Nog ${stand.vrij} ${stand.vrij === 1 ? 'envelop' : 'enveloppen'} over, 25 euro per stuk.`
+                  : 'Uitverkocht. De trekking was op 17 september.'}
+              </p>
             </div>
-            <p class="teller-vrij zacht">
-              Nog {stand.vrij} {stand.vrij === 1 ? 'minuut' : 'minuten'} vrij, tien euro per stuk.
-            </p>
           </div>
         </div>
       </div>
@@ -79,24 +138,27 @@ const penningmeester = getContactpersoon('Penningmeester');
   <section class="vlak-zwart sectie">
     <div class="omhulsel">
       <div class="kolom">
-        <p class="kolom-kicker">Het bord</p>
+        <p class="kolom-kicker">De lijst</p>
         <div>
           <div class="bordkop">
-            <h2 class="kop-sectie">Alle negentig minuten</h2>
-            <p class="legenda">
-              <span class="legenda-item"><span class="legenda-vlak legenda-vlak--vrij"></span> vrij</span>
-              <span class="legenda-item"><span class="legenda-vlak legenda-vlak--bezet"></span> verkocht</span>
-            </p>
+            <h2 class="kop-sectie">Wie heeft welke minuut</h2>
+            {stand.vrij > 0 && (
+              <p class="legenda">
+                <span class="legenda-item"><span class="legenda-vlak legenda-vlak--vrij"></span> niet verkocht</span>
+                <span class="legenda-item"><span class="legenda-vlak legenda-vlak--bezet"></span> verkocht</span>
+              </p>
+            )}
           </div>
 
           <ol class="minutenbord">
             {minuten.map((regel) => (
               <li class:list={['minuut', regel.naam ? 'is-bezet' : 'is-vrij']}>
-                <span class="minuut-nummer data">{regel.minuut}</span>
-                <span class="minuut-naam">{regel.naam ?? 'vrij'}</span>
+                <span class="minuut-nummer data">{regel.minuut}{(regel.minuut === 45 || regel.minuut === 90) && '+'}</span>
+                <span class="minuut-naam">{regel.naam ?? 'niet verkocht'}</span>
               </li>
             ))}
           </ol>
+          <p class="bord-noot">De 45e en de 90e minuut krijgen de blessuretijd erbij.</p>
         </div>
       </div>
     </div>
@@ -108,6 +170,27 @@ const penningmeester = getContactpersoon('Penningmeester');
   @media (min-width: 900px) {
     .uitleg { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
   }
+
+  .zijkant { display: grid; gap: 1rem; }
+
+  .kort {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: var(--radius-vlak);
+    background: var(--color-zwart);
+    color: var(--color-wit);
+  }
+  .kort li { display: grid; gap: 0.1rem; }
+  .kort-getal {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1.05;
+    color: var(--color-blauw);
+  }
+  .kort-wat { font-size: var(--text-klein); color: var(--color-grijs); line-height: 1.45; }
 
   .teller {
     display: grid;
@@ -188,4 +271,6 @@ const penningmeester = getContactpersoon('Penningmeester');
     font-weight: 400;
     font-style: italic;
   }
+
+  .bord-noot { margin-top: 1rem; font-size: var(--text-klein); color: var(--color-grijs); }
 </style>

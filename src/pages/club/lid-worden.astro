@@ -31,12 +31,10 @@ const categorieen = getTeamsPerCategorie();
 const ledenadministratie = getContactpersoon('Ledenadministratie');
 
 /* De momenten waarop er kantinediensten zijn: bar en keuken op de
-   wedstrijddagen, schoonmaak op maandag. */
+   wedstrijddagen. Schoonmaken staat er op verzoek van de club niet bij. */
 const kantinedagen = [
   { waarde: 'zaterdag', naam: 'Zaterdag', uitleg: 'Bar of keuken' },
   { waarde: 'zondag', naam: 'Zondag', uitleg: 'Bar of keuken' },
-  { waarde: 'maandagochtend', naam: 'Maandagochtend', uitleg: 'Schoonmaak' },
-  { waarde: 'maandagavond', naam: 'Maandagavond', uitleg: 'Schoonmaak' },
 ];
 ---
 
@@ -490,7 +488,7 @@ const kantinedagen = [
     accent-color: var(--color-blauwdiep);
   }
 
-  /* Kantinedienst: vier aanklikbare tegels, twee naast elkaar. */
+  /* Kantinedienst: twee aanklikbare tegels naast elkaar. */
   .kantinedagen { border: 0; padding: 0; margin: 0; min-width: 0; }
   .kantinedagen legend {
     font-family: var(--font-smal);

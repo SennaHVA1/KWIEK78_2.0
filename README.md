@@ -33,7 +33,7 @@ npm run fotos                                # verkleint /_bronfotos naar /publi
 node scripts/clublogos-genereren.mjs         # tijdelijke wapens van tegenstanders
 node scripts/sponsorlogos-genereren.mjs      # tijdelijke sponsorlogo's
 node scripts/standen-genereren.mjs           # poulestanden, met controle op consistentie
-node scripts/dummydata-genereren.mjs         # verjaardagen, minutenspel, dienstenrooster
+node scripts/dummydata-genereren.mjs         # verjaardagen, dienstenrooster
 ```
 
 De onderste vier zijn alleen voor de demo en kunnen weg zodra de echte bronnen
@@ -153,8 +153,8 @@ het is expliciet ontworpen en niet als randgeval afgedaan.
 
 Alles in `src/data/`, als losse JSON-bestanden. Het bestuur, de commissies, de
 ereleden en de sponsoren zijn **echte gegevens** die de club heeft aangeleverd.
-Wedstrijden, teams, standen, verjaardagen, nieuws, agenda, diensten en het
-minutenspel zijn voorbeeldmateriaal.
+Het minutenspel is de echte trekking van seizoen 2026-2027. Wedstrijden, teams,
+standen, verjaardagen, nieuws, agenda en diensten zijn voorbeeldmateriaal.
 
 | Bestand | Inhoud | Toekomstige bron |
 |---|---|---|
@@ -169,7 +169,7 @@ minutenspel zijn voorbeeldmateriaal.
 | `bestuur.json` | 21 functies, **echte gegevens** | eigen beheer |
 | `ereleden.json` | 26 namen, **echte gegevens** | eigen beheer |
 | `bulletins.json` | 5 documenten | eigen beheer |
-| `minutenspel.json` | 66 verkochte minuten | eigen beheer |
+| `minutenspel.json` | 90 minuten, **echte trekking** 2026-2027 | eigen beheer |
 | `videos.json` | 9 afleveringen Kwiek Inside, echte YouTube-id's | eigen beheer |
 
 **Geen enkele pagina importeert rechtstreeks een JSON-bestand.** Alles loopt
@@ -252,11 +252,13 @@ het gratis Cloudflare-plan.
 - **Clubnaam.** Sportlink schrijft "Kwiek 78"; het script maakt er overal
   "Kwiek '78" van. De clubcode is **BBFW592**.
 - **Jeugdteams** heten tegenwoordig O17-1 in plaats van JO17-1.
-- **Teams.** Alle veldteams uit een bondscompetitie komen op de site, nu
-  zeventien. In het menu staan alleen de seniorenteams los; de jeugd (ook de
-  meidenteams) staat op `/teams`. Futsal- en lokale teams niet; hun wedstrijden staan wel in het
-  programma. Wedstrijden worden op teamcode aan een team gekoppeld, want het
-  futsalteam en het veldteam heten allebei "Kwiek '78 1".
+- **Teams.** Alle veld- en zaalteams uit een bondscompetitie komen op de site,
+  nu negentien. In het menu staan alleen de seniorenteams los; de jeugd (ook de
+  meidenteams) staat op `/teams`, de zaalteams daar onder "Zaalvoetbal".
+  Lokale teams niet; hun wedstrijden staan wel in het programma. Wedstrijden
+  worden op teamcode aan een team gekoppeld, want het futsalteam en het
+  veldteam heten in Sportlink allebei "Kwiek 78 1". Op de site heet het
+  zaalteam "Kwiek '78 Zaal 1" (id `kwiek-78-zaal-1`).
 - **Selecties** hebben geen rugnummers of posities; de teampagina laat die
   kolom dan weg. **Trainingstijden**, fotobijschriften en een introtekst levert
   Sportlink niet: die houdt de club bij in `src/data/teaminfo.json`, per

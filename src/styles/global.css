@@ -326,12 +326,20 @@
     background: color-mix(in srgb, var(--color-blauw) 13%, transparent);
     box-shadow: inset 3px 0 0 var(--color-blauw);
   }
+  /* Is het donkere vlak zelf afgelast (de kop van de wedstrijdpagina), dan
+     mengen we met zwart en niet met transparant: anders verdwijnt het zwart
+     en staat er witte tekst op lichtblauw. */
+  .vlak-zwart.is-afgelast, .vlak-inkt.is-afgelast {
+    background: color-mix(in srgb, var(--color-blauw) 13%, var(--color-zwart));
+    box-shadow: inset 3px 0 0 var(--color-blauw);
+  }
   .is-afgelast .doorgehaald {
     text-decoration: line-through;
     text-decoration-thickness: 2px;
     text-decoration-color: var(--color-blauwdiep);
   }
-  .vlak-zwart .is-afgelast .doorgehaald { text-decoration-color: var(--color-blauw); }
+  .vlak-zwart .is-afgelast .doorgehaald,
+  .vlak-zwart.is-afgelast .doorgehaald { text-decoration-color: var(--color-blauw); }
 
   .merk {
     display: inline-flex;

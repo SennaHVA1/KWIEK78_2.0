@@ -195,13 +195,13 @@ async function wedstrijden() {
    ========================================================================== */
 
 /**
- * Alleen de veldteams die in een bondscompetitie spelen. Futsal en lokale
- * teams vallen weg; hun wedstrijden staan wel gewoon in het programma.
+ * De veld- en zaalteams die in een bondscompetitie spelen. Lokale teams
+ * vallen weg; hun wedstrijden staan wel gewoon in het programma.
  */
 function siteteams(ruweTeams) {
   const opCode = new Map();
   for (const t of ruweTeams) {
-    if (t.teamsoort !== 'bond' || t.kalespelsoort !== 'VE') continue;
+    if (t.teamsoort !== 'bond' || !['VE', 'ZA'].includes(t.kalespelsoort)) continue;
     if (t.competitiesoort !== 'regulier' || !t.poulecode) continue;
     /* Bij meerdere fases in een seizoen is de hoogste poulecode de nieuwste. */
     const bestaand = opCode.get(t.teamcode);
@@ -211,6 +211,7 @@ function siteteams(ruweTeams) {
 }
 
 function categorieVan(t, naam) {
+  if (t.kalespelsoort === 'ZA') return 'zaal';
   /* Ook de meidenteams: een ouder van een MO9-speelster zoekt bij de jeugd. */
   if (t.leeftijdscategorie?.startsWith('Onder')) return 'jeugd';
   if (/vrouw/i.test(t.leeftijdscategorie ?? '') || /\bVR\d/.test(naam)) return 'dames';
@@ -227,10 +228,17 @@ const volledigeNaam = (lid) => [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
 const jeugdleden = new Map();
 
 function naarTeam(t, indeling) {
-  const naam = teamnaam(t.teamnaam);
+  const isZaal = t.kalespelsoort === 'ZA';
+  /* Het zaalteam heet in Sportlink net als het veldteam ("Kwiek 78 1"). Op de
+     site zetten we er Zaal tussen; de wedstrijden koppelen op teamcode, dus
+     de naam hoeft niet gelijk te zijn aan die in het programma. */
+  const naam = isZaal
+    ? teamnaam(t.teamnaam).replace("Kwiek '78", "Kwiek '78 Zaal")
+    : teamnaam(t.teamnaam);
   const code = naam.replace("Kwiek '78", '').trim();
   const isJeugd = Boolean(t.leeftijdscategorie?.startsWith('Onder'));
-  const speeldag = /zondag/i.test(`${t.speeldag} ${t.spelsoort}`) ? 'zondag' : 'zaterdag';
+  const speeldagtekst = `${t.speeldag} ${t.spelsoort} ${t.speeldagteam}`;
+  const speeldag = /vrijdag/i.test(speeldagtekst) ? 'vrijdag' : /zondag/i.test(speeldagtekst) ? 'zondag' : 'zaterdag';
 
   const spelers = indeling
     .filter((lid) => lid.rol === 'Teamspeler')

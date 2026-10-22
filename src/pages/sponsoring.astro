@@ -9,8 +9,9 @@
  *   Bedrijven      een logo op het shirt of een bord langs het veld
  *   Club van '78   particulieren, 78 euro per jaar, bepalen zelf waar het heen gaat
  *   All Stars      particulieren, een bedrag per doelpunt van het eerste
+ *   Minutenspel    25 euro voor een minuut, met een eigen pagina onder /club
  *
- * De laatste twee zijn geen sponsors met een logo maar mensen. Ze in hetzelfde
+ * De laatste drie zijn geen sponsors met een logo maar mensen. Ze in hetzelfde
  * logoraster zetten was de reden dat de pagina niet klopte.
  *
  * DE FORMULIEREN ZIJN IN DEZE DEMO NIET ACTIEF. Na oplevering gaan ze naar
@@ -41,18 +42,18 @@ const gerealiseerd = [
 
 <Basis
   titel="Sponsoring"
-  omschrijving="Sponsor worden van v.v. Kwiek '78: bedrijfssponsoring, de Club van '78 en de All Stars."
+  omschrijving="Sponsor worden van v.v. Kwiek '78: bedrijfssponsoring, de Club van '78, de All Stars en het minutenspel."
 >
   <Paginakop
     foto="/images/club/thuiswedstrijd.webp"
     fotoPositie="center 40%"
     kicker="Steun de club"
     titel="Sponsoring"
-    intro="Er zijn drie manieren om mee te doen. Een voor bedrijven, en twee voor iedereen die Kwiek een warm hart toedraagt."
+    intro="Er zijn vier manieren om mee te doen. Een voor bedrijven, en drie voor iedereen die Kwiek een warm hart toedraagt."
   />
 
   <!-- ================================================================== -->
-  <!-- Drie wegen, in een oogopslag                                       -->
+  <!-- Vier wegen, in een oogopslag                                       -->
   <!-- ================================================================== -->
   <section class="vlak-wit keuze-sectie">
     <div class="omhulsel">
@@ -74,6 +75,12 @@ const gerealiseerd = [
           <h2 class="keuze-titel">All Stars</h2>
           <p class="keuze-tekst">Een bedrag naar keuze per doelpunt van het eerste.</p>
           <a class="knop knop--rand" href="#all-stars">Meedoen</a>
+        </li>
+        <li class="keuze">
+          <p class="keuze-wie">Voor iedereen</p>
+          <h2 class="keuze-titel">Minutenspel</h2>
+          <p class="keuze-tekst">25 euro voor een minuut. Valt daarin het eerste Kwiek-doelpunt, dan win je 50 euro.</p>
+          <a class="knop knop--rand" href="#minutenspel">Bekijk</a>
         </li>
       </ul>
     </div>
@@ -397,9 +404,45 @@ const gerealiseerd = [
     </div>
   </section>
 
-  {/* Geen baan hier: die hoort tussen een donker en een licht vlak te staan.
-      Tussen het wit van All Stars en het papier hieronder vielen de witte
-      blokjes weg en bleef er een zwarte stippellijn over. */}
+  <div class="baan" aria-hidden="true"></div>
+
+  <!-- ================================================================== -->
+  <!-- Minutenspel. De volledige uitleg en de lijst staan op een eigen     -->
+  <!-- pagina; hier alleen de kern en de weg ernaartoe.                    -->
+  <!-- ================================================================== -->
+  <section class="vlak-zwart sectie" id="minutenspel">
+    <div class="omhulsel">
+      <p class="kolom-kicker">25 euro per seizoen</p>
+      <h2 class="kop-l minutenspel-kop">Minutenspel</h2>
+
+      <div class="allstars">
+        <div class="minutenspel-tekst lopende-tekst">
+          <p>
+            Voor 25 euro ben je het hele seizoen eigenaar van een minuut, bij alle
+            thuiswedstrijden van Heren-1 en Vrouwen-1 in de competitie. Je minuut wordt uit een
+            dichte envelop getrokken, dus iedereen heeft dezelfde kans.
+          </p>
+          <p>
+            Scoort Kwiek '78 thuis het eerste doelpunt in jouw minuut, dan win je 50 euro.
+            Wordt er niet gescoord, dan gaat de pot door naar de volgende thuiswedstrijd,
+            tot maximaal 150 euro.
+          </p>
+          <a class="knop knop--primair" href="/club/minutenspel">Speluitleg en de lijst</a>
+        </div>
+
+        <aside class="gerealiseerd">
+          <p class="label">In het kort</p>
+          <ul>
+            <li><span class="gerealiseerd-wat">€ 25</span><span class="gerealiseerd-waar">per minuut, het hele seizoen</span></li>
+            <li><span class="gerealiseerd-wat">€ 50</span><span class="gerealiseerd-waar">voor het eerste Kwiek-doelpunt in jouw minuut</span></li>
+            <li><span class="gerealiseerd-wat">€ 150</span><span class="gerealiseerd-waar">de hoogste pot</span></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <div class="baan" aria-hidden="true"></div>
 
   <!-- ================================================================== -->
   <!-- Contact                                                            -->
@@ -439,7 +482,7 @@ const gerealiseerd = [
 </Basis>
 
 <style>
-  /* Drie wegen ---------------------------------------------------------- */
+  /* Vier wegen ----------------------------------------------------------- */
   .keuze-sectie { padding-block: clamp(2rem, 4vw, 3rem); }
   .keuzes {
     display: grid;
@@ -449,7 +492,8 @@ const gerealiseerd = [
     margin: 0;
     padding: 0;
   }
-  @media (min-width: 800px) { .keuzes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 640px) { .keuzes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .keuzes { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
   .keuze {
     display: grid;
@@ -580,6 +624,11 @@ const gerealiseerd = [
   @media (min-width: 900px) {
     .allstars { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 3.5rem; align-items: start; }
   }
+
+  /* Minutenspel ---------------------------------------------------------- */
+  .minutenspel-kop { margin-bottom: 1.25rem; }
+  .minutenspel-tekst p { color: var(--color-grijs); }
+  .minutenspel-tekst .knop { margin-top: 0.5rem; }
 
   .rekenvoorbeeld {
     padding: 1.5rem;

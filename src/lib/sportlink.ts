@@ -225,13 +225,14 @@ export function getWedstrijdTeams(): string[] {
      1, 2, 3       senioren
      VR1, VR2      vrouwen (senioren)
      O17-1, MO9-1  jeugd, jongens en meisjes (ook het oude JO17-1)
+     Zaal 1        zaalvoetbal; zo noemt de site het, Sportlink niet
      35+, 7x7      overig
    -------------------------------------------------------------------------- */
 
-export type Teamgroep = 'Senioren' | 'Vrouwen' | 'Jeugd' | 'Overig';
+export type Teamgroep = 'Senioren' | 'Vrouwen' | 'Jeugd' | 'Zaalvoetbal' | 'Overig';
 
 /** De volgorde waarin de groepen in een filter staan. */
-export const TEAMGROEPEN: Teamgroep[] = ['Senioren', 'Vrouwen', 'Jeugd', 'Overig'];
+export const TEAMGROEPEN: Teamgroep[] = ['Senioren', 'Vrouwen', 'Jeugd', 'Zaalvoetbal', 'Overig'];
 
 /** De teamcode zonder clubnaam: "Kwiek '78 JO17-1" wordt "JO17-1". */
 function teamcode(naam: string): string {
@@ -241,6 +242,7 @@ function teamcode(naam: string): string {
 /** In welke groep hoort dit team thuis? */
 export function getTeamgroep(naam: string): Teamgroep {
   const code = teamcode(naam).toUpperCase();
+  if (/^ZAAL/.test(code)) return 'Zaalvoetbal';
   if (/^VR\s*\d/.test(code)) return 'Vrouwen';
   if (/^(JO|MO|JM|O)\s*\d/.test(code)) return 'Jeugd';
   if (/^\d+$/.test(code)) return 'Senioren';
@@ -296,9 +298,9 @@ export function getCompetitieSoorten(): Competitie[] {
    ========================================================================== */
 
 /**
- * De teams die op de site staan: alle veldteams uit een bondscompetitie.
- * Futsal en lokale teams laat het ophaalscript weg; hun wedstrijden staan
- * wel in het programma.
+ * De teams die op de site staan: alle veld- en zaalteams uit een
+ * bondscompetitie. Lokale teams laat het ophaalscript weg; hun wedstrijden
+ * staan wel in het programma.
  *
  * Sportlink-artikelen: `teams` en `team-indeling`
  */
@@ -322,8 +324,9 @@ export function getTeamsPerCategorie(): { categorie: TeamCategorie; label: strin
     selectie: 'Senioren',
     jeugd: 'Jeugd',
     dames: 'Dames',
+    zaal: 'Zaalvoetbal',
   };
-  const volgorde: TeamCategorie[] = ['selectie', 'dames', 'jeugd'];
+  const volgorde: TeamCategorie[] = ['selectie', 'dames', 'jeugd', 'zaal'];
   return volgorde
     .map((categorie) => ({
       categorie,

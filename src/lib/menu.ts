@@ -80,9 +80,9 @@ export const MENU: Menu_groep[] = [
       { label: 'Verjaardagen', href: '/club/verjaardagen', omschrijving: 'Wie er binnenkort jarig is' },
       { label: 'Informatiebulletin', href: '/club/informatiebulletin', omschrijving: 'Huisregels, contributie en lidmaatschap' },
       { label: 'Ereleden', href: '/club/ereleden' },
+      { label: 'Vrijwillige diensten', href: '/vrijwillige-diensten', omschrijving: 'Het dienstenrooster van de kantine' },
     ],
   },
-  { label: 'Vrijwillige diensten', href: '/vrijwillige-diensten' },
   {
     label: 'Sponsoring',
     href: '/sponsoring',

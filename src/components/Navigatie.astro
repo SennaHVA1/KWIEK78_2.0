@@ -10,6 +10,21 @@
 import { MENU, isActief } from '../lib/menu';
 
 const pad = Astro.url.pathname;
+
+/* Voor het overlaymenu: de groepen met kinderen zoals ze zijn, en alle losse
+   links samen in een laatste groep. */
+type Overlaylink = { label: string; href: string; extern?: boolean };
+const overlayGroepen: { label: string; links: Overlaylink[] }[] = [
+  ...MENU.filter((groep) => groep.kinderen).map((groep) => ({ label: groep.label, links: groep.kinderen! })),
+  {
+    label: 'Meer',
+    links: MENU.filter((groep) => !groep.kinderen && groep.href).map((groep) => ({
+      label: groep.label,
+      href: groep.href!,
+      extern: groep.extern,
+    })),
+  },
+].filter((groep) => groep.links.length > 0);
 ---
 
 <header class="kop">
@@ -98,44 +113,48 @@ const pad = Astro.url.pathname;
     </button>
   </div>
 
+  {/* Elke link is een rij met een pijl, zodat duidelijk is wat je kunt
+      aantikken. De groepskoppen zijn grijs en klein: blauw is alleen voor de
+      pagina waar je nu bent. Losse links zonder groep (Clubwinkel, Contact)
+      komen samen onder "Meer", in dezelfde vorm als de rest. */}
   <nav class="overlay-inhoud omhulsel" aria-label="Menu">
-    {MENU.map((groep) => (
-      <section class="overlay-groep">
-        {groep.kinderen ? (
-          <>
-            {/* Geen h2: het overlaymenu staat in de bron boven de h1 van de
-                pagina, en dan zou de kopstructuur niet meer kloppen. Het is
-                een groepslabel, dus dat hoort het ook te zijn. */}
-            <p class="overlay-groepkop" id={`overlaygroep-${groep.label.toLowerCase().replace(/\s+/g, '-')}`}>
-              {groep.label}
-            </p>
-            <ul aria-labelledby={`overlaygroep-${groep.label.toLowerCase().replace(/\s+/g, '-')}`}>
-              {groep.kinderen.map((kind) => (
+    {overlayGroepen.map((groep) => {
+      const kopId = `overlaygroep-${groep.label.toLowerCase().replace(/\s+/g, '-')}`;
+      return (
+        <section class="overlay-groep">
+          {/* Geen h2: het overlaymenu staat in de bron boven de h1 van de
+              pagina, en dan zou de kopstructuur niet meer kloppen. Het is
+              een groepslabel, dus dat hoort het ook te zijn. */}
+          <p class="overlay-groepkop" id={kopId}>{groep.label}</p>
+          <ul aria-labelledby={kopId}>
+            {groep.links.map((link) => {
+              const actief = !link.extern && pad.replace(/\/$/, '') === link.href.replace(/\/$/, '');
+              return (
                 <li>
-                  <a href={kind.href} class:list={[pad.replace(/\/$/, '') === kind.href.replace(/\/$/, '') && 'is-actief']}>
-                    {kind.label}
+                  <a
+                    href={link.href}
+                    class:list={['overlay-link', actief && 'is-actief']}
+                    aria-current={actief ? 'page' : undefined}
+                    target={link.extern ? '_blank' : undefined}
+                    rel={link.extern ? 'noopener noreferrer' : undefined}
+                  >
+                    <span class="overlay-label">{link.label}</span>
+                    {link.extern ? (
+                      <>
+                        <svg class="overlay-pijl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                        <span class="alleen-schermlezer">Opent in een nieuw tabblad</span>
+                      </>
+                    ) : (
+                      <svg class="overlay-pijl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6" /></svg>
+                    )}
                   </a>
                 </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <a
-            class:list={['overlay-enkel', isActief(pad, groep) && 'is-actief']}
-            href={groep.href}
-            target={groep.extern ? '_blank' : undefined}
-            rel={groep.extern ? 'noopener noreferrer' : undefined}
-          >
-            {groep.label}
-            {groep.extern && (
-              <svg class="extern" width="11" height="11" viewBox="0 0 9 9" aria-hidden="true">
-                <path d="M2 7L7 2M7 2H3.2M7 2v3.8" fill="none" stroke="currentColor" stroke-width="1.4" />
-              </svg>
-            )}
-          </a>
-        )}
-      </section>
-    ))}
+              );
+            })}
+          </ul>
+        </section>
+      );
+    })}
   </nav>
 </div>
 
@@ -327,34 +346,64 @@ const pad = Astro.url.pathname;
     letter-spacing: 0.05em;
   }
 
-  .overlay-inhoud { padding-block: 1.75rem 4rem; display: grid; gap: 1.75rem; }
-  .overlay-groep ul { list-style: none; margin: 0; padding: 0; }
+  .overlay-inhoud { padding-block: 1.5rem 4rem; display: grid; gap: 1.75rem; }
 
+  /* Groepskop: klein en grijs, een etiket boven de lijst en geen link. */
   .overlay-groepkop {
     font-family: var(--font-smal);
     font-size: var(--text-mini);
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-blauw);
-    margin-bottom: 0.4rem;
+    color: var(--color-grijs);
+    margin-bottom: 0.5rem;
   }
-  .overlay-groep a {
+
+  /* De links als een kaart met rijen: tegel-achtergrond, scheidingslijnen en
+     rechts een pijl. Dan is zonder uitleg duidelijk wat aantikbaar is. */
+  .overlay-groep ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-inkt);
+    overflow: hidden;
+  }
+  .overlay-groep li + li { border-top: 1px solid var(--kleur-lijn-donker); }
+
+  .overlay-link {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.55rem 0;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.25rem;
+    padding: 0.7rem 1rem;
     text-decoration: none;
     color: var(--color-wit);
     font-family: var(--font-smal);
-    font-size: 1.35rem;
+    font-size: 1.2rem;
     font-weight: 600;
+    -webkit-tap-highlight-color: transparent;
   }
-  .overlay-groep a.is-actief { color: var(--color-blauw); }
-  .overlay-enkel {
-    font-family: var(--font-display) !important;
-    font-size: 1.6rem !important;
-    font-weight: 400 !important;
+  .overlay-link:active { background: var(--kleur-inkt-op); }
+  .overlay-link:focus-visible { outline: 3px solid var(--color-blauw); outline-offset: -3px; }
+  .overlay-pijl { width: 1.15rem; height: 1.15rem; flex: none; color: var(--color-grijs); }
+
+  /* De pagina waar je bent: blauwe balk links, blauwe tekst en een stip in
+     plaats van de pijl. */
+  .overlay-link.is-actief {
+    color: var(--color-blauw);
+    background: color-mix(in srgb, var(--color-blauw) 12%, var(--kleur-inkt));
+    box-shadow: inset 3px 0 0 var(--color-blauw);
+  }
+  .overlay-link.is-actief .overlay-pijl { display: none; }
+  .overlay-link.is-actief::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-blauw);
+    flex: none;
   }
 
   .alleen-schermlezer {

@@ -82,30 +82,43 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
           <Klapbord doel={wedstrijd.datum} compact />
         </div>
 
-        {balsponsor && (
-          <a class="duel-bal" href={balsponsor.url} target={balsponsor.url ? '_blank' : undefined} rel={balsponsor.url ? 'noopener noreferrer' : undefined}>
-            <span class="duel-bal-label">Wedstrijdbal aangeboden door</span>
-            <span class="duel-bal-logo">
-              <img src={balsponsor.logo} alt={balsponsor.naam} loading="lazy" decoding="async" />
-            </span>
-          </a>
-        )}
+        {/* Op een telefoon staat onder de klok anders een hele stapel: sponsor,
+            locatie en twee knoppen. Daar klapt dit dicht; vanaf 700px staat
+            het altijd open en is de uitklapknop weg. Zonder script blijft
+            het open. */}
+        <details class="duel-meer" data-duel-meer open>
+          <summary class="duel-meer-knop">
+            <span>Locatie en details</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+          </summary>
 
-        <div class="duel-voet">
-          <p class="duel-waar">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
-            {wedstrijd.accommodatie}{wedstrijd.veld ? `, ${wedstrijd.veld}` : ''}
-          </p>
-          <div class="duel-knoppen">
-            <a class="knop knop--rand" href={`/wedstrijd/${wedstrijd.wedstrijdcode}`}>Wedstrijddetails</a>
-            <a
-              class="knop knop--rand"
-              href={routeLink(wedstrijd.accommodatie)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >Route</a>
+          <div class="duel-meer-inhoud">
+            {balsponsor && (
+              <a class="duel-bal" href={balsponsor.url} target={balsponsor.url ? '_blank' : undefined} rel={balsponsor.url ? 'noopener noreferrer' : undefined}>
+                <span class="duel-bal-label">Wedstrijdbal aangeboden door</span>
+                <span class="duel-bal-logo">
+                  <img src={balsponsor.logo} alt={balsponsor.naam} loading="lazy" decoding="async" />
+                </span>
+              </a>
+            )}
+
+            <div class="duel-voet">
+              <p class="duel-waar">
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
+                {wedstrijd.accommodatie}{wedstrijd.veld ? `, ${wedstrijd.veld}` : ''}
+              </p>
+              <div class="duel-knoppen">
+                <a class="knop knop--rand" href={`/wedstrijd/${wedstrijd.wedstrijdcode}`}>Wedstrijddetails</a>
+                <a
+                  class="knop knop--rand"
+                  href={routeLink(wedstrijd.accommodatie)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Route</a>
+              </div>
+            </div>
           </div>
-        </div>
+        </details>
       </article>
       );
     })}
@@ -238,6 +251,46 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
     color: var(--color-grijs);
   }
 
+  /* Uitklapper onder de klok ------------------------------------------- */
+  .duel-meer { width: 100%; }
+  .duel-meer-knop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--kleur-lijn-donker);
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-grijs);
+    cursor: pointer;
+    list-style: none;
+  }
+  .duel-meer-knop::-webkit-details-marker { display: none; }
+  .duel-meer-knop:hover { color: var(--color-wit); }
+  .duel-meer-knop:focus-visible { outline: 3px solid var(--color-blauw); outline-offset: 2px; }
+  .duel-meer-knop svg { width: 1rem; height: 1rem; transition: transform 0.18s var(--ease-klap); }
+  .duel-meer[open] .duel-meer-knop svg { transform: rotate(180deg); }
+  .duel-meer-inhoud {
+    display: grid;
+    justify-items: center;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    padding-top: 0.75rem;
+  }
+  /* Vanaf 700px is er ruimte genoeg: geen knop, alles zichtbaar. Het script
+     houdt de details daar open. */
+  @media (min-width: 700px) {
+    .duel-meer-knop { display: none; }
+    .duel-meer-inhoud { padding-top: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .duel-meer-knop svg { transition: none; }
+  }
+
   /* Wedstrijdbalsponsor: een regel tekst en het logo op een witte tegel,
      want de logo's zijn gemaakt voor een lichte achtergrond. */
   .duel-bal {
@@ -316,5 +369,13 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
       kandidaten.forEach((el) => el.setAttribute('hidden', ''));
       eerstvolgende.removeAttribute('hidden');
     }
+
+    /* Op een telefoon dicht, daarboven altijd open. Draait het scherm (of
+       wordt het venster breder), dan schuift dat mee. */
+    const breed = window.matchMedia('(min-width: 700px)');
+    const uitklappers = [...bord.querySelectorAll<HTMLDetailsElement>('[data-duel-meer]')];
+    const zet = () => uitklappers.forEach((el) => { el.open = breed.matches; });
+    zet();
+    breed.addEventListener('change', zet);
   }
 </script>

@@ -4,21 +4,13 @@
  *
  * Draaien met: npm run nieuws
  *
- * WAAROM NIET RECHTSTREEKS VAN FACEBOOK
- * Facebook laat zich niet meer publiek uitlezen. De Graph API geeft zonder
- * token een OAuthException, de pagina zelf stuurt een bezoeker zonder login
- * door naar een inlogscherm en de oude RSS-feeds bestaan niet meer. De enige
- * echte weg daarheen is een Page Access Token, en daarvoor moet de club ons
- * eerst een rol geven op hun Facebookpagina.
+ * DIT IS DE TERUGVAL
+ * Het nieuws komt van Facebook, via scripts/facebook-ophalen.mjs, zodra
+ * FB_PAGE_TOKEN gezet is. Wat dit script ophaalt staat in git en wordt alleen
+ * gebruikt als dat token ontbreekt of als Facebook nog nooit heeft geantwoord.
  *
- * Maar dat is niet nodig, want dezelfde berichten staan ook op kwiek78.nl en
- * die zijn wel gewoon op te halen. Dat is bovendien de betere bron: het is de
- * plek waar de club het nieuws zelf al redigeert, er zit een echte kop op (op
- * Facebook niet) en er is geen token dat kan verlopen.
- *
- * Dit script schrijft naar hetzelfde formaat als de Facebook Graph API, dus
- * src/lib/nieuws.ts hoeft niet te veranderen als de club later toch voor de
- * Facebook-koppeling kiest. Alleen de aanlevering wisselt dan.
+ * Dit script schrijft naar hetzelfde formaat als de Facebook Graph API, zodat
+ * src/lib/nieuws.ts beide bronnen op dezelfde manier leest.
  */
 import sharp from 'sharp';
 import { mkdir, writeFile, stat } from 'node:fs/promises';

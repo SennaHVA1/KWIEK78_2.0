@@ -37,11 +37,19 @@ interface Props {
 
 const { artikel, groot = false, kopNiveau = 3, compactOpMobiel = false } = Astro.props;
 const Kop = `h${kopNiveau}` as 'h2' | 'h3';
+
+/* Een staande of vierkante foto (vaak een poster of flyer van Facebook) gaat
+   heel in de kaart, met dezelfde foto vervaagd erachter als opvulling. Een
+   liggende foto vult de kaart gewoon, daar valt bijna niets van af. */
+const passend = artikel.afbeelding && (artikel.afbeeldingVerhouding ?? 2) < 1.15;
 ---
 
 <article class:list={['nieuwskaart', groot && 'nieuwskaart--groot', compactOpMobiel && 'nieuwskaart--compact']}>
   <a class="nieuwskaart-link" href={`/nieuws/${artikel.slug}`}>
-    <div class="nieuwskaart-beeld">
+    <div
+      class:list={['nieuwskaart-beeld', passend && 'nieuwskaart-beeld--passend']}
+      style={passend ? `--achtergrond: url('${artikel.afbeelding}')` : undefined}
+    >
       <Foto
         src={artikel.afbeelding}
         alt={`Foto bij het bericht: ${artikel.titel}`}
@@ -142,6 +150,19 @@ const Kop = `h${kopNiveau}` as 'h2' | 'h3';
   }
   .nieuwskaart-beeld :global(.foto-plek) { border-radius: 0; }
   .nieuwskaart-link:hover .nieuwskaart-beeld :global(img) { transform: scale(1.03); }
+
+  /* Passend: de foto heel, de vervaagde kopie erachter vult de rest. */
+  .nieuwskaart-beeld--passend { position: relative; isolation: isolate; }
+  .nieuwskaart-beeld--passend::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--achtergrond) center / cover no-repeat;
+    filter: blur(18px) brightness(0.75);
+    transform: scale(1.15);
+  }
+  .nieuwskaart-beeld--passend :global(img) { object-fit: contain !important; }
   @media (prefers-reduced-motion: reduce) {
     .nieuwskaart-beeld :global(img) { transition: none; }
     .nieuwskaart-link:hover .nieuwskaart-beeld :global(img) { transform: none; }
@@ -222,6 +243,8 @@ const Kop = `h${kopNiveau}` as 'h2' | 'h3';
     .nieuwskaart--compact .nieuwskaart-beeld :global(.foto-plek) {
       aspect-ratio: 1 / 1 !important;
     }
+    /* Zo klein is een hele poster onleesbaar; dan liever een uitsnede. */
+    .nieuwskaart--compact .nieuwskaart-beeld--passend :global(img) { object-fit: cover !important; }
     .nieuwskaart--compact .nieuwskaart-tekst { gap: 0.2rem; padding: 0; }
     .nieuwskaart--compact .nieuwskaart-tekst :is(h2, h3) {
       font-size: 1.0625rem;

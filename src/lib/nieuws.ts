@@ -6,27 +6,16 @@
  * De wens van de club: berichten die de club plaatst komen automatisch als
  * artikel op de site.
  *
- * NU: /src/data/nieuws.json wordt gevuld door `npm run nieuws`, dat de
- * berichten van kwiek78.nl haalt. Zie scripts/nieuws-ophalen.mjs.
+ * Er zijn twee bronnen, en de pagina's merken daar niets van:
  *
- * WAAROM NIET VAN FACEBOOK, ZOALS EERST BEDACHT
- * Facebook laat zich niet meer publiek uitlezen. Nagemeten: de Graph API geeft
- * zonder token een OAuthException (code 104), de pagina stuurt een bezoeker
- * zonder login door naar een inlogscherm en de oude RSS-feeds bestaan niet
- * meer. De enige echte weg is een Page Access Token, en daarvoor moet de club
- * ons eerst een rol geven op hun Facebookpagina.
+ *   - src/data/facebook/nieuws.json, bij elke build gevuld door
+ *     scripts/facebook-ophalen.mjs uit de Graph API, met het Page Access
+ *     Token uit FB_PAGE_TOKEN. Staat buiten git.
+ *   - src/data/nieuws.json, de berichten van kwiek78.nl, met de hand gevuld
+ *     door `npm run nieuws`. Dit is de terugval als er geen token is.
  *
- * Dat hoeft nu niet meer, want dezelfde berichten staan ook op kwiek78.nl en
- * die zijn wel op te halen. Dat is bovendien de betere bron: daar staat een
- * echte kop boven het bericht, op Facebook niet, en er is geen token dat kan
- * verlopen of dat kan worden ingetrokken.
- *
- * ALS DE CLUB TOCH FACEBOOK WIL:
- *   GET https://graph.facebook.com/v21.0/{page-id}/posts
- *       ?fields=id,message,created_time,full_picture,permalink_url
- *       &access_token={page-access-token}
- * Het formaat in nieuws.json is precies dat van de Graph API, dus dan hoeft
- * alleen de aanlevering te wisselen; alles hieronder blijft staan.
+ * Het formaat is in beide gevallen dat van de Graph API, dus alles hieronder
+ * werkt voor allebei.
  *
  * BELANGRIJK OVER DE VORM VAN EEN BERICHT:
  * Een Facebookpost heeft geen kop, alleen een veld `message` met de volledige
@@ -45,7 +34,7 @@
  * precies dezelfde omzetting heen, zodat er maar een weg is.
  */
 
-import ruwNieuws from '../data/nieuws.json';
+import vanWebsite from '../data/nieuws.json';
 import type { Artikel } from './types';
 
 /** De vorm van een ruw bericht, gelijk aan wat de Facebook Graph API geeft. */
@@ -55,10 +44,15 @@ type RuwBericht = {
   message: string;
   created_time: string;
   full_picture?: string;
+  /** Niet van de Graph API zelf: het importscript meet de foto na. */
+  beeldverhouding?: number;
   permalink_url?: string | null;
 };
 
-const berichten = ruwNieuws as RuwBericht[];
+/* Bestaat src/data/facebook niet, dan geeft deze glob een leeg object en komt
+   het nieuws van kwiek78.nl. */
+const vanFacebook = import.meta.glob<{ default: unknown }>('../data/facebook/nieuws.json', { eager: true });
+const berichten = (vanFacebook['../data/facebook/nieuws.json']?.default ?? vanWebsite) as RuwBericht[];
 
 /** Maakt een URL-veilige slug van een titel. */
 function maakSlug(titel: string): string {
@@ -100,6 +94,7 @@ function naarArtikel(bericht: RuwBericht): Artikel {
     samenvatting: kort(eersteAlinea),
     body,
     afbeelding: bericht.full_picture,
+    afbeeldingVerhouding: bericht.beeldverhouding,
     bron: bericht.bron,
     bronUrl: bericht.permalink_url ?? undefined,
   };
@@ -107,10 +102,23 @@ function naarArtikel(bericht: RuwBericht): Artikel {
 
 /** Alle artikelen, nieuwste eerst. */
 export function getNieuws(): Artikel[] {
-  return berichten
-    .map(naarArtikel)
-    .sort((a, b) => new Date(b.datum).getTime() - new Date(a.datum).getTime());
+  return alleArtikelen;
 }
+
+/* Twee posts die met dezelfde regel beginnen ("Uitslagen van het weekend")
+   krijgen dezelfde slug. De oudste houdt hem, de rest krijgt -2, -3. */
+const alleArtikelen = (() => {
+  const artikelen = berichten
+    .map(naarArtikel)
+    .sort((a, b) => new Date(a.datum).getTime() - new Date(b.datum).getTime());
+  const gezien = new Map<string, number>();
+  for (const artikel of artikelen) {
+    const keer = (gezien.get(artikel.slug) ?? 0) + 1;
+    gezien.set(artikel.slug, keer);
+    if (keer > 1) artikel.slug = `${artikel.slug}-${keer}`;
+  }
+  return artikelen.reverse();
+})();
 
 /** Een enkel artikel op slug. Voedt /nieuws/[slug]. */
 export function getArtikel(slug: string): Artikel | undefined {

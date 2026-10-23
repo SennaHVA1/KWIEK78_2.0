@@ -67,7 +67,8 @@ const meer = getNieuws().filter((a) => a.slug !== artikel.slug).slice(0, 3);
                 <Foto
                   src={artikel.afbeelding}
                   alt={`Foto bij het bericht: ${artikel.titel}`}
-                  ratio="16 / 9"
+                  ratio={artikel.afbeeldingVerhouding ? String(artikel.afbeeldingVerhouding) : '16 / 9'}
+                  klasse={artikel.afbeeldingVerhouding ? 'artikel-beeld-heel' : ''}
                   prioriteit
                 />
               </div>
@@ -127,6 +128,14 @@ const meer = getNieuws().filter((a) => a.slug !== artikel.slug).slice(0, 3);
 
   .artikel-body { display: grid; gap: 1.75rem; }
   .artikel-beeld { max-width: 46rem; }
+  /* Is de verhouding bekend, dan de foto heel en in zijn eigen vorm. Een
+     staande poster zou op volle breedte te hoog worden, dus die wordt
+     begrensd in de hoogte en smaller. */
+  .artikel-beeld :global(.artikel-beeld-heel) {
+    width: auto !important;
+    max-width: 100%;
+    max-height: min(80vh, 44rem);
+  }
   .artikel-origineel { margin-top: 0.5rem; }
 
   .meer { padding-bottom: var(--spacing-sectie); }

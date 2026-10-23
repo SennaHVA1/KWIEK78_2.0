@@ -162,6 +162,8 @@ export type Artikel = {
   /** Markdown. */
   body: string;
   afbeelding?: string;
+  /** Breedte gedeeld door hoogte, als bekend. Onder de 1 is een staande foto. */
+  afbeeldingVerhouding?: number;
   /**
    * Waar het bericht vandaan komt.
    *   website  van kwiek78.nl, de huidige site van de club

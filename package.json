@@ -6,12 +6,13 @@
   "description": "Demo-website v.v. Kwiek '78 Avenhorn (Brand-On)",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/sportlink-ophalen.mjs && astro build",
+    "build": "node scripts/sportlink-ophalen.mjs && node scripts/facebook-ophalen.mjs && astro build",
     "preview": "astro preview",
     "check": "astro check",
     "fotos": "node scripts/fotos-verkleinen.mjs",
     "thumbnails": "node scripts/kwiek-inside-thumbnails.mjs",
     "nieuws": "node scripts/nieuws-ophalen.mjs",
+    "facebook": "node scripts/facebook-ophalen.mjs",
     "sportlink": "node scripts/sportlink-ophalen.mjs"
   },
   "dependencies": {

@@ -34,7 +34,10 @@ try { process.loadEnvFile('.env'); } catch { /* geen .env, prima */ }
 const VERSIE = 'v26.0';
 const PAGINA = process.env.FB_PAGE_ID;
 const TOKEN = process.env.FB_PAGE_TOKEN;
-const AANTAL = 12;
+/* Alles vanaf het begin van het seizoen, met een grens voor het geval de club
+   ineens heel veel post. Ouder nieuws staat op Facebook zelf nog. */
+const VANAF = '2026-09-01';
+const MAXIMUM = 150;
 const UITMAP = 'src/data/facebook';
 const BEELDMAP = 'public/images/nieuws/facebook';
 
@@ -91,20 +94,28 @@ async function bewaarFoto(url, naam) {
 try {
   const zoek = new URLSearchParams({
     fields: 'id,message,created_time,full_picture,permalink_url',
-    /* Ruim ophalen: posts met alleen een foto en geen tekst vallen af. */
-    limit: String(AANTAL * 2),
+    since: String(Math.floor(new Date(VANAF).getTime() / 1000)),
+    limit: '50',
     access_token: TOKEN,
   });
-  const antwoord = await fetch(`https://graph.facebook.com/${VERSIE}/${PAGINA}/posts?${zoek}`);
-  const data = await antwoord.json();
-  if (data.error) throw new Error(`${data.error.type} ${data.error.code}: ${data.error.message}`);
+
+  /* Facebook geeft de posts in pagina's; paging.next wijst naar de volgende. */
+  const posts = [];
+  let url = `https://graph.facebook.com/${VERSIE}/${PAGINA}/posts?${zoek}`;
+  while (url && posts.length < MAXIMUM) {
+    const data = await (await fetch(url)).json();
+    if (data.error) throw new Error(`${data.error.type} ${data.error.code}: ${data.error.message}`);
+    posts.push(...(data.data ?? []).filter((post) => post.created_time >= VANAF));
+    url = data.paging?.next;
+  }
+  console.log(`${posts.length} posts sinds ${VANAF}`);
 
   await mkdir(UITMAP, { recursive: true });
   await mkdir(BEELDMAP, { recursive: true });
 
   const berichten = [];
-  for (const post of data.data ?? []) {
-    if (berichten.length >= AANTAL) break;
+  for (const post of posts.slice(0, MAXIMUM)) {
+    /* Posts met alleen een foto en geen tekst hebben geen kop; die vallen af. */
     if (!post.message?.trim()) continue;
 
     /* Een post-id is "paginaid_postid"; het tweede deel is uniek genoeg. */

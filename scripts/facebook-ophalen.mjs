@@ -26,7 +26,7 @@
  * dagen verloopt. Rechtstreeks linken geeft dan na een week kapotte foto's.
  */
 import sharp from 'sharp';
-import { mkdir, writeFile, stat } from 'node:fs/promises';
+import { mkdir, writeFile, stat, readdir, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 
 try { process.loadEnvFile('.env'); } catch { /* geen .env, prima */ }
@@ -34,9 +34,14 @@ try { process.loadEnvFile('.env'); } catch { /* geen .env, prima */ }
 const VERSIE = 'v26.0';
 const PAGINA = process.env.FB_PAGE_ID;
 const TOKEN = process.env.FB_PAGE_TOKEN;
-/* Alles vanaf het begin van het seizoen, met een grens voor het geval de club
-   ineens heel veel post. Ouder nieuws staat op Facebook zelf nog. */
-const VANAF = '2026-09-01';
+/* Alles van het afgelopen jaar, maar niet van voor de start van de site op
+   1 september 2026. Wat ouder is valt er bij de volgende build vanzelf af; op
+   Facebook zelf blijft het staan. Het maximum is er voor het geval de club
+   ineens heel veel post. */
+const START = '2026-09-01';
+const jaarGeleden = new Date();
+jaarGeleden.setFullYear(jaarGeleden.getFullYear() - 1);
+const VANAF = [START, jaarGeleden.toISOString().slice(0, 10)].sort().at(-1);
 const MAXIMUM = 150;
 const UITMAP = 'src/data/facebook';
 const BEELDMAP = 'public/images/nieuws/facebook';
@@ -134,6 +139,13 @@ try {
   }
 
   await writeFile(join(UITMAP, 'nieuws.json'), JSON.stringify(berichten, null, 2) + '\n', 'utf8');
+
+  /* Foto's van posts die zijn afgevallen of op Facebook verwijderd. Op
+     Cloudflare is de map elke build leeg, lokaal zou hij anders blijven groeien. */
+  const inGebruik = new Set(berichten.map((b) => b.full_picture?.split('/').pop()));
+  for (const bestand of await readdir(BEELDMAP)) {
+    if (!inGebruik.has(bestand)) await unlink(join(BEELDMAP, bestand));
+  }
   console.log(`${berichten.length} Facebookberichten weggeschreven naar ${UITMAP}/nieuws.json`);
 } catch (fout) {
   console.warn(`Facebook ophalen mislukt, de site bouwt op de vorige berichten: ${fout.message}`);

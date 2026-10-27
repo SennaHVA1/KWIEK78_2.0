@@ -64,6 +64,8 @@ export async function verstuur(formulier: HTMLFormElement): Promise<boolean> {
   }
   if (velden.botcheck) return false;
   delete velden.botcheck;
+  /* Een herhaald veld (zoals Herhaal e-mail) is alleen ter controle. */
+  for (const veld of formulier.querySelectorAll<HTMLInputElement>('[data-herhaal]')) delete velden[veld.name];
 
   try {
     const antwoord = await fetch('https://api.web3forms.com/submit', {

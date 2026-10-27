@@ -5,30 +5,18 @@
  * Op de oude site waren dit twee losse pagina's, terwijl het dezelfde
  * handeling is bij dezelfde ledenadministratie.
  *
- * DE FORMULIEREN ZIJN IN DEZE DEMO NIET ACTIEF.
+ * Beide formulieren gaan via Web3Forms als e-mail naar de ledenadministratie
+ * (zie src/lib/web3forms.ts). Zonder sleutel staan ze in de demostand.
  *
- * Het aanmeldformulier gaat straks via het Sportlink-artikel
- * `aanmeldenaspirantlid-form`. Dat werkt als volgt:
- *
- *   POST https://data.sportlink.com/aanmeldenaspirantlid-form?client_id=<ID>
- *
- * Sportlink maakt van de inzending direct een aspirant-lid in het
- * ledenbestand van de club, inclusief incassomachtiging. De veldnamen
- * hieronder zijn daarom al gekozen zoals Sportlink ze verwacht:
- * voornaam, tussenvoegsel, achternaam, geboortedatum, geslacht, emailadres,
- * telefoonnummer, straat, huisnummer, postcode, woonplaats, iban,
- * vorigevereniging, relatiecodevorigevereniging.
- *
- * Het wijzigingsformulier heeft geen Sportlink-tegenhanger en gaat naar de
- * ledenadministratie per e-mail.
+ * Het aanmeldformulier vraagt hetzelfde als het formulier van de oude site,
+ * in dezelfde volgorde, zodat de ledenadministratie niets nieuws hoeft te
+ * leren. Een IBAN vragen we niet: dat zou dan als gewone mail binnenkomen.
  */
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
-import { getTeamsPerCategorie } from '../../lib/sportlink';
 import { getContactpersoon, CLUBGEGEVENS } from '../../lib/club';
 import { isActief } from '../../lib/web3forms';
 
-const categorieen = getTeamsPerCategorie();
 const ledenadministratie = getContactpersoon('Ledenadministratie');
 
 /* Zolang er geen Web3Forms-sleutel voor de ledenadministratie is, verstuurt
@@ -37,11 +25,25 @@ const ledenadministratie = getContactpersoon('Ledenadministratie');
 const AANMELDEN_VIA_KNVB = !isActief('leden');
 const knvbInschrijven = `https://www.knvb.nl/ontdek-voetbal/inschrijven/${CLUBGEGEVENS.knvbClubcode}`;
 
-/* De momenten waarop er kantinediensten zijn: bar en keuken op de
-   wedstrijddagen. Schoonmaken staat er op verzoek van de club niet bij. */
-const kantinedagen = [
-  { waarde: 'zaterdag', naam: 'Zaterdag', uitleg: 'Bar of keuken' },
-  { waarde: 'zondag', naam: 'Zondag', uitleg: 'Bar of keuken' },
+/* De soorten lidmaatschap, zoals de club ze in Sportlink heeft staan. */
+const lidmaatschappen = [
+  { naam: 'Voetbal: Algemeen/Futsal', uitleg: 'Tevens bondslid KNVB' },
+  { naam: 'Voetbal: Algemeen/Veld', uitleg: 'Tevens bondslid KNVB' },
+  { naam: 'Niet spelend', uitleg: 'Bijvoorbeeld trainers en scheidsrechters. Tevens bondslid KNVB' },
+  { naam: 'Vereniging', uitleg: 'Voor als je niet in de KNVB-competitie wilt spelen' },
+];
+
+const overigeVragen = [
+  'Mijn kind wil alleen trainen',
+  'Ik wil een dagdeel kantinedienst draaien',
+  'Ik wil scheidsrechter of spelbegeleider worden',
+];
+
+/* Keuzelijst voor de nationaliteit. Een vrij veld met suggesties, want een
+   volledige lijst van alle landen is voor deze club overdreven. */
+const nationaliteiten = [
+  'Nederlands', 'Belgisch', 'Duits', 'Pools', 'Turks', 'Marokkaans', 'Surinaams',
+  'Brits', 'Oekraïens', 'Roemeens', 'Bulgaars', 'Portugees', 'Spaans', 'Italiaans', 'Syrisch',
 ];
 ---
 
@@ -59,11 +61,13 @@ const kantinedagen = [
 
   <section class="vlak-wit sectie">
     <div class="omhulsel">
-      <p class="demo-melding">
-        <span class="merk merk--zacht">Demo</span>
-        De formulieren op deze pagina zijn nog niet aangesloten. Ze laten wel precies zien
-        welke gegevens er straks gevraagd worden.
-      </p>
+      {!isActief('leden') && (
+        <p class="demo-melding">
+          <span class="merk merk--zacht">Demo</span>
+          De formulieren op deze pagina zijn nog niet aangesloten. Ze laten wel precies zien
+          welke gegevens er straks gevraagd worden.
+        </p>
+      )}
 
       <!-- ============================================================== -->
       <!-- Tabwissel                                                      -->
@@ -127,93 +131,152 @@ const kantinedagen = [
             </div>
             ) : (
             <form class="formulier" data-formulier data-sleutel="leden" data-onderwerp="Nieuwe aanmelding als lid" data-bedankt="Bedankt voor je aanmelding! De ledenadministratie neemt binnen een week contact met je op." novalidate>
+              {/* Lidmaatschap ------------------------------------------- */}
+              <fieldset class="keuzegroep veld" data-groep-verplicht>
+                <legend>Lidmaatschap</legend>
+                <p class="veld-hulp">
+                  Kies de sport of activiteit die je bij Kwiek '78 wilt gaan doen. Meer dan een mag.
+                </p>
+                <div class="tegels tegels--breed">
+                  {lidmaatschappen.map((soort) => (
+                    <label class="tegel">
+                      <input type="checkbox" name="lidmaatschap" value={soort.naam} />
+                      <span class="tegel-naam">{soort.naam}</span>
+                      <span class="tegel-uitleg">{soort.uitleg}</span>
+                    </label>
+                  ))}
+                </div>
+                <p class="veld-fout" data-fout hidden>Kies minimaal een soort lidmaatschap.</p>
+              </fieldset>
+
+              {/* Vorige vereniging --------------------------------------- */}
+              <fieldset class="keuzegroep veld">
+                <legend>Voormalige of huidige vereniging</legend>
+                <p class="veld-hulp">
+                  Ben je al eerder lid geweest, of ben je nog lid, van een vereniging die is aangesloten
+                  bij de KNVB?
+                </p>
+                <div class="tegels">
+                  <label class="tegel">
+                    <input type="radio" name="eerderlid" value="Ja" required data-vorige-ja />
+                    <span class="tegel-naam">Ja</span>
+                  </label>
+                  <label class="tegel">
+                    <input type="radio" name="eerderlid" value="Nee" required />
+                    <span class="tegel-naam">Nee</span>
+                  </label>
+                </div>
+                <p class="veld-fout" data-fout hidden>Kies ja of nee.</p>
+              </fieldset>
+
+              <div class="veldrij" data-vorige-velden hidden>
+                <div class="veld">
+                  <label for="vorigevereniging">Naam vereniging</label>
+                  <input type="text" id="vorigevereniging" name="vorigevereniging" disabled />
+                </div>
+                <div class="veld">
+                  <label for="relatiecodevorigevereniging">KNVB-relatiecode</label>
+                  <input type="text" id="relatiecodevorigevereniging" name="relatiecodevorigevereniging" disabled />
+                  <p class="veld-hulp">Als je die weet. Staat in de KNVB-app onder je profiel.</p>
+                </div>
+              </div>
+
+              {/* Je gegevens ---------------------------------------------- */}
+              <h3 class="formulier-tussenkop">Je gegevens</h3>
+
+              <fieldset class="keuzegroep veld">
+                <legend>Geslacht</legend>
+                <div class="tegels">
+                  <label class="tegel">
+                    <input type="radio" name="geslacht" value="Man" required />
+                    <span class="tegel-naam">Man</span>
+                  </label>
+                  <label class="tegel">
+                    <input type="radio" name="geslacht" value="Vrouw" required />
+                    <span class="tegel-naam">Vrouw</span>
+                  </label>
+                </div>
+                <p class="veld-fout" data-fout hidden>Maak een keuze.</p>
+              </fieldset>
+
               <div class="veldrij">
                 <div class="veld">
                   <label for="voornaam">Voornaam</label>
-                  <input type="text" id="voornaam" name="voornaam" autocomplete="given-name" required />
-                  <p class="veld-fout" data-fout hidden>Vul een voornaam in.</p>
+                  <input type="text" id="voornaam" name="voornaam" autocomplete="given-name" />
                 </div>
                 <div class="veld">
-                  <label for="tussenvoegsel">Tussenvoegsel</label>
+                  <label for="voorletters">Voorletter(s)</label>
+                  <input type="text" id="voorletters" name="voorletters" placeholder="J.P." required />
+                  <p class="veld-fout" data-fout hidden>Vul je voorletters in.</p>
+                </div>
+              </div>
+
+              <div class="veldrij veldrij--drie-omgekeerd">
+                <div class="veld">
+                  <label for="tussenvoegsel">Tussenvoegsel(s)</label>
                   <input type="text" id="tussenvoegsel" name="tussenvoegsel" autocomplete="additional-name" />
-                  <p class="veld-hulp">Bijvoorbeeld van, de of van der. Mag leeg blijven.</p>
+                </div>
+                <div class="veld">
+                  <label for="achternaam">Achternaam</label>
+                  <input type="text" id="achternaam" name="achternaam" autocomplete="family-name" required />
+                  <p class="veld-fout" data-fout hidden>Vul een achternaam in.</p>
+                </div>
+              </div>
+
+              <datalist id="nationaliteiten">
+                {nationaliteiten.map((n) => <option value={n} />)}
+              </datalist>
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="nationaliteit">Nationaliteit</label>
+                  <input type="text" id="nationaliteit" name="nationaliteit" list="nationaliteiten" value="Nederlands" required />
+                  <p class="veld-fout" data-fout hidden>Vul je nationaliteit in.</p>
+                </div>
+                <div class="veld">
+                  <label for="nationaliteit2">2e nationaliteit</label>
+                  <input type="text" id="nationaliteit2" name="nationaliteit2" list="nationaliteiten" />
                 </div>
               </div>
 
               <div class="veld">
-                <label for="achternaam">Achternaam</label>
-                <input type="text" id="achternaam" name="achternaam" autocomplete="family-name" required />
-                <p class="veld-fout" data-fout hidden>Vul een achternaam in.</p>
+                <label for="geboortedatum">Geboortedatum</label>
+                <input type="date" id="geboortedatum" name="geboortedatum" autocomplete="bday" required />
+                <p class="veld-fout" data-fout hidden>Vul een geboortedatum in.</p>
               </div>
 
-              <div class="veldrij">
-                <div class="veld">
-                  <label for="geboortedatum">Geboortedatum</label>
-                  <input type="date" id="geboortedatum" name="geboortedatum" autocomplete="bday" required />
-                  <p class="veld-hulp">Bepaalt in welke leeftijdscategorie je wordt ingedeeld.</p>
-                  <p class="veld-fout" data-fout hidden>Vul een geboortedatum in.</p>
-                </div>
-                <div class="veld">
-                  <label for="geslacht">Geslacht</label>
-                  <select id="geslacht" name="geslacht" required>
-                    <option value="">Kies</option>
-                    <option value="M">Man</option>
-                    <option value="V">Vrouw</option>
-                    <option value="X">Zeg ik liever niet</option>
-                  </select>
-                  <p class="veld-hulp">De KNVB vraagt dit voor de teamindeling.</p>
-                  <p class="veld-fout" data-fout hidden>Maak een keuze.</p>
-                </div>
-              </div>
+              {/* Adres ---------------------------------------------------- */}
+              <h3 class="formulier-tussenkop">Adres</h3>
 
-              <div class="veldrij">
-                <div class="veld">
-                  <label for="emailadres">E-mailadres</label>
-                  <input type="email" id="emailadres" name="emailadres" autocomplete="email" required />
-                  <p class="veld-fout" data-fout hidden>Vul een geldig e-mailadres in.</p>
-                </div>
-                <div class="veld">
-                  <label for="telefoonnummer">Telefoonnummer</label>
-                  <input
-                    type="tel"
-                    id="telefoonnummer"
-                    name="telefoonnummer"
-                    autocomplete="tel"
-                    inputmode="tel"
-                    pattern="[0-9 +()-]{10,}"
-                    required
-                  />
-                  <p class="veld-hulp">Bij jeugdleden het nummer van een ouder of verzorger.</p>
-                  <p class="veld-fout" data-fout hidden>Vul een telefoonnummer van minimaal tien tekens in.</p>
-                </div>
-              </div>
-
-              <div class="veldrij veldrij--drie">
-                <div class="veld veld--breed">
-                  <label for="straat">Straat</label>
-                  <input type="text" id="straat" name="straat" autocomplete="address-line1" required />
-                  <p class="veld-fout" data-fout hidden>Vul een straatnaam in.</p>
-                </div>
-                <div class="veld">
-                  <label for="huisnummer">Huisnummer</label>
-                  <input type="text" id="huisnummer" name="huisnummer" required />
-                  <p class="veld-fout" data-fout hidden>Vul een huisnummer in.</p>
-                </div>
+              <div class="veld">
+                <label for="land">Land</label>
+                <input type="text" id="land" name="land" autocomplete="country-name" value="Nederland" required />
+                <p class="veld-fout" data-fout hidden>Vul een land in.</p>
               </div>
 
               <div class="veldrij">
                 <div class="veld">
                   <label for="postcode">Postcode</label>
-                  <input
-                    type="text"
-                    id="postcode"
-                    name="postcode"
-                    autocomplete="postal-code"
-                    pattern="[1-9][0-9]{3}\s?[A-Za-z]{2}"
-                    placeholder="1633 HE"
-                    required
-                  />
-                  <p class="veld-fout" data-fout hidden>Vul een Nederlandse postcode in, bijvoorbeeld 1633 HE.</p>
+                  <input type="text" id="postcode" name="postcode" autocomplete="postal-code" placeholder="1633 DH" required />
+                  <p class="veld-fout" data-fout hidden>Vul een postcode in.</p>
+                </div>
+                <div class="veldrij veldrij--paar">
+                  <div class="veld">
+                    <label for="huisnummer">Huisnummer</label>
+                    <input type="text" id="huisnummer" name="huisnummer" inputmode="numeric" required />
+                    <p class="veld-fout" data-fout hidden>Vul een huisnummer in.</p>
+                  </div>
+                  <div class="veld">
+                    <label for="toevoeging">Toevoeging</label>
+                    <input type="text" id="toevoeging" name="toevoeging" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="straat">Straatnaam</label>
+                  <input type="text" id="straat" name="straat" autocomplete="address-line1" required />
+                  <p class="veld-fout" data-fout hidden>Vul een straatnaam in.</p>
                 </div>
                 <div class="veld">
                   <label for="woonplaats">Woonplaats</label>
@@ -222,95 +285,73 @@ const kantinedagen = [
                 </div>
               </div>
 
-              <div class="veld">
-                <label for="iban">IBAN</label>
-                <input
-                  type="text"
-                  id="iban"
-                  name="iban"
-                  placeholder="NL00 BANK 0000 0000 00"
-                  pattern="[A-Za-z]{2}[0-9]{2}\s?([A-Za-z0-9]\s?){10,26}"
-                  required
-                />
-                <p class="veld-hulp">Voor het betaalverzoek van de contributie via NIKKI.</p>
-                <p class="veld-fout" data-fout hidden>Vul een geldig IBAN in.</p>
+              {/* Contact -------------------------------------------------- */}
+              <h3 class="formulier-tussenkop">Contact</h3>
+
+              <div class="veldrij">
+                <div class="veld">
+                  <label for="telefoonvast">Telefoon vast</label>
+                  <input type="tel" id="telefoonvast" name="telefoonvast" autocomplete="tel" inputmode="tel" />
+                </div>
+                <div class="veld">
+                  <label for="telefoonmobiel">Telefoon mobiel</label>
+                  <input type="tel" id="telefoonmobiel" name="telefoonmobiel" autocomplete="tel" inputmode="tel" />
+                  <p class="veld-hulp">Bij jeugdleden het nummer van een ouder of verzorger.</p>
+                </div>
               </div>
 
               <div class="veldrij">
                 <div class="veld">
-                  <label for="vorigevereniging">Vorige vereniging</label>
-                  <input type="text" id="vorigevereniging" name="vorigevereniging" />
-                  <p class="veld-hulp">Alleen invullen als je eerder lid was.</p>
+                  <label for="emailadres">E-mail</label>
+                  <input type="email" id="emailadres" name="emailadres" autocomplete="email" required />
+                  <p class="veld-fout" data-fout hidden>Vul een geldig e-mailadres in.</p>
                 </div>
                 <div class="veld">
-                  <label for="relatiecodevorigevereniging">KNVB-relatiecode</label>
-                  <input type="text" id="relatiecodevorigevereniging" name="relatiecodevorigevereniging" />
-                  <p class="veld-hulp">Staat in de KNVB-app onder je profiel.</p>
+                  <label for="emailherhaal">Herhaal e-mail</label>
+                  <input type="email" id="emailherhaal" name="emailherhaal" autocomplete="email" required data-herhaal="emailadres" />
+                  <p class="veld-fout" data-fout hidden>Dit is niet hetzelfde e-mailadres.</p>
                 </div>
               </div>
 
-              <div class="veld">
-                <label for="voorkeurteam">Voorkeur categorie</label>
-                <select id="voorkeurteam" name="voorkeurteam">
-                  <option value="">Geen voorkeur, deel mij maar in</option>
-                  {categorieen.map((categorie) => (
-                    <optgroup label={categorie.label}>
-                      {categorie.teams.map((team) => (
-                        <option value={team.id}>{team.naam}</option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-                <p class="veld-hulp">De technische commissie bepaalt uiteindelijk de indeling.</p>
-              </div>
-
-              {/* Geen Sportlink-veld: dit gaat met de aanmelding mee naar de
-                  kantinecommissie, die er het dienstenrooster mee maakt. */}
-              <fieldset class="veld kantinedagen" data-groep-verplicht>
-                <legend>Kantinedienst</legend>
-                <p class="veld-hulp">
-                  Elk lid draait een paar keer per seizoen een dienst in de kantine. Op welke dagen zou
-                  dat jou het beste uitkomen? Kies er minimaal een. Bij jeugdleden doet een ouder of
-                  verzorger de dienst.
-                </p>
-                <div class="dagkeuze">
-                  {kantinedagen.map((dag) => (
-                    <label class="dag">
-                      <input type="checkbox" name="kantinedienstdagen" value={dag.waarde} />
-                      <span class="dag-naam">{dag.naam}</span>
-                      <span class="dag-uitleg">{dag.uitleg}</span>
+              {/* Overige vragen ------------------------------------------- */}
+              <fieldset class="keuzegroep">
+                <legend>Overige vragen</legend>
+                <div class="tegels tegels--lijst">
+                  {overigeVragen.map((vraag) => (
+                    <label class="tegel">
+                      <input type="checkbox" name="overigevragen" value={vraag} />
+                      <span class="tegel-naam">{vraag}</span>
                     </label>
                   ))}
                 </div>
-                <p class="veld-fout" data-fout hidden>Kies minimaal een dag waarop je een kantinedienst kunt draaien.</p>
               </fieldset>
 
               <div class="veld">
                 <label for="opmerkingen">Opmerkingen</label>
-                <textarea id="opmerkingen" name="opmerkingen" rows="4"></textarea>
-                <p class="veld-hulp">Bijvoorbeeld of je broer of zus al lid is, of dat je liever met een vriendje in een team zit.</p>
+                <textarea id="opmerkingen" name="opmerkingen" rows="5" maxlength="1000"></textarea>
+                <p class="veld-hulp">
+                  Heb je een voorkeur voor de spelvorm, het team waar je graag in wilt spelen, of iets anders
+                  voor de ledenadministratie? Zet het hier. Maximaal 1000 tekens.
+                </p>
               </div>
 
+              {/* Privacy -------------------------------------------------- */}
               <fieldset class="akkoorden">
-                <legend>Akkoord</legend>
+                <legend>Privacyverklaringen</legend>
+                <p class="veld-hulp">
+                  Lees de privacyverklaringen van Kwiek '78 en de KNVB voordat je je aanmeldt. Daarin staat
+                  hoe de club en de KNVB met je persoonsgegevens omgaan.
+                </p>
                 <div class="veld veld--vinkje">
                   <label class="vinkje">
                     <input type="checkbox" name="akkoordprivacy" required />
                     <span>
-                      Ik ga akkoord met de <a href="/privacyverklaring">privacyverklaring</a> van de club.
+                      Ik heb de <a href="/privacyverklaring" target="_blank">privacyverklaring van Kwiek '78</a>
+                      en de <a href="https://www.knvb.nl/info/3043/privacy" target="_blank" rel="noopener noreferrer">privacyverklaring van de KNVB</a>
+                      gelezen.
                     </span>
                   </label>
                   <p class="veld-fout" data-fout hidden>Zonder akkoord kunnen we de aanmelding niet verwerken.</p>
-                </div>
-
-                <div class="veld veld--vinkje">
-                  <label class="vinkje">
-                    <input type="checkbox" name="akkoordbeeld" />
-                    <span>
-                      Foto's waarop ik herkenbaar sta mogen op de website en social media van de club.
-                      Dit mag je altijd later weer intrekken.
-                    </span>
-                  </label>
                 </div>
               </fieldset>
 
@@ -469,9 +510,23 @@ const kantinedagen = [
     background: var(--kleur-papier-diep);
   }
   .veldrij { display: grid; gap: 1.25rem; align-items: start; }
+  .veldrij[hidden] { display: none; }
+  /* Huisnummer en toevoeging blijven ook op een telefoon naast elkaar. */
+  .veldrij--paar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   @media (min-width: 560px) {
     .veldrij { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .veldrij--drie { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+    .veldrij--drie-omgekeerd { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+  }
+
+  .formulier-tussenkop {
+    font-family: var(--font-smal);
+    font-size: var(--text-kop-s);
+    font-weight: 700;
+    color: var(--color-zwart);
+    padding-top: 1.25rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--kleur-lijn-licht);
   }
 
   .akkoorden {
@@ -513,9 +568,9 @@ const kantinedagen = [
     accent-color: var(--color-blauwdiep);
   }
 
-  /* Kantinedienst: twee aanklikbare tegels naast elkaar. */
-  .kantinedagen { border: 0; padding: 0; margin: 0; min-width: 0; }
-  .kantinedagen legend {
+  /* Keuzes als aanklikbare tegels, twee naast elkaar. */
+  .keuzegroep { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .keuzegroep legend {
     font-family: var(--font-smal);
     font-size: var(--text-kop-s);
     font-weight: 700;
@@ -523,13 +578,18 @@ const kantinedagen = [
     padding: 0;
     margin-bottom: 0.25rem;
   }
-  .dagkeuze {
+  .tegels {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.6rem;
     margin-top: 0.75rem;
   }
-  .kantinedagen > .dagkeuze > :global(label.dag) {
+  .tegels--lijst { grid-template-columns: minmax(0, 1fr); }
+  /* Tegels met een uitleg zijn op een telefoon te krap voor twee naast elkaar. */
+  @media (max-width: 559px) {
+    .tegels--breed { grid-template-columns: minmax(0, 1fr); }
+  }
+  .keuzegroep > .tegels > :global(label.tegel) {
     font-family: var(--font-sans);
     font-size: var(--text-klein);
     font-weight: 400;
@@ -537,7 +597,7 @@ const kantinedagen = [
     text-transform: none;
     color: inherit;
   }
-  .dag {
+  .tegel {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: 0.65rem;
@@ -548,10 +608,10 @@ const kantinedagen = [
     cursor: pointer;
     transition: border-color 0.15s var(--ease-klap), background-color 0.15s var(--ease-klap);
   }
-  .dag:hover { border-color: color-mix(in srgb, var(--color-blauwdiep) 50%, transparent); }
-  .dag:has(input:checked) { border-color: var(--color-blauwdiep); background: var(--kleur-papier-op); }
-  .dag:has(input:focus-visible) { outline: 3px solid var(--color-blauwdiep); outline-offset: 2px; }
-  .dag input {
+  .tegel:hover { border-color: color-mix(in srgb, var(--color-blauwdiep) 50%, transparent); }
+  .tegel:has(input:checked) { border-color: var(--color-blauwdiep); background: var(--kleur-papier-op); }
+  .tegel:has(input:focus-visible) { outline: 3px solid var(--color-blauwdiep); outline-offset: 2px; }
+  .tegel input {
     grid-row: span 2;
     /* .veld input is bedoeld voor tekstvelden; voor een vinkje terugzetten. */
     width: 1.15rem;
@@ -561,9 +621,9 @@ const kantinedagen = [
     margin: 0;
     accent-color: var(--color-blauwdiep);
   }
-  .dag-naam { font-weight: 600; color: var(--color-zwart); }
-  .dag-uitleg { font-size: var(--text-mini); color: var(--color-grijsdonker); }
-  @media (prefers-reduced-motion: reduce) { .dag { transition: none; } }
+  .tegel-naam { font-weight: 600; color: var(--color-zwart); }
+  .tegel-uitleg { font-size: var(--text-mini); color: var(--color-grijsdonker); }
+  @media (prefers-reduced-motion: reduce) { .tegel { transition: none; } }
 
   .formulier-melding {
     font-size: var(--text-klein);
@@ -639,16 +699,43 @@ const kantinedagen = [
       }
     };
     controleerGroepen();
+
+    /* Herhaal e-mail moet hetzelfde zijn als het eerste adres. */
+    const herhaal = formulier.querySelector<HTMLInputElement>('[data-herhaal]');
+    const origineel = herhaal
+      ? formulier.querySelector<HTMLInputElement>(`[name="${herhaal.dataset.herhaal}"]`)
+      : null;
+    const controleerHerhaal = () => {
+      if (!herhaal || !origineel) return;
+      const gelijk = herhaal.value.trim().toLowerCase() === origineel.value.trim().toLowerCase();
+      herhaal.setCustomValidity(gelijk ? '' : 'Niet hetzelfde e-mailadres.');
+    };
+    formulier.addEventListener('input', controleerHerhaal);
+
+    /* De vorige vereniging alleen bij "ja". Uitgeschakelde velden gaan niet
+       mee in de mail, dus wat er bij "nee" nog in stond verdwijnt vanzelf. */
+    const vorigeJa = formulier.querySelector<HTMLInputElement>('[data-vorige-ja]');
+    const vorigeVelden = formulier.querySelector<HTMLElement>('[data-vorige-velden]');
+    const toonVorige = () => {
+      if (!vorigeJa || !vorigeVelden) return;
+      vorigeVelden.hidden = !vorigeJa.checked;
+      vorigeVelden.querySelectorAll('input').forEach((veld) => (veld.disabled = !vorigeJa.checked));
+    };
+
     formulier.addEventListener('change', (gebeurtenis) => {
       controleerGroepen();
+      toonVorige();
       const doel = gebeurtenis.target;
-      // Een fout bij de dagkeuze verdwijnt zodra er een dag is aangevinkt.
-      if (doel instanceof HTMLInputElement && doel.closest('[data-groep-verplicht]')) toonFout(doel);
+      // Een fout bij een groep keuzes verdwijnt zodra er een is gekozen.
+      if (doel instanceof HTMLInputElement && (doel.type === 'radio' || doel.closest('[data-groep-verplicht]'))) {
+        toonFout(doel);
+      }
     });
 
     formulier.addEventListener('submit', async (gebeurtenis) => {
       gebeurtenis.preventDefault();
       controleerGroepen();
+      controleerHerhaal();
 
       const velden = [...formulier.querySelectorAll<HTMLInputElement>('input, select, textarea')];
       velden.forEach(toonFout);
@@ -669,7 +756,10 @@ const kantinedagen = [
         'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; ' +
           'na oplevering gaat de aanmelding rechtstreeks naar de ledenadministratie.',
       );
-      if (gelukt) controleerGroepen();
+      if (gelukt) {
+        controleerGroepen();
+        toonVorige();
+      }
     });
 
     // Meteen na het verlaten van een veld terugkoppelen, niet al tijdens het typen.

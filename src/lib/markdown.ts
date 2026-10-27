@@ -12,7 +12,7 @@
  *   - opsommingen met - of *
  *   - genummerde opsommingen met 1.
  *   - **vet** en *cursief*
- *   - [tekst](url)
+ *   - [tekst](url), ook met mailto:
  *   - kale URL's worden klikbaar
  *
  * Alle invoer wordt eerst geescaped, dus er kan geen HTML uit een
@@ -33,6 +33,9 @@ function inline(tekst: string): string {
   // [tekst](url)
   uit = uit.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
     '<a href="$2" rel="noopener noreferrer" target="_blank">$1</a>');
+
+  // [tekst](mailto:adres), opent het mailprogramma en dus geen nieuw tabblad
+  uit = uit.replace(/\[([^\]]+)\]\((mailto:[^\s)]+)\)/g, '<a href="$2">$1</a>');
 
   // Kale URL's, maar niet die al in een href staan. Leestekens aan het eind
   // horen bij de zin, niet bij de link: "kijk op rabobank.nl/clubsupport."

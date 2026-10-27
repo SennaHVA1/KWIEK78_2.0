@@ -14,7 +14,10 @@
  *   - src/data/nieuws.json, de berichten van kwiek78.nl, met de hand gevuld
  *     door `npm run nieuws`. Dit is de terugval als er geen token is.
  *
- * Het formaat is in beide gevallen dat van de Graph API, dus alles hieronder
+ * Daarnaast komen altijd de berichten uit src/data/eigen-nieuws.json mee: met
+ * de hand geschreven artikelen, die niet op Facebook staan.
+ *
+ * Het formaat is in alle gevallen dat van de Graph API, dus alles hieronder
  * werkt voor allebei.
  *
  * BELANGRIJK OVER DE VORM VAN EEN BERICHT:
@@ -35,6 +38,7 @@
  */
 
 import vanWebsite from '../data/nieuws.json';
+import eigen from '../data/eigen-nieuws.json';
 import type { Artikel } from './types';
 
 /** De vorm van een ruw bericht, gelijk aan wat de Facebook Graph API geeft. */
@@ -52,7 +56,10 @@ type RuwBericht = {
 /* Bestaat src/data/facebook niet, dan geeft deze glob een leeg object en komt
    het nieuws van kwiek78.nl. */
 const vanFacebook = import.meta.glob<{ default: unknown }>('../data/facebook/nieuws.json', { eager: true });
-const berichten = (vanFacebook['../data/facebook/nieuws.json']?.default ?? vanWebsite) as RuwBericht[];
+const berichten = [
+  ...((vanFacebook['../data/facebook/nieuws.json']?.default ?? vanWebsite) as RuwBericht[]),
+  ...(eigen as RuwBericht[]),
+];
 
 /** Maakt een URL-veilige slug van een titel. */
 function maakSlug(titel: string): string {

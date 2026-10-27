@@ -163,7 +163,7 @@ standen, verjaardagen, nieuws, agenda en diensten zijn voorbeeldmateriaal.
 | `standen.json` | 5 poulestanden | Sportlink |
 | `verjaardagen.json` | 134 leden, alleen dag en maand | Sportlink |
 | `nieuws.json` | 12 echte berichten, in Graph-API-vorm | kwiek78.nl, `npm run nieuws` |
-| `agenda.json` | 12 activiteiten | eigen beheer |
+| `facebook/agenda.json` | de evenementen van de Facebookpagina | Facebook, bij elke build |
 | `diensten.json` | 135 vrijwilligersdiensten | eigen beheer |
 | `sponsoren.json` | 8 sponsoren, echte namen | eigen beheer |
 | `bestuur.json` | 21 functies, **echte gegevens** | eigen beheer |

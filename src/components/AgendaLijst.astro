@@ -47,7 +47,11 @@ const dagDeel = (iso: string) => {
             <span class="agenda-maand">{deel.maand}</span>
           </time>
           <div class="agenda-inhoud">
-            <h3 class="agenda-titel">{item.titel}</h3>
+            <h3 class="agenda-titel">
+              {item.url
+                ? <a class="agenda-link" href={item.url} target="_blank" rel="noopener noreferrer">{item.titel}</a>
+                : item.titel}
+            </h3>
             <p class="agenda-meta data">
               {tijd(item.datum)}
               <span class="agenda-scheiding" aria-hidden="true"></span>
@@ -64,6 +68,8 @@ const dagDeel = (iso: string) => {
 
 <style>
   .agenda { list-style: none; margin: 0; padding: 0; }
+  .agenda-link { color: inherit; text-decoration: none; }
+  .agenda-link:hover { text-decoration: underline; }
 
   .agenda-rij {
     grid-template-columns: auto minmax(0, 1fr);

@@ -218,6 +218,8 @@ export type AgendaItem = {
   omschrijving: string;
   locatie: string;
   categorie: 'club' | 'jeugd' | 'kantine' | 'sponsor' | 'onderhoud';
+  /** Het evenement op Facebook. */
+  url?: string;
 };
 
 export type DienstSoort = 'kantine-zaterdag' | 'kantine-zondag' | 'bestuursdienst' | 'schoonmaak';

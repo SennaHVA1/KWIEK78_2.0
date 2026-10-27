@@ -23,7 +23,6 @@
  * functies. De aanroepen in de pagina's blijven dan gelijk.
  */
 
-import ruweAgenda from '../data/agenda.json';
 import ruweDiensten from '../data/diensten.json';
 import ruweSponsoren from '../data/sponsoren.json';
 import ruwBestuur from '../data/bestuur.json';
@@ -37,7 +36,11 @@ import type {
   Bestuurslid, Erelid, MinutenspelClaim, Video, Contributie,
 } from './types';
 
-const agenda = ruweAgenda as AgendaItem[];
+/* De agenda bestaat uit de evenementen op de Facebookpagina, bij elke build
+   opgehaald door scripts/facebook-ophalen.mjs. Zonder token bestaat het
+   bestand niet en is de agenda leeg. */
+const vanFacebook = import.meta.glob<{ default: unknown }>('../data/facebook/agenda.json', { eager: true });
+const agenda = (vanFacebook['../data/facebook/agenda.json']?.default ?? []) as AgendaItem[];
 const diensten = ruweDiensten as Dienst[];
 const sponsoren = ruweSponsoren as Sponsor[];
 const balsponsoren = ruweBalsponsoren as { standaard?: string; perWedstrijd: Record<string, string> };

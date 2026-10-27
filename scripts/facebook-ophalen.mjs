@@ -1,6 +1,8 @@
 /**
  * Haalt de laatste berichten van de Facebookpagina van de club op en zet ze in
  * /src/data/facebook/nieuws.json, met de foto's in /public/images/nieuws/facebook.
+ * De evenementen van de pagina gaan naar /src/data/facebook/agenda.json; dat
+ * is de clubagenda op de site.
  *
  * Draaien met: npm run facebook   (gebeurt ook automatisch bij npm run build)
  *
@@ -149,4 +151,65 @@ try {
   console.log(`${berichten.length} Facebookberichten weggeschreven naar ${UITMAP}/nieuws.json`);
 } catch (fout) {
   console.warn(`Facebook ophalen mislukt, de site bouwt op de vorige berichten: ${fout.message}`);
+}
+
+/* ==========================================================================
+   Agenda: de evenementen van de pagina
+   ========================================================================== */
+
+/* Evenementen vanaf deze datum. Staat nu op 1 januari 2026, zodat het
+   veteranenduel tegen Ajax van februari als test in de agenda staat. Bij
+   de start van een nieuw seizoen gewoon vooruitzetten. */
+const AGENDA_VANAF = '2026-01-01';
+const MAX_OMSCHRIJVING = 240;
+
+/** "2026-02-21T17:00:00+0100" wordt "2026-02-21T17:00:00+01:00". */
+const isoDatum = (datum) => String(datum).replace(/([+-]\d\d)(\d\d)$/, '$1:$2');
+
+/** De eerste alinea, afgekapt op een woordgrens. */
+function omschrijvingVan(tekst = '') {
+  const alinea = tekst.trim().split(/\n\s*\n/)[0].replace(/\s+/g, ' ').trim();
+  if (alinea.length <= MAX_OMSCHRIJVING) return alinea;
+  const kort = alinea.slice(0, MAX_OMSCHRIJVING);
+  return kort.slice(0, kort.lastIndexOf(' ')) + '...';
+}
+
+try {
+  const zoek = new URLSearchParams({
+    fields: 'id,name,start_time,end_time,place,description,is_canceled',
+    limit: '25',
+    access_token: TOKEN,
+  });
+
+  /* Facebook geeft de evenementen van nieuw naar oud. Zodra er een van voor
+     AGENDA_VANAF langskomt, hoeven we niet verder te bladeren. */
+  const evenementen = [];
+  let url = `https://graph.facebook.com/${VERSIE}/${PAGINA}/events?${zoek}`;
+  while (url) {
+    const data = await (await fetch(url)).json();
+    if (data.error) throw new Error(`${data.error.type} ${data.error.code}: ${data.error.message}`);
+    const pagina = data.data ?? [];
+    evenementen.push(...pagina.filter((e) => e.start_time.slice(0, 10) >= AGENDA_VANAF));
+    if (pagina.some((e) => e.start_time.slice(0, 10) < AGENDA_VANAF)) break;
+    url = data.paging?.next;
+  }
+
+  const agenda = evenementen
+    .filter((e) => !e.is_canceled)
+    .map((e) => ({
+      id: e.id,
+      datum: isoDatum(e.start_time),
+      ...(e.end_time && { eindDatum: isoDatum(e.end_time) }),
+      titel: e.name.trim(),
+      omschrijving: omschrijvingVan(e.description),
+      locatie: e.place?.name?.trim() ?? '',
+      categorie: 'club',
+      url: `https://www.facebook.com/events/${e.id}`,
+    }));
+
+  await mkdir(UITMAP, { recursive: true });
+  await writeFile(join(UITMAP, 'agenda.json'), JSON.stringify(agenda, null, 2) + '\n', 'utf8');
+  console.log(`${agenda.length} Facebookevenementen sinds ${AGENDA_VANAF} weggeschreven naar ${UITMAP}/agenda.json`);
+} catch (fout) {
+  console.warn(`Facebookevenementen ophalen mislukt, de agenda blijft zoals hij was: ${fout.message}`);
 }

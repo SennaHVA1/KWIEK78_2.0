@@ -87,6 +87,26 @@ export async function verstuur(formulier: HTMLFormElement): Promise<boolean> {
   }
 }
 
+/* Het hCaptcha-script van Web3Forms zet deze op window. */
+declare global {
+  interface Window {
+    hcaptcha?: { reset: (widgetId?: string) => void };
+  }
+}
+
+/**
+ * Zet de captcha van dit formulier terug. Op de sponsorpagina staan er twee,
+ * dus het moet met het widget-id; zonder id reset hCaptcha alleen de eerste.
+ */
+function resetCaptcha(formulier: HTMLFormElement) {
+  const id = formulier.querySelector('.h-captcha iframe')?.getAttribute('data-hcaptcha-widget-id');
+  try {
+    if (id) window.hcaptcha?.reset(id);
+  } catch {
+    /* Geen captcha geladen, dan valt er niets te resetten. */
+  }
+}
+
 /**
  * Het laatste stuk van elke submit, na de validatie: versturen en de
  * bezoeker laten weten hoe het ging. Zonder sleutel komt de demotekst in
@@ -109,12 +129,22 @@ export async function verstuurMetMelding(
     return false;
   }
 
+  /* hCaptcha staat aan in het dashboard van Web3Forms, dus zonder antwoord
+     weigert de server de inzending toch. Beter meteen zeggen. */
+  const captcha = formulier.querySelector<HTMLTextAreaElement>('textarea[name="h-captcha-response"]');
+  if (!captcha?.value) {
+    toon('Vink eerst het vakje "Ik ben een mens" aan, boven de verzendknop.');
+    return false;
+  }
+
   const knop = formulier.querySelector<HTMLButtonElement>('button[type="submit"]');
   if (knop) knop.disabled = true;
   toon('Bezig met versturen…');
 
   const gelukt = await verstuur(formulier);
   if (knop) knop.disabled = false;
+  /* Een captcha-antwoord is maar een keer geldig, ook als het misging. */
+  resetCaptcha(formulier);
 
   if (gelukt) {
     toon(formulier.dataset.bedankt ?? 'Bedankt, het is verstuurd.');

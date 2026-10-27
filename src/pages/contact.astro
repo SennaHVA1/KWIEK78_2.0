@@ -244,6 +244,8 @@ const wieWaarvoor = [
               <p class="veld-fout" data-fout hidden>Zet een vinkje om het bericht te versturen.</p>
             </div>
 
+            <div class="h-captcha" data-captcha="true" data-lang="nl"></div>
+
             <p class="formulier-melding" data-melding role="status" hidden></p>
 
             <button type="submit" class="knop knop--zwart">Bericht versturen</button>
@@ -252,6 +254,8 @@ const wieWaarvoor = [
       </div>
     </div>
   </section>
+  {/* hCaptcha van Web3Forms, alleen als de formulieren echt versturen. */}
+  {isActief('contact') && <script is:inline src="https://web3forms.com/client/script.js" async defer></script>}
 </Basis>
 
 <style>

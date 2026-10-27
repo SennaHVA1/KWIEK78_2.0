@@ -303,6 +303,8 @@ const gerealiseerd = [
             <p class="veld-fout" data-fout hidden>Zonder machtiging kunnen we de aanmelding niet verwerken.</p>
           </div>
 
+          <div class="h-captcha" data-captcha="true" data-lang="nl"></div>
+
           <p class="formulier-melding" data-melding role="status" hidden></p>
 
           <div class="formulier-knoppen">
@@ -416,6 +418,8 @@ const gerealiseerd = [
             </div>
           </div>
 
+          <div class="h-captcha" data-captcha="true" data-lang="nl"></div>
+
           <p class="formulier-melding" data-melding role="status" hidden></p>
           <button type="submit" class="knop knop--primair">Aanmelden als All Star</button>
         </form>
@@ -498,6 +502,8 @@ const gerealiseerd = [
       </div>
     </div>
   </section>
+  {/* hCaptcha van Web3Forms, alleen als de formulieren echt versturen. */}
+  {isActief('sponsoring') && <script is:inline src="https://web3forms.com/client/script.js" async defer></script>}
 </Basis>
 
 <style>

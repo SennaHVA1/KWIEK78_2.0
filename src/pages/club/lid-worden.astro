@@ -369,6 +369,8 @@ const nationaliteiten = [
                 </div>
               </fieldset>
 
+              <div class="h-captcha" data-captcha="true" data-lang="nl"></div>
+
               <p class="formulier-melding" data-melding role="status" hidden></p>
 
               <button type="submit" class="knop knop--zwart">Aanmelding versturen</button>
@@ -451,6 +453,8 @@ const nationaliteiten = [
                 <p class="veld-fout" data-fout hidden>Vul een toelichting in.</p>
               </div>
 
+              <div class="h-captcha" data-captcha="true" data-lang="nl"></div>
+
               <p class="formulier-melding" data-melding role="status" hidden></p>
 
               <button type="submit" class="knop knop--zwart">Wijziging doorgeven</button>
@@ -460,6 +464,8 @@ const nationaliteiten = [
       </div>
     </div>
   </section>
+  {/* hCaptcha van Web3Forms, alleen als de formulieren echt versturen. */}
+  {isActief('leden') && <script is:inline src="https://web3forms.com/client/script.js" async defer></script>}
 </Basis>
 
 <style>

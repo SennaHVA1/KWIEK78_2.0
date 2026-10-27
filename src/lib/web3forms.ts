@@ -2,18 +2,35 @@
  * Verstuurt de formulieren van de site via Web3Forms (web3forms.com). Die
  * zetten de inzending om in een e-mail naar het adres dat bij de sleutel hoort.
  *
- * DE SLEUTEL
- * Komt uit PUBLIC_WEB3FORMS_KEY: lokaal in .env, op Cloudflare onder Settings >
- * Variables and Secrets. Hij mag openbaar zijn, Web3Forms is daarop gemaakt:
- * met de sleutel kun je alleen mail sturen naar het vaste adres erachter.
+ * DE SLEUTELS
+ * Een sleutel hoort bij een mailbox, dus er zijn er drie:
  *
- * Is er geen sleutel, dan verstuurt niets en tonen de formulieren de
- * demomelding. Aanmelden als lid gaat dan via de KNVB (zie lid-worden.astro).
+ *   PUBLIC_WEB3FORMS_KEY_LEDEN        aanmelden en wijzigen, naar de ledenadministratie
+ *   PUBLIC_WEB3FORMS_KEY_SPONSORING   Club van '78 en All Stars, naar de sponsorcommissie
+ *   PUBLIC_WEB3FORMS_KEY_CONTACT      het contactformulier
+ *
+ * Lokaal in .env, op Cloudflare onder Settings > Variables and Secrets. Ze
+ * mogen openbaar zijn, Web3Forms is daarop gemaakt: met een sleutel kun je
+ * alleen mail sturen naar het vaste adres erachter.
+ *
+ * Elk formulier zegt met data-sleutel welke het gebruikt. Ontbreekt die
+ * sleutel, dan verstuurt dat formulier niets en toont het de demomelding.
+ * Aanmelden als lid gaat dan via de KNVB (zie lid-worden.astro).
  */
 
-const SLEUTEL: string | undefined = import.meta.env.PUBLIC_WEB3FORMS_KEY;
+/* Elke variabele voluit, anders kan Vite ze bij de build niet invullen. */
+const SLEUTELS = {
+  leden: import.meta.env.PUBLIC_WEB3FORMS_KEY_LEDEN,
+  sponsoring: import.meta.env.PUBLIC_WEB3FORMS_KEY_SPONSORING,
+  contact: import.meta.env.PUBLIC_WEB3FORMS_KEY_CONTACT,
+} as Record<string, string | undefined>;
 
-export const WEB3FORMS_ACTIEF = Boolean(SLEUTEL);
+export type Mailbox = 'leden' | 'sponsoring' | 'contact';
+
+/** Of de formulieren voor deze mailbox echt versturen. */
+export function isActief(mailbox: Mailbox): boolean {
+  return Boolean(SLEUTELS[mailbox]);
+}
 
 /**
  * Een verborgen vinkje dat mensen niet zien en bots wel invullen. Web3Forms
@@ -30,11 +47,12 @@ export function voegBotcheckToe(formulier: HTMLFormElement) {
 }
 
 /**
- * Stuurt het formulier op. Het onderwerp van de mail komt uit
- * data-onderwerp op het formulier. Geeft true terug als het is aangekomen.
+ * Stuurt het formulier op. De sleutel komt uit data-sleutel, het onderwerp
+ * van de mail uit data-onderwerp. Geeft true terug als het is aangekomen.
  */
 export async function verstuur(formulier: HTMLFormElement): Promise<boolean> {
-  if (!SLEUTEL) return false;
+  const sleutel = SLEUTELS[formulier.dataset.sleutel ?? ''];
+  if (!sleutel) return false;
 
   /* Meerdere vinkjes met dezelfde naam (de kantinedagen) worden een regel,
      een los aangevinkt vakje wordt "ja" in plaats van "on". */
@@ -52,7 +70,7 @@ export async function verstuur(formulier: HTMLFormElement): Promise<boolean> {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
-        access_key: SLEUTEL,
+        access_key: sleutel,
         subject: formulier.dataset.onderwerp ?? "Formulier website Kwiek '78",
         from_name: "Website v.v. Kwiek '78",
         /* Zo kan de ontvanger in zijn mail gewoon op beantwoorden klikken. */
@@ -84,7 +102,7 @@ export async function verstuurMetMelding(
     melding.textContent = tekst;
   };
 
-  if (!WEB3FORMS_ACTIEF) {
+  if (!SLEUTELS[formulier.dataset.sleutel ?? '']) {
     toon(demotekst);
     return false;
   }

@@ -17,7 +17,7 @@ import Basis from '../layouts/Basis.astro';
 import Paginakop from '../components/Paginakop.astro';
 import Foto from '../components/Foto.astro';
 import { CLUBGEGEVENS, ADRES, routeLink, getContactpersoon } from '../lib/club';
-import { WEB3FORMS_ACTIEF } from '../lib/web3forms';
+import { isActief } from '../lib/web3forms';
 
 const wieWaarvoor = [
   {
@@ -187,7 +187,7 @@ const wieWaarvoor = [
               Liever niet bellen? Vul het formulier in. Je krijgt doorgaans binnen twee
               werkdagen antwoord, behalve in de winterstop.
             </p>
-            {!WEB3FORMS_ACTIEF && (
+            {!isActief('contact') && (
               <p class="demo-melding">
                 <span class="merk merk--zacht">Demo</span>
                 Dit formulier is nog niet aangesloten en verstuurt niets.
@@ -198,6 +198,7 @@ const wieWaarvoor = [
           <form
             class="formulier"
             data-formulier
+            data-sleutel="contact"
             data-onderwerp="Bericht via het contactformulier"
             data-bedankt="Bedankt voor je bericht! Je krijgt doorgaans binnen twee werkdagen antwoord."
             novalidate

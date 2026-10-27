@@ -22,7 +22,7 @@ import Paginakop from '../components/Paginakop.astro';
 import Foto from '../components/Foto.astro';
 import { fotoBestaat } from '../lib/fotos';
 import { getSponsorNiveaus, getContactpersoon, CLUBGEGEVENS } from '../lib/club';
-import { WEB3FORMS_ACTIEF } from '../lib/web3forms';
+import { isActief } from '../lib/web3forms';
 
 const niveaus = getSponsorNiveaus();
 const sponsorcommissie = getContactpersoon('Sponsorcommissie');
@@ -224,7 +224,7 @@ const gerealiseerd = [
       <!-- Aanmeldformulier Club van '78 -->
       <div class="formulierblok">
         <h3 class="formulier-kop">Aanmelden voor de Club van '78</h3>
-        {!WEB3FORMS_ACTIEF && (
+        {!isActief('sponsoring') && (
           <p class="demo-melding">
             <span class="merk merk--afgelast">Demo</span>
             Dit formulier is nog niet aangesloten en verstuurt niets.
@@ -234,6 +234,7 @@ const gerealiseerd = [
         <form
           class="formulier"
           data-formulier
+          data-sleutel="sponsoring"
           data-onderwerp="Aanmelding Club van '78"
           data-bedankt="Bedankt voor je aanmelding voor de Club van '78! De sponsorcommissie neemt contact met je op."
           novalidate
@@ -357,7 +358,7 @@ const gerealiseerd = [
       <!-- Aanmeldformulier All Stars -->
       <div class="formulierblok">
         <h3 class="formulier-kop">Meedoen met de All Stars</h3>
-        {!WEB3FORMS_ACTIEF && (
+        {!isActief('sponsoring') && (
           <p class="demo-melding">
             <span class="merk merk--afgelast">Demo</span>
             Dit formulier is nog niet aangesloten en verstuurt niets.
@@ -367,6 +368,7 @@ const gerealiseerd = [
         <form
           class="formulier"
           data-formulier
+          data-sleutel="sponsoring"
           data-onderwerp="Aanmelding All Stars"
           data-bedankt="Bedankt, je doet mee met de All Stars! De sponsorcommissie neemt contact met je op."
           novalidate

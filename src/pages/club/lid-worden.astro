@@ -26,14 +26,15 @@ import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import { getTeamsPerCategorie } from '../../lib/sportlink';
 import { getContactpersoon, CLUBGEGEVENS } from '../../lib/club';
-import { WEB3FORMS_ACTIEF } from '../../lib/web3forms';
+import { isActief } from '../../lib/web3forms';
 
 const categorieen = getTeamsPerCategorie();
 const ledenadministratie = getContactpersoon('Ledenadministratie');
 
-/* Zolang er geen Web3Forms-sleutel is, verstuurt het eigen formulier niets.
-   Nieuwe leden schrijven zich dan in via de pagina van de KNVB. */
-const AANMELDEN_VIA_KNVB = !WEB3FORMS_ACTIEF;
+/* Zolang er geen Web3Forms-sleutel voor de ledenadministratie is, verstuurt
+   het eigen formulier niets. Nieuwe leden schrijven zich dan in via de pagina
+   van de KNVB. */
+const AANMELDEN_VIA_KNVB = !isActief('leden');
 const knvbInschrijven = `https://www.knvb.nl/ontdek-voetbal/inschrijven/${CLUBGEGEVENS.knvbClubcode}`;
 
 /* De momenten waarop er kantinediensten zijn: bar en keuken op de
@@ -125,7 +126,7 @@ const kantinedagen = [
               </a>
             </div>
             ) : (
-            <form class="formulier" data-formulier data-onderwerp="Nieuwe aanmelding als lid" data-bedankt="Bedankt voor je aanmelding! De ledenadministratie neemt binnen een week contact met je op." novalidate>
+            <form class="formulier" data-formulier data-sleutel="leden" data-onderwerp="Nieuwe aanmelding als lid" data-bedankt="Bedankt voor je aanmelding! De ledenadministratie neemt binnen een week contact met je op." novalidate>
               <div class="veldrij">
                 <div class="veld">
                   <label for="voornaam">Voornaam</label>
@@ -348,7 +349,7 @@ const kantinedagen = [
               </div>
             </div>
 
-            <form class="formulier" data-formulier data-onderwerp="Wijziging lidmaatschap" data-bedankt="Bedankt, je wijziging is doorgegeven aan de ledenadministratie." novalidate>
+            <form class="formulier" data-formulier data-sleutel="leden" data-onderwerp="Wijziging lidmaatschap" data-bedankt="Bedankt, je wijziging is doorgegeven aan de ledenadministratie." novalidate>
               <div class="veld">
                 <label for="wnaam">Naam van het lid</label>
                 <input type="text" id="wnaam" name="naam" autocomplete="name" required />

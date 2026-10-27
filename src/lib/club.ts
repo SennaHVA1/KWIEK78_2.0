@@ -111,13 +111,11 @@ export function getAgenda(): AgendaItem[] {
 /** De eerstvolgende activiteiten, voor het agendablok op de homepage. */
 export function getKomendeAgenda(aantal = 4, vanaf: Date = new Date()): AgendaItem[] {
   const grens = vanaf.getTime();
-  const komend = getAgenda().filter((item) => {
-    const eind = new Date(item.eindDatum ?? item.datum).getTime();
-    return eind >= grens;
-  });
-  // Is het seizoen voorbij en staat er niets meer, toon dan toch de laatste
-  // punten. Een leeg agendablok op de homepage ziet eruit als een storing.
-  return (komend.length > 0 ? komend : getAgenda().slice(-aantal)).slice(0, aantal);
+  // Geen terugval op activiteiten die al geweest zijn: op de homepage lijken
+  // die nog te komen. Staat er niets, dan zegt het blok dat.
+  return getAgenda()
+    .filter((item) => new Date(item.eindDatum ?? item.datum).getTime() >= grens)
+    .slice(0, aantal);
 }
 
 /* ==========================================================================

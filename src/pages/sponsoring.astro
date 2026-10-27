@@ -22,6 +22,7 @@ import Paginakop from '../components/Paginakop.astro';
 import Foto from '../components/Foto.astro';
 import { fotoBestaat } from '../lib/fotos';
 import { getSponsorNiveaus, getContactpersoon, CLUBGEGEVENS } from '../lib/club';
+import { WEB3FORMS_ACTIEF } from '../lib/web3forms';
 
 const niveaus = getSponsorNiveaus();
 const sponsorcommissie = getContactpersoon('Sponsorcommissie');
@@ -223,12 +224,20 @@ const gerealiseerd = [
       <!-- Aanmeldformulier Club van '78 -->
       <div class="formulierblok">
         <h3 class="formulier-kop">Aanmelden voor de Club van '78</h3>
-        <p class="demo-melding">
-          <span class="merk merk--afgelast">Demo</span>
-          Dit formulier is nog niet aangesloten en verstuurt niets.
-        </p>
+        {!WEB3FORMS_ACTIEF && (
+          <p class="demo-melding">
+            <span class="merk merk--afgelast">Demo</span>
+            Dit formulier is nog niet aangesloten en verstuurt niets.
+          </p>
+        )}
 
-        <form class="formulier" data-formulier novalidate>
+        <form
+          class="formulier"
+          data-formulier
+          data-onderwerp="Aanmelding Club van '78"
+          data-bedankt="Bedankt voor je aanmelding voor de Club van '78! De sponsorcommissie neemt contact met je op."
+          novalidate
+        >
           <div class="veldrij">
             <div class="veld">
               <label for="c78-voornaam">Voornaam</label>
@@ -348,12 +357,20 @@ const gerealiseerd = [
       <!-- Aanmeldformulier All Stars -->
       <div class="formulierblok">
         <h3 class="formulier-kop">Meedoen met de All Stars</h3>
-        <p class="demo-melding">
-          <span class="merk merk--afgelast">Demo</span>
-          Dit formulier is nog niet aangesloten en verstuurt niets.
-        </p>
+        {!WEB3FORMS_ACTIEF && (
+          <p class="demo-melding">
+            <span class="merk merk--afgelast">Demo</span>
+            Dit formulier is nog niet aangesloten en verstuurt niets.
+          </p>
+        )}
 
-        <form class="formulier" data-formulier novalidate>
+        <form
+          class="formulier"
+          data-formulier
+          data-onderwerp="Aanmelding All Stars"
+          data-bedankt="Bedankt, je doet mee met de All Stars! De sponsorcommissie neemt contact met je op."
+          novalidate
+        >
           <div class="veldrij">
             <div class="veld">
               <label for="as-naam">Voor- en achternaam</label>
@@ -734,9 +751,12 @@ const gerealiseerd = [
 </style>
 
 <script>
-  /* Validatie, gedeeld door beide formulieren op deze pagina. */
+  import { verstuurMetMelding, voegBotcheckToe } from '../lib/web3forms';
+
+  /* Validatie en versturen, gedeeld door beide formulieren op deze pagina. */
   for (const formulier of document.querySelectorAll<HTMLFormElement>('[data-formulier]')) {
     const melding = formulier.querySelector<HTMLElement>('[data-melding]');
+    voegBotcheckToe(formulier);
 
     const toonFout = (veld: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
       const fout = veld.closest('.veld')?.querySelector<HTMLElement>('[data-fout]');
@@ -744,7 +764,7 @@ const gerealiseerd = [
       fout.hidden = veld.checkValidity();
     };
 
-    formulier.addEventListener('submit', (gebeurtenis) => {
+    formulier.addEventListener('submit', async (gebeurtenis) => {
       gebeurtenis.preventDefault();
       const velden = [...formulier.querySelectorAll<HTMLInputElement>('input, select, textarea')];
       velden.forEach(toonFout);
@@ -759,12 +779,12 @@ const gerealiseerd = [
         return;
       }
 
-      if (melding) {
-        melding.hidden = false;
-        melding.textContent =
-          'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; na oplevering ' +
-          'komt de aanmelding binnen bij de sponsorcommissie.';
-      }
+      await verstuurMetMelding(
+        formulier,
+        melding,
+        'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; na oplevering ' +
+          'komt de aanmelding binnen bij de sponsorcommissie.',
+      );
     });
 
     formulier.addEventListener('blur', (gebeurtenis) => {

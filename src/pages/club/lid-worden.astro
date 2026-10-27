@@ -26,14 +26,14 @@ import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import { getTeamsPerCategorie } from '../../lib/sportlink';
 import { getContactpersoon, CLUBGEGEVENS } from '../../lib/club';
+import { WEB3FORMS_ACTIEF } from '../../lib/web3forms';
 
 const categorieen = getTeamsPerCategorie();
 const ledenadministratie = getContactpersoon('Ledenadministratie');
 
-/* Zolang het Sportlink-formulier niet is aangesloten, schrijven nieuwe leden
-   zich in via de pagina van de KNVB. Op false zetten en het eigen formulier
-   hieronder komt terug. */
-const AANMELDEN_VIA_KNVB = true;
+/* Zolang er geen Web3Forms-sleutel is, verstuurt het eigen formulier niets.
+   Nieuwe leden schrijven zich dan in via de pagina van de KNVB. */
+const AANMELDEN_VIA_KNVB = !WEB3FORMS_ACTIEF;
 const knvbInschrijven = `https://www.knvb.nl/ontdek-voetbal/inschrijven/${CLUBGEGEVENS.knvbClubcode}`;
 
 /* De momenten waarop er kantinediensten zijn: bar en keuken op de
@@ -125,7 +125,7 @@ const kantinedagen = [
               </a>
             </div>
             ) : (
-            <form class="formulier" data-formulier novalidate>
+            <form class="formulier" data-formulier data-onderwerp="Nieuwe aanmelding als lid" data-bedankt="Bedankt voor je aanmelding! De ledenadministratie neemt binnen een week contact met je op." novalidate>
               <div class="veldrij">
                 <div class="veld">
                   <label for="voornaam">Voornaam</label>
@@ -348,7 +348,7 @@ const kantinedagen = [
               </div>
             </div>
 
-            <form class="formulier" data-formulier novalidate>
+            <form class="formulier" data-formulier data-onderwerp="Wijziging lidmaatschap" data-bedankt="Bedankt, je wijziging is doorgegeven aan de ledenadministratie." novalidate>
               <div class="veld">
                 <label for="wnaam">Naam van het lid</label>
                 <input type="text" id="wnaam" name="naam" autocomplete="name" required />
@@ -575,8 +575,10 @@ const kantinedagen = [
 </style>
 
 <script>
+  import { verstuurMetMelding, voegBotcheckToe } from '../../lib/web3forms';
+
   /* ------------------------------------------------------------------ */
-  /* Tabwissel                                                          */
+  /* Tabwissel                                                        */
   /* Zelf geschreven, met de toetsenbordafspraken die bij een tablist    */
   /* horen: pijltjes wisselen, Home en End springen naar begin en eind.  */
   /* ------------------------------------------------------------------ */
@@ -612,10 +614,11 @@ const kantinedagen = [
   }
 
   /* ------------------------------------------------------------------ */
-  /* Validatie en demo-melding                                          */
+  /* Validatie en versturen                                             */
   /* ------------------------------------------------------------------ */
   for (const formulier of document.querySelectorAll<HTMLFormElement>('[data-formulier]')) {
     const melding = formulier.querySelector<HTMLElement>('[data-melding]');
+    voegBotcheckToe(formulier);
 
     /** Toont of verbergt de foutmelding die bij een veld hoort. */
     const toonFout = (veld: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
@@ -642,7 +645,7 @@ const kantinedagen = [
       if (doel instanceof HTMLInputElement && doel.closest('[data-groep-verplicht]')) toonFout(doel);
     });
 
-    formulier.addEventListener('submit', (gebeurtenis) => {
+    formulier.addEventListener('submit', async (gebeurtenis) => {
       gebeurtenis.preventDefault();
       controleerGroepen();
 
@@ -659,12 +662,13 @@ const kantinedagen = [
         return;
       }
 
-      if (melding) {
-        melding.hidden = false;
-        melding.textContent =
-          'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; ' +
-          'na oplevering gaat de aanmelding rechtstreeks naar de ledenadministratie.';
-      }
+      const gelukt = await verstuurMetMelding(
+        formulier,
+        melding,
+        'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; ' +
+          'na oplevering gaat de aanmelding rechtstreeks naar de ledenadministratie.',
+      );
+      if (gelukt) controleerGroepen();
     });
 
     // Meteen na het verlaten van een veld terugkoppelen, niet al tijdens het typen.

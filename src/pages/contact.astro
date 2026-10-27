@@ -17,6 +17,7 @@ import Basis from '../layouts/Basis.astro';
 import Paginakop from '../components/Paginakop.astro';
 import Foto from '../components/Foto.astro';
 import { CLUBGEGEVENS, ADRES, routeLink, getContactpersoon } from '../lib/club';
+import { WEB3FORMS_ACTIEF } from '../lib/web3forms';
 
 const wieWaarvoor = [
   {
@@ -186,13 +187,21 @@ const wieWaarvoor = [
               Liever niet bellen? Vul het formulier in. Je krijgt doorgaans binnen twee
               werkdagen antwoord, behalve in de winterstop.
             </p>
-            <p class="demo-melding">
-              <span class="merk merk--zacht">Demo</span>
-              Dit formulier is nog niet aangesloten en verstuurt niets.
-            </p>
+            {!WEB3FORMS_ACTIEF && (
+              <p class="demo-melding">
+                <span class="merk merk--zacht">Demo</span>
+                Dit formulier is nog niet aangesloten en verstuurt niets.
+              </p>
+            )}
           </div>
 
-          <form class="formulier" data-formulier novalidate>
+          <form
+            class="formulier"
+            data-formulier
+            data-onderwerp="Bericht via het contactformulier"
+            data-bedankt="Bedankt voor je bericht! Je krijgt doorgaans binnen twee werkdagen antwoord."
+            novalidate
+          >
             <div class="veldrij">
               <div class="veld">
                 <label for="cnaam">Naam</label>
@@ -378,11 +387,14 @@ const wieWaarvoor = [
 </style>
 
 <script>
+  import { verstuurMetMelding, voegBotcheckToe } from '../lib/web3forms';
+
   /* ------------------------------------------------------------------ */
-  /* Validatie van het contactformulier                                 */
+  /* Validatie en versturen van het contactformulier                    */
   /* ------------------------------------------------------------------ */
   for (const formulier of document.querySelectorAll<HTMLFormElement>('[data-formulier]')) {
     const melding = formulier.querySelector<HTMLElement>('[data-melding]');
+    voegBotcheckToe(formulier);
 
     /** Toont of verbergt de foutmelding die bij een veld hoort. */
     const toonFout = (veld: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
@@ -391,7 +403,7 @@ const wieWaarvoor = [
       fout.hidden = veld.checkValidity();
     };
 
-    formulier.addEventListener('submit', (gebeurtenis) => {
+    formulier.addEventListener('submit', async (gebeurtenis) => {
       gebeurtenis.preventDefault();
       const velden = [...formulier.querySelectorAll<HTMLInputElement>('input, select, textarea')];
       velden.forEach(toonFout);
@@ -406,12 +418,12 @@ const wieWaarvoor = [
         return;
       }
 
-      if (melding) {
-        melding.hidden = false;
-        melding.textContent =
-          'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; ' +
-          'na oplevering komt dit bericht binnen bij de gekozen vrijwilliger.';
-      }
+      await verstuurMetMelding(
+        formulier,
+        melding,
+        'Alles is correct ingevuld. In deze demo wordt er niets verstuurd; ' +
+          'na oplevering komt dit bericht binnen bij de gekozen vrijwilliger.',
+      );
     });
 
     formulier.addEventListener('blur', (gebeurtenis) => {

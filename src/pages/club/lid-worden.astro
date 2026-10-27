@@ -33,11 +33,11 @@ const lidmaatschappen = [
   { naam: 'Vereniging', uitleg: 'Voor als je niet in de KNVB-competitie wilt spelen' },
 ];
 
-const overigeVragen = [
-  'Mijn kind wil alleen trainen',
-  'Ik wil een dagdeel kantinedienst draaien',
-  'Ik wil scheidsrechter of spelbegeleider worden',
-];
+/* Op welke dag iemand een dagdeel in de kantine wil staan. Niets aanvinken
+   mag ook. */
+const kantinedagen = ['Zaterdag', 'Zondag'];
+
+const fluiten = ['Scheidsrechter', 'Spelbegeleider', 'Liever niet'];
 
 /* Keuzelijst voor de nationaliteit. Een vrij veld met suggesties, want een
    volledige lijst van alle landen is voor deze club overdreven. */
@@ -314,13 +314,27 @@ const nationaliteiten = [
               </div>
 
               {/* Overige vragen ------------------------------------------- */}
+              <h3 class="formulier-tussenkop">Overige vragen</h3>
+
               <fieldset class="keuzegroep">
-                <legend>Overige vragen</legend>
-                <div class="tegels tegels--lijst">
-                  {overigeVragen.map((vraag) => (
+                <legend>Ik wil een dagdeel kantinedienst draaien</legend>
+                <div class="tegels">
+                  {kantinedagen.map((dag) => (
                     <label class="tegel">
-                      <input type="checkbox" name="overigevragen" value={vraag} />
-                      <span class="tegel-naam">{vraag}</span>
+                      <input type="checkbox" name="kantinedienst" value={dag} />
+                      <span class="tegel-naam">Op {dag.toLowerCase()}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <fieldset class="keuzegroep">
+                <legend>Ik wil scheidsrechter of spelbegeleider worden</legend>
+                <div class="tegels tegels--drie">
+                  {fluiten.map((keuze) => (
+                    <label class="tegel">
+                      <input type="radio" name="scheidsrechter" value={keuze} />
+                      <span class="tegel-naam">{keuze}</span>
                     </label>
                   ))}
                 </div>
@@ -585,9 +599,10 @@ const nationaliteiten = [
     margin-top: 0.75rem;
   }
   .tegels--lijst { grid-template-columns: minmax(0, 1fr); }
+  .tegels--drie { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   /* Tegels met een uitleg zijn op een telefoon te krap voor twee naast elkaar. */
   @media (max-width: 559px) {
-    .tegels--breed { grid-template-columns: minmax(0, 1fr); }
+    .tegels--breed, .tegels--drie { grid-template-columns: minmax(0, 1fr); }
   }
   .keuzegroep > .tegels > :global(label.tegel) {
     font-family: var(--font-sans);

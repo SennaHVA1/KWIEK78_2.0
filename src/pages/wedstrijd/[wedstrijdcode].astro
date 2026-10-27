@@ -3,8 +3,10 @@
  * Detailpagina van een wedstrijd.
  *
  * Elke wedstrijd uit de adapter krijgt een eigen statische pagina. De
- * opstelling is een plaatshouder: Sportlink levert die pas na het digitale
- * wedstrijdformulier aan, en niet voor elke categorie.
+ * opstelling staat er niet op: de Club.Dataservice van Sportlink levert die
+ * niet (wedstrijd-informatie heeft geen spelers, een artikel daarvoor bestaat
+ * niet). Voetbal.nl haalt hem via een eigen KNVB-koppeling uit het digitale
+ * wedstrijdformulier, dus we verwijzen daarheen.
  */
 import Basis from '../../layouts/Basis.astro';
 import Clubwapen from '../../components/Clubwapen.astro';
@@ -169,14 +171,14 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
 
             <h2 class="kop-s detail-tweedekop">Opstelling</h2>
             <div class="opstelling">
-              <p class="detail-leeg zacht">
-                De opstelling verschijnt hier zodra die is ingevuld.
-              </p>
               <p class="opstelling-uitleg">
-                Sportlink levert de opstelling pas aan nadat het digitale wedstrijdformulier
-                is ingevuld, en niet voor elke leeftijdscategorie. Bij jeugdteams tonen we
-                daarbij nooit volledige achternamen.
+                De opstelling, doelpunten en kaarten staan na afloop van de wedstrijd op
+                Voetbal.nl en in de Voetbal.nl-app. Sportlink deelt die gegevens niet met
+                clubwebsites.
               </p>
+              <a class="knop knop--rand" href="https://www.voetbal.nl" target="_blank" rel="noopener noreferrer">
+                Bekijk op Voetbal.nl
+              </a>
               {eigenTeam && (
                 <a class="knop knop--rand" href={`/teams/${eigenTeam.id}`}>Selectie van {eigenTeam.korteNaam}</a>
               )}

@@ -25,10 +25,16 @@
 import Basis from '../../layouts/Basis.astro';
 import Paginakop from '../../components/Paginakop.astro';
 import { getTeamsPerCategorie } from '../../lib/sportlink';
-import { getContactpersoon } from '../../lib/club';
+import { getContactpersoon, CLUBGEGEVENS } from '../../lib/club';
 
 const categorieen = getTeamsPerCategorie();
 const ledenadministratie = getContactpersoon('Ledenadministratie');
+
+/* Zolang het Sportlink-formulier niet is aangesloten, schrijven nieuwe leden
+   zich in via de pagina van de KNVB. Op false zetten en het eigen formulier
+   hieronder komt terug. */
+const AANMELDEN_VIA_KNVB = true;
+const knvbInschrijven = `https://www.knvb.nl/ontdek-voetbal/inschrijven/${CLUBGEGEVENS.knvbClubcode}`;
 
 /* De momenten waarop er kantinediensten zijn: bar en keuken op de
    wedstrijddagen. Schoonmaken staat er op verzoek van de club niet bij. */
@@ -96,7 +102,7 @@ const kantinedagen = [
                 </p>
                 <h3>Hoe het daarna gaat</h3>
                 <ol>
-                  <li>Je vult dit formulier in.</li>
+                  <li>{AANMELDEN_VIA_KNVB ? 'Je schrijft je in via de KNVB.' : 'Je vult dit formulier in.'}</li>
                   <li>De ledenadministratie neemt binnen een week contact op.</li>
                   <li>Je wordt ingedeeld bij een team en krijgt de trainingstijden.</li>
                   <li>Contributiepartner NIKKI stuurt je het betaalverzoek. Je betaalt in een keer of in delen.</li>
@@ -108,6 +114,17 @@ const kantinedagen = [
               </div>
             </div>
 
+            {AANMELDEN_VIA_KNVB ? (
+            <div class="knvb-inschrijven">
+              <p>
+                Inschrijven gaat via de site van de KNVB. Daar vul je je gegevens in en je
+                aanmelding komt direct bij onze ledenadministratie terecht.
+              </p>
+              <a class="knop knop--zwart" href={knvbInschrijven} target="_blank" rel="noopener noreferrer">
+                Inschrijven bij de KNVB
+              </a>
+            </div>
+            ) : (
             <form class="formulier" data-formulier novalidate>
               <div class="veldrij">
                 <div class="veld">
@@ -300,6 +317,7 @@ const kantinedagen = [
 
               <button type="submit" class="knop knop--zwart">Aanmelding versturen</button>
             </form>
+            )}
           </div>
         </div>
 
@@ -443,6 +461,12 @@ const kantinedagen = [
 
   /* Formulier --------------------------------------------------------- */
   .formulier { display: grid; gap: 1.25rem; max-width: 40rem; }
+  .knvb-inschrijven {
+    display: grid; gap: 1.25rem; justify-items: start; align-content: start;
+    max-width: 40rem; padding: 1.5rem;
+    border-radius: var(--radius-vlak);
+    background: var(--kleur-papier-diep);
+  }
   .veldrij { display: grid; gap: 1.25rem; align-items: start; }
   @media (min-width: 560px) {
     .veldrij { grid-template-columns: repeat(2, minmax(0, 1fr)); }

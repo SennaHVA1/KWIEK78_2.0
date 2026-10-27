@@ -10,7 +10,7 @@ import Foto from '../../components/Foto.astro';
 import NieuwsKaart from '../../components/NieuwsKaart.astro';
 import { getNieuws, getArtikel } from '../../lib/nieuws';
 import { naarHtml } from '../../lib/markdown';
-import { volledigeDatum, machineDatum } from '../../lib/datum';
+import { volledigeDatum, machineDatum, datumZonderDag } from '../../lib/datum';
 
 export function getStaticPaths() {
   return getNieuws().map((artikel) => ({ params: { slug: artikel.slug } }));
@@ -24,7 +24,12 @@ const body = naarHtml(artikel.body);
 const meer = getNieuws().filter((a) => a.slug !== artikel.slug).slice(0, 3);
 ---
 
-<Basis titel={artikel.titel} omschrijving={artikel.samenvatting}>
+<Basis
+  titel={/-\d+$/.test(artikel.slug) ? `${artikel.titel} (${datumZonderDag(artikel.datum)})` : artikel.titel}
+  omschrijving={artikel.samenvatting}
+  afbeelding={artikel.afbeelding}
+  gepubliceerd={machineDatum(artikel.datum)}
+>
   <article>
     <!-- ============================================================== -->
     <!-- Kop                                                            -->

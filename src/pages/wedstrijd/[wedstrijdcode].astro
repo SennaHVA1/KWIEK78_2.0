@@ -16,7 +16,7 @@ import {
   getAlleWedstrijden, getWedstrijd, isThuiswedstrijd, getTeams, isVanTeam,
 } from '../../lib/sportlink';
 import { routeLink, CLUBGEGEVENS } from '../../lib/club';
-import { volledigeDatum, tijd, machineDatum, dagSleutel } from '../../lib/datum';
+import { volledigeDatum, tijd, machineDatum, dagSleutel, datumZonderDag } from '../../lib/datum';
 
 export function getStaticPaths() {
   return getAlleWedstrijden().map((wedstrijd) => ({
@@ -51,7 +51,7 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
 ---
 
 <Basis
-  titel={titel}
+  titel={`${titel}, ${datumZonderDag(wedstrijd.datum)}`}
   omschrijving={`${titel} op ${volledigeDatum(wedstrijd.datum)} om ${tijd(wedstrijd.datum)}, ${wedstrijd.accommodatie}.`}
 >
   <!-- ================================================================== -->

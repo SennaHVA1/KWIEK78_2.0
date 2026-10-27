@@ -12,13 +12,42 @@ interface Props {
   omschrijving: string;
   /** Zet op false voor pagina's die niet in Google horen. */
   indexeerbaar?: boolean;
+  /** Pad van de deelfoto voor Google, Facebook en WhatsApp. Anders de teamfoto van heren 1. */
+  afbeelding?: string;
+  /** Publicatiedatum. Maakt van de pagina een artikel voor og:type. */
+  gepubliceerd?: string;
 }
 
-const { titel, omschrijving, indexeerbaar = true } = Astro.props;
+const { titel, omschrijving, indexeerbaar = true, afbeelding, gepubliceerd } = Astro.props;
+
+/**
+ * De titel voor in Google. Koppen van Facebook staan vaak vol emoji, in
+ * hoofdletters of met een punt erachter; dat oogt in de zoekresultaten als
+ * spam. Lange koppen worden op een woordgrens ingekort, want Google kapt
+ * rond de 60 tekens toch af.
+ */
+function zoektitel(tekst: string): string {
+  let schoon = tekst
+    .replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/[.:]+$/, '');
+  const letters = schoon.replace(/[^\p{L}]/gu, '');
+  if (letters.length > 8 && letters === letters.toUpperCase()) {
+    schoon = schoon.charAt(0) + schoon.slice(1).toLowerCase().replace(/kwiek/g, 'Kwiek');
+  }
+  if (schoon.length <= 55) return schoon;
+  const kort = schoon.slice(0, 55);
+  return kort.slice(0, kort.lastIndexOf(' ')).replace(/[\s,.:;-]+$/, '') + '...';
+}
+
 const volledigeTitel = titel === 'Home'
-  ? `${CLUBGEGEVENS.naam} - Avenhorn`
-  : `${titel} - ${CLUBGEGEVENS.naam}`;
-const canoniek = new URL(Astro.url.pathname, Astro.site ?? 'https://www.kwiek78.nl').href;
+  ? `${CLUBGEGEVENS.naam} | Voetbalvereniging in ${CLUBGEGEVENS.plaats}`
+  : `${zoektitel(titel)} | ${CLUBGEGEVENS.naam}`;
+const basis = Astro.site ?? 'https://www.kwiek78.nl';
+const canoniek = new URL(Astro.url.pathname, basis).href;
+const deelfoto = new URL(afbeelding ?? '/images/club/hero-heren-1.webp', basis).href;
+const logo = new URL('/images/logos/kwiek-78-wapen.png', basis).href;
 ---
 
 <html lang="nl">
@@ -35,12 +64,15 @@ const canoniek = new URL(Astro.url.pathname, Astro.site ?? 'https://www.kwiek78.
     <link rel="icon" href="/images/logos/kwiek-78-favicon.png" />
     <link rel="apple-touch-icon" href="/images/logos/kwiek-78-wapen.png" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={gepubliceerd ? 'article' : 'website'} />
     <meta property="og:site_name" content={CLUBGEGEVENS.naam} />
     <meta property="og:title" content={volledigeTitel} />
     <meta property="og:description" content={omschrijving} />
     <meta property="og:locale" content="nl_NL" />
     <meta property="og:url" content={canoniek} />
+    <meta property="og:image" content={deelfoto} />
+    {gepubliceerd && <meta property="article:published_time" content={gepubliceerd} />}
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Lettertypes staan lokaal, dus geen verzoek naar een externe server. -->
     <link rel="preload" href="/fonts/barlow-400-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -53,9 +85,12 @@ const canoniek = new URL(Astro.url.pathname, Astro.site ?? 'https://www.kwiek78.
         '@context': 'https://schema.org',
         '@type': 'SportsClub',
         name: CLUBGEGEVENS.naam,
+        alternateName: "Kwiek '78",
         foundingDate: String(CLUBGEGEVENS.opgericht),
         sport: 'Voetbal',
         url: 'https://www.kwiek78.nl',
+        logo,
+        image: new URL('/images/club/hero-heren-1.webp', basis).href,
         telephone: CLUBGEGEVENS.telefoon,
         email: CLUBGEGEVENS.email,
         address: {
@@ -66,7 +101,7 @@ const canoniek = new URL(Astro.url.pathname, Astro.site ?? 'https://www.kwiek78.
           addressRegion: CLUBGEGEVENS.provincie,
           addressCountry: 'NL',
         },
-        sameAs: [CLUBGEGEVENS.facebook, CLUBGEGEVENS.x, CLUBGEGEVENS.youtube],
+        sameAs: [CLUBGEGEVENS.facebook, CLUBGEGEVENS.instagram, CLUBGEGEVENS.x, CLUBGEGEVENS.youtube],
       })}
     />
   </head>

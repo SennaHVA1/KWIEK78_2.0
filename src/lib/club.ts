@@ -61,7 +61,7 @@ const videos = ruweVideos as Video[];
  *
  * Bij oplevering zet je dit op `false`. Dat is de enige plek waar het staat.
  */
-export const IS_DEMO = true;
+export const IS_DEMO = false;
 
 /* ==========================================================================
    Vaste clubgegevens

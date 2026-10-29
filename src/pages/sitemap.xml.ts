@@ -30,6 +30,7 @@ export const GET: APIRoute = ({ site }) => {
     { pad: '/club/lid-worden', prioriteit: 0.7, frequentie: 'monthly' },
     { pad: '/club/bestuur', prioriteit: 0.6, frequentie: 'monthly' },
     { pad: '/club/agenda', prioriteit: 0.6, frequentie: 'weekly' },
+    { pad: '/club/trainingsschema', prioriteit: 0.6, frequentie: 'monthly' },
     { pad: '/club/verjaardagen', prioriteit: 0.5, frequentie: 'weekly' },
     { pad: '/club/minutenspel', prioriteit: 0.5, frequentie: 'monthly' },
     { pad: '/club/informatiebulletin', prioriteit: 0.5, frequentie: 'monthly' },

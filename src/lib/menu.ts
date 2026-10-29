@@ -77,6 +77,7 @@ export const MENU: Menu_groep[] = [
       { label: 'Bestuur en commissies', href: '/club/bestuur' },
       { label: 'Lid worden', href: '/club/lid-worden', omschrijving: 'Aanmelden en wijzigen' },
       { label: 'Agenda', href: '/club/agenda' },
+      { label: 'Trainingsschema', href: '/club/trainingsschema', omschrijving: 'Wie wanneer traint' },
       { label: 'Verjaardagen', href: '/club/verjaardagen', omschrijving: 'Wie er binnenkort jarig is' },
       { label: 'Informatiebulletin', href: '/club/informatiebulletin', omschrijving: 'Huisregels, contributie en lidmaatschap' },
       { label: 'Ereleden', href: '/club/ereleden' },

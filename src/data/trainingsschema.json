@@ -1,0 +1,202 @@
+[
+  {
+    "dag": "Maandag",
+    "van": "16:15",
+    "tot": "17:15",
+    "veld": "T1",
+    "team": "JO8, JO9 en MO9",
+    "trainer": "Henk van Vuure"
+  },
+  {
+    "dag": "Maandag",
+    "van": "17:15",
+    "tot": "18:15",
+    "veld": "A1",
+    "team": "JO11-1",
+    "trainer": "Alex / Wouter"
+  },
+  {
+    "dag": "Maandag",
+    "van": "18:00",
+    "tot": "19:00",
+    "veld": "A2",
+    "team": "JO10",
+    "trainer": "Bob Floris"
+  },
+  {
+    "dag": "Maandag",
+    "van": "19:00",
+    "tot": "20:00",
+    "veld": "Trainingsveld",
+    "team": "JO13",
+    "trainer": "Bas / Boudewijn"
+  },
+  {
+    "dag": "Maandag",
+    "van": "19:00",
+    "tot": "20:00",
+    "veld": "A1",
+    "team": "JO12-1",
+    "trainer": "Menno / Nick"
+  },
+  {
+    "dag": "Maandag",
+    "van": "19:00",
+    "tot": "20:00",
+    "veld": "A2",
+    "team": "JO12-2",
+    "trainer": "Rob Konijn"
+  },
+  {
+    "dag": "Maandag",
+    "van": "19:30",
+    "tot": "21:00",
+    "veld": "Trainingsveld",
+    "team": "JO15",
+    "trainer": "Henk van Vuure"
+  },
+  {
+    "dag": "Dinsdag",
+    "van": "19:00",
+    "tot": "20:00",
+    "veld": "Trainingsveld",
+    "team": "JO17 en JO19",
+    "trainer": "Wouter Weel, Matthijs Greenan, Tim Kramer"
+  },
+  {
+    "dag": "Dinsdag",
+    "van": "19:30",
+    "tot": "20:30",
+    "veld": "A-veld",
+    "team": "Dames",
+    "trainer": "Remco / Ron / Sandy / Lisa"
+  },
+  {
+    "dag": "Dinsdag",
+    "van": "20:00",
+    "tot": "21:30",
+    "veld": "A-veld/Trainingsveld",
+    "team": "Heren 1 en 2",
+    "trainer": "Ferry Noordhuis / Eric Bunck"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "15:45",
+    "tot": "17:00",
+    "veld": "A2 (tribunekant)",
+    "team": "JO9",
+    "trainer": "Barry van der Oord"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "16:00",
+    "tot": "17:00",
+    "veld": "A2 (kantinekant)",
+    "team": "JO10",
+    "trainer": "Nick / Colin"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "16:00",
+    "tot": "17:00",
+    "veld": "A1",
+    "team": "JO11-1",
+    "trainer": "Alex / Wouter"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "16:15",
+    "tot": "17:15",
+    "veld": "T1",
+    "team": "MO9",
+    "trainer": "Hugo Landesbergen"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "16:15",
+    "tot": "17:15",
+    "veld": "T2",
+    "team": "JO8",
+    "trainer": "Parick/Rick"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "16:15",
+    "tot": "17:15",
+    "veld": "T3 + T4",
+    "team": "JO6 en JO7",
+    "trainer": "Renate Stam"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "17:00",
+    "tot": "18:00",
+    "veld": "A1",
+    "team": "JO12-1",
+    "trainer": "Nick Oldenburg"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "17:00",
+    "tot": "18:00",
+    "veld": "A2",
+    "team": "JO12-2",
+    "trainer": "Bob Floris"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "19:00",
+    "tot": "20:00",
+    "veld": "A-veld",
+    "team": "JO13",
+    "trainer": "Bas / Boudewijn"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "20:00",
+    "tot": "21:00",
+    "veld": "Trainingsveld",
+    "team": "Lagere senioren / VE2",
+    "trainer": "zelf"
+  },
+  {
+    "dag": "Woensdag",
+    "van": "20:00",
+    "tot": "21:00",
+    "veld": "A-veld/Trainingsveld",
+    "team": "VE1",
+    "trainer": "zelf"
+  },
+  {
+    "dag": "Donderdag",
+    "van": "18:30",
+    "tot": "19:30",
+    "veld": "A2",
+    "team": "JO15",
+    "trainer": "Rens / Gerard"
+  },
+  {
+    "dag": "Donderdag",
+    "van": "19:00",
+    "tot": "20:00",
+    "veld": "Trainingsveld",
+    "team": "JO17 en JO19",
+    "trainer": "Sabrina Lijesen"
+  },
+  {
+    "dag": "Donderdag",
+    "van": "19:00",
+    "tot": "20:00",
+    "veld": "A1",
+    "team": "Dames",
+    "trainer": "Lisa van der Vliet"
+  },
+  {
+    "dag": "Donderdag",
+    "van": "20:00",
+    "tot": "21:30",
+    "veld": "A-veld",
+    "team": "Heren 1 en 2",
+    "trainer": "Ferry Noordhuis / Eric Bunck"
+  }
+]

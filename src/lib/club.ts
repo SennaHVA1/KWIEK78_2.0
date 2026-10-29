@@ -31,9 +31,10 @@ import ruweContributie from '../data/contributie.json';
 import ruwMinutenspel from '../data/minutenspel.json';
 import ruweVideos from '../data/videos.json';
 import ruweBalsponsoren from '../data/balsponsoren.json';
+import ruwTrainingsschema from '../data/trainingsschema.json';
 import type {
   AgendaItem, Dienst, DienstSoort, Sponsor, SponsorNiveau,
-  Bestuurslid, Erelid, MinutenspelClaim, Video, Contributie,
+  Bestuurslid, Erelid, MinutenspelClaim, Video, Contributie, SchemaTraining,
 } from './types';
 
 /* De agenda bestaat uit de evenementen op de Facebookpagina, bij elke build
@@ -49,6 +50,7 @@ const ereleden = ruweEreleden as Erelid[];
 const contributie = ruweContributie as Contributie;
 const minutenspel = ruwMinutenspel as MinutenspelClaim[];
 const videos = ruweVideos as Video[];
+const trainingsschema = ruwTrainingsschema as SchemaTraining[];
 
 /* ==========================================================================
    Demoschakelaar
@@ -242,6 +244,22 @@ export function getContactpersoon(functie: string): Bestuurslid | undefined {
  */
 export function getEreleden(): Erelid[] {
   return ereleden;
+}
+
+/**
+ * Het trainingsschema per dag, in de volgorde van de week. Binnen een dag
+ * staan de trainingen op begintijd. Komt uit de Excel van de club, omgezet
+ * naar src/data/trainingsschema.json.
+ */
+export function getTrainingsschema(): { dag: string; trainingen: SchemaTraining[] }[] {
+  const dagen: { dag: string; trainingen: SchemaTraining[] }[] = [];
+  for (const training of trainingsschema) {
+    let groep = dagen.find((d) => d.dag === training.dag);
+    if (!groep) dagen.push((groep = { dag: training.dag, trainingen: [] }));
+    groep.trainingen.push(training);
+  }
+  for (const groep of dagen) groep.trainingen.sort((a, b) => a.van.localeCompare(b.van));
+  return dagen;
 }
 
 /**

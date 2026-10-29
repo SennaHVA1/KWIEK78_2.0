@@ -76,6 +76,12 @@ export type Training = {
   veld: string;
 };
 
+/** Een regel uit het trainingsschema van de hele club. */
+export type SchemaTraining = Training & {
+  team: string;
+  trainer: string;
+};
+
 /**
  * Een team dat op de site staat.
  *

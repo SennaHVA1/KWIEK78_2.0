@@ -1,0 +1,128 @@
+---
+/**
+ * Trainingsschema.
+ *
+ * Aangeleverd als Excel (Trainingschema 2026-2027.xlsx) en omgezet naar
+ * src/data/trainingsschema.json. Een blok per dag, met dezelfde tabel als het
+ * dienstenrooster: op desktop een tabel, onder 640 pixels kaarten, omdat
+ * ouders dit vooral op hun telefoon langs de lijn opzoeken.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Paginakop from '../../components/Paginakop.astro';
+import { getTrainingsschema } from '../../lib/club';
+
+const schema = getTrainingsschema();
+---
+
+<Basis
+  titel="Trainingsschema"
+  omschrijving="Het trainingsschema van v.v. Kwiek '78 voor seizoen 2026/2027: per dag welk team wanneer en op welk veld traint."
+>
+  <Paginakop
+    foto="/images/club/clubhuis-training.webp"
+    fotoPositie="center 55%"
+    kicker="Club"
+    titel="Trainingsschema"
+    intro="Seizoen 2026/2027. Per dag zie je welk team wanneer traint, op welk veld en bij wie."
+  />
+
+  <section class="vlak-wit sectie">
+    <div class="omhulsel roosters">
+      {schema.map((blok) => (
+        <section class="kolom roosterblok">
+          <p class="kolom-kicker">{blok.trainingen.length} trainingen</p>
+          <div>
+            <h2 class="kop-sectie dagkop">{blok.dag}</h2>
+
+            <table class="rooster">
+              <caption class="alleen-schermlezer">Trainingen op {blok.dag.toLowerCase()}, seizoen 2026/2027</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Tijd</th>
+                  <th scope="col">Team</th>
+                  <th scope="col">Veld</th>
+                  <th scope="col">Trainer</th>
+                </tr>
+              </thead>
+              <tbody>
+                {blok.trainingen.map((training) => (
+                  <tr>
+                    <td data-label="Tijd" class="data rooster-tijd">{training.van} - {training.tot}</td>
+                    <td data-label="Team" class="rooster-team">{training.team}</td>
+                    <td data-label="Veld">{training.veld}</td>
+                    <td data-label="Trainer">{training.trainer}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .roosters { display: grid; gap: 3.5rem; }
+  .dagkop { padding-bottom: 1.1rem; }
+
+  /* Tabel op desktop -------------------------------------------------- */
+  .rooster { width: 100%; border-collapse: collapse; }
+  .rooster th {
+    font-family: var(--font-smal);
+    font-size: var(--text-mini);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 2px solid var(--color-zwart);
+    white-space: nowrap;
+  }
+  .rooster td {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--kleur-lijn-licht);
+    font-size: var(--text-klein);
+    vertical-align: top;
+  }
+  .rooster-tijd { white-space: nowrap; }
+  .rooster-team { font-weight: 600; }
+
+  /* Kaarten op mobiel ------------------------------------------------- */
+  @media (max-width: 639px) {
+    .rooster, .rooster tbody, .rooster tr, .rooster td { display: block; width: 100%; }
+    .rooster thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+    .rooster tr {
+      border: 1px solid var(--kleur-lijn-licht);
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .rooster td {
+      border: 0;
+      padding: 0.2rem 0;
+      display: grid;
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      gap: 0.75rem;
+      align-items: baseline;
+    }
+    .rooster td::before {
+      content: attr(data-label);
+      font-family: var(--font-smal);
+      font-size: var(--text-mini);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-grijsdonker);
+    }
+    .rooster td:first-child { border-bottom: 1px solid var(--kleur-lijn-licht); padding-bottom: 0.5rem; margin-bottom: 0.4rem; }
+  }
+
+  .alleen-schermlezer {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

@@ -27,12 +27,6 @@ import { isActief } from '../lib/web3forms';
 const niveaus = getSponsorNiveaus();
 const sponsorcommissie = getContactpersoon('Sponsorcommissie');
 
-/* Contactpersonen van de Club van '78, aangeleverd door de club. */
-const club78Contact = [
-  { naam: 'Gerard Tammer', telefoon: '06-53245016' },
-  { naam: 'Frank Imming', telefoon: '06-39782839' },
-];
-
 const gerealiseerd = [
   { wat: 'Dug-outs', waar: 'langs het hoofdveld' },
   { wat: 'De tribune', waar: 'aan de lange zijde' },
@@ -210,14 +204,6 @@ const gerealiseerd = [
               </li>
             ))}
           </ul>
-          <p class="gerealiseerd-noot">
-            Vragen? Bel {club78Contact.map((c, i) => (
-              <>
-                {i > 0 && ' of '}
-                {c.naam} op <a class="link-onder" href={`tel:${c.telefoon.replace(/[^0-9+]/g, '')}`}>{c.telefoon}</a>
-              </>
-            ))}.
-          </p>
         </aside>
       </div>
 
@@ -491,7 +477,7 @@ const gerealiseerd = [
             <span class="contact-soort">E-mail</span>
             <span class="contact-waarde">{sponsorcommissie?.email ?? 'sponsoring@kwiek78.nl'}</span>
           </a>
-          <span class="contact-regel contact-regel--stil">
+          <span class="contact-regel">
             <span class="contact-soort">Langskomen</span>
             <span class="contact-waarde">{CLUBGEGEVENS.sportpark}, {CLUBGEGEVENS.straat}</span>
           </span>
@@ -630,15 +616,6 @@ const gerealiseerd = [
   .gerealiseerd li { display: grid; gap: 0.05rem; }
   .gerealiseerd-wat { font-family: var(--font-smal); font-size: 1.2rem; font-weight: 700; }
   .gerealiseerd-waar { font-size: var(--text-klein); color: var(--color-grijs); }
-  .gerealiseerd-noot {
-    margin-top: 1.25rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--kleur-lijn-donker);
-    font-size: var(--text-klein);
-    color: var(--color-grijs);
-    line-height: 1.6;
-  }
-  .gerealiseerd-noot a { color: var(--color-blauw); }
 
   /* All Stars ------------------------------------------------------------ */
   .allstars-kop { margin-bottom: 1.25rem; }
@@ -743,7 +720,6 @@ const gerealiseerd = [
     text-decoration: none;
     color: inherit !important;
   }
-  .contact-regel--stil { background: transparent; }
   .contact-soort {
     font-family: var(--font-smal);
     font-size: var(--text-mini);

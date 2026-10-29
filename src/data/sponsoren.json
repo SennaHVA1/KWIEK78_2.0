@@ -30,6 +30,7 @@
     "id": "duijn-teamsport",
     "naam": "Duijn Teamsport",
     "niveau": "partner",
+    "url": "https://www.teamsportwinkel.nl",
     "logo": "/images/sponsoren/duijn-teamsport.webp",
     "inCarousel": true
   },
@@ -70,6 +71,7 @@
     "id": "villa-groet",
     "naam": "Villa Groet uit Avenhorn",
     "niveau": "partner",
+    "url": "https://groetuitavenhorn.nl",
     "logo": "/images/sponsoren/villa-groet.webp",
     "inCarousel": true
   },
@@ -103,6 +105,7 @@
     "id": "verkeersschool-nelen",
     "naam": "Verkeersschool Nelen",
     "niveau": "partner",
+    "url": "https://nelen.nl",
     "logo": "/images/sponsoren/verkeersschool-nelen.webp",
     "vlak": "donker",
     "inCarousel": true
@@ -111,6 +114,7 @@
     "id": "pronk-belkom",
     "naam": "Pronk-Belkom",
     "niveau": "partner",
+    "url": "https://www.pronk-belkom.nl",
     "logo": "/images/sponsoren/pronk-belkom.webp",
     "inCarousel": true
   },

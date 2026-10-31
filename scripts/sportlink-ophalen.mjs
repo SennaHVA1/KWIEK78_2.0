@@ -77,8 +77,6 @@ const teamnaam = (naam) =>
 /** "2026-10-11T10:30:00+0200" wordt "2026-10-11T10:30:00+02:00". */
 const isoDatum = (datum) => String(datum).replace(/([+-]\d\d)(\d\d)$/, '$1:$2');
 
-const isJeugdnaam = (naam) => /\b(J|M)?O\d+/.test(naam);
-
 const slug = (naam) =>
   naam.toLowerCase().replace(/'/g, '').replace(/\+/g, 'plus').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -139,10 +137,10 @@ async function bewaarLogos() {
 async function naarWedstrijd(ruw) {
   const thuisteam = teamnaam(ruw.thuisteam);
   const uitteam = teamnaam(ruw.uitteam);
-  const eigen = thuisteam.startsWith("Kwiek '78") ? thuisteam : uitteam;
 
-  /* Bij jeugdwedstrijden fluit vaak een jeugdlid. Die namen laten we weg. */
-  const scheids = isJeugdnaam(eigen) ? [] : officialsVan(ruw.scheidsrechters);
+  /* Ook bij de jeugd fluiten volwassenen, dus de officials staan overal bij.
+     Wie zich in Sportlink heeft afgeschermd valt er in officialsVan uit. */
+  const scheids = officialsVan(ruw.scheidsrechters);
 
   const wedstrijd = {
     wedstrijdcode: String(ruw.wedstrijdcode),

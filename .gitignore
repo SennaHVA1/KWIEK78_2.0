@@ -31,3 +31,6 @@ public/images/clubs/sportlink/
 # Wordt bij elke build opnieuw van Facebook gehaald. Het token staat in .env.
 src/data/facebook/
 public/images/nieuws/facebook/
+
+# Lokale cache van wrangler voor de herbouw-worker.
+.wrangler/

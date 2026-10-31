@@ -1,0 +1,22 @@
+# Worker die op vaste tijden de Deploy Hook van Cloudflare Pages aanroept,
+# zodat programma, uitslagen, standen en nieuws bijblijven. Dit vervangt de
+# planning in .github/workflows/herbouwen.yml: GitHub voert geplande runs
+# uren te laat of helemaal niet uit, Cloudflare doet dat wel op tijd.
+#
+# Eenmalig instellen, vanuit deze map:
+#   npx wrangler login
+#   npx wrangler secret put DEPLOY_HOOK     (de url van de Deploy Hook)
+#   npx wrangler deploy
+#
+# Tijden zijn in UTC. In de zomer is dat Nederlandse tijd min twee uur, in de
+# winter min een.
+name = "kwiek78-herbouwen"
+main = "index.js"
+compatibility_date = "2026-10-01"
+workers_dev = false  # geen publieke url nodig, alleen de cron
+
+[triggers]
+crons = [
+  "17 4 * * *",           # elke ochtend
+  "17 6-17 * * SAT,SUN",  # zaterdag en zondag elk uur, voor uitslagen en afgelastingen
+]

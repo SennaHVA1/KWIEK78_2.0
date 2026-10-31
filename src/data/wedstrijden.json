@@ -8,7 +8,7 @@
     "uitLogo": "/images/logos/grasshoppers.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Ferry Bregman"],
+    "scheidsrechters": [{ "naam": "Ferry Bregman", "rol": "Scheidsrechter" }],
     "competitie": "oefen",
     "uitslag": { "thuis": 2, "uit": 2 }
   },
@@ -21,7 +21,7 @@
     "uitLogo": "/images/logos/spirit-30.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Kunstgras",
-    "scheidsrechters": ["Marco Schouten"],
+    "scheidsrechters": [{ "naam": "Marco Schouten", "rol": "Scheidsrechter" }],
     "competitie": "oefen",
     "uitslag": { "thuis": 4, "uit": 1 }
   },
@@ -34,7 +34,7 @@
     "uitLogo": "/images/logos/rkedo.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Cor Sijm", "Nico Ruiter", "Wilfred Kaper"],
+    "scheidsrechters": [{ "naam": "Cor Sijm", "rol": "Scheidsrechter" }, { "naam": "Nico Ruiter", "rol": "Assistent-scheidsrechter" }, { "naam": "Wilfred Kaper", "rol": "Assistent-scheidsrechter" }],
     "competitie": "beker",
     "uitslag": { "thuis": 1, "uit": 3 }
   },
@@ -47,7 +47,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark Kwadijk",
     "veld": "Veld 2",
-    "scheidsrechters": ["Ted Bijl"],
+    "scheidsrechters": [{ "naam": "Ted Bijl", "rol": "Scheidsrechter" }],
     "competitie": "beker",
     "uitslag": { "thuis": 0, "uit": 2 }
   },
@@ -71,7 +71,7 @@
     "uitLogo": "/images/logos/vrone.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Kunstgras",
-    "scheidsrechters": ["Dennis Bakker"],
+    "scheidsrechters": [{ "naam": "Dennis Bakker", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -83,7 +83,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark Hauwert",
     "veld": "Veld 1",
-    "scheidsrechters": ["Ronald Neefjes"],
+    "scheidsrechters": [{ "naam": "Ronald Neefjes", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -95,7 +95,7 @@
     "uitLogo": "/images/logos/de-wherevogels.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Patrick Zwaan"],
+    "scheidsrechters": [{ "naam": "Patrick Zwaan", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -107,7 +107,7 @@
     "uitLogo": "/images/logos/oosthuizen.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 2",
-    "scheidsrechters": ["Hans Koopman"],
+    "scheidsrechters": [{ "naam": "Hans Koopman", "rol": "Scheidsrechter" }],
     "competitie": "beker"
   },
   {
@@ -119,7 +119,7 @@
     "uitLogo": "/images/logos/dirkshorn.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Sjaak Groot", "Erik Molenaar", "Wilfred Kaper"],
+    "scheidsrechters": [{ "naam": "Sjaak Groot", "rol": "Scheidsrechter" }, { "naam": "Erik Molenaar", "rol": "Assistent-scheidsrechter" }, { "naam": "Wilfred Kaper", "rol": "Assistent-scheidsrechter" }],
     "competitie": "beker"
   },
   {
@@ -131,7 +131,7 @@
     "uitLogo": "/images/logos/sporting-andijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Kunstgras",
-    "scheidsrechters": ["Dennis Bakker"],
+    "scheidsrechters": [{ "naam": "Dennis Bakker", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -154,7 +154,7 @@
     "uitLogo": "/images/logos/purmerend.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Patrick Zwaan"],
+    "scheidsrechters": [{ "naam": "Patrick Zwaan", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -177,7 +177,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark Victoria O",
     "veld": "Veld 1",
-    "scheidsrechters": ["Nico Ruiter", "Ted Bijl", "Cor Sijm"],
+    "scheidsrechters": [{ "naam": "Nico Ruiter", "rol": "Scheidsrechter" }, { "naam": "Ted Bijl", "rol": "Assistent-scheidsrechter" }, { "naam": "Cor Sijm", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -200,7 +200,7 @@
     "uitLogo": "/images/logos/sporting-andijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Kunstgras",
-    "scheidsrechters": ["Marco Schouten"],
+    "scheidsrechters": [{ "naam": "Marco Schouten", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -212,7 +212,7 @@
     "uitLogo": "/images/logos/beemster.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 2",
-    "scheidsrechters": ["Hans Koopman"],
+    "scheidsrechters": [{ "naam": "Hans Koopman", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -224,7 +224,7 @@
     "uitLogo": "/images/logos/kwadijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Erik Molenaar", "Sjaak Groot", "Ferry Bregman"],
+    "scheidsrechters": [{ "naam": "Erik Molenaar", "rol": "Scheidsrechter" }, { "naam": "Sjaak Groot", "rol": "Assistent-scheidsrechter" }, { "naam": "Ferry Bregman", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -236,7 +236,7 @@
     "uitLogo": "/images/logos/koedijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Kunstgras",
-    "scheidsrechters": ["Dennis Bakker"],
+    "scheidsrechters": [{ "naam": "Dennis Bakker", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -259,7 +259,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark Hauwert",
     "veld": "Veld 1",
-    "scheidsrechters": ["Wilfred Kaper", "Nico Ruiter", "Ronald Neefjes"],
+    "scheidsrechters": [{ "naam": "Wilfred Kaper", "rol": "Scheidsrechter" }, { "naam": "Nico Ruiter", "rol": "Assistent-scheidsrechter" }, { "naam": "Ronald Neefjes", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -283,7 +283,7 @@
     "uitLogo": "/images/logos/oosthuizen.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Patrick Zwaan"],
+    "scheidsrechters": [{ "naam": "Patrick Zwaan", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -307,7 +307,7 @@
     "uitLogo": "/images/logos/de-wherevogels.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Cor Sijm", "Ferry Bregman", "Ted Bijl"],
+    "scheidsrechters": [{ "naam": "Cor Sijm", "rol": "Scheidsrechter" }, { "naam": "Ferry Bregman", "rol": "Assistent-scheidsrechter" }, { "naam": "Ted Bijl", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie",
     "afgelast": true
   },
@@ -342,7 +342,7 @@
     "uitLogo": "/images/logos/purmerend.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 2",
-    "scheidsrechters": ["Hans Koopman"],
+    "scheidsrechters": [{ "naam": "Hans Koopman", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -354,7 +354,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark Oosthuizen",
     "veld": "Veld 1",
-    "scheidsrechters": ["Ronald Neefjes", "Marco Schouten", "Dennis Bakker"],
+    "scheidsrechters": [{ "naam": "Ronald Neefjes", "rol": "Scheidsrechter" }, { "naam": "Marco Schouten", "rol": "Assistent-scheidsrechter" }, { "naam": "Dennis Bakker", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -366,7 +366,7 @@
     "uitLogo": "/images/logos/beemster.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Patrick Zwaan"],
+    "scheidsrechters": [{ "naam": "Patrick Zwaan", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -378,7 +378,7 @@
     "uitLogo": "/images/logos/sporting-andijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Sjaak Groot", "Erik Molenaar", "Wilfred Kaper"],
+    "scheidsrechters": [{ "naam": "Sjaak Groot", "rol": "Scheidsrechter" }, { "naam": "Erik Molenaar", "rol": "Assistent-scheidsrechter" }, { "naam": "Wilfred Kaper", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -412,7 +412,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark De Keyser",
     "veld": "Veld 1",
-    "scheidsrechters": ["Ted Bijl", "Cor Sijm", "Ferry Bregman"],
+    "scheidsrechters": [{ "naam": "Ted Bijl", "rol": "Scheidsrechter" }, { "naam": "Cor Sijm", "rol": "Assistent-scheidsrechter" }, { "naam": "Ferry Bregman", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -424,7 +424,7 @@
     "uitLogo": "/images/logos/koedijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Nico Ruiter", "Ronald Neefjes", "Marco Schouten"],
+    "scheidsrechters": [{ "naam": "Nico Ruiter", "rol": "Scheidsrechter" }, { "naam": "Ronald Neefjes", "rol": "Assistent-scheidsrechter" }, { "naam": "Marco Schouten", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -458,7 +458,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark De Bloesem",
     "veld": "Veld 1",
-    "scheidsrechters": ["Wilfred Kaper", "Sjaak Groot", "Erik Molenaar"],
+    "scheidsrechters": [{ "naam": "Wilfred Kaper", "rol": "Scheidsrechter" }, { "naam": "Sjaak Groot", "rol": "Assistent-scheidsrechter" }, { "naam": "Erik Molenaar", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -470,7 +470,7 @@
     "uitLogo": "/images/logos/victoria-o.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Kunstgras",
-    "scheidsrechters": ["Marco Schouten"],
+    "scheidsrechters": [{ "naam": "Marco Schouten", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -482,7 +482,7 @@
     "uitLogo": "/images/logos/zouaven.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 2",
-    "scheidsrechters": ["Hans Koopman"],
+    "scheidsrechters": [{ "naam": "Hans Koopman", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -494,7 +494,7 @@
     "uitLogo": "/images/logos/purmerend.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Ferry Bregman", "Ted Bijl", "Nico Ruiter"],
+    "scheidsrechters": [{ "naam": "Ferry Bregman", "rol": "Scheidsrechter" }, { "naam": "Ted Bijl", "rol": "Assistent-scheidsrechter" }, { "naam": "Nico Ruiter", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -506,7 +506,7 @@
     "uitLogo": "/images/logos/rkedo.svg",
     "accommodatie": "Sporthal De Koggenhal",
     "veld": "Zaal A",
-    "scheidsrechters": ["Cor Sijm"],
+    "scheidsrechters": [{ "naam": "Cor Sijm", "rol": "Scheidsrechter" }],
     "competitie": "zaal"
   },
   {
@@ -518,7 +518,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark Dirkshorn",
     "veld": "Veld 1",
-    "scheidsrechters": ["Erik Molenaar", "Patrick Zwaan", "Dennis Bakker"],
+    "scheidsrechters": [{ "naam": "Erik Molenaar", "rol": "Scheidsrechter" }, { "naam": "Patrick Zwaan", "rol": "Assistent-scheidsrechter" }, { "naam": "Dennis Bakker", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -541,7 +541,7 @@
     "uitLogo": "/images/logos/victoria-o.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Sjaak Groot", "Ronald Neefjes", "Wilfred Kaper"],
+    "scheidsrechters": [{ "naam": "Sjaak Groot", "rol": "Scheidsrechter" }, { "naam": "Ronald Neefjes", "rol": "Assistent-scheidsrechter" }, { "naam": "Wilfred Kaper", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -553,7 +553,7 @@
     "uitLogo": "/images/logos/sporting-andijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Patrick Zwaan"],
+    "scheidsrechters": [{ "naam": "Patrick Zwaan", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -576,7 +576,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark De Weid",
     "veld": "Veld 1",
-    "scheidsrechters": ["Ted Bijl", "Ferry Bregman", "Cor Sijm"],
+    "scheidsrechters": [{ "naam": "Ted Bijl", "rol": "Scheidsrechter" }, { "naam": "Ferry Bregman", "rol": "Assistent-scheidsrechter" }, { "naam": "Cor Sijm", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -588,7 +588,7 @@
     "uitLogo": "/images/logos/hauwert-65.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Nico Ruiter", "Marco Schouten", "Erik Molenaar"],
+    "scheidsrechters": [{ "naam": "Nico Ruiter", "rol": "Scheidsrechter" }, { "naam": "Marco Schouten", "rol": "Assistent-scheidsrechter" }, { "naam": "Erik Molenaar", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -600,7 +600,7 @@
     "uitLogo": "/images/logos/koedijk.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Kunstgras",
-    "scheidsrechters": ["Dennis Bakker"],
+    "scheidsrechters": [{ "naam": "Dennis Bakker", "rol": "Scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -612,7 +612,7 @@
     "uitLogo": "/images/logos/kwiek-78-wapen.png",
     "accommodatie": "Sportpark Kwadijk",
     "veld": "Veld 1",
-    "scheidsrechters": ["Wilfred Kaper", "Sjaak Groot", "Ronald Neefjes"],
+    "scheidsrechters": [{ "naam": "Wilfred Kaper", "rol": "Scheidsrechter" }, { "naam": "Sjaak Groot", "rol": "Assistent-scheidsrechter" }, { "naam": "Ronald Neefjes", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -624,7 +624,7 @@
     "uitLogo": "/images/logos/oosthuizen.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Cor Sijm", "Ted Bijl", "Patrick Zwaan"],
+    "scheidsrechters": [{ "naam": "Cor Sijm", "rol": "Scheidsrechter" }, { "naam": "Ted Bijl", "rol": "Assistent-scheidsrechter" }, { "naam": "Patrick Zwaan", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   },
   {
@@ -636,7 +636,7 @@
     "uitLogo": "/images/logos/beemster.svg",
     "accommodatie": "Sportpark Het Veer",
     "veld": "Veld 1",
-    "scheidsrechters": ["Ferry Bregman", "Nico Ruiter", "Marco Schouten"],
+    "scheidsrechters": [{ "naam": "Ferry Bregman", "rol": "Scheidsrechter" }, { "naam": "Nico Ruiter", "rol": "Assistent-scheidsrechter" }, { "naam": "Marco Schouten", "rol": "Assistent-scheidsrechter" }],
     "competitie": "competitie"
   }
 ]

@@ -12,6 +12,16 @@
 export type Competitie = 'competitie' | 'beker' | 'oefen' | 'zaal';
 
 /**
+ * Een official bij een wedstrijd. Sportlink-veld `scheidsrechters`, waar de
+ * rol tussen haakjes achter de naam staat: "Scheidsrechter",
+ * "Assistent-scheidsrechter" of bij de pupillen "Spelbegeleider".
+ */
+export type Official = {
+  naam: string;
+  rol: string;
+};
+
+/**
  * Een wedstrijd.
  *
  * Sportlink-artikel: `wedstrijdenprogramma` (toekomstig) en `uitslagen` (gespeeld).
@@ -30,7 +40,8 @@ export type Wedstrijd = {
   uitLogo: string;
   accommodatie: string;
   veld?: string;
-  scheidsrechters?: string[];
+  /** Scheidsrechter eerst, dan de assistenten. Afgeschermde officials staan er niet in. */
+  scheidsrechters?: Official[];
   competitie: Competitie;
   uitslag?: { thuis: number; uit: number };
   afgelast?: boolean;

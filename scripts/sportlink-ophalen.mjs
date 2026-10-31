@@ -95,6 +95,21 @@ function uitslagVan(tekst) {
   return m ? { thuis: Number(m[1]), uit: Number(m[2]) } : undefined;
 }
 
+/**
+ * Sportlink zet alle officials in een regel, met de rol tussen haakjes:
+ * "Afgeschermd (Assistent-scheidsrechter), F. (Frans) Hulst (Assistent-
+ * scheidsrechter), T.F. (Thijs) Mul (Scheidsrechter)". Afgeschermde officials
+ * vallen weg, de scheidsrechter komt voorop en "T.F. (Thijs) Mul" wordt
+ * "Thijs Mul".
+ */
+const ROLVOLGORDE = ['Scheidsrechter', 'Assistent-scheidsrechter'];
+function officialsVan(tekst) {
+  return [...String(tekst ?? '').matchAll(/\s*(.+?)\s+\(([^()]+)\)\s*(?:,|$)/g)]
+    .map(([, naam, rol]) => ({ naam: naam.replace(/^[^\s()]+\s+\(([^()]+)\)\s+/, '$1 ').trim(), rol }))
+    .filter((o) => o.naam && o.naam !== 'Afgeschermd')
+    .sort((a, b) => (ROLVOLGORDE.indexOf(a.rol) + 1 || 9) - (ROLVOLGORDE.indexOf(b.rol) + 1 || 9));
+}
+
 /* De wapens van Sportlink zijn ondertekende links die na een paar uur
    verlopen. Daarom halen we ze binnen en serveren we ze zelf. */
 const logos = new Map();
@@ -126,10 +141,8 @@ async function naarWedstrijd(ruw) {
   const uitteam = teamnaam(ruw.uitteam);
   const eigen = thuisteam.startsWith("Kwiek '78") ? thuisteam : uitteam;
 
-  /* Bij jeugdwedstrijden fluit vaak een jeugdlid. Die naam laten we weg. */
-  const scheids = ruw.scheidsrechter && ruw.scheidsrechter !== 'Afgeschermd' && !isJeugdnaam(eigen)
-    ? [ruw.scheidsrechter]
-    : undefined;
+  /* Bij jeugdwedstrijden fluit vaak een jeugdlid. Die namen laten we weg. */
+  const scheids = isJeugdnaam(eigen) ? [] : officialsVan(ruw.scheidsrechters);
 
   const wedstrijd = {
     wedstrijdcode: String(ruw.wedstrijdcode),
@@ -144,7 +157,7 @@ async function naarWedstrijd(ruw) {
     competitie: competitieVan(ruw),
   };
   if (ruw.veld) wedstrijd.veld = ruw.veld;
-  if (scheids) wedstrijd.scheidsrechters = scheids;
+  if (scheids.length > 0) wedstrijd.scheidsrechters = scheids;
   const uitslag = uitslagVan(ruw.uitslag);
   if (uitslag) wedstrijd.uitslag = uitslag;
   if (ruw.status === 'Afgelast') wedstrijd.afgelast = true;

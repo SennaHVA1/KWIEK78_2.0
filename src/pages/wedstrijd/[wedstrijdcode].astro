@@ -155,9 +155,9 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
             <h2 class="kop-s">Arbitrage</h2>
             {wedstrijd.scheidsrechters && wedstrijd.scheidsrechters.length > 0 ? (
               <ul class="detail-namen">
-                {wedstrijd.scheidsrechters.map((naam, i) => (
+                {wedstrijd.scheidsrechters.map(({ naam, rol }) => (
                   <li>
-                    <span class="detail-rol data">{i === 0 ? 'Scheidsrechter' : 'Assistent'}</span>
+                    <span class="detail-rol data">{rol === 'Assistent-scheidsrechter' ? 'Assistent' : rol}</span>
                     <span>{naam}</span>
                   </li>
                 ))}

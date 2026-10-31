@@ -20,6 +20,7 @@ import { fotoBestaat, actiefotos } from '../../lib/fotos';
 import {
   getTeams, getTeam, getWedstrijdenVoorTeam, getPoulestand, toonNaam, aantalAfgeschermd, isPupillenteam,
 } from '../../lib/sportlink';
+import { getTrainingenVoorTeam } from '../../lib/club';
 
 export function getStaticPaths() {
   return getTeams().map((team) => ({ params: { id: team.id } }));
@@ -36,6 +37,8 @@ const stand = getPoulestand(team.id);
 const isPupil = isPupillenteam(team.naam);
 const afgeschermd = aantalAfgeschermd(team.id);
 const fotos = actiefotos(team.id);
+/* Wat in teaminfo.json staat gaat voor, anders komen de tijden uit het clubschema. */
+const trainingen = team.trainingen.length ? team.trainingen : getTrainingenVoorTeam(team);
 
 /* Selectie op positie groeperen. Spelers zonder positie komen achteraan; bij
    de jongste jeugd wordt er geen vaste positie bijgehouden. */
@@ -253,9 +256,9 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
             )}
 
             <h2 class="kop-sectie blokkop blokkop--tweede">Trainingstijden</h2>
-            {team.trainingen.length > 0 ? (
+            {trainingen.length > 0 ? (
               <ul class="traininglijst">
-                {team.trainingen.map((training) => (
+                {trainingen.map((training) => (
                   <li>
                     <span class="training-dag">{training.dag}</span>
                     <span class="training-tijd data">{training.van} - {training.tot}</span>
@@ -264,8 +267,9 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
                 ))}
               </ul>
             ) : (
-              <p class="ploeg-leeg zacht">De trainingstijden zijn op te vragen bij de trainer of via het contactformulier.</p>
+              <p class="ploeg-leeg zacht">Dit team staat niet in het trainingsschema. Vraag de trainer of neem contact op.</p>
             )}
+            <p class="training-schema"><a class="link-onder" href="/club/trainingsschema">Bekijk het hele trainingsschema</a></p>
 
             <a class="knop knop--rand" href="/contact">Vragen over dit team</a>
           </div>
@@ -393,6 +397,7 @@ if (zonderPositie.length > 0) groepen.push({ label: 'Selectie', spelers: zonderP
   .speler--zonder-nummer { grid-template-columns: minmax(0, 1fr); }
   .speler:last-child { border-bottom: 1px solid var(--kleur-lijn-donker); }
   .ploeg-leeg { font-size: var(--text-klein); max-width: 40ch; line-height: 1.6; }
+  .training-schema { margin-top: 0.9rem; font-size: var(--text-klein); }
   .speler-nummer { color: var(--color-grijs); text-align: right; }
   .speler-naam { font-weight: 600; }
 

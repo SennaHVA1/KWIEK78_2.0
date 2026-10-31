@@ -262,6 +262,39 @@ export function getTrainingsschema(): { dag: string; trainingen: SchemaTraining[
   return dagen;
 }
 
+/* Seniorenteams heten in het schema anders dan in Sportlink. */
+const SCHEMANAAM_SENIOREN: Record<string, string> = {
+  'kwiek-78-1': 'Heren 1',
+  'kwiek-78-2': 'Heren 2',
+  'kwiek-78-vr1': 'Dames',
+};
+
+/**
+ * De teams in een regel van het schema, los. "JO8, JO9 en MO9" wordt
+ * JO8, JO9 en MO9, en "Heren 1 en 2" wordt Heren 1 en Heren 2.
+ */
+function teamsInRegel(regel: string): string[] {
+  const teams: string[] = [];
+  for (const deel of regel.split(/,| en /).map((d) => d.trim()).filter(Boolean)) {
+    const vorige = teams[teams.length - 1];
+    teams.push(/^\d+$/.test(deel) && vorige ? vorige.replace(/\d+$/, deel) : deel);
+  }
+  return teams.map((t) => t.toLowerCase());
+}
+
+/**
+ * De trainingen van een team uit het clubschema. De jeugd heet in Sportlink
+ * O12-1, in het schema JO12-1 of soms alleen JO12; beide tellen. Teams die er
+ * niet in staan (zaal, 35+, het derde) krijgen een lege lijst.
+ */
+export function getTrainingenVoorTeam(team: { id: string; korteNaam: string; isJeugd: boolean }): SchemaTraining[] {
+  const namen = team.isJeugd
+    ? [team.korteNaam.replace(/^O/, 'JO'), team.korteNaam.replace(/^O/, 'JO').replace(/-1$/, '')]
+    : [SCHEMANAAM_SENIOREN[team.id]].filter(Boolean);
+  const gezocht = namen.map((n) => n.toLowerCase());
+  return trainingsschema.filter((t) => teamsInRegel(t.team).some((naam) => gezocht.includes(naam)));
+}
+
 /**
  * De contributie zoals die in het informatiebulletin staat: een basisbedrag
  * per leeftijdscategorie voor veld en zaal, plus de bijdrage voor het

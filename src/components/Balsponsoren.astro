@@ -1,0 +1,71 @@
+---
+/**
+ * De wedstrijdbalsponsoren van een wedstrijd, elk op een eigen tegel: het logo
+ * als dat er is, anders de naam. Met een eigen site is de tegel een link.
+ */
+import type { Balsponsor } from '../lib/types';
+
+interface Props {
+  sponsoren: Balsponsor[];
+}
+
+const { sponsoren } = Astro.props;
+---
+
+<ul class="balsponsoren">
+  {sponsoren.map((sponsor) => {
+    const Tegel = sponsor.url ? 'a' : 'span';
+    const link = sponsor.url ? { href: sponsor.url, target: '_blank', rel: 'noopener noreferrer' } : {};
+    return (
+      <li>
+        <Tegel class="balsponsor" data-vlak={sponsor.vlak} {...link}>
+          {sponsor.logo
+            ? <img src={sponsor.logo} alt={sponsor.naam} loading="lazy" decoding="async" />
+            : sponsor.naam}
+        </Tegel>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .balsponsoren {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: inherit;
+    gap: 0.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  /* Wit, want de meeste logo's zijn gemaakt voor een lichte achtergrond. De
+     rand houdt de tegel zichtbaar op een witte pagina. */
+  .balsponsor {
+    display: grid;
+    place-items: center;
+    min-height: 4rem;
+    max-width: 100%;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--kleur-lijn-licht);
+    border-radius: var(--radius-klein);
+    background: var(--color-wit);
+    color: var(--color-zwart);
+    font-family: var(--font-smal);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.18s var(--ease-klap);
+  }
+  .balsponsor[data-vlak='donker'] { background: var(--color-zwart); border-color: var(--kleur-lijn-donker); }
+  /* Vaste hoogte, en een grens aan de breedte: een heel langwerpig logo wordt
+     anders veel groter dan de rest en is dan ook niet meer scherp. */
+  .balsponsor img { display: block; height: 3rem; width: auto; max-width: 14rem; object-fit: contain; }
+  a.balsponsor:hover { transform: translateY(-2px); }
+  @media (prefers-reduced-motion: reduce) {
+    .balsponsor { transition: none; }
+    a.balsponsor:hover { transform: none; }
+  }
+</style>

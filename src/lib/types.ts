@@ -216,6 +216,10 @@ export type Sponsor = {
   inCarousel: boolean;
 };
 
+/** Een wedstrijdbalsponsor. Niet elke balsponsor staat ook in de sponsorlijst
+ *  en heeft een logo; zonder logo tonen we de naam. */
+export type Balsponsor = Pick<Sponsor, 'naam' | 'url' | 'vlak'> & { logo?: string };
+
 export type Bestuurslid = {
   /** Kan ook een duo zijn, bijvoorbeeld twee mensen die samen de secretaris doen. */
   naam: string;
@@ -231,6 +235,8 @@ export type AgendaItem = {
   id: string;
   datum: string;
   eindDatum?: string;
+  /** Tekst in plaats van de kloktijd, bijvoorbeeld "Na de wedstrijd". */
+  tijdTekst?: string;
   titel: string;
   omschrijving: string;
   locatie: string;

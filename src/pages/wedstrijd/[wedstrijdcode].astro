@@ -15,7 +15,8 @@ import Wedstrijdrij from '../../components/Wedstrijdrij.astro';
 import {
   getAlleWedstrijden, getWedstrijd, isThuiswedstrijd, getTeams, isVanTeam,
 } from '../../lib/sportlink';
-import { routeLink, CLUBGEGEVENS } from '../../lib/club';
+import Balsponsoren from '../../components/Balsponsoren.astro';
+import { routeLink, CLUBGEGEVENS, getBalsponsoren } from '../../lib/club';
 import { volledigeDatum, tijd, machineDatum, dagSleutel, datumZonderDag } from '../../lib/datum';
 
 export function getStaticPaths() {
@@ -41,6 +42,11 @@ const soortLabel: Record<typeof wedstrijd.competitie, string> = {
 
 /* Het eigen team opzoeken zodat we naar de teampagina kunnen linken. */
 const eigenTeam = getTeams().find((t) => isVanTeam(wedstrijd, t));
+
+/* De wedstrijdbal hoort alleen bij de thuiswedstrijden van het eerste. */
+const balsponsoren = thuis && eigenTeam?.id === 'kwiek-78-1'
+  ? getBalsponsoren(wedstrijd.wedstrijdcode)
+  : [];
 
 /* De andere wedstrijden op dezelfde dag: handig als er meer kinderen spelen. */
 const zelfdeDag = getAlleWedstrijden().filter(
@@ -149,6 +155,13 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
               target="_blank"
               rel="noopener noreferrer"
             >Route plannen</a>
+
+            {balsponsoren.length > 0 && (
+              <>
+                <h2 class="kop-s detail-tweedekop">Wedstrijdbal aangeboden door</h2>
+                <Balsponsoren sponsoren={balsponsoren} />
+              </>
+            )}
           </div>
 
           <div class="detail-blok">

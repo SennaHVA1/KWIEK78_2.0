@@ -53,7 +53,7 @@ const dagDeel = (iso: string) => {
                 : item.titel}
             </h3>
             <p class="agenda-meta data">
-              {tijd(item.datum)}
+              {item.tijdTekst ?? tijd(item.datum)}
               <span class="agenda-scheiding" aria-hidden="true"></span>
               {item.locatie}
             </p>

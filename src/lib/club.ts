@@ -31,9 +31,10 @@ import ruweContributie from '../data/contributie.json';
 import ruwMinutenspel from '../data/minutenspel.json';
 import ruweVideos from '../data/videos.json';
 import ruweBalsponsoren from '../data/balsponsoren.json';
+import eigenAgenda from '../data/eigen-agenda.json';
 import ruwTrainingsschema from '../data/trainingsschema.json';
 import type {
-  AgendaItem, Dienst, DienstSoort, Sponsor, SponsorNiveau,
+  AgendaItem, Balsponsor, Dienst, DienstSoort, Sponsor, SponsorNiveau,
   Bestuurslid, Erelid, MinutenspelClaim, Video, Contributie, SchemaTraining,
 } from './types';
 
@@ -41,10 +42,17 @@ import type {
    opgehaald door scripts/facebook-ophalen.mjs. Zonder token bestaat het
    bestand niet en is de agenda leeg. */
 const vanFacebook = import.meta.glob<{ default: unknown }>('../data/facebook/agenda.json', { eager: true });
-const agenda = (vanFacebook['../data/facebook/agenda.json']?.default ?? []) as AgendaItem[];
+const agenda = [
+  ...((vanFacebook['../data/facebook/agenda.json']?.default ?? []) as AgendaItem[]),
+  ...(eigenAgenda as AgendaItem[]),
+];
 const diensten = ruweDiensten as Dienst[];
 const sponsoren = ruweSponsoren as Sponsor[];
-const balsponsoren = ruweBalsponsoren as { standaard?: string; perWedstrijd: Record<string, string> };
+const balsponsoren = ruweBalsponsoren as {
+  standaard?: string;
+  sponsoren: (Balsponsor & { id: string })[];
+  perWedstrijd: Record<string, string[]>;
+};
 const bestuur = ruwBestuur as Bestuurslid[];
 const ereleden = ruweEreleden as Erelid[];
 const contributie = ruweContributie as Contributie;
@@ -192,16 +200,19 @@ export function getCarouselSponsoren(): Sponsor[] {
 }
 
 /**
- * De wedstrijdbalsponsor van een wedstrijd van het eerste elftal.
+ * De wedstrijdbalsponsoren van een wedstrijd van het eerste elftal.
  *
- * In balsponsoren.json staat een standaardsponsor en per wedstrijdcode een
- * eventuele uitzondering, beide als id uit sponsoren.json. Heeft een
- * wedstrijd een eigen balsponsor, zet dan in "perWedstrijd" de wedstrijdcode
- * met het sponsor-id, bijvoorbeeld { "2604118": "spare-rib-express" }.
+ * In balsponsoren.json staat een standaardsponsor en per wedstrijdcode de
+ * eigen balsponsoren van die wedstrijd. Gebruik het id uit sponsoren.json, of
+ * uit "sponsoren" in balsponsoren.json voor wie alleen de bal sponsort en dus
+ * niet op de sponsorpagina hoort: dan komen logo en link mee. Anders de naam,
+ * die als tekst getoond wordt: { "20869701": ["pronk-belkom", "Lou Lou"] }.
  */
-export function getBalsponsor(wedstrijdcode: string): Sponsor | undefined {
-  const id = balsponsoren.perWedstrijd[wedstrijdcode] ?? balsponsoren.standaard;
-  return id ? sponsoren.find((s) => s.id === id) : undefined;
+export function getBalsponsoren(wedstrijdcode: string): Balsponsor[] {
+  const eigen = balsponsoren.perWedstrijd[wedstrijdcode];
+  const lijst = eigen ?? (balsponsoren.standaard ? [balsponsoren.standaard] : []);
+  const bekend: (Balsponsor & { id: string })[] = [...sponsoren, ...balsponsoren.sponsoren];
+  return lijst.map((sponsor) => bekend.find((s) => s.id === sponsor) ?? { naam: sponsor });
 }
 
 /* ==========================================================================

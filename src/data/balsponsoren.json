@@ -1,4 +1,87 @@
 {
   "standaard": "kramer-keukens",
-  "perWedstrijd": {}
+  "sponsoren": [
+    {
+      "id": "bikeservice-van-vuure",
+      "naam": "Bike Service Van Vuure",
+      "url": "https://www.bikeservicevanvuure.nl",
+      "logo": "/images/sponsoren/bikeservice-van-vuure.webp",
+      "vlak": "donker"
+    },
+    {
+      "id": "dhv-accountancy",
+      "naam": "DHV Accountancy",
+      "url": "https://www.dhvaccountancy.nl",
+      "logo": "/images/sponsoren/dhv-accountancy.webp"
+    },
+    {
+      "id": "oppermannen",
+      "naam": "Oppermannen",
+      "url": "https://oppermannen.nl",
+      "logo": "/images/sponsoren/oppermannen.webp"
+    },
+    {
+      "id": "hoek-bouma",
+      "naam": "Hoek Bouma",
+      "url": "https://www.hoekbouma.nl",
+      "logo": "/images/sponsoren/hoek-bouma.webp"
+    },
+    {
+      "id": "ruiter-dakkapellen",
+      "naam": "Ruiter Dakkapellen",
+      "url": "https://www.ruiterdakkapellen.nl",
+      "logo": "/images/sponsoren/ruiter-dakkapellen.webp"
+    },
+    {
+      "id": "vdb-entertainment",
+      "naam": "VDB Entertainment",
+      "url": "https://vdbentertainment.nl",
+      "logo": "/images/sponsoren/vdb-entertainment.webp"
+    },
+    {
+      "id": "enerzien",
+      "naam": "Enerzien",
+      "url": "https://www.enerzien.nl",
+      "logo": "/images/sponsoren/enerzien.webp"
+    },
+    {
+      "id": "sps-heicombinatie",
+      "naam": "SPS Heicombinatie",
+      "url": "https://heicombinatiesps.nl",
+      "logo": "/images/sponsoren/sps-heicombinatie.webp"
+    },
+    {
+      "id": "ed-laan-de-kapper",
+      "naam": "Ed Laan de Kapper",
+      "url": "https://edlaandekapper.nl",
+      "logo": "/images/sponsoren/ed-laan-de-kapper.webp"
+    },
+    {
+      "id": "bol-schildersbedrijf",
+      "naam": "Bol Schildersbedrijf",
+      "url": "https://bolschildersbedrijf.nl",
+      "logo": "/images/sponsoren/bol-schildersbedrijf.webp"
+    },
+    {
+      "id": "writify",
+      "naam": "Writify",
+      "url": "https://www.writify.co",
+      "logo": "/images/sponsoren/writify.webp"
+    }
+  ],
+  "perWedstrijd": {
+    "20869239": ["john-pronk-transport", "Frank Lascaris"],
+    "20869431": ["spare-rib-express", "Lou Lou"],
+    "20869624": ["ed-laan-de-kapper", "bikeservice-van-vuure"],
+    "20869701": ["dhv-accountancy", "oppermannen"],
+    "20869882": ["pronk-belkom", "john-pronk-transport"],
+    "20870061": ["ruiter-dakkapellen", "VD Gulik"],
+    "20870228": ["hoek-bouma", "Dekker Bouwbedrijf"],
+    "20870318": ["vdb-entertainment", "braas-en-partners"],
+    "20870511": ["kramer-keukens", "bol-schildersbedrijf"],
+    "20870704": ["writify", "enerzien"],
+    "20870961": ["kramer-keukens", "braas-en-partners"],
+    "20871142": ["bandenservice-van-den-enghel", "sps-heicombinatie"],
+    "20871308": ["banjos-bar", "VD Gulik"]
+  }
 }

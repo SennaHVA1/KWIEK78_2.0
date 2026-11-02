@@ -1,0 +1,32 @@
+[
+  {
+    "id": "nieuwjaarsreceptie-2027",
+    "datum": "2027-01-09T20:00:00+01:00",
+    "eindDatum": "2027-01-09T23:59:00+01:00",
+    "tijdTekst": "Vanaf 20:00",
+    "titel": "Nieuwjaarsreceptie met zanger Leen Schoon",
+    "omschrijving": "Op zaterdagavond 9 januari luiden we samen het nieuwe jaar in, met een optreden van zanger Leen Schoon.",
+    "locatie": "Sportpark Het Veer",
+    "categorie": "club"
+  },
+  {
+    "id": "quincy-smolders-dynamo-2027",
+    "datum": "2027-02-07T16:00:00+01:00",
+    "eindDatum": "2027-02-07T23:59:00+01:00",
+    "tijdTekst": "Na de wedstrijd",
+    "titel": "Zanger/dj Quincy Smolders na Kwiek '78 - Dynamo",
+    "omschrijving": "Na de thuiswedstrijd tegen Dynamo treedt zanger/dj Quincy Smolders op.",
+    "locatie": "Sportpark Het Veer",
+    "categorie": "club"
+  },
+  {
+    "id": "alberto-nicolay-oosthuizen-2027",
+    "datum": "2027-02-28T16:00:00+01:00",
+    "eindDatum": "2027-02-28T23:59:00+01:00",
+    "tijdTekst": "Na de wedstrijd",
+    "titel": "Zanger Alberto Nicolay na Kwiek '78 - Oosthuizen",
+    "omschrijving": "Na de thuiswedstrijd tegen Oosthuizen treedt zanger Alberto Nicolay op.",
+    "locatie": "Sportpark Het Veer",
+    "categorie": "club"
+  }
+]

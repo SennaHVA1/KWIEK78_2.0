@@ -16,7 +16,8 @@
 import Klapbord from './Klapbord.astro';
 import Clubwapen from './Clubwapen.astro';
 import { langeDatum, tijd, machineDatum } from '../lib/datum';
-import { routeLink, getBalsponsor } from '../lib/club';
+import Balsponsoren from './Balsponsoren.astro';
+import { routeLink, getBalsponsoren } from '../lib/club';
 import type { Wedstrijd } from '../lib/types';
 
 interface Props {
@@ -51,7 +52,7 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
     )}
 
     {wedstrijden.map((wedstrijd, index) => {
-      const balsponsor = getBalsponsor(wedstrijd.wedstrijdcode);
+      const balsponsoren = getBalsponsoren(wedstrijd.wedstrijdcode);
       return (
       <article class="duel" data-wedstrijd data-aftrap={wedstrijd.datum} hidden={index > 0}>
         <h2 class="alleen-schermlezer">{wedstrijd.thuisteam} tegen {wedstrijd.uitteam}</h2>
@@ -93,13 +94,11 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
           </summary>
 
           <div class="duel-meer-inhoud">
-            {balsponsor && (
-              <a class="duel-bal" href={balsponsor.url} target={balsponsor.url ? '_blank' : undefined} rel={balsponsor.url ? 'noopener noreferrer' : undefined}>
+            {balsponsoren.length > 0 && (
+              <div class="duel-bal">
                 <span class="duel-bal-label">Wedstrijdbal aangeboden door</span>
-                <span class="duel-bal-logo">
-                  <img src={balsponsor.logo} alt={balsponsor.naam} loading="lazy" decoding="async" />
-                </span>
-              </a>
+                <Balsponsoren sponsoren={balsponsoren} />
+              </div>
             )}
 
             <div class="duel-voet">
@@ -291,15 +290,13 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
     .duel-meer-knop svg { transition: none; }
   }
 
-  /* Wedstrijdbalsponsor: een regel tekst en het logo op een witte tegel,
-     want de logo's zijn gemaakt voor een lichte achtergrond. */
+  /* Wedstrijdbalsponsoren: een regel tekst en de sponsoren op tegels. */
   .duel-bal {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 0.6rem 1rem;
-    text-decoration: none;
     color: var(--color-grijs);
   }
   .duel-bal-label {
@@ -308,21 +305,6 @@ const soortLabel: Record<Wedstrijd['competitie'], string> = {
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-  }
-  .duel-bal-logo {
-    display: grid;
-    place-items: center;
-    padding: 0.45rem 0.9rem;
-    border-radius: var(--radius-klein);
-    background: var(--color-wit);
-    transition: transform 0.18s var(--ease-klap);
-  }
-  .duel-bal-logo img { display: block; height: 2rem; width: auto; }
-  .duel-bal:hover .duel-bal-logo { transform: translateY(-2px); }
-  .duel-bal:hover .duel-bal-label { color: var(--color-wit); }
-  @media (prefers-reduced-motion: reduce) {
-    .duel-bal-logo { transition: none; }
-    .duel-bal:hover .duel-bal-logo { transform: none; }
   }
 
   .duel-voet {

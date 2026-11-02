@@ -13,7 +13,7 @@
  */
 import Clubwapen from './Clubwapen.astro';
 import { tijd, korteDatum, langeDatum } from '../lib/datum';
-import { CLUB } from '../lib/sportlink';
+import { CLUB, filterTeamnaam } from '../lib/sportlink';
 import type { Wedstrijd } from '../lib/types';
 
 interface Props {
@@ -73,7 +73,7 @@ const omschrijving = [
   aria-label={omschrijving}
   data-filterbaar
   data-zoek={zoektekst}
-  data-team={eigenTeam}
+  data-team={filterTeamnaam(wedstrijd, eigenTeam)}
   data-locatie={isThuis ? 'thuis' : 'uit'}
   data-soort={wedstrijd.competitie}
 >

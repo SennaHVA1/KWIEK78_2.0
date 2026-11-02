@@ -200,12 +200,21 @@ export function getWedstrijdenVoorTeam(teamId: string): Wedstrijd[] {
   return wedstrijden.filter((w) => isVanTeam(w, team)).sort(opDatum);
 }
 
+/**
+ * De naam waarop een eigen team in de filters staat. Sportlink noemt een
+ * zaalteam in de wedstrijden net als het veldteam ("Kwiek '78 1"); in de filters
+ * is dat "Kwiek '78 Zaal 1", anders lopen veld en zaal door elkaar.
+ */
+export function filterTeamnaam(wedstrijd: Wedstrijd, naam: string): string {
+  return wedstrijd.competitie === 'zaal' ? naam.replace(CLUB, `${CLUB} Zaal`) : naam;
+}
+
 /** Alle teamnamen die in het programma voorkomen, voor de filters. */
 export function getWedstrijdTeams(): string[] {
   const namen = new Set<string>();
   for (const w of wedstrijden) {
-    if (w.thuisteam.startsWith(CLUB)) namen.add(w.thuisteam);
-    if (w.uitteam.startsWith(CLUB)) namen.add(w.uitteam);
+    if (w.thuisteam.startsWith(CLUB)) namen.add(filterTeamnaam(w, w.thuisteam));
+    if (w.uitteam.startsWith(CLUB)) namen.add(filterTeamnaam(w, w.uitteam));
   }
   return [...namen].sort(vergelijkTeamnaam);
 }
@@ -242,7 +251,7 @@ function teamcode(naam: string): string {
 /** In welke groep hoort dit team thuis? */
 export function getTeamgroep(naam: string): Teamgroep {
   const code = teamcode(naam).toUpperCase();
-  if (/^ZAAL/.test(code)) return 'Zaalvoetbal';
+  if (/^ZAAL\b/.test(code)) return 'Zaalvoetbal';
   if (/^VR\s*\d/.test(code)) return 'Vrouwen';
   if (/^(JO|MO|JM|O)\s*\d/.test(code)) return 'Jeugd';
   if (/^\d+$/.test(code)) return 'Senioren';

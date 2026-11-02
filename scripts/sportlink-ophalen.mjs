@@ -105,7 +105,31 @@ function officialsVan(tekst) {
   return [...String(tekst ?? '').matchAll(/\s*(.+?)\s+\(([^()]+)\)\s*(?:,|$)/g)]
     .map(([, naam, rol]) => ({ naam: naam.replace(/^[^\s()]+\s+\(([^()]+)\)\s+/, '$1 ').trim(), rol }))
     .filter((o) => o.naam && o.naam !== 'Afgeschermd')
-    .sort((a, b) => (ROLVOLGORDE.indexOf(a.rol) + 1 || 9) - (ROLVOLGORDE.indexOf(b.rol) + 1 || 9));
+    .sort(opRol);
+}
+const opRol = (a, b) => (ROLVOLGORDE.indexOf(a.rol) + 1 || 9) - (ROLVOLGORDE.indexOf(b.rol) + 1 || 9);
+
+/**
+ * De uitslagen-feed heeft geen officials. Die staan in wedstrijd-informatie,
+ * in een andere vorm: "Berg, Jan van der (Scheidsrechter), Afgeschermd,
+ * (Assistent-scheidsrechter)". Dat wordt "Jan van der Berg".
+ */
+function matchofficialsVan(tekst) {
+  return [...String(tekst ?? '').matchAll(/\s*([^,()]+?),\s*([^,()]*?)\s*\(([^()]+)\)\s*(?:,|$)/g)]
+    .map(([, achternaam, voornaam, rol]) => ({ achternaam: achternaam.trim(), naam: `${voornaam} ${achternaam}`.trim(), rol }))
+    .filter((o) => o.achternaam !== 'Afgeschermd' && o.naam)
+    .map(({ naam, rol }) => ({ naam, rol }))
+    .sort(opRol);
+}
+
+async function officialsVanUitslag(wedstrijdcode) {
+  try {
+    const info = await haal('wedstrijd-informatie', { wedstrijdcode: String(wedstrijdcode) });
+    return matchofficialsVan(info?.matchofficials?.scheidsrechters);
+  } catch {
+    /* Geen officials is geen reden om de hele build te laten falen. */
+    return [];
+  }
 }
 
 /* De wapens van Sportlink zijn ondertekende links die na een paar uur
@@ -194,9 +218,16 @@ async function wedstrijden() {
     if (bestaand) bestaand.afgelast = true;
     else opCode.set(ruw.wedstrijdcode, await naarWedstrijd({ ...ruw, status: 'Afgelast' }));
   }
-  /* Uitslagen zonder score (gestaakt, afgelast in het verleden) laten we weg. */
-  for (const ruw of uitslagen.filter((r) => uitslagVan(r.uitslag))) {
-    opCode.set(ruw.wedstrijdcode, await naarWedstrijd(ruw));
+  /* Uitslagen zonder score (gestaakt, afgelast in het verleden) laten we weg.
+     De officials komen per wedstrijd uit wedstrijd-informatie; lukt dat niet,
+     dan houden we wat het programma eerder had. */
+  const gespeeld = uitslagen.filter((r) => uitslagVan(r.uitslag));
+  const officials = await perStuk(gespeeld, (ruw) => officialsVanUitslag(ruw.wedstrijdcode));
+  for (const [i, ruw] of gespeeld.entries()) {
+    const wedstrijd = await naarWedstrijd(ruw);
+    const scheids = officials[i].length > 0 ? officials[i] : opCode.get(ruw.wedstrijdcode)?.scheidsrechters;
+    if (scheids?.length) wedstrijd.scheidsrechters = scheids;
+    opCode.set(ruw.wedstrijdcode, wedstrijd);
   }
   return [...opCode.values()].sort((a, b) => new Date(a.datum) - new Date(b.datum));
 }

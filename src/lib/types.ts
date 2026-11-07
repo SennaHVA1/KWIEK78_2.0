@@ -40,7 +40,7 @@ export type Wedstrijd = {
   uitLogo: string;
   accommodatie: string;
   veld?: string;
-  /** Scheidsrechter eerst, dan de assistenten. Afgeschermde officials staan er niet in. */
+  /** Scheidsrechter eerst, dan de assistenten. Bij een afgeschermde official is de naam "Afgeschermd". */
   scheidsrechters?: Official[];
   competitie: Competitie;
   uitslag?: { thuis: number; uit: number };

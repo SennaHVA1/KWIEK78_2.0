@@ -97,14 +97,14 @@ function uitslagVan(tekst) {
  * Sportlink zet alle officials in een regel, met de rol tussen haakjes:
  * "Afgeschermd (Assistent-scheidsrechter), F. (Frans) Hulst (Assistent-
  * scheidsrechter), T.F. (Thijs) Mul (Scheidsrechter)". Afgeschermde officials
- * vallen weg, de scheidsrechter komt voorop en "T.F. (Thijs) Mul" wordt
- * "Thijs Mul".
+ * blijven staan met "Afgeschermd" als naam, de scheidsrechter komt voorop en
+ * "T.F. (Thijs) Mul" wordt "Thijs Mul".
  */
 const ROLVOLGORDE = ['Scheidsrechter', 'Assistent-scheidsrechter'];
 function officialsVan(tekst) {
   return [...String(tekst ?? '').matchAll(/\s*(.+?)\s+\(([^()]+)\)\s*(?:,|$)/g)]
     .map(([, naam, rol]) => ({ naam: naam.replace(/^[^\s()]+\s+\(([^()]+)\)\s+/, '$1 ').trim(), rol }))
-    .filter((o) => o.naam && o.naam !== 'Afgeschermd')
+    .filter((o) => o.naam)
     .sort(opRol);
 }
 const opRol = (a, b) => (ROLVOLGORDE.indexOf(a.rol) + 1 || 9) - (ROLVOLGORDE.indexOf(b.rol) + 1 || 9);
@@ -116,9 +116,8 @@ const opRol = (a, b) => (ROLVOLGORDE.indexOf(a.rol) + 1 || 9) - (ROLVOLGORDE.ind
  */
 function matchofficialsVan(tekst) {
   return [...String(tekst ?? '').matchAll(/\s*([^,()]+?),\s*([^,()]*?)\s*\(([^()]+)\)\s*(?:,|$)/g)]
-    .map(([, achternaam, voornaam, rol]) => ({ achternaam: achternaam.trim(), naam: `${voornaam} ${achternaam}`.trim(), rol }))
-    .filter((o) => o.achternaam !== 'Afgeschermd' && o.naam)
-    .map(({ naam, rol }) => ({ naam, rol }))
+    .map(([, achternaam, voornaam, rol]) => ({ naam: `${voornaam} ${achternaam}`.trim(), rol }))
+    .filter((o) => o.naam)
     .sort(opRol);
 }
 

@@ -48,6 +48,18 @@ const balsponsoren = thuis && eigenTeam?.id === 'kwiek-78-1'
   ? getBalsponsoren(wedstrijd.wedstrijdcode)
   : [];
 
+/* Sportlink geeft niet altijd een scheidsrechter door. Is de wedstrijd geweest
+   of zijn er al andere officials bekend, dan zeggen we dat hij onbekend is.
+   Assistenten vullen we niet aan: die zijn er lang niet bij elke wedstrijd. Een
+   spelbegeleider leidt de wedstrijd bij de jongste jeugd, dus dan hoort er geen
+   scheidsrechter bij. */
+const nogTeSpelen = !heeftUitslag && new Date(wedstrijd.datum).getTime() > Date.now();
+const bekendeOfficials = wedstrijd.scheidsrechters ?? [];
+const officials = bekendeOfficials.some((o) => o.rol === 'Scheidsrechter' || o.rol === 'Spelbegeleider')
+  || (nogTeSpelen && bekendeOfficials.length === 0)
+  ? bekendeOfficials
+  : [{ naam: 'Onbekend', rol: 'Scheidsrechter' }, ...bekendeOfficials];
+
 /* De andere wedstrijden op dezelfde dag: handig als er meer kinderen spelen. */
 const zelfdeDag = getAlleWedstrijden().filter(
   (w) => dagSleutel(w.datum) === dagSleutel(wedstrijd.datum) && w.wedstrijdcode !== wedstrijd.wedstrijdcode,
@@ -166,12 +178,12 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
 
           <div class="detail-blok">
             <h2 class="kop-s">Arbitrage</h2>
-            {wedstrijd.scheidsrechters && wedstrijd.scheidsrechters.length > 0 ? (
+            {officials.length > 0 ? (
               <ul class="detail-namen">
-                {wedstrijd.scheidsrechters.map(({ naam, rol }) => (
+                {officials.map(({ naam, rol }) => (
                   <li>
                     <span class="detail-rol data">{rol === 'Assistent-scheidsrechter' ? 'Assistent' : rol}</span>
-                    <span>{naam}</span>
+                    <span class:list={[(naam === 'Onbekend' || naam === 'Afgeschermd') && 'detail-geen-naam']}>{naam}</span>
                   </li>
                 ))}
               </ul>
@@ -325,6 +337,8 @@ const titel = `${wedstrijd.thuisteam} - ${wedstrijd.uitteam}`;
     text-transform: uppercase;
     color: var(--color-grijsdonker);
   }
+
+  .detail-geen-naam { color: var(--color-grijsdonker); font-style: italic; }
 
   .detail-tweedekop { margin-top: 1.25rem; }
   .detail-leeg { font-size: var(--text-klein); }

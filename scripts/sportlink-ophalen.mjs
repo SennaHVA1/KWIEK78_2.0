@@ -23,6 +23,7 @@
  */
 import { mkdir, writeFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
+import sharp from 'sharp';
 
 try { process.loadEnvFile('.env'); } catch { /* geen .env, prima */ }
 
@@ -141,6 +142,14 @@ async function logoVan(clubcode, url) {
   return `/images/clubs/sportlink/${clubcode}.png`;
 }
 
+/** Een wapen op 192 pixels (twee keer de grootste weergave, voor scherpe
+    schermen), als png met een kleurenpalet. */
+const verkleinLogo = (buffer) =>
+  sharp(buffer)
+    .resize({ width: 192, height: 192, fit: 'inside', withoutEnlargement: true })
+    .png({ palette: true, quality: 90, effort: 10 })
+    .toBuffer();
+
 async function bewaarLogos() {
   await mkdir(LOGOMAP, { recursive: true });
   const aanwezig = new Set(await readdir(LOGOMAP));
@@ -150,7 +159,8 @@ async function bewaarLogos() {
     try {
       const antwoord = await fetch(url);
       if (!antwoord.ok) return;
-      await writeFile(join(LOGOMAP, bestand), Buffer.from(await antwoord.arrayBuffer()));
+      /* Sportlink levert ze op 800 pixels, wij tonen ze hooguit op 96. */
+      await writeFile(join(LOGOMAP, bestand), await verkleinLogo(Buffer.from(await antwoord.arrayBuffer())));
     } catch {
       /* Geen wapen is geen ramp: Clubwapen zet er dan initialen neer. */
     }

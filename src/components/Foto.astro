@@ -7,7 +7,7 @@
  * als de club het materiaal later aanlevert, en zie je in de demo meteen
  * welk bestand er nog mist.
  */
-import { fotoBestaat } from '../lib/fotos';
+import { fotoBestaat, srcsetVan } from '../lib/fotos';
 
 interface Props {
   src?: string | null;
@@ -22,6 +22,9 @@ interface Props {
   plaatshouder?: string;
   /** CSS object-position, om het onderwerp in de uitsnede te houden. */
   positie?: string;
+  /** Hoe breed de foto op het scherm staat, voor de keuze uit de srcset.
+      Standaard een halve pagina op een groot scherm en vol op een telefoon. */
+  sizes?: string;
 }
 
 const {
@@ -33,6 +36,7 @@ const {
   prioriteit = false,
   plaatshouder,
   positie = 'center',
+  sizes = '(min-width: 1024px) 50vw, 100vw',
 } = Astro.props;
 
 const aanwezig = fotoBestaat(src);
@@ -42,6 +46,8 @@ const bestandsnaam = src ? src.split('/').pop() : 'foto volgt';
 {aanwezig ? (
   <img
     src={src}
+    srcset={srcsetVan(src)}
+    sizes={srcsetVan(src) ? sizes : undefined}
     alt={alt}
     class={klasse}
     loading={prioriteit ? 'eager' : laden}

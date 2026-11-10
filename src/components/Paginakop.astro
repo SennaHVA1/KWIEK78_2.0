@@ -9,7 +9,7 @@
  * moet de inhoud net zo snel in beeld staan als zonder foto. Op een telefoon
  * ligt de foto gedimd achter de tekst.
  */
-import { fotoBestaat } from '../lib/fotos';
+import { fotoBestaat, srcsetVan } from '../lib/fotos';
 
 interface Props {
   kicker: string;
@@ -28,7 +28,7 @@ const metFoto = fotoBestaat(foto);
 <section class:list={['paginakop', 'vlak-zwart', { 'paginakop--foto': metFoto }]}>
   {metFoto && (
     <div class="paginakop-beeld" aria-hidden="true">
-      <img src={foto} alt="" decoding="async" fetchpriority="low" style={`object-position: ${fotoPositie};`} />
+      <img src={foto} srcset={srcsetVan(foto)} sizes="(min-width: 1024px) 50vw, 100vw" alt="" decoding="async" fetchpriority="low" style={`object-position: ${fotoPositie};`} />
     </div>
   )}
   <div class="omhulsel paginakop-binnen">

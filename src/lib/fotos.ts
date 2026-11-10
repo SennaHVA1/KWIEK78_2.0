@@ -11,6 +11,8 @@
  */
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+/* De kleinere versies die scripts/fotos-varianten.mjs maakt. */
+import varianten from '../data/fotovarianten.json';
 
 /**
  * De actiefoto's van een team: /public/images/teams/<team-id>-actie-1.webp,
@@ -39,4 +41,13 @@ export function fotoBestaat(pad?: string | null): boolean {
   const bestaat = existsSync(join(process.cwd(), 'public', schoon));
   cache.set(pad, bestaat);
   return bestaat;
+}
+
+/**
+ * De srcset voor een foto, of undefined als er geen kleinere versies zijn.
+ * Zo haalt een telefoon voor een kaartje niet de foto van 1800 pixels op.
+ */
+export function srcsetVan(pad?: string | null): string | undefined {
+  const lijst = pad ? (varianten as Record<string, { src: string; breedte: number }[]>)[pad] : undefined;
+  return lijst?.map((v) => `${v.src} ${v.breedte}w`).join(', ');
 }
